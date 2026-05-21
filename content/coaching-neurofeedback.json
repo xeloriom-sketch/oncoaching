@@ -1,0 +1,60 @@
+{
+  "page": {
+    "title": "Coaching & Neurofeedback",
+    "subtitle": "Entraîner le cerveau pour améliorer performance et bien-être."
+  },
+  "tabs": [
+    {
+      "key": "accompagnement",
+      "label": "Accompagnement par Neurofeedback",
+      "paragraphs": [
+        "Grâce à ma certification en neurofeedback, je propose un accompagnement permettant d'entraîner le cerveau à retrouver équilibre et flexibilité. Cette approche douce et non invasive s'adresse autant aux personnes souhaitant réduire le stress, améliorer leur sommeil, renforcer leur concentration qu'à celles cherchant à optimiser leurs performances cognitives et émotionnelles.",
+        "Le neurofeedback vient ainsi compléter mes pratiques de coaching, en offrant un outil concret et efficace pour développer son potentiel, dépasser certaines difficultés et retrouver un mieux-être durable."
+      ]
+    },
+    {
+      "key": "definition",
+      "label": "Qu'est-ce que le neurofeedback ?",
+      "paragraph": "Le neurofeedback est une méthode douce et non invasive qui permet au cerveau d'apprendre à mieux s'autoréguler. Grâce à des capteurs posés sur le cuir chevelu, l'activité cérébrale est enregistrée et renvoyée sous forme de signaux visuels ou sonores. Au fil des séances, le cerveau développe de nouveaux automatismes favorisant l'équilibre émotionnel, la concentration et le bien-être."
+    },
+    {
+      "key": "pourqui",
+      "label": "Pour qui ?",
+      "items": [
+        "Santé / Bien-être / Santé psychique : stress, anxiété, burn-out, peurs, hyper-émotivité, impulsivité, hyperactivité, troubles de la mémoire, concentration, organisation, troubles du sommeil, fatigue chronique, douleurs persistantes.",
+        "Troubles neurodéveloppementaux : TDA/H, troubles « Dys » (dyslexie, dysorthographie, dyscalculie, dysphasie, dysgraphie, dyspraxie)",
+        "Performance / Potentiel : musiciens, danseurs, athlètes, dirigeants, cadres souhaitant optimiser leur performance, créativité, concentration, confiance, etc."
+      ]
+    },
+    {
+      "key": "resultats",
+      "label": "Résultats attendus",
+      "items": [
+        "Diminution du stress, anxiété, émotivité, impulsivité, colères, conflits, maladresses, doutes, hyperactivité, difficultés « Dys », phobies, échecs, douleurs chroniques, insomnies, réveils nocturnes.",
+        "Amélioration de l'attention, concentration, mémoire, flexibilité mentale, rapidité d'apprentissage, gestion émotionnelle, estime et confiance en soi, organisation, prise de décision, communication, créativité, relations sociales, performance, bien-être global et qualité de vie."
+      ]
+    },
+    {
+      "key": "deroulement",
+      "label": "Déroulement d'une séance",
+      "steps": [
+        "Accueil & échanges : définition des besoins et objectifs.",
+        "Installation : pose de capteurs légers et indolores sur le cuir chevelu.",
+        "Exercice : le participant regarde un film ou joue à un jeu vidéo. Le feedback reçu entraîne le cerveau à s'autoréguler.",
+        "Bilan : retour d'expérience et suivi personnalisé. Durée moyenne : 30 à 45 minutes par séance."
+      ],
+      "note": "Un accompagnement progressif est recommandé pour des résultats durables."
+    },
+    {
+      "key": "complementarite",
+      "label": "Complémentarité Neurofeedback & Coaching",
+      "paragraph": "Le neurofeedback entraîne votre cerveau à être plus stable, concentré et détendu. Le coaching vous aide ensuite à transformer ce potentiel en actions concrètes pour atteindre vos objectifs personnels, scolaires ou professionnels. Le Neurofeedback peut accompagner, en parallèle ou en amont, un traitement médical, une rééducation (orthophonie, psychomotricité, kinésithérapie) ou un suivi psychothérapeutique."
+    }
+  ],
+  "cta": {
+    "title": "Essayez dès maintenant",
+    "subtitle": "Séance découverte ou programme personnalisé combinant coaching & Neurofeedback.",
+    "buttonText": "Je prends rendez-vous",
+    "buttonLink": "/contact"
+  }
+}

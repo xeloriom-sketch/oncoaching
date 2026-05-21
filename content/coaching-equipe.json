@@ -1,0 +1,44 @@
+{
+  "page": {
+    "title": "Coaching d'équipe",
+    "subtitle": "Renforcer la cohésion et la performance collective.",
+    "intro": "Fort de 26 ans d'enseignement en sciences économiques et sociales, passionné par la sociologie du travail et des organisations, j'accompagne les équipes et les dirigeants en mobilisant une double expertise : celle d'un pédagogue formé à l'analyse des dynamiques sociales, et celle d'un coach certifié spécialisé en coaching d'équipe. Grâce à une approche alliant outils de coaching, pédagogie active et intelligence collective, mes interventions visent à transformer les groupes en équipes engagées et alignées."
+  },
+  "tabs": [
+    {
+      "key": "vision",
+      "label": "Ma vision",
+      "tagline": "Renforcer la cohésion – Fédérer autour d'une vision – Agir ensemble"
+    },
+    {
+      "key": "objectifs",
+      "label": "Objectifs",
+      "items": [
+        "Créer ou renforcer les liens entre les membres de l'équipe",
+        "Améliorer la communication et l'écoute active",
+        "Développer la confiance mutuelle et la solidarité",
+        "Clarifier les valeurs partagées, les missions, les rôles",
+        "Identifier les forces collectives et les leviers de performance",
+        "Favoriser l'engagement individuel au service du collectif",
+        "La gestion de conflits"
+      ]
+    },
+    {
+      "key": "methodes",
+      "label": "Méthodes & Outils",
+      "items": [
+        "Ateliers expérientiels (jeux de coopération, mises en situation, métaphores collectives)",
+        "Outils issus du coaching d'équipe, de la dynamique des groupes et de la sociologie des organisations",
+        "Travail sur les représentations, la posture managériale, la gouvernance d'équipe",
+        "Techniques de facilitation : codéveloppement, photolangage, cercles de parole",
+        "Évaluation des besoins en amont + bilan à chaud/froid"
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Faites grandir votre équipe",
+    "subtitle": "Planifiez une séance d'accompagnement dès maintenant.",
+    "buttonText": "Je prends rendez-vous",
+    "buttonLink": "/contact"
+  }
+}

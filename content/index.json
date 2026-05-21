@@ -1,0 +1,68 @@
+{
+  "hero": {
+    "title": "Révélez votre potentiel avec ON Coaching",
+    "subtitle": "Coaching personnalisé pour particuliers et professionnels. Transformez vos défis en opportunités et atteignez vos objectifs.",
+    "buttonPrimary": "Prendre rendez-vous",
+    "buttonSecondary": "Découvrir nos services",
+    "image": "imgHeroicon.png"
+  },
+  "servicesSection": {
+    "title": "Nos services de coaching",
+    "subtitle": "Nous offrons un accompagnement personnalisé pour répondre à vos besoins spécifiques, que vous soyez un particulier ou une entreprise."
+  },
+  "services": [
+    {
+      "key": "scolaire",
+      "title": "Coaching scolaire & étudiant",
+      "description": "Soutien, méthodologie et orientation pour réussir sa scolarité ou ses études.",
+      "link": "/coaching-scolaire"
+    },
+    {
+      "key": "jeunes",
+      "title": "Coaching jeunes & jeunes adultes",
+      "description": "Accompagnement lors des choix d'orientation, insertion pro, confiance et construction du projet de vie.",
+      "link": "/coaching-jeunes"
+    },
+    {
+      "key": "neurofeedback",
+      "title": "Coaching & Neurofeedback",
+      "description": "Amélioration des capacités cognitives, gestion du stress et du mental grâce au neurofeedback.",
+      "link": "/coaching-neurofeedback"
+    },
+    {
+      "key": "equipe",
+      "title": "Coaching d'équipe",
+      "description": "Développez la cohésion, la performance et l'intelligence collective de votre équipe.",
+      "link": "/coaching-equipe"
+    }
+  ],
+  "whyUsSection": {
+    "title": "Pourquoi choisir ON Coaching ?",
+    "subtitle": "Notre approche unique combine expertise, personnalisation et résultats concrets pour votre développement personnel et professionnel.",
+    "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
+    "imageAlt": "Coaching de groupe",
+    "items": [
+      {
+        "key": "certifies",
+        "title": "Coachs certifiés",
+        "description": "Notre équipe est composée de coachs certifiés avec une solide expérience dans divers domaines professionnels."
+      },
+      {
+        "key": "mesure",
+        "title": "Approche sur mesure",
+        "description": "Chaque programme de coaching est personnalisé pour répondre précisément à vos besoins et objectifs spécifiques."
+      },
+      {
+        "key": "methodes",
+        "title": "Méthodes éprouvées",
+        "description": "Nos techniques de coaching sont basées sur des approches scientifiques et des méthodes qui ont fait leurs preuves."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Prêt à transformer votre potentiel en réussite?",
+    "subtitle": "Prenez rendez-vous pour une consultation gratuite et découvrez comment notre coaching peut vous aider à atteindre vos objectifs.",
+    "buttonText": "Contactez-nous",
+    "buttonLink": "/contact"
+  }
+}

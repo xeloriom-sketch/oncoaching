@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "title": "À propos d'ON Coaching",
+    "paragraph1": "Fondé sur des valeurs d'excellence, d'empathie et d'innovation, ON Coaching accompagne les particuliers et les entreprises dans leur développement.",
+    "paragraph2": "Notre mission est de vous aider à libérer votre potentiel, à surmonter les obstacles et à atteindre vos objectifs personnels et professionnels.",
+    "image": "faviconNoText.png",
+    "imageAlt": "ON Coaching"
+  },
+  "whoSection": {
+    "title": "Qui suis-je ?",
+    "subtitle": "Coach certifié et passionné par l'accompagnement humain",
+    "paragraph1": "Coach certifié, formé par Prisme Évolution, j'ai consacré 26 années de ma vie professionnelle à enseigner les sciences économiques et sociales à des lycéens. Cette longue expérience m'a permis d'acquérir une écoute fine, une compréhension approfondie des dynamiques humaines, et une capacité à accompagner avec bienveillance et exigence.",
+    "paragraph2": "Titulaire d'un diplôme en sciences sociales, j'ai toujours eu à cœur de comprendre l'humain dans sa globalité : ses comportements, ses motivations, ses freins, ses potentiels. Mon parcours m'a également conduit à accompagner des publics très variés, en lien avec des situations sociales, scolaires ou professionnelles complexes, enrichissant ainsi mon approche du coaching.",
+    "differenceTitle": "Ma différence",
+    "paragraph3": "Ce qui me distingue ? C'est l'alliance entre une solide base théorique, issue des sciences humaines, et une expérience de terrain riche, forgée au fil des années auprès de jeunes, d'adultes et de professionnels.",
+    "paragraph4": "J'ai fait du goût de l'accompagnement une valeur centrale de mon engagement. Je crois profondément en la capacité de chacun à évoluer, à retrouver du sens, de l'énergie et à reprendre le pouvoir sur sa trajectoire de vie."
+  },
+  "valuesSection": {
+    "title": "Nos valeurs",
+    "subtitle": "Chez ON Coaching, nos valeurs fondamentales guident toutes nos interactions et notre approche du coaching.",
+    "values": [
+      {
+        "key": "empathie",
+        "title": "Empathie",
+        "description": "Nous créons un espace de confiance où vous vous sentez écouté et compris sans jugement."
+      },
+      {
+        "key": "excellence",
+        "title": "Excellence",
+        "description": "Nous nous engageons à offrir un accompagnement de haute qualité et à poursuivre constamment notre développement professionnel."
+      },
+      {
+        "key": "innovation",
+        "title": "Innovation",
+        "description": "Nous intégrons les dernières recherches et approches pour vous offrir des techniques de coaching efficaces et innovantes."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Découvrez comment nous pouvons vous accompagner",
+    "subtitle": "Prenez rendez-vous pour une première séance de découverte et discutons de vos objectifs et besoins.",
+    "buttonText": "Contactez-nous",
+    "buttonLink": "/contact"
+  }
+}

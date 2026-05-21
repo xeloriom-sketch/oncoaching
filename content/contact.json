@@ -1,0 +1,57 @@
+{
+  "coordonnees": {
+    "title": "Nos coordonnées",
+    "subtitle": "Plusieurs façons de nous joindre pour discuter de vos besoins.",
+    "adresse": {
+      "label": "Notre adresse",
+      "value": "14 rue des écureuils\n71000 Sancé, France"
+    },
+    "telephone": {
+      "label": "Téléphone",
+      "value": "+33 06 63 04 18 12"
+    },
+    "email": {
+      "label": "Email",
+      "value": "contact@oncoaching.fr"
+    },
+    "horaires": {
+      "label": "Horaires",
+      "lines": [
+        "Lundi: 14h00 - 19h00",
+        "Mardi: 8h00 - 12h00 / 17h00 - 19h00",
+        "Mercredi: Fermé",
+        "Jeudi: Fermé",
+        "Vendredi: 8h00 - 12h00 / 14h00 - 19h00",
+        "Samedi: 8h00 - 13h00",
+        "Dimanche: Fermé"
+      ]
+    }
+  },
+  "formulaire": {
+    "title": "Formulaire de contact",
+    "subtitle": "Envoyez-nous un message et nous vous répondrons dans les plus brefs délais.",
+    "fields": {
+      "name": "Nom complet",
+      "email": "Email",
+      "phone": "Téléphone",
+      "service": "Service qui vous intéresse",
+      "subject": "Sujet",
+      "message": "Message",
+      "submitButton": "Envoyer le message",
+      "submittingButton": "Envoi en cours..."
+    },
+    "services": [
+      { "value": "coaching-de-vie", "label": "Coaching scolaire & étudiant" },
+      { "value": "coaching-de-carriere", "label": "Coaching jeunes & jeunes adultes" },
+      { "value": "coaching-d-equipe", "label": "Coaching & Neurofeedback" },
+      { "value": "coaching-de-dirigeants", "label": "Coaching d'équipe" },
+      { "value": "autre", "label": "Autre" }
+    ],
+    "messages": {
+      "successTitle": "Message envoyé!",
+      "successDescription": "Nous vous contacterons très bientôt.",
+      "errorTitle": "Erreur",
+      "errorDefault": "Une erreur est survenue."
+    }
+  }
+}
