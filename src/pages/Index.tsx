@@ -627,7 +627,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+            className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 items-center"
           >
             <motion.div variants={fadeInLeft} className="space-y-6">
               <p className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]" aria-hidden="true">
@@ -656,7 +656,7 @@ export default function Index() {
 
             <motion.div
               variants={fadeInRight}
-              className="flex justify-center lg:justify-end"
+              className="flex justify-center"
             >
               <motion.div
                 whileHover={{ y: -4 }}
