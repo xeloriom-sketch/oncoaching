@@ -9,7 +9,7 @@ interface LogoMarkProps {
 /** Logo réel du client — faviconNoText.png en blanc ou noir via CSS filter */
 export const LogoMark = ({ size = 36, animate: doAnimate = false, className = "", color = "white" }: LogoMarkProps & { color?: "white" | "black" }) => (
   <motion.img
-    src="/faviconNoText.png"
+    src={`${import.meta.env.BASE_URL}faviconNoText.png`}
     alt="ON Coaching — Logo"
     style={{
       width: size,

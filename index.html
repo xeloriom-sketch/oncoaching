@@ -132,6 +132,18 @@
   </head>
 
   <body>
+    <!-- GitHub Pages SPA routing: restore path from ?p= redirect -->
+    <script>
+      (function(){
+        var p = new URLSearchParams(window.location.search).get('p');
+        if (p) {
+          var url = window.location.pathname + decodeURIComponent(p) +
+                    window.location.search.replace(/[?&]p=[^&]*/, '').replace(/^&/, '?') +
+                    window.location.hash;
+          window.history.replaceState(null, '', url);
+        }
+      })();
+    </script>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>

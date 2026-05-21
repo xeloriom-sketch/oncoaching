@@ -71,7 +71,7 @@ const App = () => {
         <Sonner />
         {/* Loader Awwwards — affiché à chaque chargement */}
         <PageLoader />
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <ScrollToTop />
           <Suspense fallback={<SuspenseFallback />}>
             <Routes>

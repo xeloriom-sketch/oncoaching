@@ -29,7 +29,7 @@ export default function PageLoader() {
         >
           {/* Logo */}
           <motion.img
-            src="/faviconNoText.png"
+            src={`${import.meta.env.BASE_URL}faviconNoText.png`}
             alt="ON Coaching"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
