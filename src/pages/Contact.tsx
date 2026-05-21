@@ -224,7 +224,7 @@ const Contact = () => {
       <div className="w-full bg-white">
 
         {/* ── HERO ─────────────────────────────────────────────────── */}
-        <section className="pt-20 md:pt-28 pb-8 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-24 pb-8 max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -244,21 +244,21 @@ const Contact = () => {
 
             <h1
               aria-label="Parlons de votre projet."
-              className="flex flex-wrap gap-x-4 gap-y-1 leading-[1.05] font-bold tracking-tight text-[#0B0B0C]"
-              style={{ fontSize: "clamp(3rem,7vw,6rem)" }}
+              className="leading-[1.1] font-bold tracking-tight text-[#0B0B0C]"
+              style={{ fontSize: "clamp(2.8rem,6vw,5rem)" }}
             >
               {WORDS.map((word, i) => (
                 <motion.span
                   key={word}
-                  initial={{ opacity: 0, y: 60, rotate: 4 }}
-                  animate={{ opacity: 1, y: 0, rotate: 0 }}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{
                     type: "spring",
                     stiffness: 200,
                     damping: 20,
-                    delay: i * 0.1,
+                    delay: i * 0.08,
                   }}
-                  className={word === "projet." ? "text-[#1ab5c7]" : ""}
+                  className={`inline-block mr-[0.22em] ${word === "projet." ? "text-[#1ab5c7]" : ""}`}
                 >
                   {word}
                 </motion.span>
