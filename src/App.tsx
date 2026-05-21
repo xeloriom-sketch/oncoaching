@@ -1,48 +1,96 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Lenis from "lenis";
+
+import { Toaster }                    from "@/components/ui/toaster";
+import { Toaster as Sonner }          from "@/components/ui/sonner";
+import { TooltipProvider }            from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter, Routes, Route } from "react-router-dom"; // <-- changé ici
 
-// Pages principales
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
+import ScrollToTop from "./components/ScrollToTop";
+import PageLoader  from "./components/PageLoader";
 
-// Pages modules services
-import CoachingScolaire from "./pages/Services/CoachingScolaire";
-import CoachingJeunes from "./pages/Services/CoachingJeunes";
-import CoachingNeurofeedback from "./pages/Services/CoachingNeurofeedback";
-import CoachingEquipe from "./pages/Services/CoachingEquipe";
+// ─── Lazy-loaded pages ────────────────────────────────────────────────────────
+const Index               = lazy(() => import("./pages/Index"));
+const About               = lazy(() => import("./pages/About"));
+const Contact             = lazy(() => import("./pages/Contact"));
+const NosTarifs           = lazy(() => import("./pages/NosTarifs"));
+const CoachingScolaire    = lazy(() => import("./pages/Services/CoachingScolaire"));
+const CoachingJeunes      = lazy(() => import("./pages/Services/CoachingJeunes"));
+const CoachingNeurofeedback = lazy(() => import("./pages/Services/CoachingNeurofeedback"));
+const CoachingEquipe      = lazy(() => import("./pages/Services/CoachingEquipe"));
+const Partenaires         = lazy(() => import("./pages/Partenaires"));
+const NotFound            = lazy(() => import("./pages/NotFound"));
 
-import NotFound from "./pages/NotFound";
+// ─── Query client (content cached for entire session) ─────────────────────────
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+      gcTime:    1000 * 60 * 60,
+      retry:     1,
+    },
+  },
+});
 
-const queryClient = new QueryClient();
+// ─── Suspense fallback minimal ─────────────────────────────────────────────────
+const SuspenseFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="w-6 h-6 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
-const App = () => (
+// ─── Lenis smooth scroll ──────────────────────────────────────────────────────
+const useLenis = () => {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+    let rafId: number;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
+};
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+const App = () => {
+  useLenis();
+
+  return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <HashRouter> {/* <-- ici */}
-          <Routes>
-            {/* Pages principales */}
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-
-            {/* Pages modules services */}
-            <Route path="/coaching-scolaire" element={<CoachingScolaire />} />
-            <Route path="/coaching-jeunes" element={<CoachingJeunes />} />
-            <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
-            <Route path="/coaching-equipe" element={<CoachingEquipe />} />
-
-            {/* Catch-all */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </HashRouter>
+        {/* Loader Awwwards — affiché à chaque chargement */}
+        <PageLoader />
+        <BrowserRouter>
+          <ScrollToTop />
+          <Suspense fallback={<SuspenseFallback />}>
+            <Routes>
+              <Route path="/"                       element={<Index />} />
+              <Route path="/about"                  element={<About />} />
+              <Route path="/contact"                element={<Contact />} />
+              <Route path="/NosTarifs"              element={<NosTarifs />} />
+              <Route path="/coaching-scolaire"      element={<CoachingScolaire />} />
+              <Route path="/coaching-jeunes"        element={<CoachingJeunes />} />
+              <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
+              <Route path="/coaching-equipe"        element={<CoachingEquipe />} />
+              <Route path="/partenaires"            element={<Partenaires />} />
+              <Route path="*"                       element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
-);
+  );
+};
 
 export default App;

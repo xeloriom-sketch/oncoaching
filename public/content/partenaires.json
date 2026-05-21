@@ -1,0 +1,120 @@
+{
+  "hero": {
+    "title": "Partenaires & Institutions",
+    "subtitle": "Accompagnement des publics en insertion et en transition",
+    "intro": "J'accompagne les structures (associations, fondations, organismes d'insertion, établissements éducatifs) dans le développement des compétences psychosociales et la remobilisation des publics en situation de fragilité."
+  },
+  "expertise": {
+    "title": "Une expertise au service des structures d'accompagnement",
+    "subtitle": "Mon approche s'appuie sur une double expertise :",
+    "points": [
+      "Plus de 26 ans d'expérience dans l'enseignement des sciences sociales (économie, sociologie, science politique)",
+      "Une pratique professionnelle du coaching individuel et collectif, enrichie par le neurofeedback et la communication non violente (CNV)"
+    ]
+  },
+  "publics": {
+    "title": "Publics accompagnés",
+    "items": [
+      "Jeunes en difficulté d'orientation ou de décrochage",
+      "Jeunes adultes en recherche de projet professionnel",
+      "Adultes en reconversion ou en insertion",
+      "Publics issus de la diversité ou de parcours migratoires",
+      "Personnes en situation de fragilité psychosociale"
+    ]
+  },
+  "problematiques": {
+    "title": "Problématiques traitées",
+    "items": [
+      "Manque de confiance en soi et d'estime personnelle",
+      "Difficulté à se projeter et à construire un projet",
+      "Freins émotionnels (stress, anxiété, blocages)",
+      "Difficultés relationnelles et de communication",
+      "Isolement, perte de repères"
+    ]
+  },
+  "modalites": {
+    "title": "Modalités d'intervention",
+    "items": [
+      {
+        "key": "ateliers",
+        "title": "Ateliers collectifs",
+        "items": [
+          "Développement des compétences psychosociales",
+          "Communication et gestion des relations",
+          "Construction du projet professionnel",
+          "Gestion du stress et des émotions"
+        ]
+      },
+      {
+        "key": "individuel",
+        "title": "Coaching individuel",
+        "items": [
+          "Remobilisation et accompagnement au changement",
+          "Clarification des objectifs personnels et professionnels",
+          "Renforcement de la confiance en soi"
+        ]
+      },
+      {
+        "key": "neurofeedback",
+        "title": "Approche spécifique : Neurofeedback",
+        "items": [
+          "Amélioration de la concentration",
+          "Régulation émotionnelle",
+          "Réduction du stress"
+        ]
+      }
+    ]
+  },
+  "methodologie": {
+    "title": "Méthodologie",
+    "subtitle": "Chaque intervention est structurée autour de :",
+    "steps": [
+      "Analyse des besoins (structure et bénéficiaires)",
+      "Définition d'objectifs opérationnels",
+      "Mise en œuvre d'outils adaptés",
+      "Suivi et évaluation des évolutions"
+    ],
+    "approche": {
+      "title": "Mon approche privilégie :",
+      "items": [
+        "L'écoute active",
+        "La valorisation des ressources individuelles",
+        "L'autonomisation des bénéficiaires",
+        "Une posture à la fois bienveillante et structurante"
+      ]
+    }
+  },
+  "formats": {
+    "title": "Formats de collaboration",
+    "items": [
+      "Interventions ponctuelles (ateliers, modules spécifiques)",
+      "Parcours d'accompagnement sur plusieurs semaines",
+      "Intégration dans des dispositifs existants",
+      "Co-construction de programmes adaptés à vos publics"
+    ]
+  },
+  "valeur": {
+    "title": "Valeur ajoutée",
+    "items": [
+      "Approche intégrative : coaching, sciences sociales, neurofeedback",
+      "Expérience concrète des publics en insertion et multiculturels",
+      "Capacité d'adaptation à des profils variés",
+      "Outils directement mobilisables sur le terrain"
+    ]
+  },
+  "exemples": {
+    "title": "Exemples d'accompagnement",
+    "items": [
+      "Remobilisation de jeunes en situation de décrochage scolaire",
+      "Accompagnement de publics en insertion issus de parcours migratoires",
+      "Travail sur la confiance en soi et la projection professionnelle",
+      "Développement des compétences relationnelles et émotionnelles"
+    ]
+  },
+  "cta": {
+    "title": "Construisons ensemble votre dispositif",
+    "subtitle": "Je suis disponible pour échanger avec les structures souhaitant renforcer leurs dispositifs d'accompagnement et co-construire des interventions adaptées à leurs besoins.",
+    "buttonText": "Prendre contact",
+    "buttonLink": "/contact"
+  }
+}

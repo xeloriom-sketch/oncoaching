@@ -1,0 +1,65 @@
+{
+  "page": {
+    "title": "Coaching jeunes & jeunes adultes",
+    "subtitle": "Retrouver confiance, clarté et direction."
+  },
+  "tabs": [
+    {
+      "key": "accompagnement",
+      "label": "Accompagnement sur mesure",
+      "paragraphs": [
+        "Tu te sens parfois perdu ? En questionnement sur ton avenir, ton identité ou tes choix ? Tu as du mal à te motiver, à t'organiser, ou à gérer le stress du quotidien ? Tu n'es pas seul.",
+        "Aujourd'hui, beaucoup de jeunes et de jeunes adultes vivent des passages flous, des transitions difficiles ou des moments de doute. Mon rôle : t'aider à traverser ces étapes avec plus de clarté, d'équilibre et de confiance.",
+        "Coach certifié et enseignant depuis 26 ans, je propose un espace d'écoute bienveillant et structuré pour t'accompagner à ton rythme, en respectant qui tu es, là où tu en es."
+      ]
+    },
+    {
+      "key": "concretement",
+      "label": "Concrètement, je t'aide à…",
+      "items": [
+        "Clarifier tes envies, tes projets, ton orientation (études, pro, vie perso)",
+        "Retrouver confiance en toi et en tes capacités",
+        "Apprendre à mieux t'organiser et gérer ton temps",
+        "Gérer ton stress, ta pression et tes émotions",
+        "Sortir de l'auto-sabotage, du doute, de la procrastination",
+        "Trouver du sens et reconnecter avec ce qui te motive"
+      ]
+    },
+    {
+      "key": "propose",
+      "label": "Ce que je propose",
+      "items": [
+        "Un bilan de départ pour faire le point",
+        "Des séances individuelles en visio, en présentiel ou à domicile",
+        "Des outils concrets et personnalisés (gestion du temps, ancrage, visualisation, orientation…)",
+        "Une relation de confiance basée sur l'écoute active, le respect et la co-construction"
+      ]
+    },
+    {
+      "key": "pourquoi",
+      "label": "Pourquoi me faire confiance ?",
+      "items": [
+        "🎓 Double expertise : 26 ans auprès de jeunes dans le monde éducatif et associatif, aujourd'hui coach certifié",
+        "👂 Une posture d'écoute, pas de jugement : je ne conseille pas, je t'aide à trouver tes propres réponses",
+        "🤝 Un accompagnement humain, adapté à chacun : pas de méthode toute faite, mais un chemin à co-construire ensemble"
+      ]
+    },
+    {
+      "key": "pourqui",
+      "label": "Pour qui ?",
+      "items": [
+        "🧭 Ceux qui cherchent un cap",
+        "💬 Ceux qui veulent mieux se connaître",
+        "🔥 Ceux qui veulent se relever après un échec ou un blocage",
+        "🌱 Ceux qui veulent juste avancer, autrement"
+      ],
+      "quote": "Tu n'as pas besoin d'avoir toutes les réponses. Tu as besoin d'un espace pour les faire émerger."
+    }
+  ],
+  "cta": {
+    "title": "Prêt à passer à l'action ?",
+    "subtitle": "Réservez dès maintenant votre séance découverte.",
+    "buttonText": "Je prends rendez-vous",
+    "buttonLink": "/contact"
+  }
+}

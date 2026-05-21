@@ -1,35 +1,46 @@
+import { motion } from "framer-motion";
 
-import { UserCircle2, Brain } from "lucide-react";
-import { Link } from "react-router-dom";
-
-interface LogoProps {
-  size?: "small" | "medium" | "large";
+interface LogoMarkProps {
+  size?: number;
+  animate?: boolean;
+  className?: string;
 }
 
-const Logo = ({ size = "medium" }: LogoProps) => {
-  const sizeClasses = {
-    small: "text-xl",
-    medium: "text-2xl",
-    large: "text-3xl"
-  };
+/** Logo réel du client — faviconNoText.png en blanc ou noir via CSS filter */
+export const LogoMark = ({ size = 36, animate: doAnimate = false, className = "", color = "white" }: LogoMarkProps & { color?: "white" | "black" }) => (
+  <motion.img
+    src="/faviconNoText.png"
+    alt="ON Coaching — Logo"
+    style={{
+      width: size,
+      height: size,
+      filter: color === "white"
+        ? "brightness(0) invert(1)"
+        : "brightness(0)",
+    }}
+    className={`object-contain flex-shrink-0 ${className}`}
+    {...(doAnimate
+      ? { whileHover: { scale: 1.1, rotate: 5 }, whileTap: { scale: 0.95 } }
+      : {})}
+  />
+);
 
-  return (
-    <Link to="/" className="flex items-center gap-2 group">
-      <div className="relative flex items-center justify-center">
-        <UserCircle2 
-          className="text-coaching-600 group-hover:text-coaching-500 transition-colors duration-300" 
-          size={size === "small" ? 24 : size === "medium" ? 32 : 40} 
-        />
-        <Brain 
-          className="absolute text-coaching-400 group-hover:text-coaching-300 transition-colors duration-300" 
-          size={size === "small" ? 14 : size === "medium" ? 16 : 20} 
-        />
-      </div>
-      <span className={`font-serif font-semibold text-coaching-600 group-hover:text-coaching-500 transition-colors duration-300 ${sizeClasses[size]}`}>
-        OM Coaching
+interface LogoProps {
+  showText?: boolean;
+  textColor?: string;
+  size?: number;
+}
+
+/** Logo complet = marque + wordmark */
+const Logo = ({ showText = true, textColor = "text-white", size = 34 }: LogoProps) => (
+  <div className="flex items-center gap-2.5">
+    <LogoMark size={size} animate />
+    {showText && (
+      <span className={`font-bold tracking-tight text-[15px] uppercase ${textColor}`}>
+        Coaching
       </span>
-    </Link>
-  );
-};
+    )}
+  </div>
+);
 
 export default Logo;

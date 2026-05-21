@@ -1,148 +1,240 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
-import SectionTitle from "@/components/SectionTitle";
-import CTA from "@/components/CTA";
-import { BrainCircuit, Info, Users, Target, Activity } from "lucide-react";
+import SEO from "@/components/SEO";
+import { BrainCircuit, Info, Users, Target, Activity, Brain, Check, ArrowUpRight, ChevronRight } from "lucide-react";
+import { usePageContent } from "@/hooks/usePageContent";
+import { fadeInUp, staggerContainer, VP } from "@/lib/motion";
+import type { ServicePageContent } from "@/types";
 
-const tabsData = [
-    {
-        key: 'accompagnement',
-        label: 'Accompagnement par Neurofeedback',
-        icon: <BrainCircuit size={24} />,
-        content: (
-            <>
-                <p className="mb-4">
-                    Grâce à ma certification en neurofeedback, je propose un accompagnement permettant
-                    d’entraîner le cerveau à retrouver équilibre et flexibilité. Cette approche douce et
-                    non invasive s’adresse autant aux personnes souhaitant réduire le stress, améliorer
-                    leur sommeil, renforcer leur concentration qu’à celles cherchant à optimiser leurs
-                    performances cognitives et émotionnelles.
-                </p>
-                <p>
-                    Le neurofeedback vient ainsi compléter mes pratiques de coaching, en offrant un outil
-                    concret et efficace pour développer son potentiel, dépasser certaines difficultés
-                    et retrouver un mieux-être durable.
-                </p>
-            </>
-        ),
-    },
-    {
-        key: 'definition',
-        label: 'Qu’est-ce que le neurofeedback ?',
-        icon: <Info size={24} />,
-        content: (
-            <p>
-                Le neurofeedback est une méthode douce et non invasive qui permet au cerveau d’apprendre
-                à mieux s’autoréguler. Grâce à des capteurs posés sur le cuir chevelu, l’activité
-                cérébrale est enregistrée et renvoyée sous forme de signaux visuels ou sonores. Au fil
-                des séances, le cerveau développe de nouveaux automatismes favorisant l’équilibre émotionnel,
-                la concentration et le bien-être.
-            </p>
-        ),
-    },
-    {
-        key: 'pourqui',
-        label: 'Pour qui ?',
-        icon: <Users size={24} />,
-        content: (
-            <ul className="list-disc pl-5 space-y-2">
-                <li><strong>Santé / Bien-être / Santé psychique :</strong> stress, anxiété, burn-out, peurs, hyper-émotivité, impulsivité, hyperactivité, troubles de la mémoire, concentration, organisation, troubles du sommeil, fatigue chronique, douleurs persistantes.</li>
-                <li><strong>Troubles neurodéveloppementaux :</strong> TDA/H, troubles « Dys » (dyslexie, dysorthographie, dyscalculie, dysphasie, dysgraphie, dyspraxie)</li>
-                <li><strong>Performance / Potentiel :</strong> musiciens, danseurs, athlètes, dirigeants, cadres souhaitant optimiser leur performance, créativité, concentration, confiance, etc.</li>
-            </ul>
-        ),
-    },
-    {
-        key: 'resultats',
-        label: 'Résultats attendus',
-        icon: <Target size={24} />,
-        content: (
-            <ul className="list-disc pl-5 space-y-2">
-                <li>Diminution du stress, anxiété, émotivité, impulsivité, colères, conflits, maladresses, doutes, hyperactivité, difficultés « Dys », phobies, échecs, douleurs chroniques, insomnies, réveils nocturnes.</li>
-                <li>Amélioration de l’attention, concentration, mémoire, flexibilité mentale, rapidité d’apprentissage, gestion émotionnelle, estime et confiance en soi, organisation, prise de décision, communication, créativité, relations sociales, performance, bien-être global et qualité de vie.</li>
-            </ul>
-        ),
-    },
-    {
-        key: 'deroulement',
-        label: 'Déroulement d’une séance',
-        icon: <Activity size={24} />,
-        content: (
-            <>
-                <ol className="list-decimal pl-5 space-y-2">
-                    <li>Accueil & échanges : définition des besoins et objectifs.</li>
-                    <li>Installation : pose de capteurs légers et indolores sur le cuir chevelu.</li>
-                    <li>Exercice : le participant regarde un film ou joue à un jeu vidéo. Le feedback reçu entraîne le cerveau à s’autoréguler.</li>
-                    <li>Bilan : retour d’expérience et suivi personnalisé. Durée moyenne : 30 à 45 minutes par séance.</li>
-                </ol>
-                <p className="mt-2">
-                    Un accompagnement progressif est recommandé pour des résultats durables.
-                </p>
-            </>
-        ),
-    },
-    {
-        key: 'complementarite',
-        label: 'Complémentarité Neurofeedback & Coaching',
-        icon: <BrainCircuit size={24} />,
-        content: (
-            <p>
-                Le neurofeedback entraîne votre cerveau à être plus stable, concentré et détendu. Le coaching
-                vous aide ensuite à transformer ce potentiel en actions concrètes pour atteindre vos objectifs
-                personnels, scolaires ou professionnels. Le Neurofeedback peut accompagner, en parallèle ou
-                en amont, un traitement médical, une rééducation (orthophonie, psychomotricité, kinésithérapie)
-                ou un suivi psychothérapeutique.
-            </p>
-        ),
-    }
-];
+const TAB_ICONS: Record<string, React.ElementType> = {
+  accompagnement:  BrainCircuit,
+  definition:      Info,
+  pourqui:         Users,
+  resultats:       Target,
+  deroulement:     Activity,
+  complementarite: Brain,
+};
+
+const HERO_IMG =
+  "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1400&q=80&auto=format&fit=crop";
 
 const CoachingNeurofeedback = () => {
-    const [activeTab, setActiveTab] = useState('accompagnement');
+  const { content, loading } = usePageContent<ServicePageContent>("coaching-neurofeedback");
+  const [activeTab, setActiveTab] = useState("accompagnement");
 
+  if (loading || !content) {
     return (
-        <Layout>
-            <section className="py-20 bg-white">
-                <div className="section-container max-w-5xl mx-auto">
-                    <SectionTitle
-                        title="Coaching & Neurofeedback"
-                        subtitle="Entraîner le cerveau pour améliorer performance et bien-être."
-                        center
-                    />
-
-                    <div className="flex flex-col md:flex-row gap-8 mt-12">
-                        {/* Onglets verticaux */}
-                        <nav className="flex flex-row md:flex-col md:w-1/3 bg-coaching-50 rounded-xl shadow-lg border border-coaching-200 p-4">
-                            {tabsData.map(({ key, label, icon }) => (
-                                <button
-                                    key={key}
-                                    onClick={() => setActiveTab(key)}
-                                    className={`flex items-center gap-3 py-3 px-4 mb-3 rounded-lg font-semibold cursor-pointer transition-colors
-                    ${activeTab === key ? 'bg-coaching-600 text-white shadow-md' : 'text-coaching-700 hover:bg-coaching-100'}`}
-                                    aria-current={activeTab === key ? 'true' : 'false'}
-                                >
-                                    {icon}
-                                    <span>{label}</span>
-                                </button>
-                            ))}
-                        </nav>
-
-                        {/* Contenu actif */}
-                        <div className="md:w-2/3 bg-coaching-50 rounded-xl shadow-lg border border-coaching-200 p-8 min-h-[320px] text-gray-700 text-lg leading-relaxed">
-                            {tabsData.find(tab => tab.key === activeTab)?.content}
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <CTA
-                title="Essayez dès maintenant"
-                subtitle="Séance découverte ou programme personnalisé combinant coaching & Neurofeedback."
-                buttonText="Je prends rendez-vous"
-                buttonLink="/contact"
-            />
-        </Layout>
+      <Layout>
+        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+          <div className="w-8 h-8 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
+        </div>
+      </Layout>
     );
+  }
+
+  const { page, tabs, cta } = content;
+  const activeData = tabs.find(t => t.key === activeTab);
+
+  return (
+    <Layout>
+      <SEO
+        title="Coaching & Neurofeedback"
+        description="Neurofeedback certifié à Mâcon : entraînement cérébral non invasif pour réduire le stress, améliorer la concentration et les performances cognitives."
+        canonical="/coaching-neurofeedback"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type":    "Service",
+          "name":     "Coaching & Neurofeedback",
+          "url":      "https://www.oncoaching.fr/coaching-neurofeedback",
+          "provider": { "@id": "https://www.oncoaching.fr/#business" },
+        }}
+      />
+
+      <div className="w-full bg-white min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">
+
+        {/* ── HERO TEXT ───────────────────────────── */}
+        <motion.header
+          initial="hidden" animate="visible" variants={staggerContainer}
+          className="space-y-3"
+          aria-labelledby="neurofeedback-h1"
+        >
+          <motion.p variants={fadeInUp} className="font-mono tracking-widest uppercase text-[10px] text-gray-400" aria-hidden="true">
+            ↳ Neurofeedback
+          </motion.p>
+          <motion.h1
+            id="neurofeedback-h1"
+            variants={fadeInUp}
+            className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1]"
+          >
+            {page.title}
+          </motion.h1>
+          <motion.p variants={fadeInUp} className="text-gray-500 text-[15px] max-w-xl">
+            {page.subtitle}
+          </motion.p>
+        </motion.header>
+
+        {/* ── HERO IMAGE ──────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="relative w-full h-[260px] sm:h-[380px] rounded-[32px] overflow-hidden"
+        >
+          <img
+            src={HERO_IMG}
+            alt="Coaching et neurofeedback — ON Coaching Mâcon"
+            className="w-full h-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="absolute bottom-4 left-4 bg-[#1ab5c7] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold"
+          >
+            Coaching &amp; Neurofeedback
+          </motion.div>
+        </motion.div>
+
+        {/* ── DARK TABS PANEL ─────────────────────── */}
+        <motion.section
+          initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}
+          className="bg-[#0B0B0C] rounded-[32px] overflow-hidden"
+          aria-label="Services de neurofeedback"
+        >
+          <div className="flex flex-col lg:flex-row min-h-[500px]">
+
+            {/* Left nav */}
+            <nav aria-label="Onglets" className="lg:w-72 flex-shrink-0 border-b lg:border-b-0 lg:border-r border-white/8">
+              <div className="p-6 space-y-1">
+                {tabs.map(tab => {
+                  const Icon     = TAB_ICONS[tab.key] ?? Target;
+                  const isActive = activeTab === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key)}
+                      aria-selected={isActive}
+                      aria-controls="tab-panel-nf"
+                      role="tab"
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 min-h-[44px] ${
+                        isActive ? "bg-white text-[#0B0B0C]" : "text-white/40 hover:bg-white/5"
+                      }`}
+                    >
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                          isActive ? "bg-[#1ab5c7] text-white" : "bg-white/5"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        <Icon className={`w-4 h-4 ${isActive ? "text-[#0B0B0C]" : "text-white/40"}`} strokeWidth={1.8} />
+                      </div>
+                      <span className="font-semibold text-[13px] tracking-tight leading-snug flex-1">{tab.label}</span>
+                      {isActive && <ChevronRight className="w-4 h-4 text-[#1ab5c7] flex-shrink-0" aria-hidden="true" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
+
+            {/* Right content */}
+            <div id="tab-panel-nf" role="tabpanel" className="flex-1 p-8 lg:p-10">
+              <AnimatePresence mode="wait">
+                {activeData && (
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 12 }}
+                    transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <h2 className="font-semibold tracking-tight text-white text-[1.25rem] mb-5 leading-snug">
+                      {activeData.label}
+                    </h2>
+
+                    {activeData.paragraphs?.map((p, i) => (
+                      <p key={i} className="text-white/50 text-[14px] leading-relaxed mb-4">{p}</p>
+                    ))}
+
+                    {activeData.paragraph && !activeData.paragraphs && (
+                      <p className="text-white/50 text-[14px] leading-relaxed mb-4">{activeData.paragraph}</p>
+                    )}
+
+                    {activeData.items && (
+                      <ul className="space-y-3 mt-2">
+                        {activeData.items.map((item, i) => (
+                          <li key={i} className="flex items-start gap-3 text-white/60 text-[13px]">
+                            <Check className="w-4 h-4 text-[#1ab5c7]/70 flex-shrink-0 mt-0.5" strokeWidth={2.5} aria-hidden="true" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {activeData.steps && (
+                      <ol className="space-y-3 mt-2 list-none">
+                        {activeData.steps.map((step, i) => (
+                          <li key={i} className="flex items-start gap-3 text-white/60 text-[13px]">
+                            <span
+                              className="w-5 h-5 rounded-full bg-[#1ab5c7]/20 text-[#1ab5c7] text-[10px] font-mono flex items-center justify-center flex-shrink-0 mt-0.5"
+                              aria-hidden="true"
+                            >
+                              {i + 1}
+                            </span>
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+
+                    {activeData.note && (
+                      <p className="mt-4 text-white/30 text-[12px] italic">{activeData.note}</p>
+                    )}
+
+                    {activeData.quote && (
+                      <blockquote className="mt-6 text-white/40 text-[13px] italic border-l-2 border-[#1ab5c7]/30 pl-4 leading-relaxed">
+                        {activeData.quote}
+                      </blockquote>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Bottom CTA bar */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-8 py-5 border-t border-white/8">
+            <p className="text-white/20 text-[12px] font-mono">Consultation initiale gratuite · Sans engagement</p>
+            <Link
+              to={cta.buttonLink}
+              className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-semibold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+            >
+              {cta.buttonText} <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </Link>
+          </div>
+        </motion.section>
+
+        {/* ── CTA ─────────────────────────────────── */}
+        <motion.section
+          initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}
+          className="text-center py-10 space-y-5"
+        >
+          <h2 className="text-[clamp(1.6rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C]">{cta.title}</h2>
+          <p className="text-gray-500 text-[14px] max-w-md mx-auto">{cta.subtitle}</p>
+          <Link
+            to={cta.buttonLink}
+            className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-medium text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+          >
+            {cta.buttonText} <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </Link>
+        </motion.section>
+
+      </div>
+    </Layout>
+  );
 };
 
 export default CoachingNeurofeedback;

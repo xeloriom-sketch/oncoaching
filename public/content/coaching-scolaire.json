@@ -1,0 +1,75 @@
+{
+  "page": {
+    "title": "Coaching scolaire & étudiant",
+    "subtitle": "Pour réussir, se révéler et trouver son chemin."
+  },
+  "tabs": [
+    {
+      "key": "accompagnement",
+      "label": "Accompagnement sur mesure",
+      "paragraphs": [
+        "Coach certifié et enseignant de lycée depuis 26 ans, j'ai accompagné des milliers de jeunes dans leur construction personnelle et dans leurs apprentissages. Aujourd'hui, je mets cette double expertise — pédagogique et humaine — au service des collégiens, lycéens, étudiants… et de leurs parents.",
+        "Parce que chaque parcours est unique, je propose un accompagnement personnalisé, bienveillant et structuré, pour aider les jeunes à retrouver du sens, de la confiance et des outils concrets."
+      ]
+    },
+    {
+      "key": "jeunes",
+      "label": "J'accompagne les jeunes à…",
+      "items": [
+        "Retrouver la motivation et le goût d'apprendre",
+        "Améliorer leurs méthodes de travail et leur organisation",
+        "Gérer le stress, la pression scolaire et les examens",
+        "Renforcer leur confiance en eux et leur estime personnelle",
+        "Clarifier leur orientation et leurs choix d'avenir",
+        "Se remettre en mouvement après un décrochage, une difficulté ou une perte de repères"
+      ]
+    },
+    {
+      "key": "parents",
+      "label": "J'accompagne aussi les parents à…",
+      "items": [
+        "Mieux comprendre les besoins et les blocages de leur enfant",
+        "Adopter une posture de soutien juste, sans surprotéger ni culpabiliser",
+        "Retrouver un dialogue apaisé en famille autour des enjeux scolaires"
+      ]
+    },
+    {
+      "key": "methodes",
+      "label": "Méthode et outils",
+      "items": [
+        "L'écoute active et l'alliance avec le jeune",
+        "Analyse fine des freins et des leviers (connaissance des adolescents)",
+        "Outils concrets et adaptés à chaque profil (organisation, gestion du temps, auto-évaluation, orientation…)",
+        "Posture de coach : ni professeur, ni psychologue, mais accompagnant vers l'autonomie et l'épanouissement"
+      ]
+    },
+    {
+      "key": "propose",
+      "label": "Ce que je propose concrètement",
+      "items": [
+        "Bilan personnalisé en début d'accompagnement",
+        "Séances individuelles (présentiel, visio ou à domicile), orientées solutions",
+        "Outils pratiques : gestion du temps, planification, auto-évaluation, techniques de concentration",
+        "Points réguliers avec les parents si nécessaire",
+        "Travail autour de l'orientation choisie, non subie"
+      ]
+    },
+    {
+      "key": "resultats",
+      "label": "Pour quels résultats ?",
+      "items": [
+        "Un jeune qui reprend confiance en lui et comprend ses modes d'apprentissage",
+        "Un climat familial apaisé face aux enjeux scolaires",
+        "Un projet d'orientation plus clair, choisi, non subi",
+        "Des progrès visibles à l'école comme dans la posture personnelle"
+      ],
+      "quote": "On ne motive pas un jeune en lui mettant la pression. On l'aide à se reconnecter à ses ressources, à ce qui a du sens pour lui, à ce qui le rend vivant."
+    }
+  ],
+  "cta": {
+    "title": "Prêt à avancer ?",
+    "subtitle": "Réservez votre première séance dès maintenant.",
+    "buttonText": "Je prends rendez-vous",
+    "buttonLink": "/contact"
+  }
+}

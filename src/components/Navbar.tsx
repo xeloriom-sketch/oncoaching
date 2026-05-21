@@ -1,91 +1,250 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import logo from "@/components/Logo.tsx";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Brain, Building2, ChevronDown, GraduationCap, Menu, Users, X, Zap } from "lucide-react";
+import { NAV_LINKS, ROUTES, SERVICES } from "@/lib/config";
+import { LogoMark } from "@/components/Logo";
+
+const SERVICE_ICONS: Record<string, React.ElementType> = {
+  [ROUTES.scolaire]:     GraduationCap,
+  [ROUTES.jeunes]:       Zap,
+  [ROUTES.neurofeedback]:Brain,
+  [ROUTES.equipe]:       Users,
+  [ROUTES.partenaires]:  Building2,
+};
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false); // menu mobile
-  const [isServicesOpen, setIsServicesOpen] = useState(false); // dropdown services mobile
+  const [isOpen,  setIsOpen]  = useState(false);
+  const [svcOpen, setSvcOpen] = useState(false);
+  const location = useLocation();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const closeMenu = () => setIsOpen(false);
-  const toggleServices = () => setIsServicesOpen(!isServicesOpen);
+  useEffect(() => {
+    setIsOpen(false);
+    setSvcOpen(false);
+  }, [location.pathname]);
+
+  const isActive = (href: string) =>
+    href === "/" ? location.pathname === "/" : location.pathname.startsWith(href);
+
+  const isServiceActive = SERVICES.some(s => location.pathname.startsWith(s.href));
 
   return (
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
-            <div className="flex items-center">
-              <Link to="/" className="flex-shrink-0 flex items-center" onClick={closeMenu}>
-              <span className="text-2xl font-serif font-bold text-coaching-600 flex items-center">
-                <img src={`${import.meta.env.BASE_URL}faviconNoText.png`} alt="Logo" className="h-10 w-12 " />
-              </span>
-                <span className="text-2xl font-serif text-gray-700 pt-2">Coaching</span>
+    <header className="fixed top-0 inset-x-0 z-50 px-4 pt-4">
+      <nav
+        aria-label="Navigation principale"
+        className="bg-[#0B0B0C] text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto shadow-xl shadow-black/20"
+      >
+        {/* ── Logo ──────────────────────────────── */}
+        <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2.5 flex-shrink-0 group">
+          <LogoMark size={30} animate color="white" />
+          <span className="font-bold tracking-tight text-[15px] uppercase group-hover:text-[#1ab5c7] transition-colors">
+            Coaching
+          </span>
+        </Link>
+
+        {/* ── Desktop links ─────────────────────── */}
+        <ul className="hidden lg:flex items-center gap-7 text-white/60 text-[13px] font-medium list-none m-0 p-0" role="list">
+          {NAV_LINKS.map(({ label, href }) => (
+            <li key={href}>
+              <Link
+                to={href}
+                aria-current={isActive(href) ? "page" : undefined}
+                className={`relative hover:text-white transition-colors group py-1 ${isActive(href) ? "text-white" : ""}`}
+              >
+                {label}
+                <span
+                  className={`absolute bottom-0 left-0 h-[1px] bg-[#1ab5c7] transition-all duration-200 ${
+                    isActive(href) ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
               </Link>
-            </div>
+            </li>
+          ))}
 
-            {/* Desktop menu */}
-            <div className="hidden md:flex md:items-center md:space-x-10">
-              <Link to="/" className="animated-underline text-gray-700 hover:text-coaching-600 font-medium">Accueil</Link>
-              <Link to="/about" className="animated-underline text-gray-700 hover:text-coaching-600 font-medium">À Propos</Link>
-
-              {/* Services dropdown desktop */}
-              <div className="relative inline-block text-left">
-                <button
-                    onClick={toggleServices}
-                    className="animated-underline text-gray-700 hover:text-coaching-600 font-medium px-4 py-2 focus:outline-none"
-                >
-                  Services
-                </button>
-                {isServicesOpen && (
-                    <div className="absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                      <div className="py-1 flex flex-col">
-                        <Link to="/coaching-scolaire" className="block px-4 py-2 text-gray-700 hover:bg-coaching-50 hover:text-coaching-600" onClick={() => setIsServicesOpen(false)}>Coaching scolaire & étudiant</Link>
-                        <Link to="/coaching-jeunes" className="block px-4 py-2 text-gray-700 hover:bg-coaching-50 hover:text-coaching-600" onClick={() => setIsServicesOpen(false)}>Coaching jeunes & jeunes adultes</Link>
-                        <Link to="/coaching-neurofeedback" className="block px-4 py-2 text-gray-700 hover:bg-coaching-50 hover:text-coaching-600" onClick={() => setIsServicesOpen(false)}>Coaching & Neurofeedback</Link>
-                        <Link to="/coaching-equipe" className="block px-4 py-2 text-gray-700 hover:bg-coaching-50 hover:text-coaching-600" onClick={() => setIsServicesOpen(false)}>Coaching d’équipe</Link>
-                      </div>
-                    </div>
-                )}
-              </div>
-
-              <Link to="/contact" className="animated-underline text-gray-700 hover:text-coaching-600 font-medium">Contact</Link>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
-              <button onClick={toggleMenu} className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-coaching-600 focus:outline-none">
-                <span className="sr-only">Ouvrir le menu</span>
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <div className={cn("md:hidden bg-white transition-all duration-300 ease-in-out", isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden")}>
-          <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
-            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={closeMenu}>Accueil</Link>
-            <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={closeMenu}>À Propos</Link>
-
-            {/* Services dropdown mobile */}
-            <button onClick={toggleServices} className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-coaching-600 hover:bg-coaching-50">
+          {/* Services dropdown — pont invisible pour combler le gap hover */}
+          <li
+            className="relative"
+            onMouseEnter={() => setSvcOpen(true)}
+            onMouseLeave={() => setSvcOpen(false)}
+          >
+            <button
+              aria-haspopup="true"
+              aria-expanded={svcOpen}
+              className={`flex items-center gap-1 hover:text-white transition-colors py-1 group relative ${isServiceActive ? "text-white" : ""}`}
+            >
               Services
+              <motion.span
+                animate={{ rotate: svcOpen ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="inline-flex"
+              >
+                <ChevronDown className="w-3 h-3" aria-hidden="true" />
+              </motion.span>
+              <span
+                className={`absolute bottom-0 left-0 h-[1px] bg-[#1ab5c7] transition-all duration-200 ${
+                  isServiceActive ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              />
             </button>
-            {isServicesOpen && (
-                <div className="pl-4 flex flex-col space-y-1">
-                  <Link to="/coaching-scolaire" className="block px-3 py-2 text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={() => { closeMenu(); setIsServicesOpen(false); }}>Coaching scolaire & étudiant</Link>
-                  <Link to="/coaching-jeunes" className="block px-3 py-2 text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={() => { closeMenu(); setIsServicesOpen(false); }}>Coaching jeunes & jeunes adultes</Link>
-                  <Link to="/coaching-neurofeedback" className="block px-3 py-2 text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={() => { closeMenu(); setIsServicesOpen(false); }}>Coaching & Neurofeedback</Link>
-                  <Link to="/coaching-equipe" className="block px-3 py-2 text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={() => { closeMenu(); setIsServicesOpen(false); }}>Coaching d’équipe</Link>
-                </div>
-            )}
 
-            <Link to="/contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-coaching-600 hover:bg-coaching-50" onClick={closeMenu}>Contact</Link>
-          </div>
-        </div>
+            {/* Wrapper transparent qui comble le gap et garde le hover actif */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-3">
+              <AnimatePresence>
+                {svcOpen && (
+                  <motion.div
+                    role="menu"
+                    initial={{ opacity: 0, y: -4, scale: 0.97 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -4, scale: 0.97 }}
+                    transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                    className="bg-[#0B0B0C] border border-white/10 rounded-[20px] p-2 shadow-2xl"
+                  >
+                    {SERVICES.map(({ label, href }) => {
+                      const Icon = SERVICE_ICONS[href] ?? Brain;
+                      const active = location.pathname === href;
+                      return (
+                        <motion.div
+                          key={href}
+                          whileHover={{ x: 3 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 24 }}
+                        >
+                          <Link
+                            to={href}
+                            role="menuitem"
+                            aria-current={active ? "page" : undefined}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors group ${active ? "bg-white/8" : "hover:bg-white/5"}`}
+                          >
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${active ? "bg-[#1ab5c7]" : "bg-white/8 group-hover:bg-[#1ab5c7]/20"}`} aria-hidden="true">
+                              <Icon className={`w-3.5 h-3.5 transition-colors ${active ? "text-white" : "text-[#1ab5c7]"}`} strokeWidth={1.8} />
+                            </div>
+                            <span className={`text-[12px] font-medium transition-colors ${active ? "text-white" : "text-white/70 group-hover:text-white"}`}>
+                              {label}
+                            </span>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                    <div className="border-t border-white/8 mt-1 pt-2 px-2">
+                      <Link
+                        to="/contact"
+                        className="flex items-center justify-center w-full py-2.5 bg-[#1ab5c7] text-white text-[12px] font-bold rounded-xl hover:opacity-90 transition-opacity"
+                      >
+                        Consultation gratuite →
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </li>
+        </ul>
+
+        {/* ── Desktop CTA ───────────────────────── */}
+        <motion.div className="hidden lg:block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}>
+          <Link
+            to="/contact"
+            className="bg-[#1ab5c7] text-white px-5 py-2 rounded-full font-bold text-[12px] hover:opacity-90 transition-opacity"
+          >
+            Prendre RDV
+          </Link>
+        </motion.div>
+
+        {/* ── Mobile toggle ─────────────────────── */}
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-expanded={isOpen}
+          whileTap={{ scale: 0.9 }}
+          className="lg:hidden text-white p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {isOpen
+              ? <motion.span key="x"    initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <X className="w-5 h-5" aria-hidden="true" />
+                </motion.span>
+              : <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <Menu className="w-5 h-5" aria-hidden="true" />
+                </motion.span>
+            }
+          </AnimatePresence>
+        </motion.button>
       </nav>
+
+      {/* ── Mobile menu ───────────────────────────── */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.nav
+            aria-label="Menu mobile"
+            initial={{ opacity: 0, scale: 0.95, y: -8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -8 }}
+            transition={{ duration: 0.18 }}
+            className="mt-2 bg-[#0B0B0C] border border-white/10 rounded-[24px] p-5 max-w-7xl mx-auto shadow-2xl"
+          >
+            <div className="flex flex-col gap-1 mb-4">
+              {[...NAV_LINKS, { label: "Contact", href: "/contact" }].map(({ label, href }) => (
+                <Link
+                  key={href}
+                  to={href}
+                  aria-current={isActive(href) ? "page" : undefined}
+                  className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center ${
+                    isActive(href) ? "text-white bg-white/8" : "text-white/70 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+
+              <button
+                onClick={() => setSvcOpen(!svcOpen)}
+                aria-expanded={svcOpen}
+                className={`flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] ${
+                  isServiceActive ? "text-white bg-white/8" : "text-white/70 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                Services
+                <ChevronDown className={`w-4 h-4 transition-transform ${svcOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+              </button>
+
+              <AnimatePresence>
+                {svcOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="pl-2 overflow-hidden"
+                  >
+                    {SERVICES.map(({ label, href }) => {
+                      const Icon = SERVICE_ICONS[href] ?? Brain;
+                      return (
+                        <Link
+                          key={href}
+                          to={href}
+                          aria-current={location.pathname === href ? "page" : undefined}
+                          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-[13px] transition-colors min-h-[44px] ${
+                            location.pathname === href ? "text-white bg-white/8" : "text-white/55 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <Icon className="w-3.5 h-3.5 text-[#1ab5c7]" strokeWidth={1.8} aria-hidden="true" />
+                          {label}
+                        </Link>
+                      );
+                    })}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link
+              to="/contact"
+              className="block w-full text-center bg-[#1ab5c7] text-white font-bold text-[14px] py-3.5 rounded-full min-h-[44px] flex items-center justify-center"
+            >
+              Prendre rendez-vous →
+            </Link>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
 

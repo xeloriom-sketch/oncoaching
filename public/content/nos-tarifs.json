@@ -1,0 +1,74 @@
+{
+  "particuliers": {
+    "title": "Coaching particuliers",
+    "subtitle": "Ados, jeunes adultes, étudiants, parents et familles",
+    "cards": [
+      {
+        "key": "individuel",
+        "title": "Coaching individuel",
+        "items": [
+          "Séance 1h : 60 €",
+          "Séance approfondie 1h30 : 90 €"
+        ]
+      },
+      {
+        "key": "parental",
+        "title": "Coaching parental & familial",
+        "items": [
+          "Séance 1h : 70 €",
+          "Séance duo parent + ado (1h30) : 100 €"
+        ]
+      },
+      {
+        "key": "forfaits",
+        "title": "Forfaits",
+        "items": [
+          "Forfait scolaire 5 séances (1h) : 270 €",
+          "Forfait parentalité 3 séances (1h) : 190 €"
+        ]
+      }
+    ]
+  },
+  "entreprises": {
+    "title": "Coaching en entreprise",
+    "subtitle": "PME, équipes, dirigeants, managers, salariés",
+    "items": [
+      "½ journée (3h) : sur devis",
+      "Journée complète (6-7h) : sur devis"
+    ]
+  },
+  "neurofeedback": {
+    "title": "Neurofeedback",
+    "subtitle": "Amélioration de la concentration, gestion du stress, sommeil et régulation émotionnelle",
+    "cards": [
+      {
+        "key": "seances",
+        "title": "Séances individuelles",
+        "items": [
+          "Séance 30 min : 60 €",
+          "Pack 5 séances (30 min) : 280 €",
+          "Pack 10 séances (30 min) : 500 €"
+        ]
+      },
+      {
+        "key": "combo",
+        "title": "Coaching + Neurofeedback",
+        "items": [
+          "Séance combinée 1h30 : 110 €"
+        ]
+      },
+      {
+        "key": "entreprise",
+        "title": "En entreprise",
+        "description": "Gestion du stress, prévention du burn-out, amélioration de la concentration et de la performance.",
+        "note": "Tarifs sur devis"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Prenez rendez-vous dès aujourd'hui",
+    "subtitle": "Discutons ensemble de vos besoins et construisons un accompagnement sur mesure.",
+    "buttonText": "Contactez-nous",
+    "buttonLink": "/contact"
+  }
+}
