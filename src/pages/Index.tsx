@@ -308,8 +308,8 @@ export default function Index() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative"
           >
-            {/* ── Mobile portrait ── */}
-            <div className="lg:hidden relative overflow-hidden h-[320px] sm:h-[380px]">
+            {/* Image simple — même rendu mobile & desktop */}
+            <div className="relative overflow-hidden h-[320px] sm:h-[420px] lg:h-[600px]">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
@@ -318,55 +318,6 @@ export default function Index() {
                 loading="eager"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" aria-hidden="true" />
-              <div className="absolute bottom-4 left-4 bg-[#1ab5c7] rounded-2xl px-4 py-2.5">
-                <p className="text-[10px] font-mono tracking-widest uppercase text-black/40 mb-0.5">Certifié ICF</p>
-                <p className="text-[13px] font-bold text-[#0B0B0C] leading-tight">Prisme Évolution</p>
-              </div>
-              <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
-                <span className="text-white text-[12px] font-semibold">Disponible</span>
-              </div>
-            </div>
-
-            {/* ── Desktop full-height ── */}
-            <div className="hidden lg:block relative h-[800px] will-change-transform">
-              <img
-                src={COACH_IMG}
-                alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
-                className="w-full h-full object-contain object-bottom scale-[1.5] origin-bottom"
-                fetchpriority="high"
-                style={{
-                  maskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0.95) 90%, rgba(0,0,0,0.78) 94%, rgba(0,0,0,0.45) 97.5%, rgba(0,0,0,0) 100%)",
-                  WebkitMaskImage:
-                    "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0.95) 90%, rgba(0,0,0,0.78) 94%, rgba(0,0,0,0.45) 97.5%, rgba(0,0,0,0) 100%)",
-                }}
-                loading="eager"
-                decoding="async"
-              />
-
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                whileHover={{ y: -3 }}
-                className="absolute bottom-56 right-5 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3"
-              >
-                <p className="text-white text-[13px] font-semibold">Coach certifié ICF</p>
-                <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.7, duration: 0.5 }}
-                whileHover={{ y: -2 }}
-                className="absolute bottom-40 left-5 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2"
-              >
-                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
-                <span className="text-white text-[12px] font-semibold">Disponible</span>
-              </motion.div>
             </div>
           </motion.div>
         </div>
