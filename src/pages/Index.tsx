@@ -309,7 +309,7 @@ export default function Index() {
             className="relative"
           >
             {/* ── Mobile portrait ── */}
-            <div className="lg:hidden relative rounded-[28px] overflow-hidden h-[320px] sm:h-[380px] shadow-2xl">
+            <div className="lg:hidden relative overflow-hidden h-[320px] sm:h-[380px]">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
