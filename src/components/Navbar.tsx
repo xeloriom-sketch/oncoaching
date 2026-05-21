@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Building2, ChevronDown, GraduationCap, Menu, Users, X, Zap } from "lucide-react";
@@ -6,16 +6,19 @@ import { NAV_LINKS, ROUTES, SERVICES } from "@/lib/config";
 import { LogoMark } from "@/components/Logo";
 
 const SERVICE_ICONS: Record<string, React.ElementType> = {
-  [ROUTES.scolaire]:     GraduationCap,
-  [ROUTES.jeunes]:       Zap,
-  [ROUTES.neurofeedback]:Brain,
-  [ROUTES.equipe]:       Users,
-  [ROUTES.partenaires]:  Building2,
+  [ROUTES.scolaire]:      GraduationCap,
+  [ROUTES.jeunes]:        Zap,
+  [ROUTES.neurofeedback]: Brain,
+  [ROUTES.equipe]:        Users,
+  [ROUTES.partenaires]:   Building2,
 };
 
 const Navbar = () => {
   const [isOpen,  setIsOpen]  = useState(false);
   const [svcOpen, setSvcOpen] = useState(false);
+  const [hidden,  setHidden]  = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const lastY = useRef(0);
   const location = useLocation();
 
   useEffect(() => {
@@ -23,18 +26,38 @@ const Navbar = () => {
     setSvcOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 20);
+      if (y > lastY.current + 6 && y > 100) setHidden(true);
+      else if (y < lastY.current - 6) setHidden(false);
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const isActive = (href: string) =>
     href === "/" ? location.pathname === "/" : location.pathname.startsWith(href);
 
   const isServiceActive = SERVICES.some(s => location.pathname.startsWith(s.href));
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 px-4 pt-4">
+    <motion.header
+      animate={{ y: hidden ? "-110%" : "0%" }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 inset-x-0 z-50 px-4 pt-4"
+    >
       <nav
         aria-label="Navigation principale"
-        className="bg-[#0B0B0C] text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto shadow-xl shadow-black/20"
+        className={`text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto shadow-xl shadow-black/20 transition-all duration-300 ${
+          scrolled
+            ? "bg-[#0B0B0C]/90 backdrop-blur-xl border border-white/8"
+            : "bg-[#0B0B0C]"
+        }`}
       >
-        {/* ── Logo ──────────────────────────────── */}
+        {/* Logo */}
         <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2.5 flex-shrink-0 group">
           <LogoMark size={30} animate color="white" />
           <span className="font-bold tracking-tight text-[15px] uppercase group-hover:text-[#1ab5c7] transition-colors">
@@ -42,7 +65,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* ── Desktop links ─────────────────────── */}
+        {/* Desktop links */}
         <ul className="hidden lg:flex items-center gap-7 text-white/60 text-[13px] font-medium list-none m-0 p-0" role="list">
           {NAV_LINKS.map(({ label, href }) => (
             <li key={href}>
@@ -61,7 +84,7 @@ const Navbar = () => {
             </li>
           ))}
 
-          {/* Services dropdown — pont invisible pour combler le gap hover */}
+          {/* Services dropdown */}
           <li
             className="relative"
             onMouseEnter={() => setSvcOpen(true)}
@@ -87,7 +110,6 @@ const Navbar = () => {
               />
             </button>
 
-            {/* Wrapper transparent qui comble le gap et garde le hover actif */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-3">
               <AnimatePresence>
                 {svcOpen && (
@@ -139,7 +161,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* ── Desktop CTA ───────────────────────── */}
+        {/* Desktop CTA */}
         <motion.div className="hidden lg:block" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }}>
           <Link
             to="/contact"
@@ -149,7 +171,7 @@ const Navbar = () => {
           </Link>
         </motion.div>
 
-        {/* ── Mobile toggle ─────────────────────── */}
+        {/* Mobile toggle */}
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
@@ -170,7 +192,7 @@ const Navbar = () => {
         </motion.button>
       </nav>
 
-      {/* ── Mobile menu ───────────────────────────── */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.nav
@@ -221,7 +243,7 @@ const Navbar = () => {
                           key={href}
                           to={href}
                           aria-current={location.pathname === href ? "page" : undefined}
-                          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-[13px] transition-colors min-h-[44px] ${
+                          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-[14px] transition-colors min-h-[44px] ${
                             location.pathname === href ? "text-white bg-white/8" : "text-white/55 hover:text-white hover:bg-white/5"
                           }`}
                         >
@@ -244,7 +266,7 @@ const Navbar = () => {
           </motion.nav>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 };
 
