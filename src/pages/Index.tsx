@@ -274,17 +274,13 @@ export default function Index() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative hidden lg:block"
           >
-            <div className="relative h-[500px] rounded-[32px] overflow-hidden">
+            <div className="relative h-[500px] overflow-hidden">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
                 className="w-full h-full object-cover object-top"
                 loading="eager"
                 decoding="async"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
-                aria-hidden="true"
               />
 
               <motion.div

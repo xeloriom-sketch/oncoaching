@@ -106,7 +106,7 @@ const NosTarifs = () => {
       <div className="w-full bg-white overflow-x-hidden">
 
         {/* ── HERO ──────────────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 md:pt-28 pb-10 max-w-7xl mx-auto px-5 md:px-12">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -171,7 +171,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── CARTES TARIFS ─────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-12" aria-labelledby="section-tarifs">
+        <section className="pb-20 md:pb-28 max-w-7xl mx-auto px-5 md:px-12" aria-labelledby="section-tarifs">
           <motion.div
             initial="hidden"
             whileInView="visible"

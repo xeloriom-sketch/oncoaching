@@ -85,20 +85,18 @@ export const stagger = staggerContainer;
 
 /* ── Hover / Tap props ──────────────────────────────────────────── */
 export const cardHoverProps = {
-  whileHover: { y: -8, scale: 1.025, transition: { type: "spring", stiffness: 350, damping: 22 } },
+  whileHover: { y: -8, scale: 1.025, transition: { type: "spring" as const, stiffness: 350, damping: 22 } },
   whileTap:   { scale: 0.97 },
-};
+} as const;
 
-/* Lift subtil — pour éléments inline */
 export const liftHoverProps = {
-  whileHover: { y: -4, transition: { type: "spring", stiffness: 400, damping: 24 } },
-};
+  whileHover: { y: -4, transition: { type: "spring" as const, stiffness: 400, damping: 24 } },
+} as const;
 
-/* Glow bouton — scale + légère lueur */
 export const btnHoverProps = {
-  whileHover: { scale: 1.06, transition: { type: "spring", stiffness: 450, damping: 20 } },
+  whileHover: { scale: 1.06, transition: { type: "spring" as const, stiffness: 450, damping: 20 } },
   whileTap:   { scale: 0.96 },
-};
+} as const;
 
 /* Icon wobble on hover */
 export const iconWobble = {

@@ -1,159 +1,81 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import SpotlightCard from "@/components/SpotlightCard";
 import {
-  GraduationCap, UserCheck, BookOpen, Heart, Target, Check,
-  ArrowUpRight, ChevronRight, ChevronDown, Star, AlertCircle,
-  Lightbulb, TrendingUp, Brain, CalendarCheck, Users,
+  GraduationCap, Users, Brain, Lightbulb,
+  BookOpen, TrendingUp, CalendarCheck, Star, Zap, Compass,
+  Check, ArrowUpRight,
 } from "lucide-react";
 import { usePageContent } from "@/hooks/usePageContent";
 import { useTilt } from "@/hooks/useTilt";
 import {
-  fadeInUp, blurInUp, staggerContainer, springUp,
-  cardHoverProps, btnHoverProps, floatAnim, VP,
+  blurInUp, staggerContainer, springUp,
+  btnHoverProps, VP,
 } from "@/lib/motion";
 import type { ServicePageContent } from "@/types";
 
-const TAB_ICONS: Record<string, React.ElementType> = {
-  accompagnement: GraduationCap,
-  jeunes:         UserCheck,
-  parents:        Heart,
-  methodes:       BookOpen,
-  propose:        BookOpen,
-  resultats:      Target,
-};
-
 const HERO_IMG =
-  "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1400&q=80&auto=format&fit=crop";
+  "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=85";
 
-const COACH_PHOTO =
-  `${import.meta.env.BASE_URL}patron.png`;
+const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.png`;
 
-const H1_LINE_A = "Coaching".split(" ");
-const H1_LINE_B = "Scolaire".split(" ");
+const H1_WORDS = ["Coaching", "Scolaire"];
 
-const PROBLEMS = [
-  "Manque de motivation scolaire",
-  "Difficultés à travailler de façon autonome",
-  "Résultats en baisse malgré les efforts",
-  "Tensions et conflits à la maison autour de l'école",
-  "Malgré vos efforts, rien ne change vraiment",
+const FOR_WHO = [
+  { icon: BookOpen,     text: "Tu te perds dans tes révisions et n'arrives pas à t'organiser" },
+  { icon: TrendingUp,   text: "Tes résultats stagnent malgré tous tes efforts" },
+  { icon: Brain,        text: "Le stress des examens te paralyse" },
+  { icon: Star,         text: "Tu manques de motivation et décroches peu à peu" },
+  { icon: Compass,      text: "Tu ne sais pas quelle orientation choisir" },
+  { icon: Zap,          text: "Tu veux gagner en autonomie et en confiance" },
 ];
 
 const BENEFITS = [
   {
+    icon: Star,
+    title: "Motivation retrouvée",
+    desc: "Redécouvre le plaisir d'apprendre et avance avec élan vers tes objectifs.",
+  },
+  {
     icon: BookOpen,
-    title: "Méthodes d'apprentissage efficaces",
-    desc: "Apprendre à organiser son travail et utiliser des techniques d'étude adaptées pour retenir plus facilement et gagner en autonomie.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Confiance en soi renforcée",
-    desc: "Identifier les blocages, booster la motivation pour aborder les examens et les cours avec assurance.",
-  },
-  {
-    icon: CalendarCheck,
-    title: "Suivi personnalisé et régulier",
-    desc: "Un accompagnement sur-mesure qui s'adapte aux besoins spécifiques de votre enfant pour progresser à son rythme.",
+    title: "Méthodes de travail",
+    desc: "Des techniques concrètes pour organiser tes révisions et retenir efficacement.",
   },
   {
     icon: Brain,
-    title: "Gestion du stress et organisation",
-    desc: "Des outils pratiques pour gérer le stress des examens et mieux planifier les devoirs afin d'éviter la surcharge.",
+    title: "Gestion du stress d'examen",
+    desc: "Outils pratiques pour aborder les épreuves avec sérénité et lucidité.",
   },
   {
-    icon: Star,
-    title: "Amélioration durable des résultats",
-    desc: "Des progrès visibles et durables qui préparent votre enfant à réussir tout au long de sa scolarité.",
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Fatima",
-    role: "Maman d'un élève de troisième",
-    text: "Nous avons bénéficié de l'appui et de l'accompagnement de Mr Noureddine Omar. Il a été bienveillant, professionnel et éclairant sur plusieurs aspects. Mention spéciale pour les séances de Neurofeedback qui ont été vraiment et assurément d'une grande efficacité. Je recommande vivement le coaching de Noureddine Omar.",
+    icon: Compass,
+    title: "Clarté sur l'orientation",
+    desc: "Identifie tes forces et dessine un projet scolaire qui te ressemble.",
   },
   {
-    name: "Sarah",
-    role: "Jeune salariée — La relance",
-    text: "C'est principalement grâce à l'accompagnement coaching de M. OMAR que j'ai pu identifier clairement ce qui me freinait, mettre des mots sur mes blocages et surtout comprendre comment avancer. Les séances m'ont permis de prendre du recul et de prendre confiance en moi.",
-  },
-];
-
-const PRICING = [
-  {
-    label: "Coaching Individuel",
-    badge: "Populaire",
-    price: "60€",
-    unit: "/ séance",
-    items: [
-      "Reprise de confiance en soi",
-      "Méthodes efficaces pour mieux travailler",
-      "Progression rapide et durable",
-    ],
-    dark: true,
+    icon: TrendingUp,
+    title: "Confiance en soi",
+    desc: "Lève les blocages et crois enfin en ta capacité à réussir.",
   },
   {
-    label: "Coaching + Neurofeedback",
-    badge: null,
-    price: "80€",
-    unit: "/ séance",
-    desc: "Un accompagnement complet pour des résultats plus rapides et en profondeur",
-    items: [
-      "Amélioration de la concentration",
-      "Réduction du stress et de l'anxiété",
-      "Travail en profondeur sur les blocages",
-    ],
-    dark: false,
-  },
-];
-
-const FAQS = [
-  {
-    q: "À quel âge mon enfant peut-il commencer le coaching scolaire ?",
-    a: "Le coaching scolaire est adapté dès le collège (à partir de 11 ans) jusqu'aux études supérieures. Chaque séance est calibrée sur l'âge et le niveau de maturité du jeune.",
-  },
-  {
-    q: "Comment se déroule une séance de coaching ?",
-    a: "Chaque séance dure environ 1 heure. On commence par un point sur la semaine, puis on travaille sur un objectif précis (méthode, motivation, organisation) avec des outils concrets. Les séances sont disponibles en présentiel à Sancé (Mâcon), en visio ou à domicile.",
-  },
-  {
-    q: "Le coaching peut-il aider un élève en grande difficulté ?",
-    a: "Oui. Le coaching est particulièrement efficace pour les jeunes en décrochage, en perte de sens ou en grande difficulté. L'approche bienveillante et personnalisée permet de repartir sur de bonnes bases.",
-  },
-  {
-    q: "À quelle fréquence les séances sont-elles recommandées ?",
-    a: "Une séance par semaine ou toutes les deux semaines est idéale au démarrage pour créer une dynamique. Le rythme peut être ajusté selon les besoins et les objectifs.",
-  },
-  {
-    q: "Le coaching scolaire remplace-t-il les cours particuliers ?",
-    a: "Non — le coaching scolaire ne remplace pas les cours particuliers. Il les complète. Là où les cours particuliers apportent des savoirs, le coaching développe la méthode, la motivation et la confiance. Les deux sont complémentaires.",
+    icon: CalendarCheck,
+    title: "Autonomie durable",
+    desc: "Tu deviens acteur de ta réussite, sans dépendre d'un soutien permanent.",
   },
 ];
 
 const CoachingScolaire = () => {
   const { content, loading } = usePageContent<ServicePageContent>("coaching-scolaire");
-  const [activeTab, setActiveTab]   = useState("accompagnement");
-  const [openFaq,   setOpenFaq]     = useState<number | null>(null);
 
-  const tiltP0 = useTilt(10);
-  const tiltP1 = useTilt(10);
-  const tiltP2 = useTilt(10);
-  const tiltP3 = useTilt(10);
-  const tiltP4 = useTilt(10);
+  const t0 = useTilt(10);
+  const t1 = useTilt(10);
+  const t2 = useTilt(10);
+  const t3 = useTilt(10);
+  const t4 = useTilt(10);
+  const t5 = useTilt(10);
 
-  const tiltB0 = useTilt(10);
-  const tiltB1 = useTilt(10);
-  const tiltB2 = useTilt(10);
-  const tiltB3 = useTilt(10);
-  const tiltB4 = useTilt(10);
-
-  const problemTilts = [tiltP0, tiltP1, tiltP2, tiltP3, tiltP4];
-  const benefitTilts = [tiltB0, tiltB1, tiltB2, tiltB3, tiltB4];
+  const tilts = [t0, t1, t2, t3, t4, t5];
 
   if (loading || !content) {
     return (
@@ -165,8 +87,7 @@ const CoachingScolaire = () => {
     );
   }
 
-  const { page, tabs, cta } = content;
-  const activeData = tabs.find(t => t.key === activeTab);
+  const { page, cta } = content;
 
   return (
     <Layout>
@@ -183,342 +104,242 @@ const CoachingScolaire = () => {
         }}
       />
 
-      <div className="w-full bg-white min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">
+      {/* ── 01. HERO ─────────────────────────────────────────────── */}
+      <section className="bg-white pt-28 pb-16">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-        {/* ── HERO TEXT ─────────────────────────────── */}
-        <motion.header
-          initial="hidden" animate="visible" variants={staggerContainer}
-          className="space-y-3"
-          aria-labelledby="scolaire-h1"
-        >
-          <motion.p variants={fadeInUp} className="font-mono tracking-widest uppercase text-[10px] text-gray-400" aria-hidden="true">
-            ↳ Coaching Scolaire
-          </motion.p>
-
-          <h1
-            id="scolaire-h1"
-            className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1]"
-          >
-            {H1_LINE_A.map((word, i) => (
-              <motion.span
-                key={`a${i}`}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 180, damping: 18, delay: i * 0.1 }}
-                className="inline-block mr-[0.2em]"
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="flex flex-col gap-6"
+            >
+              <motion.p
+                variants={blurInUp}
+                className="font-mono tracking-widest uppercase text-[11px] text-[#1ab5c7] font-semibold"
+                aria-hidden="true"
               >
-                {word}
-              </motion.span>
-            ))}
-            <br />
-            {H1_LINE_B.map((word, i) => (
-              <motion.span
-                key={`b${i}`}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 180, damping: 18, delay: 0.18 + i * 0.1 }}
-                className="inline-block mr-[0.2em] text-[#1ab5c7]"
+                ↳ Coaching Scolaire
+              </motion.p>
+
+              <h1
+                className="text-[clamp(3rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
               >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
-
-          <motion.p variants={blurInUp} className="text-gray-500 text-[15px] max-w-xl">
-            Votre enfant manque de motivation, décroche ou ne trouve plus sa place à l'école ?<br />
-            Je l'aide à retrouver confiance, méthode et sérénité en quelques semaines.
-          </motion.p>
-
-          <motion.div variants={fadeInUp}>
-            <motion.span className="inline-block" {...btnHoverProps}>
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
-              >
-                Réserver un premier échange gratuit <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-              </Link>
-            </motion.span>
-          </motion.div>
-        </motion.header>
-
-        {/* ── HERO IMAGE ────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          whileHover={{ scale: 1.02 }}
-          className="relative w-full h-[260px] sm:h-[380px] rounded-[32px] overflow-hidden cursor-default"
-          style={{ transition: "box-shadow 0.3s ease" }}
-        >
-          <img
-            src={HERO_IMG}
-            alt="Coaching scolaire et étudiant à Mâcon — ON Coaching"
-            className="w-full h-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-            className="absolute bottom-4 left-4 bg-[#1ab5c7] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold"
-          >
-            Coaching Scolaire &amp; Étudiant
-          </motion.div>
-
-          <motion.div
-            {...floatAnim}
-            className="absolute bottom-6 right-6 w-10 h-10 rounded-full bg-[#1ab5c7]/20 border border-[#1ab5c7]/30 backdrop-blur-sm"
-            aria-hidden="true"
-          />
-          <motion.div
-            animate={{ y: [0, -14, 0] }}
-            transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-8 right-10 w-3 h-3 rounded-full bg-white/60"
-            aria-hidden="true"
-          />
-        </motion.div>
-
-        {/* ── PROBLÈMES ─────────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}
-          className="bg-[#F3F4F6] rounded-[32px] p-8 md:p-12"
-          aria-label="Situations difficiles"
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <AlertCircle className="w-5 h-5 text-[#0B0B0C]" strokeWidth={1.8} aria-hidden="true" />
-            <h2 className="font-semibold text-[1.1rem] text-[#0B0B0C] tracking-tight">
-              Vous vous reconnaissez dans cette situation ?
-            </h2>
-          </div>
-          <motion.p
-            initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={VP}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-gray-500 text-[13px] mb-6 max-w-lg"
-          >
-            Ces situations sont fréquentes. Ce n'est pas une fatalité — un accompagnement ciblé peut tout changer.
-          </motion.p>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {PROBLEMS.map((p, i) => {
-              const tilt = problemTilts[i];
-              return (
-                <li
-                  key={i}
-                  ref={tilt.ref}
-                  onMouseMove={tilt.onMouseMove}
-                  onMouseLeave={tilt.onMouseLeave}
-                  onMouseEnter={tilt.onMouseEnter}
-                  className="flex items-start gap-3 bg-white rounded-2xl px-5 py-4 text-[13px] text-[#0B0B0C] font-medium shadow-sm cursor-default"
-                  style={{ willChange: "transform" }}
-                >
-                  <span className="w-5 h-5 rounded-full bg-[#0B0B0C] text-[#1ab5c7] flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5" aria-hidden="true">
-                    {i + 1}
-                  </span>
-                  {p}
-                </li>
-              );
-            })}
-          </ul>
-        </motion.section>
-
-        {/* ── BÉNÉFICES ─────────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={staggerContainer}
-          aria-label="Bénéfices du coaching scolaire"
-        >
-          <motion.div variants={blurInUp} className="mb-6">
-            <p className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-2" aria-hidden="true">Résultats</p>
-            <h2 className="text-[clamp(1.6rem,4vw,2.8rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
-              Les bénéfices du coaching
-            </h2>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {BENEFITS.map((b, i) => {
-              const Icon = b.icon;
-              const tilt = benefitTilts[i];
-              return (
-                <motion.article
-                  key={i}
-                  variants={springUp}
-                  className="bg-[#0B0B0C] rounded-[24px] p-6 flex flex-col gap-4 cursor-default"
-                  style={{ willChange: "transform" }}
-                  ref={tilt.ref}
-                  onMouseMove={tilt.onMouseMove}
-                  onMouseLeave={tilt.onMouseLeave}
-                  onMouseEnter={tilt.onMouseEnter}
-                >
-                  <motion.div
-                    className="w-10 h-10 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0"
-                    whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}
-                    aria-hidden="true"
+                {H1_WORDS.map((word, i) => (
+                  <motion.span
+                    key={word}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 180, damping: 18, delay: i * 0.12 }}
+                    className="inline-block mr-[0.22em]"
                   >
-                    <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
-                  </motion.div>
-                  <h3 className="text-white font-semibold text-[14px] leading-snug">{b.title}</h3>
-                  <p className="text-white/50 text-[13px] leading-relaxed flex-1">{b.desc}</p>
-                </motion.article>
-              );
-            })}
+                    {word}
+                  </motion.span>
+                ))}
+              </h1>
+
+              <motion.p
+                variants={blurInUp}
+                className="text-gray-500 text-[16px] leading-relaxed max-w-lg"
+              >
+                {page.subtitle ?? "Ton enfant décroche, manque de méthode ou perd confiance ? Un accompagnement personnalisé pour retrouver motivation, organisation et sérénité."}
+              </motion.p>
+
+              <motion.div variants={blurInUp} className="flex flex-wrap gap-3">
+                <motion.span className="inline-block" {...btnHoverProps}>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                  >
+                    1er RDV offert <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </Link>
+                </motion.span>
+                <motion.span className="inline-block" {...btnHoverProps}>
+                  <Link
+                    to="/coaching-scolaire#tarif"
+                    className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#0B0B0C] font-semibold text-[13px] px-6 py-3 rounded-full hover:bg-gray-200 transition-colors"
+                  >
+                    Voir les tarifs
+                  </Link>
+                </motion.span>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+              className="relative"
+            >
+              <div className="relative h-[460px] rounded-[32px] overflow-hidden">
+                <img
+                  src={HERO_IMG}
+                  alt="Coaching scolaire à Mâcon — ON Coaching"
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/40 via-transparent to-transparent" />
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.55, duration: 0.5 }}
+                className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm text-[#0B0B0C] px-4 py-2 rounded-full text-[12px] font-semibold shadow-sm"
+              >
+                Collégiens · Lycéens · Étudiants
+              </motion.div>
+            </motion.div>
+
           </div>
-        </motion.section>
+        </div>
+      </section>
 
-        {/* ── TABS PANEL ────────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}
-          className="bg-[#0B0B0C] rounded-[32px] overflow-hidden"
-          aria-label="Services de coaching scolaire"
-        >
-          <div className="flex flex-col lg:flex-row min-h-[500px]">
+      {/* ── 02. POUR QUI ─────────────────────────────────────────── */}
+      <section className="bg-[#F3F4F6] py-20" aria-label="Pour qui est ce coaching">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="flex flex-col gap-10"
+          >
+            <motion.div variants={blurInUp} className="flex flex-col gap-2">
+              <p className="font-mono tracking-widest uppercase text-[11px] text-gray-400" aria-hidden="true">
+                Pour toi si…
+              </p>
+              <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
+                Ce coaching est fait pour toi si…
+              </h2>
+            </motion.div>
 
-            <nav aria-label="Onglets" className="lg:w-72 flex-shrink-0 border-b lg:border-b-0 lg:border-r border-white/8">
-              <div className="p-6 space-y-1">
-                {tabs.map(tab => {
-                  const Icon     = TAB_ICONS[tab.key] ?? Target;
-                  const isActive = activeTab === tab.key;
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {FOR_WHO.map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    variants={springUp}
+                    className="flex items-center gap-4 bg-white rounded-2xl px-5 py-4"
+                  >
+                    <div className="w-9 h-9 rounded-xl bg-[#1ab5c7]/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                      <Icon className="w-4.5 h-4.5 text-[#1ab5c7]" strokeWidth={1.8} />
+                    </div>
+                    <p className="text-[#0B0B0C] text-[15px] font-semibold leading-snug">{item.text}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── 03. CE QUE TU VAS GAGNER ─────────────────────────────── */}
+      <section className="bg-[#0B0B0C] py-20" aria-label="Bénéfices du coaching">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="flex flex-col gap-10"
+          >
+            <motion.div variants={blurInUp} className="flex flex-col gap-2">
+              <p className="font-mono tracking-widest uppercase text-[11px] text-white/30" aria-hidden="true">
+                Résultats
+              </p>
+              <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-white leading-tight">
+                Ce que tu vas gagner
+              </h2>
+            </motion.div>
+
+            <SpotlightCard
+              className="rounded-[32px]"
+              spotlightColor="rgba(26,181,199,0.08)"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {BENEFITS.map((b, i) => {
+                  const Icon = b.icon;
+                  const tilt = tilts[i];
                   return (
-                    <motion.button
-                      key={tab.key}
-                      onClick={() => setActiveTab(tab.key)}
-                      aria-selected={isActive}
-                      aria-controls="tab-panel"
-                      role="tab"
-                      whileHover={{ x: isActive ? 0 : 4, transition: { type: "spring", stiffness: 400, damping: 24 } }}
-                      whileTap={{ scale: 0.97 }}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 min-h-[44px] ${
-                        isActive ? "bg-white text-[#0B0B0C]" : "text-white/40 hover:bg-white/5"
-                      }`}
+                    <motion.article
+                      key={i}
+                      variants={springUp}
+                      ref={tilt.ref}
+                      onMouseMove={tilt.onMouseMove}
+                      onMouseLeave={tilt.onMouseLeave}
+                      onMouseEnter={tilt.onMouseEnter}
+                      className="bg-white/5 border border-white/8 rounded-[24px] p-6 flex flex-col gap-4 cursor-default"
+                      style={{ willChange: "transform" }}
                     >
                       <div
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                          isActive ? "bg-[#1ab5c7] text-white" : "bg-white/5"
-                        }`}
+                        className="w-10 h-10 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0"
                         aria-hidden="true"
                       >
-                        <Icon className={`w-4 h-4 ${isActive ? "text-[#0B0B0C]" : "text-white/40"}`} strokeWidth={1.8} />
+                        <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
                       </div>
-                      <span className="font-semibold text-[13px] tracking-tight leading-snug flex-1">{tab.label}</span>
-                      {isActive && (
-                        <motion.span
-                          initial={{ opacity: 0, x: -4 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                        >
-                          <ChevronRight className="w-4 h-4 text-[#1ab5c7] flex-shrink-0" aria-hidden="true" />
-                        </motion.span>
-                      )}
-                    </motion.button>
+                      <h3 className="text-white font-semibold text-[15px] leading-snug">{b.title}</h3>
+                      <p className="text-white/50 text-[13px] leading-relaxed flex-1">{b.desc}</p>
+                    </motion.article>
                   );
                 })}
               </div>
-            </nav>
+            </SpotlightCard>
+          </motion.div>
+        </div>
+      </section>
 
-            <div id="tab-panel" role="tabpanel" className="flex-1 p-8 lg:p-10">
-              <AnimatePresence mode="wait">
-                {activeData && (
-                  <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
-                    transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <h2 className="font-semibold tracking-tight text-white text-[1.25rem] mb-5 leading-snug">
-                      {activeData.label}
-                    </h2>
-                    {activeData.paragraphs?.map((p, i) => (
-                      <p key={i} className="text-white/50 text-[14px] leading-relaxed mb-4">{p}</p>
-                    ))}
-                    {activeData.items && (
-                      <ul className="space-y-3 mt-2">
-                        {activeData.items.map((item, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.05 + i * 0.06, type: "spring", stiffness: 260, damping: 22 }}
-                            className="flex items-start gap-3 text-white/60 text-[13px]"
-                          >
-                            <Check className="w-4 h-4 text-[#1ab5c7]/70 flex-shrink-0 mt-0.5" strokeWidth={2.5} aria-hidden="true" />
-                            {item}
-                          </motion.li>
-                        ))}
-                      </ul>
-                    )}
-                    {activeData.quote && (
-                      <blockquote className="mt-6 text-white/40 text-[13px] italic border-l-2 border-[#1ab5c7]/30 pl-4 leading-relaxed">
-                        {activeData.quote}
-                      </blockquote>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-8 py-5 border-t border-white/8">
-            <p className="text-white/20 text-[12px] font-mono">Consultation initiale gratuite · Sans engagement</p>
-            <motion.span className="inline-block" {...btnHoverProps}>
-              <Link
-                to={cta.buttonLink}
-                className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-semibold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
-              >
-                {cta.buttonText} <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-              </Link>
-            </motion.span>
-          </div>
-        </motion.section>
-
-        {/* ── À PROPOS DU COACH ─────────────────────── */}
-        <SpotlightCard
-          className="bg-[#0B0B0C] rounded-[32px] overflow-hidden"
-          spotlightColor="rgba(26,181,199,0.10)"
-        >
-          <motion.section
-            initial="hidden" whileInView="visible" viewport={VP} variants={staggerContainer}
-            aria-label="À propos du coach"
+      {/* ── 04. COACH BIO ────────────────────────────────────────── */}
+      <section className="bg-white py-20" aria-label="Le coach">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <motion.div
-                variants={springUp}
-                className="relative h-[320px] lg:h-auto min-h-[360px] overflow-hidden"
-              >
-                <img
-                  src={COACH_PHOTO}
-                  alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
-                  className="w-full h-full object-cover object-top"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/60 via-transparent to-transparent" />
-                <div className="absolute bottom-5 left-5">
-                  <p className="text-[#1ab5c7] text-[10px] font-mono tracking-widest uppercase">Noureddine Omar</p>
-                  <p className="text-white font-semibold text-[14px]">Coach certifié ICF</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+              <motion.div variants={springUp} className="relative">
+                <div className="relative h-[440px] rounded-[32px] overflow-hidden">
+                  <img
+                    src={COACH_PHOTO}
+                    alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
+                    className="w-full h-full object-cover object-top"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/50 via-transparent to-transparent" />
+                </div>
+                <div className="absolute bottom-5 left-5 flex flex-col gap-1">
+                  <span className="bg-[#1ab5c7] text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit">
+                    Coach certifié ICF
+                  </span>
+                  <span className="bg-white/90 backdrop-blur-sm text-[#0B0B0C] text-[11px] font-semibold px-3 py-1 rounded-full w-fit">
+                    26 ans enseignant SES
+                  </span>
                 </div>
               </motion.div>
 
-              <motion.div variants={fadeInUp} className="p-8 lg:p-10 space-y-6">
-                <div>
-                  <p className="font-mono tracking-widest uppercase text-[10px] text-white/30 mb-3" aria-hidden="true">Le coach</p>
-                  <h2 className="text-[clamp(1.4rem,3vw,2rem)] font-semibold tracking-tight text-white leading-tight">
-                    Qui suis-je pour vous accompagner ?
+              <motion.div variants={blurInUp} className="flex flex-col gap-7 pt-2">
+                <div className="flex flex-col gap-2">
+                  <p className="font-mono tracking-widest uppercase text-[11px] text-gray-400" aria-hidden="true">
+                    Notre coach
+                  </p>
+                  <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
+                    26 ans auprès des jeunes
                   </h2>
                 </div>
-                <blockquote className="space-y-3 border-l-2 border-[#1ab5c7] pl-5 not-italic">
-                  <p className="text-white/60 text-[13px] leading-relaxed">
-                    Pendant plus de 26 ans, j'ai accompagné des jeunes, des adolescents et des familles au cœur des enjeux scolaires, éducatifs et personnels.
-                  </p>
-                  <p className="text-white/60 text-[13px] leading-relaxed">
-                    Au fil de mon expérience d'enseignant en SES, j'ai constaté que les difficultés scolaires ne sont pas uniquement liées aux capacités… mais souvent à la confiance, à la motivation et à la gestion du stress.
-                  </p>
-                  <p className="text-white/60 text-[13px] leading-relaxed">
-                    Formé en neurofeedback, j'intègre une compréhension fine du fonctionnement du cerveau pour aider chaque jeune à dépasser ses blocages.
-                  </p>
-                </blockquote>
-                <ul className="space-y-3">
+
+                <p className="text-gray-500 text-[16px] leading-relaxed">
+                  Enseignant en SES pendant 26 ans, j'ai accompagné des centaines de jeunes dans leurs parcours scolaires. Formé comme coach certifié ICF chez Prisme Évolution, j'associe pédagogie de terrain et outils de coaching pour agir en profondeur sur la motivation, la méthode et la confiance.
+                </p>
+
+                <ul className="flex flex-col gap-3">
                   {[
-                    { icon: GraduationCap, label: "26 ans d'expérience en enseignement SES" },
+                    { icon: GraduationCap, label: "26 ans d'expérience enseignant SES" },
                     { icon: Users,         label: "Coach certifié ICF — Prisme Évolution" },
                     { icon: Brain,         label: "Formé en neurofeedback" },
                     { icon: Lightbulb,     label: "Double expertise pédagogique & humaine" },
@@ -534,219 +355,95 @@ const CoachingScolaire = () => {
                       <div className="w-8 h-8 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0" aria-hidden="true">
                         <Icon className="w-4 h-4 text-white" strokeWidth={1.8} />
                       </div>
-                      <span className="text-white/70 text-[13px]">{label}</span>
+                      <span className="text-[#0B0B0C] text-[14px]">{label}</span>
                     </motion.li>
                   ))}
                 </ul>
+
+                <motion.span className="inline-block w-fit" {...btnHoverProps}>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                  >
+                    Prendre contact <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </Link>
+                </motion.span>
               </motion.div>
+
             </div>
-          </motion.section>
-        </SpotlightCard>
-
-        {/* ── TÉMOIGNAGES ───────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={staggerContainer}
-          aria-label="Témoignages clients"
-        >
-          <motion.div variants={blurInUp} className="mb-6">
-            <p className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-2" aria-hidden="true">Témoignages</p>
-            <h2 className="text-[clamp(1.6rem,4vw,2.8rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
-              Ils m'ont fait confiance
-            </h2>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.article
-                key={i}
-                variants={springUp}
-                {...cardHoverProps}
-                className="bg-[#F3F4F6] rounded-[24px] p-7 flex flex-col gap-4 cursor-default"
-              >
-                <div className="flex gap-1" aria-label="5 étoiles">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <Star key={s} className="w-3.5 h-3.5 fill-[#1ab5c7] text-[#1ab5c7]" aria-hidden="true" />
-                  ))}
-                </div>
-                <blockquote className="text-gray-600 text-[13px] leading-relaxed flex-1">
-                  "{t.text}"
-                </blockquote>
-                <footer className="mt-2">
-                  <p className="font-semibold text-[#0B0B0C] text-[13px]">{t.name}</p>
-                  <p className="text-gray-400 text-[11px]">{t.role}</p>
-                </footer>
-              </motion.article>
-            ))}
-          </div>
-        </motion.section>
+        </div>
+      </section>
 
-        {/* ── TARIFS ────────────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={staggerContainer}
-          aria-label="Tarifs du coaching scolaire"
-        >
-          <motion.div variants={blurInUp} className="mb-2">
-            <p className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-2" aria-hidden="true">Tarifs</p>
-            <h2 className="text-[clamp(1.6rem,4vw,2.8rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
-              Choisissez l'accompagnement adapté
-            </h2>
-            <p className="text-gray-500 text-[15px] mt-2 max-w-xl">
-              Chaque jeune est unique. Commencez par un bilan gratuit et choisissez ensuite l'accompagnement le plus adapté.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            {PRICING.map((plan, i) => (
-              <motion.article
-                key={i}
-                variants={fadeInUp}
-                {...cardHoverProps}
-                className={`rounded-[24px] p-8 flex flex-col gap-5 relative cursor-default ${
-                  plan.dark ? "bg-[#0B0B0C] text-white" : "bg-[#F3F4F6] text-[#0B0B0C]"
-                }`}
-              >
-                {plan.badge && (
-                  <span className="absolute top-6 right-6 bg-[#1ab5c7] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
-                    {plan.badge}
-                  </span>
-                )}
-                <div>
-                  <h3 className={`font-semibold text-[15px] mb-1 ${plan.dark ? "text-white" : "text-[#0B0B0C]"}`}>
-                    {plan.label}
-                  </h3>
-                  {plan.desc && (
-                    <p className={`text-[12px] leading-relaxed ${plan.dark ? "text-white/50" : "text-gray-500"}`}>
-                      {plan.desc}
-                    </p>
-                  )}
+      {/* ── 05. TARIF + CTA ──────────────────────────────────────── */}
+      <section id="tarif" className="bg-[#1ab5c7] py-20" aria-label="Tarif et prise de rendez-vous">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+              <motion.div variants={blurInUp} className="flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <p className="font-mono tracking-widest uppercase text-[11px] text-white/60" aria-hidden="true">
+                    Tarif
+                  </p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-[clamp(3.5rem,8vw,5.5rem)] font-bold text-white leading-none tracking-tight">
+                      60€
+                    </span>
+                    <span className="text-white/70 text-[18px] font-medium">/ séance</span>
+                  </div>
+                  <p className="text-white/80 text-[16px] leading-relaxed">
+                    Séance individuelle de 60 min, en présentiel à Sancé (Mâcon), en visio ou à domicile.
+                  </p>
                 </div>
-                <div className="flex items-baseline gap-1">
-                  <span className={`text-[2.5rem] font-bold tracking-tight ${plan.dark ? "text-white" : "text-[#0B0B0C]"}`}>
-                    {plan.price}
-                  </span>
-                  <span className={`text-[13px] ${plan.dark ? "text-white/40" : "text-gray-400"}`}>{plan.unit}</span>
-                </div>
-                <ul className="space-y-2.5 flex-1">
-                  {plan.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-2.5 text-[13px]">
-                      <Check
-                        className={`w-4 h-4 flex-shrink-0 mt-0.5 ${plan.dark ? "text-[#1ab5c7]" : "text-[#0B0B0C]"}`}
-                        strokeWidth={2.5}
-                        aria-hidden="true"
-                      />
-                      <span className={plan.dark ? "text-white/70" : "text-gray-600"}>{item}</span>
+
+                <ul className="flex flex-col gap-3">
+                  {[
+                    "Méthodes de travail personnalisées",
+                    "Gestion du stress et des examens",
+                    "Soutien à l'orientation scolaire",
+                    "Suivi régulier adapté à ton rythme",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3">
+                      <Check className="w-4 h-4 text-white flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                      <span className="text-white text-[14px] font-medium">{item}</span>
                     </li>
                   ))}
                 </ul>
-                <motion.span className="inline-block" {...btnHoverProps}>
-                  <Link
-                    to="/contact"
-                    className={`inline-flex items-center justify-center gap-2 font-semibold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity w-full ${
-                      plan.dark
-                        ? "bg-[#1ab5c7] text-white"
-                        : "bg-[#0B0B0C] text-white"
-                    }`}
-                  >
-                    Prendre rendez-vous <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-                  </Link>
-                </motion.span>
-              </motion.article>
-            ))}
-          </div>
-        </motion.section>
+              </motion.div>
 
-        {/* ── FAQ ───────────────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={staggerContainer}
-          aria-label="Questions fréquentes"
-        >
-          <motion.div variants={blurInUp} className="mb-6">
-            <p className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-2" aria-hidden="true">FAQ</p>
-            <h2 className="text-[clamp(1.6rem,4vw,2.8rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
-              Questions fréquentes
-            </h2>
-          </motion.div>
-          <motion.div variants={fadeInUp} className="space-y-2">
-            {FAQS.map((faq, i) => {
-              const isOpen = openFaq === i;
-              return (
-                <div key={i} className="bg-[#F3F4F6] rounded-[20px] overflow-hidden">
-                  <motion.button
-                    onClick={() => setOpenFaq(isOpen ? null : i)}
-                    aria-expanded={isOpen}
-                    whileHover={{ backgroundColor: "rgba(0,0,0,0.03)" }}
-                    whileTap={{ scale: 0.99 }}
-                    className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 min-h-[60px]"
-                  >
-                    <span className="font-medium text-[#0B0B0C] text-[14px] leading-snug">{faq.q}</span>
-                    <motion.span
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                      className="flex-shrink-0"
-                      aria-hidden="true"
+              <motion.div variants={blurInUp} className="flex flex-col gap-5">
+                <div className="bg-white/15 backdrop-blur-sm rounded-[28px] p-8 flex flex-col gap-5">
+                  <p className="text-white font-semibold text-[18px] leading-snug">
+                    Prêt à changer les choses ?
+                  </p>
+                  <p className="text-white/80 text-[15px] leading-relaxed">
+                    Le premier rendez-vous est offert. On fait le point ensemble et on voit si le coaching est la bonne option.
+                  </p>
+                  <motion.span className="inline-block w-fit" {...btnHoverProps}>
+                    <Link
+                      to={cta.buttonLink}
+                      className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
                     >
-                      <ChevronDown className="w-4 h-4 text-gray-400" />
-                    </motion.span>
-                  </motion.button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="px-6 pb-5 text-gray-500 text-[13px] leading-relaxed">{faq.a}</p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                      Prendre RDV <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                    </Link>
+                  </motion.span>
+                  <p className="text-white/50 text-[12px] font-mono">
+                    1er RDV offert · Sans engagement · Confidentiel
+                  </p>
                 </div>
-              );
-            })}
+              </motion.div>
+
+            </div>
           </motion.div>
-        </motion.section>
+        </div>
+      </section>
 
-        {/* ── CTA FINAL ─────────────────────────────── */}
-        <motion.section
-          initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}
-          className="bg-[#0B0B0C] rounded-[32px] p-10 md:p-16 text-center space-y-5 relative overflow-hidden"
-          aria-label="Appel à l'action"
-        >
-          <motion.div
-            {...floatAnim}
-            className="absolute top-8 left-8 w-16 h-16 rounded-full border border-white/5"
-            aria-hidden="true"
-          />
-          <motion.div
-            animate={{ y: [0, -12, 0] }}
-            transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
-            className="absolute bottom-10 right-12 w-6 h-6 rounded-full bg-[#1ab5c7]/15 border border-[#1ab5c7]/20"
-            aria-hidden="true"
-          />
-
-          <motion.h2
-            variants={blurInUp}
-            className="text-[clamp(1.6rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight relative z-10"
-          >
-            Réservez votre bilan gratuit<br />dès maintenant
-          </motion.h2>
-          <motion.p
-            variants={blurInUp}
-            className="text-white/50 text-[15px] max-w-md mx-auto relative z-10"
-          >
-            Faites le point sur la situation de votre enfant et découvrez les solutions adaptées pour retrouver motivation, confiance et sérénité.
-          </motion.p>
-          <motion.span className="inline-block relative z-10" {...btnHoverProps}>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[14px] px-8 py-4 rounded-full hover:opacity-90 transition-opacity"
-            >
-              Prendre rendez-vous <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
-          </motion.span>
-          <p className="text-white/25 text-[11px] font-mono relative z-10">Sans engagement · Confidentiel</p>
-        </motion.section>
-
-      </div>
     </Layout>
   );
 };
