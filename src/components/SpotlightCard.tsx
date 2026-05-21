@@ -6,29 +6,34 @@ interface SpotlightCardProps {
   spotlightColor?: string;
 }
 
-export default function SpotlightCard({ children, className = "", spotlightColor = "rgba(26,181,199,0.12)" }: SpotlightCardProps) {
+export default function SpotlightCard({
+  children,
+  className = "",
+  spotlightColor = "rgba(26,181,199,0.12)",
+}: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const el = ref.current;
     if (!el) return;
     const { left, top } = el.getBoundingClientRect();
-    const x = e.clientX - left;
-    const y = e.clientY - top;
-    el.style.setProperty("--sx", `${x}px`);
-    el.style.setProperty("--sy", `${y}px`);
+    el.style.setProperty("--sx", `${e.clientX - left}px`);
+    el.style.setProperty("--sy", `${e.clientY - top}px`);
   }, []);
 
   return (
-    <div
-      ref={ref}
-      onMouseMove={onMouseMove}
-      className={`relative overflow-hidden ${className}`}
-      style={{
-        background: `radial-gradient(350px circle at var(--sx, 50%) var(--sy, 50%), ${spotlightColor}, transparent 70%)`,
-      }}
-    >
-      {children}
+    <div ref={ref} onMouseMove={onMouseMove} className={`relative ${className}`}>
+      {/* Glow overlay — au-dessus du fond, sous le contenu */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(400px circle at var(--sx, -999px) var(--sy, -999px), ${spotlightColor}, transparent 70%)`,
+        }}
+        aria-hidden="true"
+      />
+      <div className="relative z-10">
+        {children}
+      </div>
     </div>
   );
 }
