@@ -224,7 +224,7 @@ const Contact = () => {
       <div className="w-full bg-white">
 
         {/* ── HERO ─────────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 md:pt-28 pb-8 max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
             animate="visible"
