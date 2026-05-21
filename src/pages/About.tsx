@@ -138,7 +138,7 @@ function TiltValueCard({ val, i }: { val: { key: string; title: string; descript
   return (
     <motion.article
       variants={springUp}
-      className={`rounded-[28px] p-8 flex flex-col border ${c.border} cursor-default`}
+      className={`rounded-[28px] p-8 flex flex-col border ${c.border} cursor-default shadow-[0_4px_20px_rgba(0,0,0,0.07)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-shadow duration-300`}
       style={{ background: c.bg, willChange: "transform" }}
       ref={tilt.ref}
       onMouseMove={tilt.onMouseMove}
@@ -498,7 +498,7 @@ const About = () => {
                   key={step.num}
                   variants={springLeft}
                   whileHover={{ y: -4, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-                  className="group relative rounded-[28px] border border-gray-100 bg-white p-8 overflow-hidden cursor-default"
+                  className="group relative rounded-[28px] border border-gray-100 bg-white p-8 overflow-hidden cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
                 >
                   <div
                     className="absolute inset-0 bg-gradient-to-br from-[#1ab5c7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"

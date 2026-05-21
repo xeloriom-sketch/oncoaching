@@ -254,7 +254,7 @@ export default function Index() {
 
             <motion.div
               variants={fadeInUp}
-              className="flex flex-wrap gap-3 items-center"
+              className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center"
             >
               <motion.div
                 whileHover={{ scale: 1.04 }}
@@ -262,7 +262,7 @@ export default function Index() {
               >
                 <Link
                   to={ROUTES.contact}
-                  className="bg-[#0B0B0C] text-white rounded-full py-3.5 px-6 flex items-center gap-2.5 text-[15px] font-semibold hover:opacity-90 transition-opacity"
+                  className="bg-[#0B0B0C] text-white rounded-full py-3.5 px-6 flex items-center justify-center gap-2.5 text-[15px] font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_24px_rgba(11,11,12,0.2)]"
                   aria-label="Prendre rendez-vous avec ON Coaching"
                 >
                   Prendre RDV
@@ -321,7 +321,7 @@ export default function Index() {
               {/* Dégradé bas */}
               <div
                 className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(to bottom, transparent 55%, rgba(255,255,255,0.85) 85%, white 100%)" }}
+                style={{ background: "linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.5) 75%, rgba(255,255,255,0.9) 90%, white 100%)" }}
                 aria-hidden="true"
               />
 
@@ -331,7 +331,7 @@ export default function Index() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
                 whileHover={{ y: -3 }}
-                className="absolute bottom-12 right-4 sm:right-6 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3"
+                className="absolute bottom-14 right-4 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-lg"
               >
                 <p className="text-white text-[13px] font-semibold">Coach certifié ICF</p>
                 <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
@@ -343,7 +343,7 @@ export default function Index() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
                 whileHover={{ y: -2 }}
-                className="absolute bottom-4 left-4 sm:left-6 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2"
+                className="absolute bottom-4 left-4 flex items-center gap-2 bg-[#0B0B0C]/80 backdrop-blur-xl border border-white/10 rounded-full px-4 py-2.5 shadow-lg"
               >
                 <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
                 <span className="text-white text-[12px] font-semibold">Disponible</span>
@@ -429,7 +429,7 @@ export default function Index() {
                   key={key}
                   variants={springUp}
                   {...cardHoverProps}
-                  className="rounded-[28px] p-6 sm:p-8 flex flex-col gap-5 cursor-default"
+                  className="rounded-[28px] p-6 sm:p-8 flex flex-col gap-5 cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.14)] transition-shadow duration-300"
                   style={{ background: c.bg }}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -484,7 +484,7 @@ export default function Index() {
             variants={fadeInLeft}
             className="relative"
           >
-            <div className="h-[420px] rounded-[24px] overflow-hidden">
+            <div className="h-[340px] sm:h-[420px] rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
@@ -550,7 +550,7 @@ export default function Index() {
             <motion.div variants={fadeInUp}>
               <Link
                 to={ROUTES.about}
-                className="inline-flex items-center gap-2.5 bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[15px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                className="flex sm:inline-flex items-center justify-center gap-2.5 bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
                 aria-label="Découvrir l'approche de Noureddine Omar"
               >
                 Découvrir l'approche
@@ -601,7 +601,7 @@ export default function Index() {
               <motion.div
                 key={num}
                 variants={springUp}
-                className="flex flex-col gap-5"
+                className="flex flex-col gap-5 bg-[#F3F4F6] md:bg-transparent rounded-[24px] md:rounded-none p-6 md:p-0 shadow-[0_4px_20px_rgba(0,0,0,0.06)] md:shadow-none"
               >
                 <div className="flex items-center gap-4 md:block md:space-y-5">
                   <span
@@ -646,7 +646,7 @@ export default function Index() {
           >
             <Link
               to={ROUTES.contact}
-              className="bg-[#0B0B0C] text-white font-bold text-[15px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:opacity-85 transition-opacity"
+              className="w-full sm:w-auto justify-center bg-[#0B0B0C] text-white font-bold text-[15px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:opacity-85 transition-opacity shadow-[0_8px_32px_rgba(11,11,12,0.25)]"
               aria-label="Commencer la consultation gratuite"
             >
               Démarrer gratuitement
