@@ -23,7 +23,7 @@ import {
 import { ROUTES } from "@/lib/config";
 
 const COACH_IMG =
-  `${import.meta.env.BASE_URL}patron.png`;
+  `${import.meta.env.BASE_URL}patron.webp`;
 
 const SERVICES = [
   {

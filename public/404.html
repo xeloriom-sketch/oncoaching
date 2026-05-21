@@ -6,9 +6,8 @@
   <script>
     // GitHub Pages SPA redirect — preserves path for React Router
     var l = window.location;
-    var base = '/oncoaching';
-    var path = l.pathname.replace(base, '') || '/';
-    l.replace(l.protocol + '//' + l.host + base + '/?p=' + encodeURIComponent(path) + (l.search ? '&' + l.search.slice(1) : '') + l.hash);
+    var path = l.pathname || '/';
+    l.replace(l.protocol + '//' + l.host + '/?p=' + encodeURIComponent(path) + (l.search ? '&' + l.search.slice(1) : '') + l.hash);
   </script>
 </head>
 </html>

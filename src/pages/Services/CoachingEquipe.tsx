@@ -18,7 +18,7 @@ import {
 import type { ServicePageContent } from "@/types";
 
 const HERO_IMG    = "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=85";
-const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.png`;
+const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.webp`;
 
 const HERO_WORDS = ["Coaching", "d'équipe"];
 

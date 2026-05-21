@@ -25,7 +25,7 @@ import {
 import type { AboutContent } from "@/types";
 
 const COACH_IMG =
-  `${import.meta.env.BASE_URL}patron.png`;
+  `${import.meta.env.BASE_URL}patron.webp`;
 
 const VALUES_ICONS: Record<string, React.ElementType> = {
   empathie: Heart,
@@ -202,7 +202,7 @@ const About = () => {
             jobTitle: "Coach certifié ICF",
             description: "Coach certifié ICF, formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain.",
             url: "https://www.oncoaching.fr/about",
-            image: "https://www.oncoaching.fr/patron.png",
+            image: "https://www.oncoaching.fr/patron.webp",
             sameAs: [
               "https://www.facebook.com/profile.php?id=100050783821185",
               "https://www.instagram.com/oncoaching_",

@@ -19,7 +19,7 @@ import type { ServicePageContent } from "@/types";
 const HERO_IMG =
   "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=85";
 
-const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.png`;
+const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.webp`;
 
 const H1_WORDS = ["Coaching", "Scolaire"];
 

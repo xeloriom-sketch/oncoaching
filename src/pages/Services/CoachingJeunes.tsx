@@ -17,7 +17,7 @@ import {
 import type { ServicePageContent } from "@/types";
 
 const HERO_IMG    = "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=85";
-const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.png`;
+const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.webp`;
 
 const PROBLEMS = [
   { icon: Compass,    text: "Tu te sens perdu dans tes choix d'orientation" },
