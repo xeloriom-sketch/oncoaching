@@ -308,7 +308,7 @@ const About = () => {
               variants={fadeInScale}
               className="relative"
             >
-              <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] md:max-h-[560px] shadow-2xl">
+              <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] md:max-h-[560px]">
                 <img
                   src={COACH_IMG}
                   alt="Coach ON Coaching — coach certifié ICF à Mâcon"
