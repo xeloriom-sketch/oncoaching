@@ -94,15 +94,15 @@ const NosTarifs = () => {
       <SEO
         title="Nos Tarifs — Prix du Coaching à Mâcon | ON Coaching"
         description="Tarifs transparents : coaching scolaire, jeunes adultes, neurofeedback et équipe à Mâcon. Séances individuelles et forfaits. 1er rendez-vous offert."
-        canonical="/NosTarifs"
+        canonical="/nos-tarifs"
         keywords="tarif coaching mâcon, prix séance coaching, forfait coaching scolaire, neurofeedback tarif, coaching entreprise prix"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
-            "@id": "https://www.oncoaching.fr/NosTarifs#webpage",
+            "@id": "https://www.oncoaching.fr/nos-tarifs#webpage",
             name: "Nos Tarifs | ON Coaching",
-            url: "https://www.oncoaching.fr/NosTarifs",
+            url: "https://www.oncoaching.fr/nos-tarifs",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
           },
           {
@@ -126,7 +126,7 @@ const NosTarifs = () => {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
-              { "@type": "ListItem", position: 2, name: "Nos Tarifs", item: "https://www.oncoaching.fr/NosTarifs" },
+              { "@type": "ListItem", position: 2, name: "Nos Tarifs", item: "https://www.oncoaching.fr/nos-tarifs" },
             ],
           },
         ]}

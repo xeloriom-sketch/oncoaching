@@ -316,7 +316,6 @@ const About = () => {
                   loading="eager"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" aria-hidden="true" />
 
                 <motion.div
                   className="absolute bottom-5 left-5 bg-[#1ab5c7] rounded-2xl px-5 py-3.5"
@@ -644,7 +643,7 @@ const About = () => {
                 <motion.div variants={springUp}>
                   <motion.div {...btnHoverProps}>
                     <Link
-                      to="/NosTarifs"
+                      to="/nos-tarifs"
                       className="bg-white/10 border border-white/20 text-white font-bold text-[14px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:bg-white/15 transition-colors"
                     >
                       Voir nos tarifs

@@ -201,7 +201,7 @@ const CoachingEquipe = () => {
                 </motion.div>
                 <motion.div {...btnHoverProps}>
                   <Link
-                    to="/NosTarifs"
+                    to="/nos-tarifs"
                     className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#0B0B0C] font-semibold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
                   >
                     Voir les tarifs
@@ -327,7 +327,7 @@ const CoachingEquipe = () => {
                           onMouseMove={tilt.onMouseMove}
                           onMouseLeave={tilt.onMouseLeave}
                           onMouseEnter={tilt.onMouseEnter}
-                          className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 h-full shadow-[0_4px_20px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-shadow duration-300"
+                          className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 h-full border border-white/10 hover:border-white/20 transition-colors duration-300"
                           style={{ transformStyle: "preserve-3d" }}
                         >
                           <motion.div
@@ -485,7 +485,7 @@ const CoachingEquipe = () => {
                 </p>
                 <motion.div {...btnHoverProps}>
                   <Link
-                    to="/NosTarifs"
+                    to="/nos-tarifs"
                     className="w-full inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold text-[14px] px-8 py-4 rounded-2xl hover:bg-white/25 transition-colors backdrop-blur-sm"
                   >
                     Voir tous les tarifs

@@ -14,7 +14,7 @@ export const ROUTES = {
   home:           "/",
   about:          "/about",
   media:          "/presse-medias",
-  tarifs:         "/NosTarifs",
+  tarifs:         "/nos-tarifs",
   contact:        "/contact",
   partenaires:    "/partenaires",
   scolaire:       "/coaching-scolaire",

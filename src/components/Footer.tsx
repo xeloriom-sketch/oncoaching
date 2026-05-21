@@ -9,7 +9,7 @@ const NAV_FOOTER = [
   { label: "Accueil",    href: "/" },
   { label: "À Propos",  href: "/about" },
   { label: "Presse",    href: "/presse-medias" },
-  { label: "Nos Tarifs", href: "/NosTarifs" },
+  { label: "Nos Tarifs", href: "/nos-tarifs" },
   { label: "Contact",   href: "/contact" },
 ];
 
