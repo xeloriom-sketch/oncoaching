@@ -313,6 +313,7 @@ export default function Index() {
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
                 className="w-full h-full object-contain object-bottom scale-[1.5] origin-bottom"
+                fetchPriority="high"
                 style={{
                   maskImage:
                     "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0.95) 90%, rgba(0,0,0,0.78) 94%, rgba(0,0,0,0.45) 97.5%, rgba(0,0,0,0) 100%)",

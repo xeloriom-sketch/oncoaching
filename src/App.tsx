@@ -47,6 +47,8 @@ const useLenis = () => {
     const lenis = new Lenis({
       duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      syncTouch: false,
     });
     let rafId: number;
     const raf = (time: number) => {
@@ -71,28 +73,25 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        {!loaderDone ? (
-          <PageLoader onDone={() => setLoaderDone(true)} />
-        ) : (
-          <BrowserRouter basename={import.meta.env.BASE_URL}>
-            <ScrollToTop />
-            <Suspense fallback={<SuspenseFallback />}>
-              <Routes>
-                <Route path="/"                       element={<Index />} />
-                <Route path="/about"                  element={<About />} />
-                <Route path="/presse-medias"          element={<PresseMedias />} />
-                <Route path="/contact"                element={<Contact />} />
-                <Route path="/NosTarifs"              element={<NosTarifs />} />
-                <Route path="/coaching-scolaire"      element={<CoachingScolaire />} />
-                <Route path="/coaching-jeunes"        element={<CoachingJeunes />} />
-                <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
-                <Route path="/coaching-equipe"        element={<CoachingEquipe />} />
-                <Route path="/partenaires"            element={<Partenaires />} />
-                <Route path="*"                       element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        )}
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <ScrollToTop />
+          <Suspense fallback={<SuspenseFallback />}>
+            <Routes>
+              <Route path="/"                       element={<Index />} />
+              <Route path="/about"                  element={<About />} />
+              <Route path="/presse-medias"          element={<PresseMedias />} />
+              <Route path="/contact"                element={<Contact />} />
+              <Route path="/NosTarifs"              element={<NosTarifs />} />
+              <Route path="/coaching-scolaire"      element={<CoachingScolaire />} />
+              <Route path="/coaching-jeunes"        element={<CoachingJeunes />} />
+              <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
+              <Route path="/coaching-equipe"        element={<CoachingEquipe />} />
+              <Route path="/partenaires"            element={<Partenaires />} />
+              <Route path="*"                       element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+        {!loaderDone && <PageLoader onDone={() => setLoaderDone(true)} />}
       </TooltipProvider>
     </QueryClientProvider>
   );

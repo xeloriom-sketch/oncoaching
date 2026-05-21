@@ -12,7 +12,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const goneId = setTimeout(() => setGone(true), 2100);
+    const goneId = setTimeout(() => setGone(true), 1400);
     return () => {
       clearTimeout(goneId);
       document.body.style.overflow = previousOverflow;
