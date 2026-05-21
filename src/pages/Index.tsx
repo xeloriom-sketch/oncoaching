@@ -306,9 +306,31 @@ export default function Index() {
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="relative hidden lg:block"
+            className="relative"
           >
-            <div className="relative h-[800px] will-change-transform">
+            {/* ── Mobile portrait ── */}
+            <div className="lg:hidden relative rounded-[28px] overflow-hidden h-[320px] sm:h-[380px] shadow-2xl">
+              <img
+                src={COACH_IMG}
+                alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
+                className="w-full h-full object-cover object-top"
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" aria-hidden="true" />
+              <div className="absolute bottom-4 left-4 bg-[#1ab5c7] rounded-2xl px-4 py-2.5">
+                <p className="text-[10px] font-mono tracking-widest uppercase text-black/40 mb-0.5">Certifié ICF</p>
+                <p className="text-[13px] font-bold text-[#0B0B0C] leading-tight">Prisme Évolution</p>
+              </div>
+              <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-3 py-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+                <span className="text-white text-[12px] font-semibold">Disponible</span>
+              </div>
+            </div>
+
+            {/* ── Desktop full-height ── */}
+            <div className="hidden lg:block relative h-[800px] will-change-transform">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
@@ -331,12 +353,8 @@ export default function Index() {
                 whileHover={{ y: -3 }}
                 className="absolute bottom-56 right-5 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3"
               >
-                <p className="text-white text-[13px] font-semibold">
-                  Coach certifié ICF
-                </p>
-                <p className="text-white/50 text-[11px] mt-0.5">
-                  Prisme Évolution
-                </p>
+                <p className="text-white text-[13px] font-semibold">Coach certifié ICF</p>
+                <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
               </motion.div>
 
               <motion.div
@@ -346,13 +364,8 @@ export default function Index() {
                 whileHover={{ y: -2 }}
                 className="absolute bottom-40 left-5 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2"
               >
-                <span
-                  className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse"
-                  aria-hidden="true"
-                />
-                <span className="text-white text-[12px] font-semibold">
-                  Disponible
-                </span>
+                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+                <span className="text-white text-[12px] font-semibold">Disponible</span>
               </motion.div>
             </div>
           </motion.div>
