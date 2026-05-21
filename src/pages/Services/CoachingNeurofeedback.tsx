@@ -207,7 +207,7 @@ const CoachingNeurofeedback = () => {
                 variants={springRight}
                 initial="hidden"
                 animate="visible"
-                className="relative h-[460px] rounded-[32px] overflow-hidden group"
+                className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden group"
               >
                 <motion.img
                   src={HERO_IMG}
@@ -261,7 +261,7 @@ const CoachingNeurofeedback = () => {
                     transition={{ delay: i * 0.08 }}
                     className="bg-white rounded-[24px] p-8 flex flex-col gap-4"
                   >
-                    <span className="font-mono text-[4rem] font-bold text-[#1ab5c7]/20 leading-none select-none">
+                    <span className="font-mono text-[clamp(3rem,5vw,4rem)] font-bold text-[#1ab5c7]/20 leading-none select-none">
                       {step.num}
                     </span>
                     <h3 className="text-[#0B0B0C] font-bold text-[18px] leading-snug">
@@ -314,7 +314,7 @@ const CoachingNeurofeedback = () => {
                           onMouseMove={tilt.onMouseMove}
                           onMouseLeave={tilt.onMouseLeave}
                           onMouseEnter={tilt.onMouseEnter}
-                          className="p-7 flex flex-col gap-5 h-full"
+                          className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 h-full"
                           style={{ transformStyle: "preserve-3d" }}
                         >
                           <motion.div
@@ -347,7 +347,7 @@ const CoachingNeurofeedback = () => {
             >
               <motion.div
                 variants={springLeft}
-                className="relative h-[440px] rounded-[32px] overflow-hidden group"
+                className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden group"
               >
                 <img
                   src={COACH_PHOTO}

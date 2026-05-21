@@ -317,7 +317,7 @@ const Footer = () => {
               <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-5" aria-hidden="true">
                 ON COACHING · SANCÉ (MÂCON), FRANCE
               </p>
-              <h2 className="text-[2.2rem] md:text-[3rem] font-semibold tracking-tight leading-[1.05] text-white">
+              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight leading-[1.05] text-white">
                 Passez au niveau<br />supérieur.
               </h2>
             </div>
@@ -346,7 +346,7 @@ const Footer = () => {
           <hr className="border-0 border-t border-white/8 mb-16" />
 
           {/* Links grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 mb-16">
 
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
@@ -367,7 +367,7 @@ const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={platform}
-                      className="w-8 h-8 rounded-full bg-white/8 hover:bg-[#1ab5c7]/20 flex items-center justify-center text-white/40 hover:text-[#1ab5c7] transition-all border border-white/8"
+                      className="w-10 h-10 rounded-full bg-white/8 hover:bg-[#1ab5c7]/20 flex items-center justify-center text-white/40 hover:text-[#1ab5c7] transition-all border border-white/8"
                     >
                       <Icon size={13} aria-hidden="true" />
                     </a>

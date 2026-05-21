@@ -166,7 +166,7 @@ const NosTarifs = () => {
                     ? "text-[#1ab5c7]"
                     : "text-[#0B0B0C]"
                 }`}
-                style={{ fontSize: "clamp(3rem,7vw,6rem)" }}
+                style={{ fontSize: "clamp(2.5rem,6vw,6rem)" }}
               >
                 {word}
               </motion.span>
@@ -235,7 +235,7 @@ const NosTarifs = () => {
                 onMouseMove={tiltRefs[0].onMouseMove}
                 onMouseLeave={tiltRefs[0].onMouseLeave}
                 onMouseEnter={tiltRefs[0].onMouseEnter}
-                className="rounded-[28px] p-8 flex flex-col h-full bg-[#F3F4F6] cursor-default"
+                className="rounded-[28px] p-6 sm:p-8 flex flex-col h-full bg-[#F3F4F6] cursor-default"
                 style={{ willChange: "transform" }}
               >
                 <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400 mb-3">Particuliers</p>
@@ -322,7 +322,7 @@ const NosTarifs = () => {
                 onMouseMove={tiltRefs[2].onMouseMove}
                 onMouseLeave={tiltRefs[2].onMouseLeave}
                 onMouseEnter={tiltRefs[2].onMouseEnter}
-                className="rounded-[28px] p-8 flex flex-col h-full bg-[#1ab5c7] cursor-default"
+                className="rounded-[28px] p-6 sm:p-8 flex flex-col h-full bg-[#1ab5c7] cursor-default"
                 style={{ willChange: "transform" }}
               >
                 <p className="text-[11px] font-mono tracking-widest uppercase text-[#0B0B0C]/50 mb-3">Entreprises</p>

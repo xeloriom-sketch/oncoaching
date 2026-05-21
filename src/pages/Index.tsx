@@ -194,7 +194,7 @@ export default function Index() {
             <h1
               id="home-h1"
               className="font-semibold leading-[1.0] tracking-tight text-[#0B0B0C]"
-              style={{ fontSize: "clamp(3rem,8vw,7rem)" }}
+              style={{ fontSize: "clamp(2.2rem,7vw,6rem)" }}
             >
               {H1_WORDS_A.map((word, i) => (
                 <motion.span
@@ -366,7 +366,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="bg-[#F3F4F6] rounded-[28px] px-6 md:px-10 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+            className="bg-[#F3F4F6] rounded-[28px] px-4 sm:px-6 md:px-10 py-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center"
           >
             {STATS.map(({ value, label }, i) => (
               <motion.div
@@ -375,7 +375,7 @@ export default function Index() {
                 className="flex flex-col items-center gap-2"
               >
                 <span
-                  className="text-[2.4rem] md:text-[3rem] font-bold tracking-tight text-[#0B0B0C] leading-none font-mono"
+                  className="text-[clamp(1.8rem,4vw,3rem)] font-bold tracking-tight text-[#0B0B0C] leading-none font-mono"
                   aria-label={value}
                 >
                   {value}
@@ -412,7 +412,7 @@ export default function Index() {
             <motion.h2
               id="services-title"
               variants={fadeInUp}
-              className="text-[2rem] md:text-[3rem] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
+              className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
             >
               Un accompagnement unique
               <br className="hidden sm:block" /> pour des résultats durables
@@ -434,7 +434,7 @@ export default function Index() {
                   key={key}
                   variants={springUp}
                   {...cardHoverProps}
-                  className="rounded-[28px] p-8 flex flex-col gap-5 cursor-default"
+                  className="rounded-[28px] p-6 sm:p-8 flex flex-col gap-5 cursor-default"
                   style={{ background: c.bg }}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -517,7 +517,7 @@ export default function Index() {
             <motion.h2
               id="coach-title"
               variants={fadeInUp}
-              className="text-[2.4rem] md:text-[3.2rem] font-semibold tracking-tight text-white leading-[1.05]"
+              className="text-[clamp(2rem,5vw,3.2rem)] font-semibold tracking-tight text-white leading-[1.05]"
             >
               Noureddine Omar
             </motion.h2>
@@ -589,7 +589,7 @@ export default function Index() {
             <motion.h2
               id="processus-title"
               variants={fadeInUp}
-              className="text-[2rem] md:text-[3rem] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
+              className="text-[clamp(1.8rem,4.5vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
             >
               Trois étapes vers votre transformation
             </motion.h2>
@@ -610,7 +610,7 @@ export default function Index() {
               >
                 <div className="flex items-center gap-4 md:block md:space-y-5">
                   <span
-                    className="font-mono text-[3.5rem] md:text-[4.5rem] font-bold leading-none text-[#F3F4F6] select-none"
+                    className="font-mono text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-none text-[#F3F4F6] select-none"
                     aria-hidden="true"
                   >
                     {num}
@@ -669,7 +669,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-[1fr_720px] gap-12 lg:gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
           >
             <motion.div variants={fadeInLeft} className="space-y-6 max-w-[620px]">
               <p className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]" aria-hidden="true">
@@ -795,7 +795,7 @@ export default function Index() {
             <motion.h2
               id="cta-title"
               variants={fadeInUp}
-              className="text-[2.2rem] md:text-[3.5rem] font-semibold tracking-tight text-white leading-[1.05]"
+              className="text-[clamp(2rem,5vw,3.5rem)] font-semibold tracking-tight text-white leading-[1.05]"
             >
               Passez au niveau supérieur.
             </motion.h2>

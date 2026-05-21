@@ -208,6 +208,7 @@ const About = () => {
               "https://www.instagram.com/oncoaching_",
             ],
             worksFor: { "@id": "https://www.oncoaching.fr/#business" },
+            knowsAbout: ["ICF Coaching", "Neurofeedback", "Coaching scolaire", "Coaching jeunes adultes", "Coaching d'équipe", "Sciences économiques et sociales"],
             hasCredential: {
               "@type": "EducationalOccupationalCredential",
               name: "Certification ICF — Coach Professionnel",
@@ -258,7 +259,7 @@ const About = () => {
 
               <h1
                 id="about-h1"
-                className="text-[clamp(2.5rem,6vw,5rem)] font-bold leading-[0.95] tracking-tight text-[#0B0B0C]"
+                className="text-[clamp(2rem,5vw,5rem)] font-bold leading-[0.95] tracking-tight text-[#0B0B0C]"
               >
                 <WordByWord text={hero.title} />
               </h1>
@@ -307,7 +308,7 @@ const About = () => {
               variants={fadeInScale}
               className="relative"
             >
-              <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] max-h-[560px] shadow-2xl">
+              <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] md:max-h-[560px] shadow-2xl">
                 <img
                   src={COACH_IMG}
                   alt="Coach ON Coaching — coach certifié ICF à Mâcon"
@@ -505,7 +506,7 @@ const About = () => {
                   />
                   <div className="flex items-start gap-5">
                     <span
-                      className="font-mono font-black text-[3.5rem] leading-none tracking-tighter text-gray-100 select-none flex-shrink-0"
+                      className="font-mono font-black text-[clamp(2.8rem,5vw,3.5rem)] leading-none tracking-tighter text-gray-100 select-none flex-shrink-0"
                       aria-hidden="true"
                     >
                       {step.num}
@@ -563,7 +564,7 @@ const About = () => {
           <motion.div
             initial="hidden" whileInView="visible" viewport={VP2}
             variants={stagger}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {valuesSection.values.map((val, i) => (
               <TiltValueCard key={val.key} val={val} i={i} />

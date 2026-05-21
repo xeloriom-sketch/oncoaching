@@ -205,7 +205,7 @@ const CoachingJeunes = () => {
                 variants={springRight}
                 initial="hidden"
                 animate="visible"
-                className="relative h-[460px] rounded-[32px] overflow-hidden group"
+                className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden group"
               >
                 <img
                   src={HERO_IMG}
@@ -251,7 +251,7 @@ const CoachingJeunes = () => {
                 Ces défis te parlent&nbsp;?
               </motion.h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-7">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-10 gap-y-5 sm:gap-y-7">
                 {PROBLEMS.map((item, i) => {
                   const Icon = item.icon;
                   return (
@@ -315,7 +315,7 @@ const CoachingJeunes = () => {
                           onMouseMove={tilt.onMouseMove}
                           onMouseLeave={tilt.onMouseLeave}
                           onMouseEnter={tilt.onMouseEnter}
-                          className="p-7 flex flex-col gap-5 h-full"
+                          className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 h-full"
                           style={{ transformStyle: "preserve-3d" }}
                         >
                           <motion.div
@@ -349,7 +349,7 @@ const CoachingJeunes = () => {
             >
               <motion.div
                 variants={springLeft}
-                className="relative h-[440px] rounded-[32px] overflow-hidden group"
+                className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden group"
               >
                 <img
                   src={COACH_PHOTO}

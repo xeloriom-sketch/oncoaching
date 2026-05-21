@@ -198,7 +198,7 @@ const CoachingScolaire = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               className="relative"
             >
-              <div className="relative h-[460px] rounded-[32px] overflow-hidden">
+              <div className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden">
                 <img
                   src={HERO_IMG}
                   alt="Coaching scolaire à Mâcon — ON Coaching"
@@ -329,7 +329,7 @@ const CoachingScolaire = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
               <motion.div variants={springUp} className="relative">
-                <div className="relative h-[440px] rounded-[32px] overflow-hidden">
+                <div className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden">
                   <img
                     src={COACH_PHOTO}
                     alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
@@ -418,7 +418,7 @@ const CoachingScolaire = () => {
                     Tarif
                   </p>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-[clamp(3.5rem,8vw,5.5rem)] font-bold text-white leading-none tracking-tight">
+                    <span className="text-[clamp(2.8rem,7vw,5.5rem)] font-bold text-white leading-none tracking-tight">
                       60€
                     </span>
                     <span className="text-white/70 text-[18px] font-medium">/ séance</span>
