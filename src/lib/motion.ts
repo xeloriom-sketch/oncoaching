@@ -1,63 +1,71 @@
 import type { Variants } from "framer-motion";
 
-/* ── Entrées ───────────────────────────────────────────────────── */
+/* ── Entrées classiques ─────────────────────────────────────────── */
 export const fadeInUp: Variants = {
   hidden:  { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] as const },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export const fadeInDown: Variants = {
   hidden:  { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export const fadeInScale: Variants = {
   hidden:  { opacity: 0, scale: 0.94 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
-  },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 export const fadeInLeft: Variants = {
-  hidden:  { opacity: 0, x: -28 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", damping: 22, stiffness: 180 },
-  },
+  hidden:  { opacity: 0, x: -40 },
+  visible: { opacity: 1, x: 0, transition: { type: "spring", damping: 22, stiffness: 180 } },
 };
 
 export const fadeInRight: Variants = {
-  hidden:  { opacity: 0, x: 28 },
+  hidden:  { opacity: 0, x: 40 },
+  visible: { opacity: 1, x: 0, transition: { type: "spring", damping: 22, stiffness: 180 } },
+};
+
+/* Blur + slide — effet très "Apple" */
+export const blurInUp: Variants = {
+  hidden:  { opacity: 0, y: 32, filter: "blur(12px)" },
   visible: {
-    opacity: 1,
-    x: 0,
-    transition: { type: "spring", damping: 22, stiffness: 180 },
+    opacity: 1, y: 0, filter: "blur(0px)",
+    transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
 
-/* Spring — plus vivant que ease sur les cartes */
+export const blurIn: Variants = {
+  hidden:  { opacity: 0, filter: "blur(16px)", scale: 0.97 },
+  visible: {
+    opacity: 1, filter: "blur(0px)", scale: 1,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
+/* Spring — plus vivant que ease */
 export const springUp: Variants = {
   hidden:  { opacity: 0, y: 40, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", damping: 20, stiffness: 200 },
-  },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", damping: 20, stiffness: 200 } },
 };
 
-/* ── Stagger containers ────────────────────────────────────────── */
+export const springLeft: Variants = {
+  hidden:  { opacity: 0, x: -50, scale: 0.97 },
+  visible: { opacity: 1, x: 0, scale: 1, transition: { type: "spring", damping: 22, stiffness: 180 } },
+};
+
+export const springRight: Variants = {
+  hidden:  { opacity: 0, x: 50, scale: 0.97 },
+  visible: { opacity: 1, x: 0, scale: 1, transition: { type: "spring", damping: 22, stiffness: 180 } },
+};
+
+/* Rotation légère à l'entrée */
+export const rotateIn: Variants = {
+  hidden:  { opacity: 0, rotate: -6, scale: 0.95 },
+  visible: { opacity: 1, rotate: 0, scale: 1, transition: { type: "spring", damping: 18, stiffness: 160 } },
+};
+
+/* ── Stagger containers ─────────────────────────────────────────── */
 export const staggerContainer: Variants = {
   hidden:  { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
@@ -65,49 +73,60 @@ export const staggerContainer: Variants = {
 
 export const staggerFast: Variants = {
   hidden:  { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.07 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
 };
 
 export const staggerSlow: Variants = {
   hidden:  { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.16 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.18 } },
 };
 
-/** Alias */
 export const stagger = staggerContainer;
 
-/* ── Hover / Tap interactions ──────────────────────────────────── */
+/* ── Hover / Tap props ──────────────────────────────────────────── */
 export const cardHoverProps = {
-  whileHover: { y: -6, scale: 1.02 },
-  whileTap:   { scale: 0.98 },
-  transition: { type: "spring", stiffness: 350, damping: 22 },
+  whileHover: { y: -8, scale: 1.025, transition: { type: "spring", stiffness: 350, damping: 22 } },
+  whileTap:   { scale: 0.97 },
 };
 
+/* Lift subtil — pour éléments inline */
 export const liftHoverProps = {
-  whileHover: { y: -4 },
-  transition: { type: "spring", stiffness: 400, damping: 24 },
+  whileHover: { y: -4, transition: { type: "spring", stiffness: 400, damping: 24 } },
 };
 
+/* Glow bouton — scale + légère lueur */
+export const btnHoverProps = {
+  whileHover: { scale: 1.06, transition: { type: "spring", stiffness: 450, damping: 20 } },
+  whileTap:   { scale: 0.96 },
+};
+
+/* Icon wobble on hover */
+export const iconWobble = {
+  whileHover: { rotate: [0, -12, 12, -6, 0], transition: { duration: 0.5 } },
+};
+
+/* ── Animations en boucle ───────────────────────────────────────── */
 export const iconSpinProps = {
   animate:    { rotate: 360 },
   transition: { duration: 8, repeat: Infinity, ease: "linear" as const },
 };
 
 export const pulseDot = {
-  animate:    { scale: [1, 1.25, 1], opacity: [1, 0.6, 1] },
-  transition: { duration: 2, repeat: Infinity, ease: "easeInOut" as const },
+  animate:    { scale: [1, 1.3, 1], opacity: [1, 0.5, 1] },
+  transition: { duration: 2.2, repeat: Infinity, ease: "easeInOut" as const },
 };
 
-/* Flottement doux — pour éléments décoratifs */
 export const floatAnim = {
-  animate: { y: [0, -8, 0] },
-  transition: {
-    duration: 3.5,
-    repeat: Infinity,
-    ease: "easeInOut" as const,
-  },
+  animate:    { y: [0, -10, 0] },
+  transition: { duration: 3.5, repeat: Infinity, ease: "easeInOut" as const },
 };
 
-/* ── Shared IntersectionObserver config ────────────────────────── */
+export const breathe = {
+  animate:    { scale: [1, 1.04, 1] },
+  transition: { duration: 4, repeat: Infinity, ease: "easeInOut" as const },
+};
+
+/* ── Helpers IntersectionObserver ───────────────────────────────── */
 export const VP  = { once: true, margin: "-80px"  } as const;
 export const VP2 = { once: true, margin: "-40px"  } as const;
+export const VP3 = { once: true, margin: "-120px" } as const;

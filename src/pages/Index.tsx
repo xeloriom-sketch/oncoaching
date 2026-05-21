@@ -22,7 +22,7 @@ import {
 import { ROUTES } from "@/lib/config";
 
 const COACH_IMG =
-  "https://tewufxbicqopmgwh.public.blob.vercel-storage.com/landing-pages/b482799c-ade7-4574-9136-60f1249636a0/images/1775986388549-photo_pour_r_seaux.jpg";
+  `${import.meta.env.BASE_URL}patron.png`;
 
 const SERVICES = [
   {

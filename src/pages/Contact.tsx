@@ -1,36 +1,179 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import { Clock, Mail, MapPin, Phone, ArrowUpRight, Check } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import SpotlightCard from "@/components/SpotlightCard";
 import { usePageContent } from "@/hooks/usePageContent";
-import { fadeInUp, stagger, VP } from "@/lib/motion";
+import { useTilt } from "@/hooks/useTilt";
+import {
+  fadeInUp,
+  blurInUp,
+  springLeft,
+  springRight,
+  stagger,
+  staggerFast,
+  btnHoverProps,
+  liftHoverProps,
+  pulseDot,
+  VP,
+} from "@/lib/motion";
+import { MapPin, Phone, Mail, ChevronDown, ArrowUpRight, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import type { ContactContent } from "@/types";
 
-const inputCls =
-  "w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/20 text-[13px] focus:outline-none focus:border-[#1ab5c7]/40 transition-colors";
+const WORDS = ["Parlons", "de", "votre", "projet."];
+
+const FAQ = [
+  {
+    q: "Est-ce que le 1er rendez-vous est vraiment gratuit ?",
+    a: "Oui, absolument. Le premier rendez-vous est offert, sans engagement de votre part. C'est l'occasion d'échanger sur vos besoins et de voir si nous sommes faits pour travailler ensemble.",
+  },
+  {
+    q: "Comment se déroule une séance de coaching ?",
+    a: "Chaque séance dure entre 45 minutes et 1 heure. Elle peut se tenir en présentiel dans notre cabinet à Sancé ou à distance en visioconférence, selon votre préférence.",
+  },
+  {
+    q: "Combien de séances sont nécessaires ?",
+    a: "Le nombre de séances varie selon vos objectifs et votre rythme d'évolution. En général, 6 à 10 séances permettent d'atteindre des résultats concrets. Nous définissons ensemble le parcours adapté.",
+  },
+  {
+    q: "Proposez-vous des forfaits ou des tarifs spéciaux ?",
+    a: "Oui, nous proposons des forfaits séances qui offrent une réduction par rapport au tarif à l'unité. Consultez notre page Tarifs ou demandez-nous directement lors du 1er RDV.",
+  },
+];
+
+function FloatingField({
+  id,
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  required = false,
+  autoComplete,
+}: {
+  id: string;
+  label: string;
+  type?: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  autoComplete?: string;
+}) {
+  const [focused, setFocused] = useState(false);
+  const active = focused || value.length > 0;
+
+  return (
+    <div className="relative">
+      <input
+        id={id}
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        required={required}
+        autoComplete={autoComplete}
+        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#0B0B0C] outline-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]"
+      />
+      <label
+        htmlFor={id}
+        className="pointer-events-none absolute left-4 transition-all duration-200 origin-left"
+        style={{
+          top: active ? "8px" : "50%",
+          transform: active ? "translateY(0) scale(0.75)" : "translateY(-50%) scale(1)",
+          color: focused ? "#1ab5c7" : "#9ca3af",
+          fontSize: "15px",
+          fontWeight: 500,
+        }}
+      >
+        {label}{required && " *"}
+      </label>
+    </div>
+  );
+}
+
+function FloatingTextarea({
+  id,
+  label,
+  name,
+  value,
+  onChange,
+  required = false,
+}: {
+  id: string;
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  required?: boolean;
+}) {
+  const [focused, setFocused] = useState(false);
+  const active = focused || value.length > 0;
+
+  return (
+    <div className="relative">
+      <textarea
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        required={required}
+        rows={5}
+        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-7 pb-3 text-[15px] text-[#0B0B0C] outline-none resize-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]"
+      />
+      <label
+        htmlFor={id}
+        className="pointer-events-none absolute left-4 top-4 transition-all duration-200 origin-left"
+        style={{
+          transform: active ? "translateY(-6px) scale(0.75)" : "translateY(0) scale(1)",
+          color: focused ? "#1ab5c7" : "#9ca3af",
+          fontSize: "15px",
+          fontWeight: 500,
+        }}
+      >
+        {label}{required && " *"}
+      </label>
+    </div>
+  );
+}
 
 const Contact = () => {
-  const { toast }   = useToast();
+  const { toast } = useToast();
   const { content, loading } = usePageContent<ContactContent>("contact");
+  const tilt = useTilt(8);
 
   const [formData, setFormData] = useState({
-    name: "", email: "", phone: "", subject: "", message: "", service: "coaching-de-vie",
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+    service: "coaching-de-vie",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!content) return;
     setIsSubmitting(true);
-    const msgs = content.formulaire.messages;
+    const msgs = content?.formulaire.messages ?? {
+      successTitle: "Message envoyé !",
+      successDescription: "Nous vous contacterons très bientôt.",
+      errorTitle: "Erreur",
+      errorDefault: "Une erreur est survenue.",
+    };
     try {
       const response = await fetch("/contact.php", {
         method: "POST",
@@ -54,7 +197,7 @@ const Contact = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+        <div className="min-h-screen flex items-center justify-center bg-white">
           <div className="w-8 h-8 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
@@ -62,7 +205,7 @@ const Contact = () => {
   }
 
   const { coordonnees, formulaire } = content;
-  const fields = formulaire.fields;
+  const services = formulaire.services ?? [];
 
   return (
     <Layout>
@@ -72,236 +215,464 @@ const Contact = () => {
         canonical="/contact"
         structuredData={{
           "@context": "https://schema.org",
-          "@type":    "ContactPage",
-          "name":     "Contact | ON Coaching",
-          "url":      "https://www.oncoaching.fr/contact",
+          "@type": "ContactPage",
+          name: "Contact | ON Coaching",
+          url: "https://www.oncoaching.fr/contact",
         }}
       />
 
-      <div className="w-full bg-white min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">
+      <div className="w-full bg-white">
 
-        {/* ── HERO ────────────────────────────────── */}
-        <motion.section
-          initial="hidden" animate="visible" variants={stagger}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2"
-          aria-labelledby="contact-h1"
-        >
-          <motion.div variants={fadeInUp} className="lg:col-span-8">
-            <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400 mb-4" aria-hidden="true">
-              ↳ Contactez-nous
-            </p>
-            <h1 id="contact-h1" className="text-[clamp(2.2rem,6vw,5rem)] font-semibold leading-[0.95] tracking-tight text-[#0B0B0C]">
-              Commençons<br />
-              <span style={{ color: "#1ab5c7", WebkitTextStroke: "1px #0B0B0C" }}>votre parcours.</span>
+        {/* ── HERO ─────────────────────────────────────────────────── */}
+        <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+            className="flex flex-col items-start gap-6"
+          >
+            <motion.div variants={blurInUp} className="flex items-center gap-2">
+              <motion.div
+                className="w-2.5 h-2.5 rounded-full bg-[#1ab5c7]"
+                animate={pulseDot.animate}
+                transition={pulseDot.transition}
+              />
+              <span className="text-[13px] font-semibold tracking-widest uppercase text-[#1ab5c7]">
+                Réponse sous 24h
+              </span>
+            </motion.div>
+
+            <h1
+              aria-label="Parlons de votre projet."
+              className="flex flex-wrap gap-x-4 gap-y-1 leading-[1.05] font-bold tracking-tight text-[#0B0B0C]"
+              style={{ fontSize: "clamp(3rem,7vw,6rem)" }}
+            >
+              {WORDS.map((word, i) => (
+                <motion.span
+                  key={word}
+                  initial={{ opacity: 0, y: 60, rotate: 4 }}
+                  animate={{ opacity: 1, y: 0, rotate: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20,
+                    delay: i * 0.1,
+                  }}
+                  className={word === "projet." ? "text-[#1ab5c7]" : ""}
+                >
+                  {word}
+                </motion.span>
+              ))}
             </h1>
+
+            <motion.p
+              variants={blurInUp}
+              className="text-[17px] text-gray-500 leading-relaxed max-w-xl"
+            >
+              {coordonnees.subtitle}
+            </motion.p>
           </motion.div>
-          <motion.div variants={fadeInUp} className="lg:col-span-4 flex flex-col justify-end gap-3">
-            <p className="text-[14px] text-gray-500 leading-relaxed">{coordonnees.subtitle}</p>
-            <div className="flex items-center gap-2 bg-[#F3F4F6] rounded-full px-4 py-2 w-fit">
-              <div className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
-              <span className="text-[12px] font-bold text-[#0B0B0C]">1er RDV offert</span>
-            </div>
-          </motion.div>
-        </motion.section>
+        </section>
 
-        {/* ── MAIN: info + form ───────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* ── GRID CONTACT ──────────────────────────────────────────── */}
+        <section className="py-0 pb-20 md:pb-28 max-w-7xl mx-auto px-5 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
-          {/* Left: coordonnées */}
-          <motion.div
-            initial="hidden" whileInView="visible" viewport={VP} variants={stagger}
-            className="flex flex-col gap-4"
-            aria-label="Coordonnées"
-          >
-            {/* Adresse */}
-            <motion.div variants={fadeInUp} className="bg-[#0B0B0C] rounded-[28px] p-7 flex items-start gap-5">
-              <div className="w-10 h-10 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                <MapPin className="w-5 h-5 text-[#0B0B0C]" strokeWidth={2} />
-              </div>
-              <address className="not-italic">
-                <p className="text-[10px] font-mono tracking-widest uppercase text-white/30 mb-1">{coordonnees.adresse.label}</p>
-                <p className="text-white font-semibold text-[15px] whitespace-pre-line leading-snug">{coordonnees.adresse.value}</p>
-              </address>
-            </motion.div>
-
-            {/* Téléphone + Email */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-6 flex flex-col gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#0B0B0C] flex items-center justify-center" aria-hidden="true">
-                  <Phone className="w-4 h-4 text-[#1ab5c7]" strokeWidth={2} />
-                </div>
-                <div>
-                  <p className="text-[10px] font-mono tracking-widest uppercase text-gray-400 mb-1">{coordonnees.telephone.label}</p>
-                  <a
-                    href={`tel:${coordonnees.telephone.value.replace(/\s/g, "")}`}
-                    className="font-bold text-[#0B0B0C] text-[14px] hover:text-[#1ab5c7] transition-colors"
-                  >
-                    {coordonnees.telephone.value}
-                  </a>
-                </div>
+            {/* ── GAUCHE : Formulaire ─────────────────────────────── */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={VP}
+              variants={stagger}
+              className="flex flex-col gap-5"
+            >
+              <motion.div variants={springLeft}>
+                <p className="text-[12px] font-mono tracking-widest uppercase text-gray-400 mb-1">
+                  {formulaire.title}
+                </p>
+                <h2 className="text-[1.65rem] font-bold text-[#0B0B0C] leading-snug tracking-tight">
+                  {formulaire.subtitle}
+                </h2>
               </motion.div>
 
-              <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-6 flex flex-col gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#0B0B0C] flex items-center justify-center" aria-hidden="true">
-                  <Mail className="w-4 h-4 text-[#1ab5c7]" strokeWidth={2} />
-                </div>
-                <div>
-                  <p className="text-[10px] font-mono tracking-widest uppercase text-gray-400 mb-1">{coordonnees.email.label}</p>
-                  <a
-                    href={`mailto:${coordonnees.email.value}`}
-                    className="font-bold text-[#0B0B0C] text-[13px] break-all hover:text-[#1ab5c7] transition-colors"
-                  >
-                    {coordonnees.email.value}
-                  </a>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Horaires */}
-            <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-7">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-9 h-9 rounded-xl bg-[#0B0B0C] flex items-center justify-center" aria-hidden="true">
-                  <Clock className="w-4 h-4 text-[#1ab5c7]" strokeWidth={2} />
-                </div>
-                <p className="font-bold text-[#0B0B0C] text-[14px]">{coordonnees.horaires.label}</p>
-              </div>
-              <ul className="space-y-2">
-                {coordonnees.horaires.lines.map((line, i) => (
-                  <li key={i} className="flex items-center gap-2 text-[13px]">
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${line.includes("Fermé") ? "bg-gray-300" : "bg-[#1ab5c7]"}`}
-                      aria-hidden="true"
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+                <motion.div
+                  variants={staggerFast}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VP}
+                  className="flex flex-col gap-4"
+                >
+                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FloatingField
+                      id="name"
+                      label="Nom complet"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      autoComplete="name"
                     />
-                    <span className={line.includes("Fermé") ? "text-gray-300" : "text-gray-600"}>{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </motion.div>
+                    <FloatingField
+                      id="email"
+                      label="Email"
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      autoComplete="email"
+                    />
+                  </motion.div>
 
-          {/* Right: formulaire */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={VP} transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-[#0B0B0C] rounded-[32px] p-7 md:p-10 relative overflow-hidden"
-            id="form"
-          >
-            <p className="text-[10px] font-mono tracking-widest uppercase text-white/30 mb-2" aria-hidden="true">
-              {formulaire.title}
-            </p>
-            <h2 className="font-bold text-white text-[1.3rem] tracking-tight mb-8 leading-snug">
-              {formulaire.subtitle}
-            </h2>
+                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <FloatingField
+                      id="phone"
+                      label="Téléphone"
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      autoComplete="tel"
+                    />
+                    <div className="relative">
+                      <select
+                        id="service"
+                        name="service"
+                        value={formData.service}
+                        onChange={handleChange}
+                        className="w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#0B0B0C] outline-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)] appearance-none cursor-pointer"
+                      >
+                        {services.map((s) => (
+                          <option key={s.value} value={s.value}>
+                            {s.label}
+                          </option>
+                        ))}
+                      </select>
+                      <label
+                        htmlFor="service"
+                        className="pointer-events-none absolute left-4 top-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wide"
+                      >
+                        Service
+                      </label>
+                      <ChevronDown
+                        className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
+                        strokeWidth={2}
+                      />
+                    </div>
+                  </motion.div>
 
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
-              {/* Nom + Email */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="name" className="block text-[10px] font-mono uppercase tracking-widest text-white/30 mb-1.5">
-                    {fields.name} *
-                  </label>
-                  <input
-                    type="text" id="name" name="name"
-                    required autoComplete="name"
-                    value={formData.name} onChange={handleChange}
-                    className={inputCls}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-[10px] font-mono uppercase tracking-widest text-white/30 mb-1.5">
-                    {fields.email} *
-                  </label>
-                  <input
-                    type="email" id="email" name="email"
-                    required autoComplete="email"
-                    value={formData.email} onChange={handleChange}
-                    className={inputCls}
-                  />
-                </div>
-              </div>
+                  <motion.div variants={springLeft}>
+                    <FloatingField
+                      id="subject"
+                      label="Sujet"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                    />
+                  </motion.div>
 
-              {/* Téléphone + Service */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label htmlFor="phone" className="block text-[10px] font-mono uppercase tracking-widest text-white/30 mb-1.5">
-                    {fields.phone}
-                  </label>
-                  <input
-                    type="tel" id="phone" name="phone"
-                    autoComplete="tel"
-                    value={formData.phone} onChange={handleChange}
-                    className={inputCls}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="service" className="block text-[10px] font-mono uppercase tracking-widest text-white/30 mb-1.5">
-                    {fields.service}
-                  </label>
-                  <select
-                    id="service" name="service"
-                    value={formData.service} onChange={handleChange}
-                    className={inputCls}
-                    style={{ backgroundColor: "rgba(255,255,255,0.06)" }}
+                  <motion.div variants={springLeft}>
+                    <FloatingTextarea
+                      id="message"
+                      label="Votre message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                    />
+                  </motion.div>
+
+                  <motion.div variants={springLeft}>
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting}
+                      {...btnHoverProps}
+                      className="w-full flex items-center justify-center gap-2 bg-[#1ab5c7] text-white font-bold text-[15px] py-4 rounded-2xl transition-opacity disabled:opacity-50 min-h-[56px] shadow-[0_8px_32px_rgba(26,181,199,0.35)]"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Envoi en cours…
+                        </>
+                      ) : (
+                        <>
+                          Envoyer le message
+                          <ArrowUpRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.p
+                    variants={fadeInUp}
+                    className="text-gray-400 text-[13px] text-center flex items-center justify-center gap-1.5"
                   >
-                    {formulaire.services.map(s => (
-                      <option key={s.value} value={s.value} style={{ background: "#1a1a1a", color: "#fff" }}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+                    <Check className="w-3.5 h-3.5 text-[#1ab5c7]" strokeWidth={3} />
+                    Consultation initiale gratuite · Sans engagement
+                  </motion.p>
+                </motion.div>
+              </form>
+            </motion.div>
 
-              {/* Sujet */}
-              <div>
-                <label htmlFor="subject" className="block text-[10px] font-mono uppercase tracking-widest text-white/30 mb-1.5">
-                  {fields.subject} *
-                </label>
-                <input
-                  type="text" id="subject" name="subject"
-                  required
-                  value={formData.subject} onChange={handleChange}
-                  className={inputCls}
-                />
-              </div>
-
-              {/* Message */}
-              <div>
-                <label htmlFor="message" className="block text-[10px] font-mono uppercase tracking-widest text-white/30 mb-1.5">
-                  {fields.message} *
-                </label>
-                <textarea
-                  id="message" name="message"
-                  rows={4} required
-                  value={formData.message} onChange={handleChange}
-                  className={`${inputCls} resize-none`}
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full flex items-center justify-center gap-2 bg-[#1ab5c7] text-white font-bold text-[14px] py-4 rounded-2xl transition-opacity disabled:opacity-50 min-h-[52px]"
+            {/* ── DROITE : Carte dark ─────────────────────────────── */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={VP}
+              variants={springRight}
+              className="flex flex-col"
+            >
+              <SpotlightCard
+                className="bg-[#0B0B0C] rounded-[32px] p-8 md:p-10 h-full flex flex-col gap-8"
+                spotlightColor="rgba(26,181,199,0.15)"
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-[#0B0B0C] border-t-transparent rounded-full animate-spin" aria-hidden="true" />
-                    Envoi…
-                  </>
-                ) : (
-                  <>{fields.submitButton} <ArrowUpRight className="w-4 h-4" aria-hidden="true" /></>
-                )}
-              </motion.button>
+                <div
+                  ref={tilt.ref}
+                  onMouseMove={tilt.onMouseMove}
+                  onMouseLeave={tilt.onMouseLeave}
+                  onMouseEnter={tilt.onMouseEnter}
+                  className="flex flex-col gap-6 flex-1"
+                  style={{ willChange: "transform" }}
+                >
+                  <div>
+                    <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-1">
+                      Retrouvez-nous
+                    </p>
+                    <h3 className="text-white font-bold text-[1.4rem] leading-snug">
+                      Nos coordonnées
+                    </h3>
+                  </div>
 
-              <p className="text-white/20 text-[11px] text-center flex items-center justify-center gap-1.5">
-                <Check className="w-3 h-3" strokeWidth={3} aria-hidden="true" />
-                Consultation initiale gratuite · Sans engagement
-              </p>
-            </form>
-          </motion.div>
-        </div>
+                  <div className="flex flex-col gap-4">
+                    <motion.a
+                      href="https://maps.google.com/?q=14+rue+des+écureuils,+71000+Sancé"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      {...liftHoverProps}
+                      className="flex items-center gap-4 group cursor-pointer"
+                    >
+                      <div className="w-11 h-11 rounded-xl bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1ab5c7]/20 transition-colors">
+                        <MapPin className="w-5 h-5 text-[#1ab5c7]" strokeWidth={2} />
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">
+                          {coordonnees.adresse.label}
+                        </p>
+                        <p className="text-white font-semibold text-[15px] leading-snug whitespace-pre-line group-hover:text-[#1ab5c7] transition-colors">
+                          {coordonnees.adresse.value}
+                        </p>
+                      </div>
+                    </motion.a>
+
+                    <div className="h-px bg-white/5" />
+
+                    <motion.a
+                      href={`tel:${coordonnees.telephone.value.replace(/\s/g, "")}`}
+                      {...liftHoverProps}
+                      className="flex items-center gap-4 group cursor-pointer"
+                    >
+                      <div className="w-11 h-11 rounded-xl bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1ab5c7]/20 transition-colors">
+                        <Phone className="w-5 h-5 text-[#1ab5c7]" strokeWidth={2} />
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">
+                          {coordonnees.telephone.label}
+                        </p>
+                        <p className="text-white font-semibold text-[15px] group-hover:text-[#1ab5c7] transition-colors">
+                          {coordonnees.telephone.value}
+                        </p>
+                      </div>
+                    </motion.a>
+
+                    <div className="h-px bg-white/5" />
+
+                    <motion.a
+                      href={`mailto:${coordonnees.email.value}`}
+                      {...liftHoverProps}
+                      className="flex items-center gap-4 group cursor-pointer"
+                    >
+                      <div className="w-11 h-11 rounded-xl bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1ab5c7]/20 transition-colors">
+                        <Mail className="w-5 h-5 text-[#1ab5c7]" strokeWidth={2} />
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">
+                          {coordonnees.email.label}
+                        </p>
+                        <p className="text-white font-semibold text-[15px] break-all group-hover:text-[#1ab5c7] transition-colors">
+                          {coordonnees.email.value}
+                        </p>
+                      </div>
+                    </motion.a>
+                  </div>
+
+                  <div className="mt-auto pt-6 border-t border-white/5">
+                    <motion.div
+                      className="flex items-center gap-3 bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 rounded-2xl px-5 py-4 w-fit"
+                      whileHover={{ scale: 1.04, transition: { type: "spring", stiffness: 400, damping: 20 } }}
+                    >
+                      <motion.div
+                        className="w-3 h-3 rounded-full bg-[#1ab5c7]"
+                        animate={pulseDot.animate}
+                        transition={pulseDot.transition}
+                      />
+                      <span className="text-[#1ab5c7] font-bold text-[14px]">1er RDV offert</span>
+                      <span className="text-white/40 text-[13px]">· Sans engagement</span>
+                    </motion.div>
+                  </div>
+                </div>
+              </SpotlightCard>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── FAQ ───────────────────────────────────────────────────── */}
+        <section className="py-20 md:py-28 bg-[#F3F4F6]">
+          <div className="max-w-7xl mx-auto px-5 md:px-12">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={VP}
+              variants={stagger}
+              className="max-w-3xl mx-auto"
+            >
+              <motion.p
+                variants={blurInUp}
+                className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7] mb-3 text-center"
+              >
+                Questions fréquentes
+              </motion.p>
+              <motion.h2
+                variants={blurInUp}
+                className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#0B0B0C] text-center mb-12 leading-tight tracking-tight"
+              >
+                Vous avez des questions ?
+              </motion.h2>
+
+              <motion.div variants={stagger} className="flex flex-col gap-3">
+                {FAQ.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    variants={fadeInUp}
+                    className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100"
+                  >
+                    <button
+                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                      className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left group"
+                      aria-expanded={openFaq === i}
+                    >
+                      <span className="font-semibold text-[15px] text-[#0B0B0C] group-hover:text-[#1ab5c7] transition-colors leading-snug pr-2">
+                        {item.q}
+                      </span>
+                      <motion.div
+                        animate={{ rotate: openFaq === i ? 180 : 0 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                        className="flex-shrink-0 w-8 h-8 rounded-full bg-[#F3F4F6] group-hover:bg-[#1ab5c7]/10 flex items-center justify-center transition-colors"
+                      >
+                        <ChevronDown
+                          className={`w-4 h-4 transition-colors ${openFaq === i ? "text-[#1ab5c7]" : "text-gray-400"}`}
+                          strokeWidth={2.5}
+                        />
+                      </motion.div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {openFaq === i && (
+                        <motion.div
+                          key="answer"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <p className="px-6 pb-5 text-[15px] text-gray-500 leading-relaxed border-t border-gray-50 pt-3">
+                            {item.a}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── CTA ───────────────────────────────────────────────────── */}
+        <section className="py-20 md:py-28">
+          <div className="max-w-7xl mx-auto px-5 md:px-12">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={VP}
+              variants={fadeInUp}
+            >
+              <SpotlightCard
+                className="bg-[#0B0B0C] rounded-[40px] py-20 px-8 md:px-16 text-center"
+                spotlightColor="rgba(26,181,199,0.18)"
+              >
+                <motion.p
+                  variants={blurInUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={VP}
+                  className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7] mb-4"
+                >
+                  Prêt à commencer ?
+                </motion.p>
+
+                <motion.h2
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={VP}
+                  transition={{ type: "spring", stiffness: 180, damping: 20, delay: 0.1 }}
+                  className="text-white font-bold leading-tight tracking-tight mb-5"
+                  style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}
+                >
+                  Votre premier pas<br />
+                  <span className="text-[#1ab5c7]">ne coûte rien.</span>
+                </motion.h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={VP}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-white/50 text-[16px] max-w-md mx-auto mb-10 leading-relaxed"
+                >
+                  Réservez votre premier rendez-vous offert et découvrez comment le coaching peut transformer votre quotidien.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={VP}
+                  transition={{ type: "spring", stiffness: 300, damping: 22, delay: 0.3 }}
+                  className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                >
+                  <motion.a
+                    href="tel:+33663041812"
+                    {...btnHoverProps}
+                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[15px] px-8 py-4 rounded-2xl shadow-[0_8px_40px_rgba(26,181,199,0.4)] cursor-pointer"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Appeler maintenant
+                  </motion.a>
+                  <motion.a
+                    href={`mailto:${coordonnees.email.value}`}
+                    {...liftHoverProps}
+                    className="inline-flex items-center gap-2 text-white/60 hover:text-white font-semibold text-[15px] px-6 py-4 rounded-2xl border border-white/10 hover:border-white/20 transition-colors cursor-pointer"
+                  >
+                    <Mail className="w-4 h-4" />
+                    Écrire un email
+                  </motion.a>
+                </motion.div>
+              </SpotlightCard>
+            </motion.div>
+          </div>
+        </section>
 
       </div>
     </Layout>

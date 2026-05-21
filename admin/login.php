@@ -60,16 +60,16 @@ $csrf = csrfToken();
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg:        #0a0a0f;
-            --surface:   #111118;
-            --border:    rgba(255,255,255,0.07);
+            --bg:        #0b0b0c;
+            --surface:   #111113;
+            --border:    rgba(255,255,255,0.08);
             --border-h:  rgba(255,255,255,0.15);
-            --accent:    #6c8cff;
-            --accent2:   #a78bfa;
-            --text:      #e8e8f0;
-            --muted:     #7070a0;
-            --error:     #ff6b6b;
-            --success:   #4ade80;
+            --accent:    #1ab5c7;
+            --accent2:   #0e8a99;
+            --text:      #e8e8ec;
+            --muted:     #6b6b78;
+            --error:     #ef4444;
+            --success:   #22c55e;
         }
 
         html, body {
@@ -86,8 +86,8 @@ $csrf = csrfToken();
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(ellipse 60% 50% at 20% 20%, rgba(108,140,255,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 50% 40% at 80% 80%, rgba(167,139,250,0.06) 0%, transparent 60%);
+                radial-gradient(ellipse 60% 50% at 20% 20%, rgba(26,181,199,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 80% 80%, rgba(26,181,199,0.04) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
         }
@@ -195,8 +195,8 @@ $csrf = csrfToken();
 
         .field input:focus {
             border-color: var(--accent);
-            background: rgba(108,140,255,0.06);
-            box-shadow: 0 0 0 3px rgba(108,140,255,0.12);
+            background: rgba(26,181,199,0.06);
+            box-shadow: 0 0 0 3px rgba(26,181,199,0.12);
         }
 
         .field input::placeholder { color: rgba(255,255,255,0.2); }
@@ -242,7 +242,7 @@ $csrf = csrfToken();
         .btn-login {
             width: 100%;
             padding: 0.95rem;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            background: var(--accent);
             border: none;
             border-radius: 10px;
             color: #fff;
@@ -253,13 +253,13 @@ $csrf = csrfToken();
             transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
             margin-top: 0.5rem;
             letter-spacing: 0.02em;
-            box-shadow: 0 4px 20px rgba(108,140,255,0.3);
+            box-shadow: 0 4px 20px rgba(26,181,199,0.3);
         }
 
         .btn-login:hover {
-            opacity: 0.92;
+            opacity: 0.9;
             transform: translateY(-1px);
-            box-shadow: 0 8px 30px rgba(108,140,255,0.4);
+            box-shadow: 0 8px 30px rgba(26,181,199,0.4);
         }
 
         .btn-login:active { transform: translateY(0); }
