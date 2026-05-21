@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -125,6 +126,8 @@ const H1_WORDS_A = "Développez votre".split(" ");
 const H1_WORDS_B = "potentiel".split(" ");
 
 export default function Index() {
+  const [videoActive, setVideoActive] = useState(false);
+
   return (
     <Layout>
       <SEO
@@ -680,49 +683,49 @@ export default function Index() {
               <p className="text-[15px] text-gray-500 leading-relaxed max-w-md">
                 Une séance, une transformation. Voyez comment le coaching ON change concrètement la trajectoire de nos clients.
               </p>
-              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="self-start">
-                <a
-                  href="https://www.facebook.com/reel/2910146945849990"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
-                  aria-label="Voir la vidéo ON Coaching sur Facebook"
-                >
-                  Voir sur Facebook
-                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-                </a>
-              </motion.div>
             </motion.div>
 
-            {/* Carte vidéo cliquable */}
+            {/* Lecteur vidéo inline */}
             <motion.div variants={fadeInRight}>
-              <motion.a
-                href="https://www.facebook.com/reel/2910146945849990"
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="block relative w-full rounded-[24px] overflow-hidden bg-[#0B0B0C] group aspect-video"
-                aria-label="Voir le reel ON Coaching sur Facebook"
-              >
-                {/* Gradient décoratif */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#1ab5c7]/20 via-transparent to-[#0B0B0C]" aria-hidden="true" />
+              {videoActive ? (
+                <div className="relative w-full rounded-[24px] overflow-hidden aspect-video bg-[#0B0B0C]">
+                  <iframe
+                    src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2910146945849990%2F&show_text=false&autoplay=1&mute=0"
+                    className="absolute inset-0 w-full h-full"
+                    style={{ border: "none" }}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    allowFullScreen
+                    title="ON Coaching — Reel Facebook"
+                  />
+                </div>
+              ) : (
+                <motion.button
+                  type="button"
+                  onClick={() => setVideoActive(true)}
+                  whileHover={{ y: -4 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="block w-full relative rounded-[24px] overflow-hidden bg-[#0B0B0C] group aspect-video cursor-pointer"
+                  aria-label="Lancer la vidéo ON Coaching"
+                >
+                  {/* Gradient décoratif */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#1ab5c7]/20 via-transparent to-[#0B0B0C]" aria-hidden="true" />
 
-                {/* Bouton Play */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-[72px] h-[72px] bg-[#1ab5c7] rounded-full flex items-center justify-center shadow-[0_8px_40px_rgba(26,181,199,0.45)] group-hover:scale-110 transition-transform duration-300">
-                    <Play className="w-7 h-7 text-white ml-1" fill="currentColor" aria-hidden="true" />
+                  {/* Bouton Play */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-[72px] h-[72px] bg-[#1ab5c7] rounded-full flex items-center justify-center shadow-[0_8px_40px_rgba(26,181,199,0.45)] group-hover:scale-110 transition-transform duration-300">
+                      <Play className="w-7 h-7 text-white ml-1" fill="currentColor" aria-hidden="true" />
+                    </div>
                   </div>
-                </div>
 
-                {/* Label bas */}
-                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                  <span className="text-white/70 text-[13px] font-medium">ON Coaching · Reel</span>
-                  <span className="bg-white/10 border border-white/15 text-white/60 text-[11px] px-3 py-1 rounded-full">
-                    Facebook
-                  </span>
-                </div>
-              </motion.a>
+                  {/* Label bas */}
+                  <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
+                    <span className="text-white/70 text-[13px] font-medium">ON Coaching · Reel</span>
+                    <span className="bg-white/10 border border-white/15 text-white/60 text-[11px] px-3 py-1 rounded-full">
+                      Appuyer pour lancer
+                    </span>
+                  </div>
+                </motion.button>
+              )}
             </motion.div>
           </motion.div>
         </div>
