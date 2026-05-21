@@ -13,6 +13,7 @@ import SEO from "@/components/SEO";
 import {
   fadeInUp,
   fadeInLeft,
+  fadeInRight,
   fadeInScale,
   springUp,
   staggerContainer,
@@ -273,7 +274,7 @@ export default function Index() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative hidden lg:block"
           >
-            <div className="relative h-[500px] rounded-[32px] overflow-hidden shadow-2xl">
+            <div className="relative h-[500px] rounded-[32px] overflow-hidden">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
@@ -622,7 +623,70 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── 06. TÉMOIGNAGE ───────────────────────────────────────────── */}
+      {/* ── 06. VIDÉO ────────────────────────────────────────────────── */}
+      <section className="py-20 md:py-28 bg-white" aria-label="Vidéo ON Coaching">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+          >
+            <motion.div variants={fadeInLeft} className="space-y-6">
+              <p className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]" aria-hidden="true">
+                On Coaching · En action
+              </p>
+              <h2 className="text-[2rem] md:text-[3rem] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]">
+                Découvrez<br />
+                <span className="text-[#1ab5c7]">notre approche</span><br />
+                en vidéo.
+              </h2>
+              <p className="text-[16px] text-gray-500 leading-relaxed max-w-md">
+                Une séance, une transformation. Voyez comment le coaching ON change concrètement la trajectoire de nos clients.
+              </p>
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+                <a
+                  href="https://www.facebook.com/reel/2910146945849990"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3 rounded-full hover:opacity-85 transition-opacity"
+                >
+                  Voir sur Facebook
+                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              variants={fadeInRight}
+              className="flex justify-center lg:justify-end"
+            >
+              <motion.div
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="rounded-[24px] overflow-hidden"
+                style={{ width: 265, height: 591 }}
+              >
+                <iframe
+                  src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2910146945849990%2F&show_text=true&width=265&t=0"
+                  width="265"
+                  height="591"
+                  style={{ border: "none", overflow: "hidden", display: "block" }}
+                  scrolling="no"
+                  frameBorder={0}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                  allowFullScreen
+                  title="ON Coaching — Reel Facebook"
+                  loading="lazy"
+                />
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── 07. TÉMOIGNAGE ───────────────────────────────────────────── */}
       <section
         className="py-20 md:py-28 bg-[#F3F4F6]"
         aria-label="Témoignage client"
@@ -677,7 +741,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── 07. CTA FINAL ────────────────────────────────────────────── */}
+      {/* ── 08. CTA FINAL ────────────────────────────────────────────── */}
       <section
         className="py-20 md:py-28 bg-[#0B0B0C]"
         aria-labelledby="cta-title"
