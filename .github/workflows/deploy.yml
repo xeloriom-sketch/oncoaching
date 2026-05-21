@@ -24,9 +24,14 @@ jobs:
           node-version: 20
           cache: yarn
 
+      - uses: actions/configure-pages@v4
+        id: pages
+
       - run: yarn install --frozen-lockfile
 
       - run: yarn build
+        env:
+          VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
