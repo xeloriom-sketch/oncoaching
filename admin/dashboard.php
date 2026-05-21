@@ -3,12 +3,41 @@ require_once 'config.php';
 requireLogin();
 
 $pages   = PAGES;
+$view    = $_GET['view'] ?? '';
 $current = $_GET['page'] ?? 'index';
-if (!array_key_exists($current, $pages)) $current = 'index';
+if ($view === 'submissions') $current = '_submissions';
+elseif (!array_key_exists($current, $pages)) $current = 'index';
 
-$pageData  = readJson($current) ?? [];
-$pageLabel = $pages[$current]['label'];
+$pageData  = ($current !== '_submissions') ? readJson($current) ?? [] : [];
+$pageLabel = ($current === '_submissions') ? 'Soumissions' : ($pages[$current]['label'] ?? 'Accueil');
 $csrf      = csrfToken();
+
+// ── Lire les soumissions ────────────────────────────────────────────────────
+$submissionsFile = __DIR__ . '/../public/content/submissions.json';
+$allSubmissions  = [];
+if (file_exists($submissionsFile)) {
+    $raw = json_decode(file_get_contents($submissionsFile), true);
+    if (is_array($raw)) $allSubmissions = $raw;
+}
+$unreadCount = count(array_filter($allSubmissions, fn($s) => !($s['read'] ?? false)));
+
+// ── Marquer comme lu via AJAX ───────────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'mark_read') {
+    if (verifyCsrf($_POST['csrf_token'] ?? '')) {
+        $sid = $_POST['submission_id'] ?? '';
+        foreach ($allSubmissions as &$sub) {
+            if ($sub['id'] === $sid) { $sub['read'] = true; break; }
+        }
+        unset($sub);
+        file_put_contents($submissionsFile, json_encode($allSubmissions, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => true]);
+        exit();
+    }
+    header('Content-Type: application/json');
+    echo json_encode(['ok' => false]);
+    exit();
+}
 
 // ── AJAX handlers ──────────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -601,6 +630,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
     </div>
 
     <div class="nav-section">
+        <span class="nav-label">Messages reçus</span>
+        <a href="?view=submissions" class="nav-item <?= $current === '_submissions' ? 'active' : '' ?>">
+            <span class="nav-icon">&#128235;</span>
+            <span class="nav-label-text">Soumissions</span>
+            <?php if ($unreadCount > 0): ?>
+            <span class="nav-badge" style="background:rgba(26,181,199,0.2);color:var(--accent);"><?= $unreadCount ?></span>
+            <?php endif ?>
+        </a>
+    </div>
+
+    <div class="nav-section">
         <span class="nav-label">Pages du site</span>
         <?php
         $navIcons = [
@@ -655,6 +695,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
             </div>
         </div>
         <div class="topbar-right">
+            <?php if ($current !== '_submissions'): ?>
             <span class="unsaved-pill" id="unsavedBadge">
                 <span class="unsaved-dot"></span>
                 Non sauvegardé
@@ -663,6 +704,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
                 <div class="spinner"></div>
                 <span class="btn-label">Enregistrer</span>
             </button>
+            <?php else: ?>
+            <a href="?view=submissions" class="btn-save" style="text-decoration:none;">
+                &#8635; Actualiser
+            </a>
+            <?php endif ?>
         </div>
     </header>
 
@@ -675,6 +721,201 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 // FORMULAIRES PAR PAGE
 // ════════════════════════════════════════════════
 switch ($current) {
+
+// ── SOUMISSIONS ───────────────────────────────────
+case '_submissions':
+$contacts = array_filter($allSubmissions, fn($s) => ($s['type'] ?? '') === 'contact');
+$rdvs     = array_filter($allSubmissions, fn($s) => ($s['type'] ?? '') === 'rdv');
+?>
+<style>
+.sub-tabs{display:flex;gap:0.5rem;margin-bottom:1.25rem;}
+.sub-tab{padding:0.45rem 1.125rem;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text-muted);font-family:inherit;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.15s;}
+.sub-tab:hover{background:rgba(255,255,255,0.04);color:var(--text);}
+.sub-tab.active{background:var(--accent-dim);border-color:rgba(26,181,199,0.3);color:var(--accent);}
+.sub-panel{display:none;}.sub-panel.active{display:flex;flex-direction:column;gap:0.75rem;}
+.sub-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.125rem 1.25rem;position:relative;transition:border-color 0.15s;}
+.sub-card:hover{border-color:var(--border-h);}
+.sub-card.unread{border-left:3px solid var(--accent);}
+.sub-card.unread::before{content:'Nouveau';position:absolute;top:0.75rem;right:0.875rem;font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);background:var(--accent-dim);padding:2px 8px;border-radius:10px;}
+.sub-meta{display:flex;align-items:center;flex-wrap:wrap;gap:0.5rem 1rem;margin-bottom:0.625rem;}
+.sub-name{font-size:0.9rem;font-weight:700;color:var(--text);}
+.sub-date{font-size:0.7rem;color:var(--text-muted);font-family:monospace;}
+.sub-tag{font-size:0.62rem;font-weight:700;padding:2px 8px;border-radius:8px;text-transform:uppercase;letter-spacing:0.06em;}
+.sub-tag.rdv{background:rgba(26,181,199,0.12);color:var(--accent);}
+.sub-tag.contact{background:rgba(255,255,255,0.06);color:var(--text-muted);}
+.sub-body{font-size:0.8rem;color:var(--text-sub);line-height:1.55;}
+.sub-detail{display:flex;flex-direction:column;gap:0.3rem;margin-top:0.5rem;}
+.sub-row{display:flex;gap:0.5rem;font-size:0.8rem;}
+.sub-row-label{color:var(--text-muted);min-width:110px;flex-shrink:0;}
+.sub-row-val{color:var(--text);}
+.sub-actions{display:flex;gap:0.5rem;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);}
+.btn-mark-read{padding:0.35rem 0.75rem;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,0.03);color:var(--text-muted);font-family:inherit;font-size:0.72rem;cursor:pointer;transition:all 0.15s;}
+.btn-mark-read:hover{background:var(--accent-dim);color:var(--accent);border-color:rgba(26,181,199,0.3);}
+.sub-empty{text-align:center;padding:3rem;color:var(--text-muted);font-size:0.85rem;}
+.creneaux{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem;}
+.creneau{border-radius:8px;padding:0.6rem 0.875rem;font-size:0.78rem;}
+.creneau.primary{background:var(--accent-dim);border:1px solid rgba(26,181,199,0.2);color:var(--accent);}
+.creneau.secondary{background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--text-sub);}
+.creneau-label{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;opacity:0.7;display:block;margin-bottom:2px;}
+.sub-stat{display:flex;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.sub-stat-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0.875rem 1.125rem;flex:1;min-width:120px;}
+.sub-stat-val{font-size:1.5rem;font-weight:700;color:var(--text);line-height:1;}
+.sub-stat-label{font-size:0.7rem;color:var(--text-muted);margin-top:4px;}
+</style>
+
+<div class="sub-stat">
+    <div class="sub-stat-item">
+        <div class="sub-stat-val stat-accent"><?= count($allSubmissions) ?></div>
+        <div class="sub-stat-label">Total reçus</div>
+    </div>
+    <div class="sub-stat-item">
+        <div class="sub-stat-val"><?= $unreadCount ?></div>
+        <div class="sub-stat-label">Non lus</div>
+    </div>
+    <div class="sub-stat-item">
+        <div class="sub-stat-val"><?= count($rdvs) ?></div>
+        <div class="sub-stat-label">Demandes RDV</div>
+    </div>
+    <div class="sub-stat-item">
+        <div class="sub-stat-val"><?= count($contacts) ?></div>
+        <div class="sub-stat-label">Messages contact</div>
+    </div>
+</div>
+
+<div class="sub-tabs">
+    <button class="sub-tab active" onclick="showSubTab('all', this)">Tous (<?= count($allSubmissions) ?>)</button>
+    <button class="sub-tab" onclick="showSubTab('rdv', this)">RDV (<?= count($rdvs) ?>)</button>
+    <button class="sub-tab" onclick="showSubTab('contact', this)">Messages (<?= count($contacts) ?>)</button>
+</div>
+
+<!-- All -->
+<div class="sub-panel active" id="subpanel-all">
+    <?php if (empty($allSubmissions)): ?>
+    <div class="sub-empty">&#128235; Aucune soumission reçue pour le moment.</div>
+    <?php else: foreach ($allSubmissions as $sub):
+        $isRead = $sub['read'] ?? false;
+        $isRdvSub = ($sub['type'] ?? '') === 'rdv';
+    ?>
+    <div class="sub-card <?= $isRead ? '' : 'unread' ?>" id="sub-<?= htmlspecialchars($sub['id']) ?>">
+        <div class="sub-meta">
+            <span class="sub-name"><?= htmlspecialchars($sub['name']) ?></span>
+            <span class="sub-date"><?= htmlspecialchars($sub['date']) ?></span>
+            <span class="sub-tag <?= $isRdvSub ? 'rdv' : 'contact' ?>"><?= $isRdvSub ? 'Rendez-vous' : 'Message' ?></span>
+        </div>
+        <div class="sub-detail">
+            <div class="sub-row"><span class="sub-row-label">Email :</span><span class="sub-row-val"><a href="mailto:<?= htmlspecialchars($sub['email']) ?>" style="color:var(--accent);text-decoration:none;"><?= htmlspecialchars($sub['email']) ?></a></span></div>
+            <?php if (!empty($sub['phone'])): ?>
+            <div class="sub-row"><span class="sub-row-label">Téléphone :</span><span class="sub-row-val"><?= htmlspecialchars($sub['phone']) ?></span></div>
+            <?php endif ?>
+            <?php if (!empty($sub['service'])): ?>
+            <div class="sub-row"><span class="sub-row-label">Service :</span><span class="sub-row-val"><?= htmlspecialchars($sub['service']) ?></span></div>
+            <?php endif ?>
+            <?php if ($isRdvSub): ?>
+            <div class="creneaux">
+                <div class="creneau primary">
+                    <span class="creneau-label">1er choix</span>
+                    <?= htmlspecialchars($sub['preferredDate'] ?? '') ?>
+                    <?php if (!empty($sub['preferredTime'])): ?> · <?= htmlspecialchars($sub['preferredTime']) ?><?php endif ?>
+                </div>
+                <?php if (!empty($sub['preferredDate2'])): ?>
+                <div class="creneau secondary">
+                    <span class="creneau-label">2e choix</span>
+                    <?= htmlspecialchars($sub['preferredDate2']) ?>
+                    <?php if (!empty($sub['preferredTime2'])): ?> · <?= htmlspecialchars($sub['preferredTime2']) ?><?php endif ?>
+                </div>
+                <?php endif ?>
+            </div>
+            <?php if (!empty($sub['sessionFormat'])): ?>
+            <div class="sub-row"><span class="sub-row-label">Format :</span><span class="sub-row-val"><?= htmlspecialchars($sub['sessionFormat']) ?></span></div>
+            <?php endif ?>
+            <?php if (!empty($sub['note'])): ?>
+            <div class="sub-row"><span class="sub-row-label">Note :</span><span class="sub-row-val" style="white-space:pre-wrap;"><?= htmlspecialchars($sub['note']) ?></span></div>
+            <?php endif ?>
+            <?php else: ?>
+            <?php if (!empty($sub['subject'])): ?>
+            <div class="sub-row"><span class="sub-row-label">Sujet :</span><span class="sub-row-val"><?= htmlspecialchars($sub['subject']) ?></span></div>
+            <?php endif ?>
+            <?php if (!empty($sub['message'])): ?>
+            <div class="sub-row"><span class="sub-row-label">Message :</span><span class="sub-row-val" style="white-space:pre-wrap;"><?= htmlspecialchars($sub['message']) ?></span></div>
+            <?php endif ?>
+            <?php endif ?>
+        </div>
+        <?php if (!$isRead): ?>
+        <div class="sub-actions">
+            <button class="btn-mark-read" onclick="markRead('<?= htmlspecialchars($sub['id']) ?>')">&#10003; Marquer comme lu</button>
+            <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re: <?= urlencode($isRdvSub ? 'Demande de RDV' : ($sub['subject'] ?? 'Votre message')) ?>" class="btn-mark-read" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">&#9993; Répondre</a>
+        </div>
+        <?php else: ?>
+        <div style="margin-top:0.625rem;">
+            <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re: <?= urlencode($isRdvSub ? 'Demande de RDV' : ($sub['subject'] ?? 'Votre message')) ?>" class="btn-mark-read" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">&#9993; Répondre</a>
+        </div>
+        <?php endif ?>
+    </div>
+    <?php endforeach; endif ?>
+</div>
+
+<!-- RDV only -->
+<div class="sub-panel" id="subpanel-rdv">
+    <?php if (empty($rdvs)): ?>
+    <div class="sub-empty">&#128197; Aucune demande de rendez-vous.</div>
+    <?php else: foreach ($rdvs as $sub):
+        $isRead = $sub['read'] ?? false;
+    ?>
+    <div class="sub-card <?= $isRead ? '' : 'unread' ?>">
+        <div class="sub-meta">
+            <span class="sub-name"><?= htmlspecialchars($sub['name']) ?></span>
+            <span class="sub-date"><?= htmlspecialchars($sub['date']) ?></span>
+            <span class="sub-tag rdv">Rendez-vous</span>
+        </div>
+        <div class="sub-detail">
+            <div class="sub-row"><span class="sub-row-label">Email :</span><span class="sub-row-val"><a href="mailto:<?= htmlspecialchars($sub['email']) ?>" style="color:var(--accent);text-decoration:none;"><?= htmlspecialchars($sub['email']) ?></a></span></div>
+            <?php if (!empty($sub['phone'])): ?><div class="sub-row"><span class="sub-row-label">Téléphone :</span><span class="sub-row-val"><?= htmlspecialchars($sub['phone']) ?></span></div><?php endif ?>
+            <?php if (!empty($sub['service'])): ?><div class="sub-row"><span class="sub-row-label">Service :</span><span class="sub-row-val"><?= htmlspecialchars($sub['service']) ?></span></div><?php endif ?>
+            <div class="creneaux">
+                <div class="creneau primary"><span class="creneau-label">1er choix</span><?= htmlspecialchars($sub['preferredDate'] ?? '') ?><?php if (!empty($sub['preferredTime'])): ?> · <?= htmlspecialchars($sub['preferredTime']) ?><?php endif ?></div>
+                <?php if (!empty($sub['preferredDate2'])): ?><div class="creneau secondary"><span class="creneau-label">2e choix</span><?= htmlspecialchars($sub['preferredDate2']) ?><?php if (!empty($sub['preferredTime2'])): ?> · <?= htmlspecialchars($sub['preferredTime2']) ?><?php endif ?></div><?php endif ?>
+            </div>
+            <?php if (!empty($sub['sessionFormat'])): ?><div class="sub-row"><span class="sub-row-label">Format :</span><span class="sub-row-val"><?= htmlspecialchars($sub['sessionFormat']) ?></span></div><?php endif ?>
+            <?php if (!empty($sub['note'])): ?><div class="sub-row"><span class="sub-row-label">Note :</span><span class="sub-row-val" style="white-space:pre-wrap;"><?= htmlspecialchars($sub['note']) ?></span></div><?php endif ?>
+        </div>
+        <div style="margin-top:0.625rem;"><a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Confirmation+RDV+ON+Coaching" class="btn-mark-read" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">&#9993; Confirmer le RDV</a></div>
+    </div>
+    <?php endforeach; endif ?>
+</div>
+
+<!-- Contacts only -->
+<div class="sub-panel" id="subpanel-contact">
+    <?php if (empty($contacts)): ?>
+    <div class="sub-empty">&#128235; Aucun message de contact.</div>
+    <?php else: foreach ($contacts as $sub):
+        $isRead = $sub['read'] ?? false;
+    ?>
+    <div class="sub-card <?= $isRead ? '' : 'unread' ?>">
+        <div class="sub-meta">
+            <span class="sub-name"><?= htmlspecialchars($sub['name']) ?></span>
+            <span class="sub-date"><?= htmlspecialchars($sub['date']) ?></span>
+            <span class="sub-tag contact">Message</span>
+        </div>
+        <div class="sub-detail">
+            <div class="sub-row"><span class="sub-row-label">Email :</span><span class="sub-row-val"><a href="mailto:<?= htmlspecialchars($sub['email']) ?>" style="color:var(--accent);text-decoration:none;"><?= htmlspecialchars($sub['email']) ?></a></span></div>
+            <?php if (!empty($sub['phone'])): ?><div class="sub-row"><span class="sub-row-label">Téléphone :</span><span class="sub-row-val"><?= htmlspecialchars($sub['phone']) ?></span></div><?php endif ?>
+            <?php if (!empty($sub['service'])): ?><div class="sub-row"><span class="sub-row-label">Service :</span><span class="sub-row-val"><?= htmlspecialchars($sub['service']) ?></span></div><?php endif ?>
+            <?php if (!empty($sub['subject'])): ?><div class="sub-row"><span class="sub-row-label">Sujet :</span><span class="sub-row-val"><?= htmlspecialchars($sub['subject']) ?></span></div><?php endif ?>
+            <?php if (!empty($sub['message'])): ?><div class="sub-row"><span class="sub-row-label">Message :</span><span class="sub-row-val" style="white-space:pre-wrap;"><?= htmlspecialchars($sub['message']) ?></span></div><?php endif ?>
+        </div>
+        <?php if (!$isRead): ?>
+        <div class="sub-actions">
+            <button class="btn-mark-read" onclick="markRead('<?= htmlspecialchars($sub['id']) ?>')">&#10003; Marquer comme lu</button>
+            <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re: <?= urlencode($sub['subject'] ?? 'Votre message') ?>" class="btn-mark-read" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">&#9993; Répondre</a>
+        </div>
+        <?php else: ?>
+        <div style="margin-top:0.625rem;"><a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re: <?= urlencode($sub['subject'] ?? 'Votre message') ?>" class="btn-mark-read" style="text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">&#9993; Répondre</a></div>
+        <?php endif ?>
+    </div>
+    <?php endforeach; endif ?>
+</div>
+
+<?php break;
 
 // ── ACCUEIL ──────────────────────────────────────
 case 'index': $d = $pageData; ?>
@@ -1313,6 +1554,43 @@ document.addEventListener('keydown', e => {
 window.addEventListener('beforeunload', e => {
     if (hasChanges) { e.preventDefault(); e.returnValue = ''; }
 });
+
+// Submissions tabs
+function showSubTab(key, btn) {
+    document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = document.getElementById('subpanel-' + key);
+    if (panel) panel.classList.add('active');
+}
+
+// Mark as read
+function markRead(id) {
+    const body = new FormData();
+    body.append('action', 'mark_read');
+    body.append('csrf_token', CSRF);
+    body.append('submission_id', id);
+    fetch(window.location.href, { method: 'POST', body })
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) {
+                const card = document.getElementById('sub-' + id);
+                if (card) {
+                    card.classList.remove('unread');
+                    const actionsDiv = card.querySelector('.sub-actions');
+                    if (actionsDiv) {
+                        const replyBtn = actionsDiv.querySelector('a');
+                        const newDiv = document.createElement('div');
+                        newDiv.style.marginTop = '0.625rem';
+                        if (replyBtn) newDiv.appendChild(replyBtn.cloneNode(true));
+                        actionsDiv.replaceWith(newDiv);
+                    }
+                }
+                showToast('Marqué comme lu', 'success');
+            }
+        })
+        .catch(() => showToast('Erreur réseau', 'error'));
+}
 </script>
 </body>
 </html>

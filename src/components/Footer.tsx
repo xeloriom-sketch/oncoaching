@@ -199,11 +199,16 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-8 border-t border-white/8">
             <p className="text-white/25 text-[11px] font-mono">
-              © {year}{" "}
-              <a href="https://www.alhambra-web.com" className="hover:text-[#1ab5c7] transition-colors" rel="noopener noreferrer">
-                alhambra-web
+              © {year} ON Coaching · Tous droits réservés.{" "}
+              Site par{" "}
+              <a
+                href="https://www.alhambra-web.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/40 hover:text-[#1ab5c7] transition-colors font-semibold"
+              >
+                Alhambra Web
               </a>
-              {" "}· Tous droits réservés.
             </p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
