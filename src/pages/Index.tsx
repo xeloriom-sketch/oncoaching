@@ -308,7 +308,6 @@ export default function Index() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative"
           >
-            {/* Image simple — même rendu mobile & desktop */}
             <div className="relative overflow-hidden h-[320px] sm:h-[420px] lg:h-[600px]">
               <img
                 src={COACH_IMG}
@@ -318,6 +317,37 @@ export default function Index() {
                 loading="eager"
                 decoding="async"
               />
+
+              {/* Dégradé bas */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: "linear-gradient(to bottom, transparent 55%, rgba(255,255,255,0.85) 85%, white 100%)" }}
+                aria-hidden="true"
+              />
+
+              {/* Bulle "Coach certifié ICF" */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                whileHover={{ y: -3 }}
+                className="absolute bottom-12 right-4 sm:right-6 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3"
+              >
+                <p className="text-white text-[13px] font-semibold">Coach certifié ICF</p>
+                <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
+              </motion.div>
+
+              {/* Bulle "Disponible" */}
+              <motion.div
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                whileHover={{ y: -2 }}
+                className="absolute bottom-4 left-4 sm:left-6 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+                <span className="text-white text-[12px] font-semibold">Disponible</span>
+              </motion.div>
             </div>
           </motion.div>
         </div>
