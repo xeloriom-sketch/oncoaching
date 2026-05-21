@@ -125,7 +125,7 @@ const CoachingJeunes = () => {
 
                 <h1
                   id="jeunes-h1"
-                  className="text-[clamp(3rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1] overflow-hidden"
+                  className="text-[clamp(3rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.15]"
                 >
                   <div>{page.title.split(" ").slice(0, 2).join(" ")}</div>
                   <div className="flex flex-wrap gap-x-3">

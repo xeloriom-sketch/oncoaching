@@ -134,7 +134,7 @@ const CoachingNeurofeedback = () => {
 
                 <h1
                   id="nf-h1"
-                  className="text-[clamp(3rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05] overflow-hidden"
+                  className="text-[clamp(3rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.15]"
                 >
                   {HERO_WORDS.map((word, i) => (
                     <motion.span
