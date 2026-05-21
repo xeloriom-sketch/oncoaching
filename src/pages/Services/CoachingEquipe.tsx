@@ -201,7 +201,7 @@ const CoachingEquipe = () => {
                 </motion.div>
                 <motion.div {...btnHoverProps}>
                   <Link
-                    to="/nos-tarifs"
+                    to="/NosTarifs"
                     className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#0B0B0C] font-semibold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
                   >
                     Voir les tarifs
@@ -214,7 +214,7 @@ const CoachingEquipe = () => {
               variants={springRight}
               initial="hidden"
               animate="visible"
-              className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden group"
+              className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden group shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
             >
               <motion.img
                 src={HERO_IMG}
@@ -228,7 +228,7 @@ const CoachingEquipe = () => {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute bottom-5 left-5 bg-[#1ab5c7] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold"
+                className="absolute bottom-5 left-5 bg-[#1ab5c7] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold shadow-md"
               >
                 Entreprises · TPE/PME
               </motion.div>
@@ -327,7 +327,7 @@ const CoachingEquipe = () => {
                           onMouseMove={tilt.onMouseMove}
                           onMouseLeave={tilt.onMouseLeave}
                           onMouseEnter={tilt.onMouseEnter}
-                          className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 h-full"
+                          className="p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 h-full shadow-[0_4px_20px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-shadow duration-300"
                           style={{ transformStyle: "preserve-3d" }}
                         >
                           <motion.div
@@ -360,7 +360,7 @@ const CoachingEquipe = () => {
             >
               <motion.div
                 variants={springLeft}
-                className="relative h-[300px] sm:h-[360px] lg:h-[420px] rounded-[32px] overflow-hidden group"
+                className="relative h-[300px] sm:h-[360px] lg:h-[420px] rounded-[32px] overflow-hidden group shadow-[0_16px_48px_rgba(0,0,0,0.18)]"
               >
                 <img
                   src={COACH_PHOTO}
@@ -451,7 +451,7 @@ const CoachingEquipe = () => {
                 >
                   Tarif
                 </p>
-                <div>
+                <div className="text-center sm:text-left">
                   <span className="text-[clamp(2.8rem,5vw,3.5rem)] font-bold text-white leading-none">Sur devis</span>
                   <p className="text-white/70 text-[15px] mt-2">Adapté à la taille de votre équipe et à vos objectifs</p>
                 </div>
@@ -474,7 +474,7 @@ const CoachingEquipe = () => {
                 <motion.div {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-[#0B0B0C] text-white font-bold text-[16px] px-8 py-5 rounded-2xl hover:opacity-90 transition-opacity"
+                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[16px] px-8 py-5 rounded-2xl hover:opacity-90 transition-opacity"
                     aria-label="Demander un devis pour coaching d'équipe"
                   >
                     Demander un devis <ArrowUpRight className="w-5 h-5" aria-hidden="true" />
@@ -485,7 +485,7 @@ const CoachingEquipe = () => {
                 </p>
                 <motion.div {...btnHoverProps}>
                   <Link
-                    to="/nos-tarifs"
+                    to="/NosTarifs"
                     className="w-full inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold text-[14px] px-8 py-4 rounded-2xl hover:bg-white/25 transition-colors backdrop-blur-sm"
                   >
                     Voir tous les tarifs

@@ -198,7 +198,7 @@ const CoachingScolaire = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               className="relative"
             >
-              <div className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden">
+              <div className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
                 <img
                   src={HERO_IMG}
                   alt="Coaching scolaire à Mâcon — ON Coaching"
@@ -212,7 +212,7 @@ const CoachingScolaire = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.55, duration: 0.5 }}
-                className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm text-[#0B0B0C] px-4 py-2 rounded-full text-[12px] font-semibold shadow-sm"
+                className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm text-[#0B0B0C] px-4 py-2 rounded-full text-[12px] font-semibold shadow-md"
               >
                 Collégiens · Lycéens · Étudiants
               </motion.div>
@@ -329,7 +329,7 @@ const CoachingScolaire = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
               <motion.div variants={springUp} className="relative">
-                <div className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden">
+                <div className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.18)]">
                   <img
                     src={COACH_PHOTO}
                     alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
@@ -417,7 +417,7 @@ const CoachingScolaire = () => {
                   <p className="font-mono tracking-widest uppercase text-[11px] text-white/60" aria-hidden="true">
                     Tarif
                   </p>
-                  <div className="flex items-baseline gap-2">
+                  <div className="flex items-baseline gap-2 text-center sm:text-left">
                     <span className="text-[clamp(2.8rem,7vw,5.5rem)] font-bold text-white leading-none tracking-tight">
                       60€
                     </span>
@@ -454,7 +454,7 @@ const CoachingScolaire = () => {
                   <motion.span className="inline-block w-fit" {...btnHoverProps}>
                     <Link
                       to={cta.buttonLink}
-                      className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                      className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
                     >
                       Prendre RDV <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
