@@ -56,7 +56,8 @@ function FloatingField({
   required?: boolean; autoComplete?: string;
 }) {
   const [focused, setFocused] = useState(false);
-  const active = focused || value.length > 0;
+  const isDate = type === "date";
+  const active = focused || value.length > 0 || isDate;
 
   return (
     <div className="relative">
@@ -65,6 +66,7 @@ function FloatingField({
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         required={required} autoComplete={autoComplete}
         className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#0B0B0C] outline-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]"
+        style={isDate ? { colorScheme: "light" } : {}}
       />
       <label
         htmlFor={id}

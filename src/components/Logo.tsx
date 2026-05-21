@@ -6,17 +6,16 @@ interface LogoMarkProps {
   className?: string;
 }
 
-/** Logo réel du client — faviconNoText.png en blanc ou noir via CSS filter */
+/** Logo réel du client — favicon_dark.png (fond noir, logo blanc) */
 export const LogoMark = ({ size = 36, animate: doAnimate = false, className = "", color = "white" }: LogoMarkProps & { color?: "white" | "black" }) => (
   <motion.img
-    src={`${import.meta.env.BASE_URL}faviconNoText.png`}
+    src={`${import.meta.env.BASE_URL}favicon_dark.png`}
     alt="ON Coaching — Logo"
     style={{
       width: size,
       height: size,
-      filter: color === "white"
-        ? "brightness(0) invert(1)"
-        : "brightness(0)",
+      borderRadius: 6,
+      filter: color === "black" ? "invert(1)" : "none",
     }}
     className={`object-contain flex-shrink-0 ${className}`}
     {...(doAnimate

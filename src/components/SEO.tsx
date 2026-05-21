@@ -24,7 +24,7 @@ const SEO = ({
   title,
   description,
   canonical,
-  ogImage = "/faviconNoText.png",
+  ogImage = "/favicon_dark.png",
   type = "website",
   structuredData,
 }: SEOProps) => {

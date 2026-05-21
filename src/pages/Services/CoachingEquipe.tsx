@@ -139,7 +139,7 @@ const CoachingEquipe = () => {
 
               <h1
                 id="equipe-h1"
-                className="text-[clamp(2.8rem,6vw,5.5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05] overflow-hidden"
+                className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05] overflow-hidden"
               >
                 {HERO_WORDS.map((word, i) => (
                   <motion.span

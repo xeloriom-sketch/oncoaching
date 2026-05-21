@@ -29,13 +29,12 @@ export default function PageLoader() {
         >
           {/* Logo */}
           <motion.img
-            src={`${import.meta.env.BASE_URL}faviconNoText.png`}
+            src={`${import.meta.env.BASE_URL}favicon_dark.png`}
             alt="ON Coaching"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-            className="w-16 h-16 object-contain"
-            style={{ filter: "brightness(0) invert(1)" }}
+            className="w-16 h-16 object-contain rounded-xl"
           />
 
           {/* Nom */}
