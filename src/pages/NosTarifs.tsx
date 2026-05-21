@@ -92,15 +92,44 @@ const NosTarifs = () => {
   return (
     <Layout>
       <SEO
-        title="Nos Tarifs — Coaching Transparent"
-        description="Découvrez nos tarifs clairs et justes pour le coaching individuel, parental et d'équipe. Premier rendez-vous offert, sans engagement."
+        title="Nos Tarifs — Prix du Coaching à Mâcon | ON Coaching"
+        description="Tarifs transparents : coaching scolaire, jeunes adultes, neurofeedback et équipe à Mâcon. Séances individuelles et forfaits. 1er rendez-vous offert."
         canonical="/NosTarifs"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          "name": "Tarifs de coaching | ON Coaching",
-          "url": "https://www.oncoaching.fr/NosTarifs",
-        }}
+        keywords="tarif coaching mâcon, prix séance coaching, forfait coaching scolaire, neurofeedback tarif, coaching entreprise prix"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": "https://www.oncoaching.fr/NosTarifs#webpage",
+            name: "Nos Tarifs | ON Coaching",
+            url: "https://www.oncoaching.fr/NosTarifs",
+            isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            name: "Coaching professionnel — ON Coaching",
+            provider: { "@id": "https://www.oncoaching.fr/#business" },
+            areaServed: { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+            hasOfferCatalog: {
+              "@type": "OfferCatalog",
+              name: "Formules de coaching",
+              itemListElement: [
+                { "@type": "Offer", name: "Séance coaching individuel", priceCurrency: "EUR", price: "80", availability: "https://schema.org/InStock" },
+                { "@type": "Offer", name: "Séance neurofeedback", priceCurrency: "EUR", price: "80", availability: "https://schema.org/InStock" },
+                { "@type": "Offer", name: "Consultation initiale", priceCurrency: "EUR", price: "0", availability: "https://schema.org/InStock", description: "1er rendez-vous offert, sans engagement" },
+              ],
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Nos Tarifs", item: "https://www.oncoaching.fr/NosTarifs" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white overflow-x-hidden">

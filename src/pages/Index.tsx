@@ -127,21 +127,51 @@ export default function Index() {
   return (
     <Layout>
       <SEO
-        title="ON Coaching — Coaching Particuliers &amp; Entreprises à Mâcon"
-        description="Coach certifié ICF à Mâcon (Sancé). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe. Premier rendez-vous offert."
+        title="ON Coaching — Coach Certifié ICF à Mâcon | Sancé"
+        description="Coach certifié ICF à Mâcon (Sancé, 71). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback, équipe. 1er rendez-vous offert sans engagement."
         canonical="/"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "ON Coaching — Accueil",
-          url: "https://www.oncoaching.fr/",
-          isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
-        }}
+        keywords="coaching mâcon, coach certifié ICF, coaching scolaire, neurofeedback mâcon, coaching jeunes, coaching équipe, sancé, bourgogne"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": "https://www.oncoaching.fr/#webpage",
+            name: "ON Coaching — Accueil",
+            url: "https://www.oncoaching.fr/",
+            isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+            about: { "@id": "https://www.oncoaching.fr/#business" },
+            description: "Coach certifié ICF à Mâcon. Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe.",
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": "https://www.oncoaching.fr/#website",
+            url: "https://www.oncoaching.fr",
+            name: "ON Coaching",
+            inLanguage: "fr-FR",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: { "@type": "EntryPoint", urlTemplate: "https://www.oncoaching.fr/?s={search_term_string}" },
+              "query-input": "required name=search_term_string",
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Services de coaching — ON Coaching",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Coaching scolaire & étudiant", url: "https://www.oncoaching.fr/coaching-scolaire" },
+              { "@type": "ListItem", position: 2, name: "Coaching jeunes & jeunes adultes", url: "https://www.oncoaching.fr/coaching-jeunes" },
+              { "@type": "ListItem", position: 3, name: "Coaching & Neurofeedback", url: "https://www.oncoaching.fr/coaching-neurofeedback" },
+              { "@type": "ListItem", position: 4, name: "Coaching d'équipe", url: "https://www.oncoaching.fr/coaching-equipe" },
+            ],
+          },
+        ]}
       />
 
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
-        className="w-full bg-white min-h-[92vh] flex items-center py-20 md:py-28"
+        className="w-full bg-white min-h-[92vh] flex items-center py-12 md:py-16"
         aria-labelledby="home-h1"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -236,12 +266,14 @@ export default function Index() {
                   aria-label="Prendre rendez-vous avec ON Coaching"
                 >
                   Prendre RDV
-                  <span
+                  <motion.span
+                    whileHover={{ x: 2, y: -1 }}
+                    transition={{ type: "spring", stiffness: 380, damping: 22 }}
                     className="w-6 h-6 bg-white/15 rounded-full flex items-center justify-center"
                     aria-hidden="true"
                   >
                     <ArrowUpRight className="w-3.5 h-3.5 text-white" />
-                  </span>
+                  </motion.span>
                 </Link>
               </motion.div>
               <motion.div
@@ -252,7 +284,9 @@ export default function Index() {
                   to={ROUTES.about}
                   className="bg-[#F3F4F6] text-[#0B0B0C] rounded-full py-3.5 px-6 text-[15px] font-semibold hover:bg-gray-200 transition-colors"
                 >
-                  Notre approche
+                  <motion.span whileHover={{ x: 1.5 }} transition={{ type: "spring", stiffness: 320, damping: 22 }} className="inline-block">
+                    Notre approche
+                  </motion.span>
                 </Link>
               </motion.div>
             </motion.div>
@@ -274,11 +308,17 @@ export default function Index() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative hidden lg:block"
           >
-            <div className="relative h-[500px] overflow-hidden">
+            <div className="relative h-[800px] will-change-transform">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-contain object-bottom scale-[1.5] origin-bottom"
+                style={{
+                  maskImage:
+                    "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0.95) 90%, rgba(0,0,0,0.78) 94%, rgba(0,0,0,0.45) 97.5%, rgba(0,0,0,0) 100%)",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 84%, rgba(0,0,0,0.95) 90%, rgba(0,0,0,0.78) 94%, rgba(0,0,0,0.45) 97.5%, rgba(0,0,0,0) 100%)",
+                }}
                 loading="eager"
                 decoding="async"
               />
@@ -287,7 +327,8 @@ export default function Index() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="absolute bottom-5 right-5 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3"
+                whileHover={{ y: -3 }}
+                className="absolute bottom-56 right-5 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3"
               >
                 <p className="text-white text-[13px] font-semibold">
                   Coach certifié ICF
@@ -301,7 +342,8 @@ export default function Index() {
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
-                className="absolute bottom-5 left-5 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2"
+                whileHover={{ y: -2 }}
+                className="absolute bottom-40 left-5 flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/20 rounded-full px-4 py-2"
               >
                 <span
                   className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse"
@@ -627,9 +669,9 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-[1fr_720px] gap-12 lg:gap-16 items-center"
           >
-            <motion.div variants={fadeInLeft} className="space-y-6">
+            <motion.div variants={fadeInLeft} className="space-y-6 max-w-[620px]">
               <p className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]" aria-hidden="true">
                 On Coaching · En action
               </p>
@@ -662,12 +704,12 @@ export default function Index() {
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 className="rounded-[24px] overflow-hidden"
-                style={{ width: 265, height: 591 }}
+                style={{ width: 720, maxWidth: "100%", aspectRatio: "16 / 9" }}
               >
                 <iframe
-                  src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2910146945849990%2F&show_text=true&width=265&t=0"
-                  width="265"
-                  height="591"
+                  src="https://www.facebook.com/plugins/video.php?height=405&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2910146945849990%2F&show_text=false&width=720&t=0"
+                  width="720"
+                  height="405"
                   style={{ border: "none", overflow: "hidden", display: "block" }}
                   scrolling="no"
                   frameBorder={0}

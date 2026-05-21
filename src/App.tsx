@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Lenis from "lenis";
 
@@ -13,6 +13,7 @@ import PageLoader  from "./components/PageLoader";
 // ─── Lazy-loaded pages ────────────────────────────────────────────────────────
 const Index               = lazy(() => import("./pages/Index"));
 const About               = lazy(() => import("./pages/About"));
+const PresseMedias        = lazy(() => import("./pages/PresseMedias"));
 const Contact             = lazy(() => import("./pages/Contact"));
 const NosTarifs           = lazy(() => import("./pages/NosTarifs"));
 const CoachingScolaire    = lazy(() => import("./pages/Services/CoachingScolaire"));
@@ -63,31 +64,35 @@ const useLenis = () => {
 // ─── App ──────────────────────────────────────────────────────────────────────
 const App = () => {
   useLenis();
+  const [loaderDone, setLoaderDone] = useState(false);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        {/* Loader Awwwards — affiché à chaque chargement */}
-        <PageLoader />
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <ScrollToTop />
-          <Suspense fallback={<SuspenseFallback />}>
-            <Routes>
-              <Route path="/"                       element={<Index />} />
-              <Route path="/about"                  element={<About />} />
-              <Route path="/contact"                element={<Contact />} />
-              <Route path="/NosTarifs"              element={<NosTarifs />} />
-              <Route path="/coaching-scolaire"      element={<CoachingScolaire />} />
-              <Route path="/coaching-jeunes"        element={<CoachingJeunes />} />
-              <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
-              <Route path="/coaching-equipe"        element={<CoachingEquipe />} />
-              <Route path="/partenaires"            element={<Partenaires />} />
-              <Route path="*"                       element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </BrowserRouter>
+        {!loaderDone ? (
+          <PageLoader onDone={() => setLoaderDone(true)} />
+        ) : (
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <ScrollToTop />
+            <Suspense fallback={<SuspenseFallback />}>
+              <Routes>
+                <Route path="/"                       element={<Index />} />
+                <Route path="/about"                  element={<About />} />
+                <Route path="/presse-medias"          element={<PresseMedias />} />
+                <Route path="/contact"                element={<Contact />} />
+                <Route path="/NosTarifs"              element={<NosTarifs />} />
+                <Route path="/coaching-scolaire"      element={<CoachingScolaire />} />
+                <Route path="/coaching-jeunes"        element={<CoachingJeunes />} />
+                <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
+                <Route path="/coaching-equipe"        element={<CoachingEquipe />} />
+                <Route path="/partenaires"            element={<Partenaires />} />
+                <Route path="*"                       element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        )}
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -13,6 +13,7 @@ export const SITE = {
 export const ROUTES = {
   home:           "/",
   about:          "/about",
+  media:          "/presse-medias",
   tarifs:         "/NosTarifs",
   contact:        "/contact",
   partenaires:    "/partenaires",
@@ -25,6 +26,7 @@ export const ROUTES = {
 export const NAV_LINKS = [
   { label: "Accueil",    href: ROUTES.home   },
   { label: "À Propos",  href: ROUTES.about   },
+  { label: "Presse",    href: ROUTES.media   },
   { label: "Nos Tarifs", href: ROUTES.tarifs  },
 ] as const;
 

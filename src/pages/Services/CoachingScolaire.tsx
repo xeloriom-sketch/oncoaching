@@ -92,16 +92,42 @@ const CoachingScolaire = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching Scolaire & Étudiant — ON Coaching Mâcon"
-        description="Coach certifié ICF, 26 ans enseignant SES. Accompagnement scolaire à Sancé (Mâcon) : méthodes de travail, motivation, gestion du stress. 1er RDV offert."
+        title="Coaching Scolaire & Étudiant à Mâcon — Méthode, Motivation, Confiance"
+        description="Coach certifié ICF & ancien enseignant SES (26 ans). Collégiens, lycéens, étudiants à Mâcon : méthodes de travail, motivation, gestion du stress. 1er RDV offert."
         canonical="/coaching-scolaire"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type":    "Service",
-          "name":     "Coaching Scolaire & Étudiant",
-          "url":      "https://www.oncoaching.fr/coaching-scolaire",
-          "provider": { "@id": "https://www.oncoaching.fr/#business" },
-        }}
+        keywords="coaching scolaire mâcon, soutien scolaire mâcon, coach lycéen, coach étudiant, méthode de travail, motivation scolaire, gestion stress examen, sancé"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://www.oncoaching.fr/coaching-scolaire#service",
+            name: "Coaching Scolaire & Étudiant",
+            url: "https://www.oncoaching.fr/coaching-scolaire",
+            description: "Accompagnement personnalisé des collégiens, lycéens et étudiants : méthodes de travail, motivation, gestion du stress et orientation.",
+            provider: { "@id": "https://www.oncoaching.fr/#business" },
+            areaServed: { "@type": "City", name: "Mâcon" },
+            audience: { "@type": "Audience", audienceType: "Collégiens, lycéens, étudiants (11-25 ans)" },
+            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "1er rendez-vous offert" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "À quel âge peut-on commencer le coaching scolaire ?", acceptedAnswer: { "@type": "Answer", text: "Le coaching scolaire est adapté dès le collège (11-12 ans) jusqu'aux études supérieures. Chaque accompagnement est personnalisé selon l'âge et les besoins." } },
+              { "@type": "Question", name: "Combien de séances faut-il pour voir des résultats ?", acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'obtenir des changements concrets sur les méthodes de travail, la motivation et la confiance en soi." } },
+              { "@type": "Question", name: "Le coaching scolaire remplace-t-il le soutien scolaire ?", acceptedAnswer: { "@type": "Answer", text: "Non, le coaching scolaire est complémentaire. Il travaille sur les blocages, la motivation et l'organisation — pas sur le contenu des matières." } },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
+              { "@type": "ListItem", position: 3, name: "Coaching Scolaire", item: "https://www.oncoaching.fr/coaching-scolaire" },
+            ],
+          },
+        ]}
       />
 
       {/* ── 01. HERO ─────────────────────────────────────────────── */}

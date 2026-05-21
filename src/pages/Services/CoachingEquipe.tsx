@@ -105,16 +105,44 @@ const CoachingEquipe = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching d'Équipe — Cohésion & Performance — ON Coaching Mâcon"
-        description="Coaching d'équipe certifié ICF à Mâcon. Cohésion, communication et intelligence collective pour TPE, PME et organisations. 26 ans d'expérience. 1er RDV offert."
+        title="Coaching d'Équipe à Mâcon — Cohésion, Communication & Performance"
+        description="Coaching d'équipe ICF certifié à Mâcon. Cohésion, intelligence collective, communication et leadership pour TPE/PME et associations. 26 ans d'expérience. 1er RDV offert."
         canonical="/coaching-equipe"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type":    "Service",
-          "name":     "Coaching d'Équipe",
-          "url":      "https://www.oncoaching.fr/coaching-equipe",
-          "provider": { "@id": "https://www.oncoaching.fr/#business" },
-        }}
+        keywords="coaching équipe mâcon, team building bourgogne, cohésion équipe, coach entreprise mâcon, management bienveillant, intelligence collective, coaching PME"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://www.oncoaching.fr/coaching-equipe#service",
+            name: "Coaching d'Équipe",
+            url: "https://www.oncoaching.fr/coaching-equipe",
+            description: "Coaching collectif certifié ICF pour renforcer la cohésion, améliorer la communication et développer l'intelligence collective des équipes professionnelles.",
+            provider: { "@id": "https://www.oncoaching.fr/#business" },
+            areaServed: [
+              { "@type": "City", name: "Mâcon" },
+              { "@type": "State", name: "Bourgogne-Franche-Comté" },
+            ],
+            audience: { "@type": "Audience", audienceType: "TPE, PME, associations, collectivités" },
+            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "1er rendez-vous de diagnostic offert" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "En quoi le coaching d'équipe diffère-t-il de la formation ?", acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe travaille sur la dynamique réelle du groupe, les relations interpersonnelles et les blocages collectifs — pas sur l'acquisition de compétences techniques." } },
+              { "@type": "Question", name: "Combien de personnes peuvent participer à un coaching d'équipe ?", acceptedAnswer: { "@type": "Answer", text: "Un coaching d'équipe fonctionne idéalement pour des groupes de 4 à 15 personnes. Au-delà, des formats adaptés (ateliers, workshops) peuvent être proposés." } },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
+              { "@type": "ListItem", position: 3, name: "Coaching Équipe", item: "https://www.oncoaching.fr/coaching-equipe" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white min-h-screen overflow-x-hidden">

@@ -77,6 +77,7 @@ const STATS = [
   { value: "Mâcon", label: "& à distance", suffix: "" },
 ];
 
+
 function WordByWord({ text, className }: { text: string; className?: string }) {
   const words = text.split(" ");
   return (
@@ -180,15 +181,56 @@ const About = () => {
   return (
     <Layout>
       <SEO
-        title="À Propos — Coach ICF Certifié | ON Coaching"
-        description="Coach certifié ICF, formé par Prisme Évolution. Ancien enseignant SES, 26 ans d'expérience. Accompagnement à Sancé (Mâcon) et à distance."
+        title="À Propos — Coach ICF Certifié à Mâcon | ON Coaching"
+        description="Noureddine Omar, coach certifié ICF par Prisme Évolution. Ancien enseignant SES, 26 ans d'expérience humaine. Coaching à Sancé (Mâcon) et à distance."
         canonical="/about"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type":    "AboutPage",
-          "name":     "À Propos | ON Coaching",
-          "url":      "https://www.oncoaching.fr/about",
-        }}
+        keywords="coach certifié ICF mâcon, Noureddine Omar, prisme évolution, coach scolaire, coaching professionnel mâcon, coach de vie bourgogne"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            "@id": "https://www.oncoaching.fr/about#webpage",
+            name: "À Propos — ON Coaching",
+            url: "https://www.oncoaching.fr/about",
+            isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "@id": "https://www.oncoaching.fr/#coach",
+            name: "Noureddine Omar",
+            jobTitle: "Coach certifié ICF",
+            description: "Coach certifié ICF, formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain.",
+            url: "https://www.oncoaching.fr/about",
+            image: "https://www.oncoaching.fr/patron.png",
+            sameAs: [
+              "https://www.facebook.com/profile.php?id=100050783821185",
+              "https://www.instagram.com/oncoaching_",
+            ],
+            worksFor: { "@id": "https://www.oncoaching.fr/#business" },
+            hasCredential: {
+              "@type": "EducationalOccupationalCredential",
+              name: "Certification ICF — Coach Professionnel",
+              credentialCategory: "certification",
+              recognizedBy: { "@type": "Organization", name: "International Coaching Federation (ICF)" },
+            },
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "14 rue des écureuils",
+              addressLocality: "Sancé",
+              postalCode: "71000",
+              addressCountry: "FR",
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "À Propos", item: "https://www.oncoaching.fr/about" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white overflow-x-hidden">
@@ -312,7 +354,7 @@ const About = () => {
               />
             </motion.div>
           </div>
-        </section>
+      </section>
 
         {/* ══ 02 — STATS ROW ══════════════════════════════════════════════ */}
         <section className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-24" aria-label="Chiffres clés">

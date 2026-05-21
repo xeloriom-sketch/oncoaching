@@ -189,15 +189,60 @@ const Contact = () => {
   return (
     <Layout>
       <SEO
-        title="Contactez-nous — Prendre Rendez-vous"
-        description="Contactez ON Coaching : 14 rue des écureuils, 71000 Sancé. Tél : 06 63 04 18 12. Premier rendez-vous offert, sans engagement."
+        title="Contact & Rendez-vous — ON Coaching Mâcon | 1er RDV Offert"
+        description="Prenez rendez-vous avec ON Coaching à Mâcon (Sancé). 1er consultation offerte, réponse sous 24h. En présentiel ou visio. Tél : 06 63 04 18 12."
         canonical="/contact"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "ContactPage",
-          name: "Contact | ON Coaching",
-          url: "https://www.oncoaching.fr/contact",
-        }}
+        keywords="contact coach mâcon, prendre rendez-vous coaching, consultation coaching offerte, coach sancé téléphone, coaching visio mâcon"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            "@id": "https://www.oncoaching.fr/contact#webpage",
+            name: "Contact & Rendez-vous | ON Coaching",
+            url: "https://www.oncoaching.fr/contact",
+            isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://www.oncoaching.fr/#business",
+            name: "ON Coaching",
+            telephone: "+33663041812",
+            email: "contact@oncoaching.fr",
+            url: "https://www.oncoaching.fr",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "14 rue des écureuils",
+              addressLocality: "Sancé",
+              postalCode: "71000",
+              addressRegion: "Bourgogne-Franche-Comté",
+              addressCountry: "FR",
+            },
+            openingHoursSpecification: [
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday"], opens: "14:00", closes: "19:00" },
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Tuesday"], opens: "08:00", closes: "12:00" },
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Friday"], opens: "08:00", closes: "19:00" },
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "08:00", closes: "13:00" },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "Est-ce que le 1er rendez-vous est vraiment gratuit ?", acceptedAnswer: { "@type": "Answer", text: "Oui, absolument. Le premier rendez-vous est offert, sans engagement de votre part. C'est l'occasion d'échanger sur vos besoins et de voir si nous sommes faits pour travailler ensemble." } },
+              { "@type": "Question", name: "Comment se déroule une séance de coaching ?", acceptedAnswer: { "@type": "Answer", text: "Chaque séance dure entre 45 minutes et 1 heure, en présentiel à Sancé (Mâcon) ou à distance en visioconférence." } },
+              { "@type": "Question", name: "Combien de séances sont nécessaires ?", acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'atteindre des résultats concrets. Nous définissons ensemble le parcours adapté." } },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Contact", item: "https://www.oncoaching.fr/contact" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white">

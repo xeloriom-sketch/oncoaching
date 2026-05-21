@@ -99,16 +99,42 @@ const CoachingNeurofeedback = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching & Neurofeedback — Entraînement cérébral — ON Coaching Mâcon"
-        description="Neurofeedback certifié à Mâcon : entraînement cérébral non invasif pour réduire le stress, améliorer la concentration et les performances cognitives. 1er RDV offert."
+        title="Neurofeedback à Mâcon — Entraînement Cérébral Non Invasif | ON Coaching"
+        description="Neurofeedback certifié à Mâcon (Sancé) : entraînement cérébral non invasif pour stress, concentration, sommeil et performances cognitives. 1er RDV offert."
         canonical="/coaching-neurofeedback"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type":    "Service",
-          "name":     "Coaching & Neurofeedback",
-          "url":      "https://www.oncoaching.fr/coaching-neurofeedback",
-          "provider": { "@id": "https://www.oncoaching.fr/#business" },
-        }}
+        keywords="neurofeedback mâcon, neurofeedback bourgogne, entraînement cérébral, réduction stress, améliorer concentration, neurofeedback enfant, biofeedback"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://www.oncoaching.fr/coaching-neurofeedback#service",
+            name: "Coaching & Neurofeedback",
+            url: "https://www.oncoaching.fr/coaching-neurofeedback",
+            description: "Neurofeedback non invasif : entraînement des ondes cérébrales pour réduire le stress, améliorer la concentration, le sommeil et les performances cognitives.",
+            provider: { "@id": "https://www.oncoaching.fr/#business" },
+            areaServed: { "@type": "City", name: "Mâcon" },
+            offers: { "@type": "Offer", price: "80", priceCurrency: "EUR" },
+            serviceType: "Neurofeedback",
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "Le neurofeedback est-il dangereux ?", acceptedAnswer: { "@type": "Answer", text: "Non, le neurofeedback est une technique non invasive et sans effet secondaire. Il consiste à lire l'activité cérébrale et à la renvoyer en temps réel sous forme de signaux sonores ou visuels." } },
+              { "@type": "Question", name: "Pour qui le neurofeedback est-il recommandé ?", acceptedAnswer: { "@type": "Answer", text: "Le neurofeedback convient aux enfants, adolescents et adultes souffrant de stress, de difficultés de concentration, de troubles du sommeil ou souhaitant améliorer leurs performances." } },
+              { "@type": "Question", name: "Combien de séances faut-il ?", acceptedAnswer: { "@type": "Answer", text: "Un protocole standard est de 20 séances pour des résultats durables, mais des améliorations sont souvent perceptibles dès les premières sessions." } },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
+              { "@type": "ListItem", position: 3, name: "Neurofeedback", item: "https://www.oncoaching.fr/coaching-neurofeedback" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white min-h-screen overflow-x-hidden">

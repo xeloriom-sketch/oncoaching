@@ -89,16 +89,41 @@ const CoachingJeunes = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching Jeunes & Jeunes Adultes — ON Coaching Mâcon"
-        description="Coach certifié pour jeunes et jeunes adultes (15-30 ans) à Sancé (Mâcon). Orientation, projet de vie, confiance en soi, gestion du stress. 1er RDV offert."
+        title="Coaching Jeunes & Jeunes Adultes à Mâcon — Orientation & Projet de Vie"
+        description="Coaching pour jeunes de 15 à 30 ans à Mâcon (Sancé). Orientation scolaire & pro, confiance en soi, gestion du stress, projet de vie. Coach ICF certifié. 1er RDV offert."
         canonical="/coaching-jeunes"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type":    "Service",
-          "name":     "Coaching Jeunes & Jeunes Adultes",
-          "url":      "https://www.oncoaching.fr/coaching-jeunes",
-          "provider": { "@id": "https://www.oncoaching.fr/#business" },
-        }}
+        keywords="coaching jeunes mâcon, orientation scolaire, coach jeunes adultes, projet de vie, confiance en soi, insertion professionnelle, sancé bourgogne"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://www.oncoaching.fr/coaching-jeunes#service",
+            name: "Coaching Jeunes & Jeunes Adultes",
+            url: "https://www.oncoaching.fr/coaching-jeunes",
+            description: "Accompagnement des 15-30 ans dans leur orientation, construction du projet de vie, confiance en soi et insertion professionnelle.",
+            provider: { "@id": "https://www.oncoaching.fr/#business" },
+            areaServed: { "@type": "City", name: "Mâcon" },
+            audience: { "@type": "Audience", audienceType: "Jeunes et jeunes adultes (15-30 ans)" },
+            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "1er rendez-vous offert" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              { "@type": "Question", name: "Le coaching jeunes est-il différent du coaching adulte ?", acceptedAnswer: { "@type": "Answer", text: "Oui, il est adapté aux enjeux spécifiques des 15-30 ans : orientation, identité, confiance, transition vers la vie adulte. La relation coach-coaché est plus souple et dynamique." } },
+              { "@type": "Question", name: "Comment le coaching aide-t-il pour l'orientation ?", acceptedAnswer: { "@type": "Answer", text: "Le coaching permet de clarifier les valeurs, les forces et les aspirations du jeune, pour construire un projet d'orientation cohérent et motivant." } },
+            ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
+              { "@type": "ListItem", position: 3, name: "Coaching Jeunes", item: "https://www.oncoaching.fr/coaching-jeunes" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white min-h-screen overflow-x-hidden">
