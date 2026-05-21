@@ -7,6 +7,7 @@ import {
   Zap,
   Brain,
   Users,
+  Play,
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
@@ -657,33 +658,35 @@ export default function Index() {
       </section>
 
       {/* ── 06. VIDÉO ────────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 bg-white" aria-label="Vidéo ON Coaching">
+      <section className="py-20 md:py-28 bg-[#F3F4F6]" aria-label="Vidéo ON Coaching">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
           >
-            <motion.div variants={fadeInLeft} className="space-y-6 max-w-[620px]">
+            {/* Texte */}
+            <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
               <p className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]" aria-hidden="true">
                 On Coaching · En action
               </p>
-              <h2 className="text-[2rem] md:text-[3rem] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]">
+              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]">
                 Découvrez<br />
                 <span className="text-[#1ab5c7]">notre approche</span><br />
                 en vidéo.
               </h2>
-              <p className="text-[16px] text-gray-500 leading-relaxed max-w-md">
+              <p className="text-[15px] text-gray-500 leading-relaxed max-w-md">
                 Une séance, une transformation. Voyez comment le coaching ON change concrètement la trajectoire de nos clients.
               </p>
-              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="self-start">
                 <a
                   href="https://www.facebook.com/reel/2910146945849990"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3 rounded-full hover:opacity-85 transition-opacity"
+                  className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
+                  aria-label="Voir la vidéo ON Coaching sur Facebook"
                 >
                   Voir sur Facebook
                   <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
@@ -691,29 +694,35 @@ export default function Index() {
               </motion.div>
             </motion.div>
 
-            <motion.div
-              variants={fadeInRight}
-              className="flex justify-center"
-            >
-              <motion.div
+            {/* Carte vidéo cliquable */}
+            <motion.div variants={fadeInRight}>
+              <motion.a
+                href="https://www.facebook.com/reel/2910146945849990"
+                target="_blank"
+                rel="noopener noreferrer"
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="rounded-[24px] overflow-hidden"
-                style={{ width: 720, maxWidth: "100%", aspectRatio: "16 / 9" }}
+                className="block relative w-full rounded-[24px] overflow-hidden bg-[#0B0B0C] group aspect-video"
+                aria-label="Voir le reel ON Coaching sur Facebook"
               >
-                <iframe
-                  src="https://www.facebook.com/plugins/video.php?height=405&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2910146945849990%2F&show_text=false&width=720&t=0"
-                  width="720"
-                  height="405"
-                  style={{ border: "none", overflow: "hidden", display: "block" }}
-                  scrolling="no"
-                  frameBorder={0}
-                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                  allowFullScreen
-                  title="ON Coaching — Reel Facebook"
-                  loading="lazy"
-                />
-              </motion.div>
+                {/* Gradient décoratif */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#1ab5c7]/20 via-transparent to-[#0B0B0C]" aria-hidden="true" />
+
+                {/* Bouton Play */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-[72px] h-[72px] bg-[#1ab5c7] rounded-full flex items-center justify-center shadow-[0_8px_40px_rgba(26,181,199,0.45)] group-hover:scale-110 transition-transform duration-300">
+                    <Play className="w-7 h-7 text-white ml-1" fill="currentColor" aria-hidden="true" />
+                  </div>
+                </div>
+
+                {/* Label bas */}
+                <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
+                  <span className="text-white/70 text-[13px] font-medium">ON Coaching · Reel</span>
+                  <span className="bg-white/10 border border-white/15 text-white/60 text-[11px] px-3 py-1 rounded-full">
+                    Facebook
+                  </span>
+                </div>
+              </motion.a>
             </motion.div>
           </motion.div>
         </div>
