@@ -668,7 +668,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 items-center"
           >
             {/* Texte */}
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
@@ -683,12 +683,24 @@ export default function Index() {
               <p className="text-[15px] text-gray-500 leading-relaxed max-w-md">
                 Une séance, une transformation. Voyez comment le coaching ON change concrètement la trajectoire de nos clients.
               </p>
+              <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="self-start">
+                <a
+                  href="https://www.facebook.com/reel/2910146945849990"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
+                  aria-label="Voir la vidéo ON Coaching sur Facebook"
+                >
+                  Voir sur Facebook
+                  <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                </a>
+              </motion.div>
             </motion.div>
 
-            {/* Lecteur vidéo inline */}
-            <motion.div variants={fadeInRight}>
+            {/* Lecteur vidéo vertical (9:16) */}
+            <motion.div variants={fadeInRight} className="flex justify-center lg:justify-end">
               {videoActive ? (
-                <div className="relative w-full rounded-[24px] overflow-hidden aspect-video bg-[#0B0B0C]">
+                <div className="relative w-full max-w-[300px] sm:max-w-[320px] rounded-[24px] overflow-hidden bg-[#0B0B0C]" style={{ aspectRatio: "9/16" }}>
                   <iframe
                     src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2910146945849990%2F&show_text=false&autoplay=1&mute=0"
                     className="absolute inset-0 w-full h-full"
@@ -704,11 +716,12 @@ export default function Index() {
                   onClick={() => setVideoActive(true)}
                   whileHover={{ y: -4 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="block w-full relative rounded-[24px] overflow-hidden bg-[#0B0B0C] group aspect-video cursor-pointer"
+                  className="relative w-full max-w-[300px] sm:max-w-[320px] rounded-[24px] overflow-hidden bg-[#0B0B0C] group cursor-pointer"
+                  style={{ aspectRatio: "9/16" }}
                   aria-label="Lancer la vidéo ON Coaching"
                 >
                   {/* Gradient décoratif */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#1ab5c7]/20 via-transparent to-[#0B0B0C]" aria-hidden="true" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#1ab5c7]/20 via-transparent to-[#0B0B0C]/80" aria-hidden="true" />
 
                   {/* Bouton Play */}
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -718,9 +731,9 @@ export default function Index() {
                   </div>
 
                   {/* Label bas */}
-                  <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between">
-                    <span className="text-white/70 text-[13px] font-medium">ON Coaching · Reel</span>
-                    <span className="bg-white/10 border border-white/15 text-white/60 text-[11px] px-3 py-1 rounded-full">
+                  <div className="absolute bottom-5 left-4 right-4 flex flex-col items-center gap-1.5">
+                    <span className="text-white/70 text-[12px] font-medium">ON Coaching · Reel</span>
+                    <span className="bg-white/10 border border-white/15 text-white/55 text-[11px] px-3 py-1 rounded-full">
                       Appuyer pour lancer
                     </span>
                   </div>
