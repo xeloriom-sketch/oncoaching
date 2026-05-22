@@ -185,3 +185,8 @@
          bg-coaching-400 origin-bottom-right transition-transform duration-300;
 }
 .animated-underline:hover::after { @apply scale-x-100 origin-bottom-left; }
+
+/* ── Custom cursor (desktop only) ───────────────────────────── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
