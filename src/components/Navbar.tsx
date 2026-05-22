@@ -51,10 +51,10 @@ const Navbar = () => {
     >
       <nav
         aria-label="Navigation principale"
-        className={`text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto transition-[background-color,backdrop-filter,box-shadow,border-color] duration-500 ease-out ${
+        className={`text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto shadow-xl shadow-black/25 transition-all duration-500 ease-out ${
           scrolled
-            ? "bg-[#0B0B0C]/88 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/30"
-            : "bg-[#0B0B0C] shadow-lg shadow-black/20"
+            ? "bg-[#0B0B0C]/90 backdrop-blur-xl border border-white/10"
+            : "bg-[#0B0B0C] border border-transparent"
         }`}
       >
         {/* Logo */}
