@@ -18,6 +18,10 @@ import {
   VP,
 } from "@/lib/motion";
 import { MapPin, Phone, Mail, ChevronDown, ArrowUpRight, Check, MessageSquare, CalendarDays, ChevronLeft, ChevronRight, Sunrise, Sun, CalendarClock } from "lucide-react";
+import { DayPicker } from "react-day-picker";
+import { fr } from "date-fns/locale";
+import { format, addMonths } from "date-fns";
+import "react-day-picker/dist/style.css";
 import { useToast } from "@/hooks/use-toast";
 import type { ContactContent } from "@/types";
 
@@ -42,115 +46,58 @@ const FAQ = [
   },
 ];
 
-const MONTH_FR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-const DAY_FR   = ["L","M","M","J","V","S","D"];
 // Available booking days: Mon=1, Tue=2, Fri=5, Sat=6
 const OPEN_DAYS = new Set([1, 2, 5, 6]);
 
 function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string) => void }) {
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  const [view, setView] = useState(() => { const d = new Date(); d.setDate(1); return d; });
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  const year = view.getFullYear();
-  const month = view.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDow = new Date(year, month, 1).getDay(); // 0=Sun
-  const startOffset = (firstDow + 6) % 7; // Mon=0 week start
+  const selected = value ? new Date(value + "T12:00:00") : undefined;
 
-  const currentMonthStart = new Date(); currentMonthStart.setDate(1); currentMonthStart.setHours(0,0,0,0);
-  const maxMonth = new Date(); maxMonth.setMonth(maxMonth.getMonth() + 3);
-
-  const selected = value ? (() => { const d = new Date(value + "T12:00:00"); return d; })() : null;
-
-  const isSelected = (d: number) => selected?.getFullYear() === year && selected?.getMonth() === month && selected?.getDate() === d;
-  const isToday    = (d: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
-  const isPast     = (d: number) => new Date(year, month, d) < today;
-  const isAvail    = (d: number) => !isPast(d) && OPEN_DAYS.has(new Date(year, month, d).getDay());
-
-  const cells: (number | null)[] = [...Array(startOffset).fill(null), ...Array.from({length: daysInMonth}, (_, i) => i + 1)];
-  // pad to full grid of 7
-  while (cells.length % 7 !== 0) cells.push(null);
-
-  const fmt = (d: number) => {
-    const date = new Date(year, month, d);
-    return date.toISOString().split("T")[0];
+  const isUnavailable = (date: Date) => {
+    if (date < today) return true;
+    return !OPEN_DAYS.has(date.getDay());
   };
 
-  const prevDisabled = new Date(year, month - 1, 1) < currentMonthStart;
-  const nextDisabled = new Date(year, month + 1, 1) > maxMonth;
-
-  const selectedLabel = selected
-    ? selected.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
-    : null;
-
   return (
-    <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 transition-all duration-200 focus-within:border-[#1ab5c7] focus-within:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <button
-          type="button" onClick={() => { const d = new Date(year, month - 1, 1); setView(d); }}
-          disabled={prevDisabled}
-          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4 text-gray-600" strokeWidth={2.5} />
-        </button>
-        <span className="text-[14px] font-bold text-[#0B0B0C] capitalize">
-          {MONTH_FR[month]} {year}
-        </span>
-        <button
-          type="button" onClick={() => { const d = new Date(year, month + 1, 1); setView(d); }}
-          disabled={nextDisabled}
-          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-        >
-          <ChevronRight className="w-4 h-4 text-gray-600" strokeWidth={2.5} />
-        </button>
-      </div>
-
-      {/* Day headers */}
-      <div className="grid grid-cols-7 mb-1">
-        {DAY_FR.map((l, i) => (
-          <div key={i} className="text-center text-[11px] font-semibold text-gray-400 py-1">{l}</div>
-        ))}
-      </div>
-
-      {/* Day cells */}
-      <div className="grid grid-cols-7 gap-y-0.5">
-        {cells.map((day, i) => {
-          if (!day) return <div key={i} />;
-          const avail    = isAvail(day);
-          const sel      = isSelected(day);
-          const past     = isPast(day);
-          const todayDay = isToday(day);
-          return (
-            <button
-              key={i} type="button"
-              disabled={!avail}
-              onClick={() => avail && onChange(fmt(day))}
-              className={`
-                mx-auto w-8 h-8 flex items-center justify-center rounded-full text-[13px] font-medium transition-all duration-150
-                ${sel     ? "bg-[#1ab5c7] text-white shadow-md shadow-[#1ab5c7]/30 scale-110"
-                : avail   ? "hover:bg-[#1ab5c7]/10 hover:text-[#1ab5c7] text-[#0B0B0C] cursor-pointer font-semibold"
-                : past    ? "text-gray-200 cursor-not-allowed"
-                           : "text-gray-300 cursor-not-allowed"}
-                ${todayDay && !sel ? "ring-1 ring-[#1ab5c7] ring-offset-1" : ""}
-              `}
-            >
-              {day}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Footer: legend + selected */}
-      <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
-        <span className="flex items-center gap-1.5 text-[11px] text-gray-400">
-          <span className="w-2 h-2 rounded-full bg-[#1ab5c7]/40 inline-block" />
-          Lun · Mar · Ven · Sam
-        </span>
-        {selectedLabel && (
-          <span className="text-[11px] font-semibold text-[#1ab5c7] capitalize truncate max-w-[140px]">{selectedLabel}</span>
-        )}
-      </div>
+    <div
+      className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-gray-300 rdp-wrapper"
+      style={{ "--rdp-accent-color": "#1ab5c7", "--rdp-background-color": "rgba(26,181,199,0.08)" } as React.CSSProperties}
+    >
+      <DayPicker
+        mode="single"
+        selected={selected}
+        onSelect={(date) => date && onChange(format(date, "yyyy-MM-dd"))}
+        locale={fr}
+        disabled={isUnavailable}
+        fromDate={today}
+        toDate={addMonths(today, 3)}
+        showOutsideDays={false}
+        components={{
+          IconLeft:  () => <ChevronLeft  className="w-4 h-4" strokeWidth={2.5} />,
+          IconRight: () => <ChevronRight className="w-4 h-4" strokeWidth={2.5} />,
+        }}
+      />
+      {selected && (
+        <div className="px-4 py-2.5 border-t border-gray-100 bg-[#1ab5c7]/5">
+          <p className="text-[12px] font-semibold text-[#1ab5c7] capitalize text-center">
+            {format(selected, "EEEE d MMMM yyyy", { locale: fr })}
+          </p>
+        </div>
+      )}
+      <style>{`
+        .rdp-wrapper .rdp { margin: 0; padding: 12px; font-family: inherit; }
+        .rdp-wrapper .rdp-caption_label { font-size: 14px; font-weight: 700; text-transform: capitalize; }
+        .rdp-wrapper .rdp-head_cell { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; }
+        .rdp-wrapper .rdp-day { border-radius: 50%; font-size: 13px; font-weight: 500; width: 36px; height: 36px; }
+        .rdp-wrapper .rdp-day:not(.rdp-day_disabled):not(.rdp-day_selected):hover { background: rgba(26,181,199,0.08); color: #1ab5c7; }
+        .rdp-wrapper .rdp-day_selected { background: #1ab5c7 !important; color: white !important; box-shadow: 0 4px 12px rgba(26,181,199,0.35); }
+        .rdp-wrapper .rdp-day_today:not(.rdp-day_selected) { border: 1.5px solid #1ab5c7; color: #1ab5c7; }
+        .rdp-wrapper .rdp-day_disabled { color: #e5e7eb !important; cursor: not-allowed; opacity: 1; }
+        .rdp-wrapper .rdp-nav_button { border-radius: 8px; color: #6b7280; }
+        .rdp-wrapper .rdp-nav_button:hover { background: #f3f4f6; }
+      `}</style>
     </div>
   );
 }
