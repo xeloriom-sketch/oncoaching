@@ -6,8 +6,8 @@
   :root {
     /* ── Brand tokens ── */
     --bone:       #F4F1EC;
-    --ink:        #0C0F12;
-    --teal:       #1A9AA6;
+    --ink:        #0B0B0C;
+    --teal:       #1ab5c7;
     --teal-pale:  #EDF9FA;
     --gold:       #C4903E;
 
@@ -69,7 +69,7 @@
 
   /* ── Gradient text ── */
   .text-gradient-teal {
-    background: linear-gradient(135deg, #66ccd5 0%, #1a9aa6 60%, #0f7a85 100%);
+    background: linear-gradient(135deg, #66ccd5 0%, #1ab5c7 60%, #0f7a85 100%);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -114,7 +114,7 @@
     content: '';
     position: absolute; inset: 0;
     border-radius: inherit; padding: 1px;
-    background: linear-gradient(135deg, rgba(102,204,213,0.5) 0%, rgba(167,139,250,0.3) 50%, rgba(26,154,166,0.1) 100%);
+    background: linear-gradient(135deg, rgba(102,204,213,0.5) 0%, rgba(167,139,250,0.3) 50%, rgba(26,181,199,0.1) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor; mask-composite: exclude;
@@ -163,17 +163,17 @@
   }
   .cta-magnetic:hover {
     transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 16px 40px rgba(12, 15, 18, 0.18);
+    box-shadow: 0 16px 40px rgba(11, 11, 12, 0.18);
   }
 }
 
 /* ── Custom scrollbar ─────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bone); }
-::-webkit-scrollbar-thumb { background: #1a9aa6; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #1ab5c7; border-radius: 10px; }
 
 /* ── Selection ───────────────────────────────── */
-::selection { background: rgba(26,154,166,0.2); color: inherit; }
+::selection { background: rgba(26,181,199,0.2); color: inherit; }
 
 /* ── Layout helpers ──────────────────────────── */
 .section-container {

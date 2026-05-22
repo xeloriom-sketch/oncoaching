@@ -51,10 +51,10 @@ const Navbar = () => {
     >
       <nav
         aria-label="Navigation principale"
-        className={`text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto shadow-xl shadow-black/20 transition-all duration-300 ${
+        className={`text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto transition-[background-color,backdrop-filter,box-shadow,border-color] duration-500 ease-out ${
           scrolled
-            ? "bg-[#0B0B0C]/90 backdrop-blur-xl border border-white/8"
-            : "bg-[#0B0B0C]"
+            ? "bg-[#0B0B0C]/88 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/30"
+            : "bg-[#0B0B0C] shadow-lg shadow-black/20"
         }`}
       >
         {/* Logo */}
@@ -76,8 +76,8 @@ const Navbar = () => {
               >
                 {label}
                 <span
-                  className={`absolute bottom-0 left-0 h-[1px] bg-[#1ab5c7] transition-all duration-200 ${
-                    isActive(href) ? "w-full" : "w-0 group-hover:w-full"
+                  className={`absolute -bottom-0.5 left-0 h-[2px] bg-[#1ab5c7] rounded-full transition-all duration-300 ease-out ${
+                    isActive(href) ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
                   }`}
                 />
               </Link>
@@ -104,8 +104,8 @@ const Navbar = () => {
                 <ChevronDown className="w-3 h-3" aria-hidden="true" />
               </motion.span>
               <span
-                className={`absolute bottom-0 left-0 h-[1px] bg-[#1ab5c7] transition-all duration-200 ${
-                  isServiceActive ? "w-full" : "w-0 group-hover:w-full"
+                className={`absolute -bottom-0.5 left-0 h-[2px] bg-[#1ab5c7] rounded-full transition-all duration-300 ease-out ${
+                  isServiceActive ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
                 }`}
               />
             </button>
@@ -197,10 +197,10 @@ const Navbar = () => {
         {isOpen && (
           <motion.nav
             aria-label="Menu mobile"
-            initial={{ opacity: 0, scale: 0.95, y: -8 }}
+            initial={{ opacity: 0, scale: 0.97, y: -6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -8 }}
-            transition={{ duration: 0.18 }}
+            exit={{ opacity: 0, scale: 0.97, y: -6 }}
+            transition={{ type: "spring", stiffness: 340, damping: 28 }}
             className="mt-2 bg-[#0B0B0C] border border-white/10 rounded-[24px] p-5 max-w-7xl mx-auto shadow-2xl"
           >
             <div className="flex flex-col gap-1 mb-4">
@@ -209,10 +209,13 @@ const Navbar = () => {
                   key={href}
                   to={href}
                   aria-current={isActive(href) ? "page" : undefined}
-                  className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center ${
+                  className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center gap-2.5 ${
                     isActive(href) ? "text-white bg-white/8" : "text-white/70 hover:text-white hover:bg-white/5"
                   }`}
                 >
+                  {isActive(href) && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" aria-hidden="true" />
+                  )}
                   {label}
                 </Link>
               ))}

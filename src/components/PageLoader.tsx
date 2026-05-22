@@ -12,7 +12,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const goneId = setTimeout(() => setGone(true), 1400);
+    const goneId = setTimeout(() => setGone(true), 1100);
     return () => {
       clearTimeout(goneId);
       document.body.style.overflow = previousOverflow;
@@ -29,7 +29,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
         <motion.div
           key="loader"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.32, ease: [0.22, 1, 0.36, 1] } }}
+          exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }}
           className="fixed inset-0 z-[200] bg-[#0B0B0C] flex items-center justify-center"
           aria-label="Chargement…"
         >
