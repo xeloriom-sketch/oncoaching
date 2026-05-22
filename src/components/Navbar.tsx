@@ -143,7 +143,7 @@ const Navbar = () => {
             </button>
 
             {/* Dropdown panel — pointer-events-none on wrapper, auto on panel */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-2 pointer-events-none">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[320px] pt-3 pointer-events-none">
               <AnimatePresence>
                 {svcOpen && (
                   <motion.div
@@ -154,12 +154,12 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0,  scale: 1    }}
                     exit={{    opacity: 0, y: -8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="pointer-events-auto bg-[#0B0B0C] border border-white/10 rounded-[20px] overflow-hidden shadow-2xl shadow-black/40"
+                    className="pointer-events-auto bg-[#0B0B0C] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl shadow-black/40"
                   >
                     {/* Accent line */}
                     <div className="h-[2px] w-full bg-gradient-to-r from-[#1ab5c7]/60 via-[#1ab5c7] to-[#1ab5c7]/60" />
 
-                    <div className="p-2">
+                    <div className="p-3">
                       {SERVICES.map(({ label, href }, i) => {
                         const Icon = SERVICE_ICONS[href] ?? Brain;
                         const desc = SERVICE_DESC[href] ?? "";
@@ -176,7 +176,7 @@ const Navbar = () => {
                               to={href}
                               role="menuitem"
                               aria-current={active ? "page" : undefined}
-                              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group ${
+                              className={`flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-150 group ${
                                 active
                                   ? "bg-white/[0.07]"
                                   : "hover:bg-white/[0.05]"
@@ -214,10 +214,10 @@ const Navbar = () => {
                     </div>
 
                     {/* CTA footer */}
-                    <div className="px-3 pb-3">
+                    <div className="px-3 pb-3 pt-1">
                       <Link
                         to="/contact"
-                        className="flex items-center justify-center gap-1.5 w-full py-2.5 bg-[#1ab5c7] hover:bg-[#16a3b4] text-white text-[12px] font-bold rounded-xl transition-colors"
+                        className="flex items-center justify-center gap-1.5 w-full py-3 bg-[#1ab5c7] hover:bg-[#16a3b4] text-white text-[12px] font-bold rounded-xl transition-colors"
                       >
                         Consultation gratuite
                         <span aria-hidden="true">→</span>
