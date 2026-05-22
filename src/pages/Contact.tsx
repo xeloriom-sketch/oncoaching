@@ -17,7 +17,7 @@ import {
   pulseDot,
   VP,
 } from "@/lib/motion";
-import { MapPin, Phone, Mail, ChevronDown, ArrowUpRight, Check, MessageSquare, CalendarDays } from "lucide-react";
+import { MapPin, Phone, Mail, ChevronDown, ArrowUpRight, Check, MessageSquare, CalendarDays, ChevronLeft, ChevronRight, Sunrise, Sun, CalendarClock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { ContactContent } from "@/types";
 
@@ -42,11 +42,157 @@ const FAQ = [
   },
 ];
 
-const TIME_PREFS = [
-  { value: "matin", label: "Matin (9h – 12h)" },
-  { value: "après-midi", label: "Après-midi (14h – 17h)" },
-  { value: "flexible", label: "Flexible" },
+const MONTH_FR = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+const DAY_FR   = ["L","M","M","J","V","S","D"];
+// Available booking days: Mon=1, Tue=2, Fri=5, Sat=6
+const OPEN_DAYS = new Set([1, 2, 5, 6]);
+
+function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string) => void }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const [view, setView] = useState(() => { const d = new Date(); d.setDate(1); return d; });
+
+  const year = view.getFullYear();
+  const month = view.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDow = new Date(year, month, 1).getDay(); // 0=Sun
+  const startOffset = (firstDow + 6) % 7; // Mon=0 week start
+
+  const currentMonthStart = new Date(); currentMonthStart.setDate(1); currentMonthStart.setHours(0,0,0,0);
+  const maxMonth = new Date(); maxMonth.setMonth(maxMonth.getMonth() + 3);
+
+  const selected = value ? (() => { const d = new Date(value + "T12:00:00"); return d; })() : null;
+
+  const isSelected = (d: number) => selected?.getFullYear() === year && selected?.getMonth() === month && selected?.getDate() === d;
+  const isToday    = (d: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === d;
+  const isPast     = (d: number) => new Date(year, month, d) < today;
+  const isAvail    = (d: number) => !isPast(d) && OPEN_DAYS.has(new Date(year, month, d).getDay());
+
+  const cells: (number | null)[] = [...Array(startOffset).fill(null), ...Array.from({length: daysInMonth}, (_, i) => i + 1)];
+  // pad to full grid of 7
+  while (cells.length % 7 !== 0) cells.push(null);
+
+  const fmt = (d: number) => {
+    const date = new Date(year, month, d);
+    return date.toISOString().split("T")[0];
+  };
+
+  const prevDisabled = new Date(year, month - 1, 1) < currentMonthStart;
+  const nextDisabled = new Date(year, month + 1, 1) > maxMonth;
+
+  const selectedLabel = selected
+    ? selected.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+    : null;
+
+  return (
+    <div className="bg-white border-2 border-gray-200 rounded-2xl p-4 transition-all duration-200 focus-within:border-[#1ab5c7] focus-within:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
+        <button
+          type="button" onClick={() => { const d = new Date(year, month - 1, 1); setView(d); }}
+          disabled={prevDisabled}
+          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4 text-gray-600" strokeWidth={2.5} />
+        </button>
+        <span className="text-[14px] font-bold text-[#0B0B0C] capitalize">
+          {MONTH_FR[month]} {year}
+        </span>
+        <button
+          type="button" onClick={() => { const d = new Date(year, month + 1, 1); setView(d); }}
+          disabled={nextDisabled}
+          className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        >
+          <ChevronRight className="w-4 h-4 text-gray-600" strokeWidth={2.5} />
+        </button>
+      </div>
+
+      {/* Day headers */}
+      <div className="grid grid-cols-7 mb-1">
+        {DAY_FR.map((l, i) => (
+          <div key={i} className="text-center text-[11px] font-semibold text-gray-400 py-1">{l}</div>
+        ))}
+      </div>
+
+      {/* Day cells */}
+      <div className="grid grid-cols-7 gap-y-0.5">
+        {cells.map((day, i) => {
+          if (!day) return <div key={i} />;
+          const avail    = isAvail(day);
+          const sel      = isSelected(day);
+          const past     = isPast(day);
+          const todayDay = isToday(day);
+          return (
+            <button
+              key={i} type="button"
+              disabled={!avail}
+              onClick={() => avail && onChange(fmt(day))}
+              className={`
+                mx-auto w-8 h-8 flex items-center justify-center rounded-full text-[13px] font-medium transition-all duration-150
+                ${sel     ? "bg-[#1ab5c7] text-white shadow-md shadow-[#1ab5c7]/30 scale-110"
+                : avail   ? "hover:bg-[#1ab5c7]/10 hover:text-[#1ab5c7] text-[#0B0B0C] cursor-pointer font-semibold"
+                : past    ? "text-gray-200 cursor-not-allowed"
+                           : "text-gray-300 cursor-not-allowed"}
+                ${todayDay && !sel ? "ring-1 ring-[#1ab5c7] ring-offset-1" : ""}
+              `}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Footer: legend + selected */}
+      <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+        <span className="flex items-center gap-1.5 text-[11px] text-gray-400">
+          <span className="w-2 h-2 rounded-full bg-[#1ab5c7]/40 inline-block" />
+          Lun · Mar · Ven · Sam
+        </span>
+        {selectedLabel && (
+          <span className="text-[11px] font-semibold text-[#1ab5c7] capitalize truncate max-w-[140px]">{selectedLabel}</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const TIME_OPTIONS = [
+  { value: "matin",       label: "Matin",       hours: "9h – 12h",   Icon: Sunrise },
+  { value: "après-midi",  label: "Après-midi",  hours: "14h – 17h",  Icon: Sun },
+  { value: "flexible",    label: "Flexible",    hours: "À convenir",  Icon: CalendarClock },
 ];
+
+function TimePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div>
+      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2 pl-0.5">Créneau préféré</p>
+      <div className="grid grid-cols-3 gap-2">
+        {TIME_OPTIONS.map(({ value: v, label, hours, Icon }) => {
+          const active = value === v;
+          return (
+            <button
+              key={v} type="button" onClick={() => onChange(v)}
+              className={`flex flex-col items-center gap-2 py-3.5 px-2 rounded-2xl border-2 transition-all duration-200 group ${
+                active
+                  ? "border-[#1ab5c7] bg-[#1ab5c7]/5 shadow-[0_0_0_3px_rgba(26,181,199,0.12)]"
+                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
+                active ? "bg-[#1ab5c7] text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
+              }`}>
+                <Icon className="w-4 h-4" strokeWidth={1.8} />
+              </div>
+              <span className={`font-semibold text-[12px] transition-colors ${active ? "text-[#1ab5c7]" : "text-[#0B0B0C]"}`}>
+                {label}
+              </span>
+              <span className="text-[10px] text-gray-400 leading-tight">{hours}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 function FloatingField({
   id, label, type = "text", name, value, onChange, required = false, autoComplete,
@@ -403,25 +549,18 @@ const Contact = () => {
                         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                         className="flex flex-col gap-4"
                       >
-                        <FloatingField
-                          id="preferredDate" label="Date souhaitée" type="date" name="preferredDate"
-                          value={formData.preferredDate} onChange={handleChange} required
-                        />
-
-                        <div className="relative">
-                          <select
-                            id="preferredTime" name="preferredTime" value={formData.preferredTime} onChange={handleChange}
-                            className="w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#0B0B0C] outline-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)] appearance-none cursor-pointer"
-                          >
-                            {TIME_PREFS.map((t) => (
-                              <option key={t.value} value={t.value}>{t.label}</option>
-                            ))}
-                          </select>
-                          <label htmlFor="preferredTime" className="pointer-events-none absolute left-4 top-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
-                            Créneau préféré
-                          </label>
-                          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" strokeWidth={2} />
+                        <div>
+                          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2 pl-0.5">Date souhaitée *</p>
+                          <MiniCalendar
+                            value={formData.preferredDate}
+                            onChange={(d) => setFormData(prev => ({ ...prev, preferredDate: d }))}
+                          />
                         </div>
+
+                        <TimePicker
+                          value={formData.preferredTime}
+                          onChange={(v) => setFormData(prev => ({ ...prev, preferredTime: v }))}
+                        />
 
                         <FloatingTextarea
                           id="message" label="Un mot sur votre besoin (optionnel)"
