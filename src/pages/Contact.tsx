@@ -87,10 +87,15 @@ function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string
         </div>
       )}
       <style>{`
-        .rdp-wrapper .rdp { margin: 0; padding: 12px; font-family: inherit; }
+        .rdp-wrapper .rdp { margin: 0; padding: 12px; width: 100%; font-family: inherit; }
+        .rdp-wrapper .rdp-months { width: 100%; }
+        .rdp-wrapper .rdp-month { width: 100%; }
+        .rdp-wrapper .rdp-table { width: 100%; table-layout: fixed; }
+        .rdp-wrapper .rdp-caption { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
         .rdp-wrapper .rdp-caption_label { font-size: 14px; font-weight: 700; text-transform: capitalize; }
-        .rdp-wrapper .rdp-head_cell { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; }
-        .rdp-wrapper .rdp-day { border-radius: 50%; font-size: 13px; font-weight: 500; width: 36px; height: 36px; }
+        .rdp-wrapper .rdp-head_cell { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; text-align: center; padding: 4px 0; }
+        .rdp-wrapper .rdp-cell { text-align: center; padding: 2px 0; }
+        .rdp-wrapper .rdp-day { border-radius: 50%; font-size: 13px; font-weight: 500; width: 36px; height: 36px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
         .rdp-wrapper .rdp-day:not(.rdp-day_disabled):not(.rdp-day_selected):hover { background: rgba(26,181,199,0.08); color: #1ab5c7; }
         .rdp-wrapper .rdp-day_selected { background: #1ab5c7 !important; color: white !important; box-shadow: 0 4px 12px rgba(26,181,199,0.35); }
         .rdp-wrapper .rdp-day_today:not(.rdp-day_selected) { border: 1.5px solid #1ab5c7; color: #1ab5c7; }
