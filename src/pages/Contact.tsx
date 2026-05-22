@@ -631,10 +631,10 @@ const Contact = () => {
             {/* ── DROITE : Carte dark ──────────────────────────── */}
             <motion.div
               initial="hidden" whileInView="visible" viewport={VP} variants={springRight}
-              className="flex flex-col"
+              className="flex flex-col lg:self-start lg:sticky lg:top-28"
             >
               <SpotlightCard
-                className="bg-[#0B0B0C] rounded-[32px] p-8 md:p-10 h-full flex flex-col gap-8"
+                className="bg-[#0B0B0C] rounded-[32px] p-8 md:p-10 flex flex-col gap-8"
                 spotlightColor="rgba(26,181,199,0.15)"
               >
                 <div
