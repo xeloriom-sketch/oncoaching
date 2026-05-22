@@ -154,6 +154,47 @@ export interface TarifsContent {
   cta: CTA;
 }
 
+// ─── Index / Home ──────────────────────────────────────────────────────────────
+export interface ServiceItem {
+  key: string;
+  title: string;
+  description: string;
+  link: string;
+}
+
+export interface WhyUsItem {
+  key: string;
+  title: string;
+  description: string;
+}
+
+export interface WhyUsSection {
+  title: string;
+  subtitle: string;
+  items: WhyUsItem[];
+}
+
+export interface ServicesSection {
+  title: string;
+  subtitle: string;
+}
+
+export interface HeroIndex {
+  title: string;
+  subtitle: string;
+  buttonPrimary: string;
+  buttonSecondary: string;
+  image: string;
+}
+
+export interface IndexContent {
+  hero: HeroIndex;
+  servicesSection: ServicesSection;
+  services: ServiceItem[];
+  whyUsSection: WhyUsSection;
+  cta: CTA;
+}
+
 // ─── Shared ───────────────────────────────────────────────────────────────────
 
 export type CardConfig = {

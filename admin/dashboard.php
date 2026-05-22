@@ -161,6 +161,19 @@ function get(array $data, string $path, $default = '') {
     return $v;
 }
 
+// ── Live URL mapping ──────────────────────────────────────────────────────────
+$pageUrls = [
+    'index'                  => '/',
+    'about'                  => '/about',
+    'coaching-scolaire'      => '/coaching-scolaire',
+    'coaching-jeunes'        => '/coaching-jeunes',
+    'coaching-equipe'        => '/coaching-equipe',
+    'coaching-neurofeedback' => '/coaching-neurofeedback',
+    'nos-tarifs'             => '/nos-tarifs',
+    'contact'                => '/contact',
+];
+$liveUrl = 'https://xeloriom-sketch.github.io/oncoaching' . ($pageUrls[$current] ?? '/');
+
 // Nav SVG icons
 $navSvg = [
     '_submissions'           => '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
@@ -383,15 +396,28 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
 .topbar-right{display:flex;align-items:center;gap:0.625rem;flex-shrink:0;}
 
-.unsaved-pill{
-  display:none;align-items:center;gap:0.4rem;
+/* ── Save status pill (replaces unsaved-pill) ── */
+.save-status{
+  display:inline-flex;align-items:center;gap:0.4rem;
   padding:0.3rem 0.75rem;border-radius:20px;
-  background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);
-  color:#f59e0b;font-size:0.7rem;font-weight:600;white-space:nowrap;
+  font-size:0.72rem;font-weight:500;
+  transition:all 0.2s;white-space:nowrap;
 }
-.unsaved-pill.show{display:inline-flex;}
-.unsaved-dot{width:5px;height:5px;border-radius:50%;background:#f59e0b;flex-shrink:0;animation:blink 1.2s ease infinite;}
+.save-status.idle  {color:#22c55e;background:rgba(34,197,94,0.08);}
+.save-status.dirty {color:#f59e0b;background:rgba(245,158,11,0.08);}
+.save-status.saving{color:var(--sub);background:rgba(255,255,255,0.05);}
+.save-status.error {color:var(--red);background:rgba(239,68,68,0.08);}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.25}}
+
+/* ── Preview button ── */
+.btn-preview{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  padding:0.45rem 0.875rem;border-radius:8px;
+  border:1px solid var(--border);background:none;
+  color:var(--sub);font-family:inherit;font-size:0.78rem;
+  text-decoration:none;transition:all 0.15s;cursor:pointer;white-space:nowrap;
+}
+.btn-preview:hover{color:var(--text);background:rgba(255,255,255,0.04);}
 
 .btn-save{
   display:flex;align-items:center;gap:0.5rem;
@@ -447,14 +473,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
 .card-body{padding:1.125rem;display:flex;flex-direction:column;gap:0.875rem;}
 
+/* ── Refined collapsible section headers ── */
 .section-header{
-  display:flex;align-items:center;gap:0.6rem;
-  padding:0.6rem 1.125rem;
-  background:rgba(255,255,255,0.015);
+  padding:0.625rem 1.125rem;
+  background:rgba(255,255,255,0.012);
   border-bottom:1px solid var(--border);
-  color:var(--muted);font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+  border-left:2px solid rgba(26,181,199,0.3);
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;user-select:none;
+  color:var(--sub);font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
 }
-.section-icon{display:flex;align-items:center;color:var(--sub);}
+.section-header:hover{background:rgba(255,255,255,0.02);}
+.section-header-left{display:flex;align-items:center;gap:0.5rem;}
+.section-icon{display:flex;align-items:center;color:var(--muted);}
+.section-chevron{transition:transform 0.2s;color:var(--muted);flex-shrink:0;}
+.section-header.collapsed .section-chevron{transform:rotate(-90deg);}
 
 /* ════════════════════
    STATS
@@ -464,24 +497,35 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 
 .stat-card{
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
-  padding:1.125rem;display:flex;flex-direction:column;
+  padding:1.25rem;display:flex;flex-direction:column;
+  transition:border-color 0.15s,transform 0.15s;
 }
+.stat-card:hover{border-color:var(--border-h);transform:translateY(-1px);}
 .stat-icon{
-  width:32px;height:32px;border-radius:8px;
-  background:var(--accent-dim);
+  width:36px;height:36px;border-radius:9px;
   display:flex;align-items:center;justify-content:center;
-  color:var(--accent);margin-bottom:0.875rem;flex-shrink:0;
+  margin-bottom:1rem;flex-shrink:0;
 }
-.stat-val{font-size:1.75rem;font-weight:700;color:var(--text);letter-spacing:-0.03em;line-height:1;font-family:'Instrument Serif',serif;}
+.stat-icon.teal{background:rgba(26,181,199,0.12);color:var(--accent);}
+.stat-icon.purple{background:rgba(139,92,246,0.12);color:#a78bfa;}
+.stat-icon.amber{background:rgba(245,158,11,0.12);color:#fbbf24;}
+.stat-icon.green{background:rgba(34,197,94,0.12);color:#4ade80;}
+.stat-val{font-size:2rem;font-weight:700;color:var(--text);letter-spacing:-0.04em;line-height:1;font-family:'Instrument Serif',serif;}
 .stat-val.accent{color:var(--accent);}
-.stat-label{font-size:0.72rem;color:var(--muted);margin-top:0.3rem;}
+.stat-label{font-size:0.72rem;color:var(--muted);margin-top:0.35rem;font-weight:500;}
 .stat-sub{font-size:0.68rem;color:var(--sub);margin-top:0.15rem;}
 
 /* ════════════════════
    FIELDS
 ════════════════════ */
 .field-wrap{display:flex;flex-direction:column;gap:0.3rem;}
-.field-wrap label{font-size:0.72rem;font-weight:600;color:var(--sub);letter-spacing:0.03em;}
+
+/* ── Refined field label ── */
+.field-wrap label{
+  font-size:0.65rem;font-weight:700;
+  color:var(--muted);letter-spacing:0.1em;
+  text-transform:uppercase;
+}
 
 .field-wrap input[type=text],
 .field-wrap textarea{
@@ -489,16 +533,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
   border:1px solid var(--border);border-radius:8px;
   font-family:inherit;font-size:0.875rem;
   color:var(--text);background:rgba(255,255,255,0.025);
-  transition:border-color 0.16s,background 0.16s,box-shadow 0.16s;
-  outline:none;resize:vertical;
+  transition:border-color 0.16s,background 0.16s,box-shadow 0.16s,border-left-color 0.16s;
+  outline:none;resize:none;
 }
+.field-wrap textarea{min-height:80px;overflow:hidden;}
 .field-wrap input[type=text]::placeholder,
 .field-wrap textarea::placeholder{color:rgba(255,255,255,0.14);}
 .field-wrap input:focus,.field-wrap textarea:focus{
-  border-color:var(--accent);
-  background:rgba(26,181,199,0.04);
-  box-shadow:0 0 0 3px var(--accent-dim);
+  border-color:var(--border-h);
+  border-left-color:var(--accent);
+  border-left-width:2px;
+  background:rgba(255,255,255,0.03);
+  box-shadow:none;
 }
+
+/* ── Character count ── */
+.char-count{
+  font-size:0.65rem;color:var(--muted);
+  text-align:right;margin-top:2px;
+}
+.char-count.warn{color:var(--orange);}
+.char-count.over{color:var(--red);}
 
 .field-with-image{display:flex;gap:0.75rem;align-items:flex-end;}
 .field-with-image .field-wrap{flex:1;}
@@ -566,20 +621,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 ════════════════════ */
 .upload-zone{
   border:1.5px dashed rgba(26,181,199,0.18);border-radius:10px;
-  padding:1.25rem 1rem;text-align:center;cursor:pointer;
-  transition:all 0.2s;background:rgba(26,181,199,0.02);
+  padding:1.625rem 1rem;text-align:center;cursor:pointer;
+  transition:all 0.25s;background:rgba(26,181,199,0.02);
+  position:relative;overflow:hidden;
 }
-.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:var(--accent-dim);}
+.upload-zone::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(26,181,199,0.06) 0%,transparent 70%);
+  opacity:0;transition:opacity 0.25s;
+}
+.upload-zone:hover::before,.upload-zone.drag::before{opacity:1;}
+.upload-zone:hover,.upload-zone.drag{
+  border-color:var(--accent);background:rgba(26,181,199,0.04);
+  transform:scale(1.01);
+}
 .uz-icon{
-  width:36px;height:36px;border-radius:8px;background:var(--accent-dim);
+  width:40px;height:40px;border-radius:10px;background:var(--accent-dim);
   display:flex;align-items:center;justify-content:center;
-  color:var(--accent);margin:0 auto 0.625rem;
+  color:var(--accent);margin:0 auto 0.75rem;
+  transition:transform 0.25s;
 }
+.upload-zone:hover .uz-icon{transform:translateY(-2px);}
 .upload-zone strong{font-size:0.8rem;color:var(--text);display:block;}
 .upload-zone p{font-size:0.7rem;color:var(--muted);margin-top:0.2rem;}
 #fileInput{display:none;}
 
-.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.375rem;margin-top:0.75rem;}
+/* 4-column image grid */
+.img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.375rem;margin-top:0.75rem;}
 .img-thumb{
   position:relative;aspect-ratio:1;border-radius:7px;
   overflow:hidden;border:1px solid var(--border);
@@ -587,6 +655,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 }
 .img-thumb:hover{border-color:var(--accent);}
 .img-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.img-thumb-name{
+  font-size:0.55rem;color:var(--muted);padding:2px 4px;
+  text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
+  text-align:center;background:rgba(0,0,0,0.5);
+  position:absolute;bottom:0;left:0;right:0;
+}
 .img-overlay{
   position:absolute;inset:0;background:rgba(0,0,0,0.72);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -630,13 +704,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .sub-tab.active{background:var(--accent-dim);border-color:rgba(26,181,199,0.25);color:var(--accent);}
 .sub-panel{display:none;}.sub-panel.active{display:flex;flex-direction:column;gap:0.75rem;}
 
+/* email-client style cards */
 .sub-card{
   background:var(--surface);border:1px solid var(--border);
   border-radius:12px;padding:1.125rem 1.25rem;
-  position:relative;transition:border-color 0.15s;
+  position:relative;transition:border-color 0.15s,background 0.15s;
+  border-left:3px solid transparent;
 }
-.sub-card:hover{border-color:var(--border-h);}
-.sub-card.unread{border-left:2.5px solid var(--accent);}
+.sub-card:hover{border-color:var(--border-h);background:rgba(255,255,255,0.012);}
+.sub-card.unread{border-left-color:var(--accent);}
+.sub-card.type-contact{border-left-color:rgba(144,144,160,0.4);}
+.sub-card.unread.type-contact{border-left-color:var(--accent);}
 .new-badge{
   position:absolute;top:0.875rem;right:0.875rem;
   font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
@@ -645,8 +723,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 }
 
 .sub-meta{display:flex;align-items:center;flex-wrap:wrap;gap:0.4rem 0.875rem;margin-bottom:0.625rem;}
-.sub-name{font-size:0.88rem;font-weight:600;color:var(--text);}
-.sub-date{font-size:0.68rem;color:var(--muted);font-family:monospace;}
+.sub-name{font-size:0.9rem;font-weight:600;color:var(--text);}
+.sub-date{font-size:0.68rem;color:var(--muted);}
 .sub-tag{font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:8px;text-transform:uppercase;letter-spacing:0.05em;}
 .sub-tag.rdv{background:rgba(26,181,199,0.1);color:var(--accent);}
 .sub-tag.contact{background:rgba(255,255,255,0.06);color:var(--sub);}
@@ -656,7 +734,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 .sub-row-label{color:var(--muted);min-width:108px;flex-shrink:0;}
 .sub-row-val{color:var(--text);}
 
-.sub-actions{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid var(--border);}
+.sub-actions{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.875rem;padding-top:0.75rem;border-top:1px solid var(--border);}
+/* "Répondre" is the primary action */
 .btn-action{
   display:inline-flex;align-items:center;gap:0.35rem;
   padding:0.38rem 0.8rem;border-radius:7px;
@@ -666,6 +745,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM San
 }
 .btn-action:hover{background:var(--accent-dim);color:var(--accent);border-color:rgba(26,181,199,0.25);}
 .btn-action svg{flex-shrink:0;}
+.btn-action.primary{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+}
+.btn-action.primary:hover{background:#18a8b8;border-color:#18a8b8;}
 
 .creneaux{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-top:0.5rem;}
 @media(max-width:500px){.creneaux{grid-template-columns:1fr;}}
@@ -846,10 +929,14 @@ kbd{font-size:0.7rem;padding:1px 6px;border-radius:4px;border:1px solid var(--bo
     </div>
     <div class="topbar-right">
       <?php if ($current !== '_submissions'): ?>
-      <span class="unsaved-pill" id="unsavedBadge">
-        <span class="unsaved-dot"></span>
-        Non sauvegardé
+      <span class="save-status idle" id="saveStatus">
+        <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;flex-shrink:0"></span>
+        Sauvegardé
       </span>
+      <a href="<?= htmlspecialchars($liveUrl) ?>" target="_blank" rel="noopener" class="btn-preview">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Voir la page
+      </a>
       <button class="btn-save" id="saveBtn" onclick="saveAll()">
         <div class="spinner"></div>
         <span class="btn-label">
@@ -941,11 +1028,11 @@ function renderSubDetail(array $sub): void {
     $isRdv  = ($sub['type'] ?? '') === 'rdv';
     $subjectLine = $isRdv ? 'Demande de RDV' : ($sub['subject'] ?? 'Votre message');
   ?>
-  <div class="sub-card <?= $isRead ? '' : 'unread' ?>" id="sub-<?= htmlspecialchars($sub['id']) ?>">
+  <div class="sub-card <?= $isRead ? '' : 'unread' ?> <?= $isRdv ? 'type-rdv' : 'type-contact' ?>" id="sub-<?= htmlspecialchars($sub['id']) ?>">
     <?php if (!$isRead): ?><span class="new-badge">Nouveau</span><?php endif ?>
     <div class="sub-meta">
       <span class="sub-name"><?= htmlspecialchars($sub['name']) ?></span>
-      <span class="sub-date"><?= htmlspecialchars($sub['date']) ?></span>
+      <span class="sub-date"><?= date('d/m/Y · H\hi', strtotime($sub['date'])) ?></span>
       <span class="sub-tag <?= $isRdv ? 'rdv' : 'contact' ?>"><?= $isRdv ? 'Rendez-vous' : 'Message' ?></span>
     </div>
     <?php renderSubDetail($sub) ?>
@@ -955,7 +1042,7 @@ function renderSubDetail(array $sub): void {
         <?= $checkIcon ?> Marquer lu
       </button>
       <?php endif ?>
-      <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re:+<?= urlencode($subjectLine) ?>" class="btn-action">
+      <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re:+<?= urlencode($subjectLine) ?>" class="btn-action primary">
         <?= $replyIcon ?> Répondre
       </a>
     </div>
@@ -968,16 +1055,16 @@ function renderSubDetail(array $sub): void {
   <?php if (empty($rdvs)): ?>
   <div class="sub-empty">Aucune demande de rendez-vous.</div>
   <?php else: foreach ($rdvs as $sub): ?>
-  <div class="sub-card <?= ($sub['read']??false) ? '' : 'unread' ?>">
+  <div class="sub-card type-rdv <?= ($sub['read']??false) ? '' : 'unread' ?>">
     <?php if (!($sub['read']??false)): ?><span class="new-badge">Nouveau</span><?php endif ?>
     <div class="sub-meta">
       <span class="sub-name"><?= htmlspecialchars($sub['name']) ?></span>
-      <span class="sub-date"><?= htmlspecialchars($sub['date']) ?></span>
+      <span class="sub-date"><?= date('d/m/Y · H\hi', strtotime($sub['date'])) ?></span>
       <span class="sub-tag rdv">Rendez-vous</span>
     </div>
     <?php renderSubDetail($sub) ?>
     <div class="sub-actions">
-      <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Confirmation+RDV+ON+Coaching" class="btn-action"><?= $replyIcon ?> Confirmer le RDV</a>
+      <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Confirmation+RDV+ON+Coaching" class="btn-action primary"><?= $replyIcon ?> Confirmer le RDV</a>
     </div>
   </div>
   <?php endforeach; endif ?>
@@ -990,11 +1077,11 @@ function renderSubDetail(array $sub): void {
   <?php else: foreach ($contacts as $sub):
     $isRead = $sub['read'] ?? false;
   ?>
-  <div class="sub-card <?= $isRead ? '' : 'unread' ?>">
+  <div class="sub-card type-contact <?= $isRead ? '' : 'unread' ?>">
     <?php if (!$isRead): ?><span class="new-badge">Nouveau</span><?php endif ?>
     <div class="sub-meta">
       <span class="sub-name"><?= htmlspecialchars($sub['name']) ?></span>
-      <span class="sub-date"><?= htmlspecialchars($sub['date']) ?></span>
+      <span class="sub-date"><?= date('d/m/Y · H\hi', strtotime($sub['date'])) ?></span>
       <span class="sub-tag contact">Message</span>
     </div>
     <?php renderSubDetail($sub) ?>
@@ -1002,7 +1089,7 @@ function renderSubDetail(array $sub): void {
       <?php if (!$isRead): ?>
       <button class="btn-action" onclick="markRead('<?= htmlspecialchars($sub['id']) ?>')"><?= $checkIcon ?> Marquer lu</button>
       <?php endif ?>
-      <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re:+<?= urlencode($sub['subject'] ?? 'Votre message') ?>" class="btn-action"><?= $replyIcon ?> Répondre</a>
+      <a href="mailto:<?= htmlspecialchars($sub['email']) ?>?subject=Re:+<?= urlencode($sub['subject'] ?? 'Votre message') ?>" class="btn-action primary"><?= $replyIcon ?> Répondre</a>
     </div>
   </div>
   <?php endforeach; endif ?>
@@ -1015,19 +1102,19 @@ case 'index': $d = $pageData; ?>
 
 <div class="stats-grid">
   <div class="stat-card">
-    <div class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+    <div class="stat-icon teal"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
     <div class="stat-val accent"><?= count($pages) ?></div>
     <div class="stat-label">Pages gérées</div>
   </div>
   <div class="stat-card">
-    <div class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+    <div class="stat-icon purple"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
     <div class="stat-val"><?= count($images) ?></div>
     <div class="stat-label">Images uploadées</div>
   </div>
   <div class="stat-card">
-    <div class="stat-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+    <div class="stat-icon amber"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
     <?php if ($lastModifiedPage): ?>
-    <div class="stat-val" style="font-size:1.1rem"><?= date('d/m/Y', $lastModifiedTime) ?></div>
+    <div class="stat-val" style="font-size:1.25rem"><?= date('d/m/Y', $lastModifiedTime) ?></div>
     <div class="stat-label">Dernière modif.</div>
     <div class="stat-sub"><?= htmlspecialchars($pages[$lastModifiedPage]['label']) ?></div>
     <?php else: ?>
@@ -1356,7 +1443,7 @@ case 'contact': $d = $pageData; ?>
             </div>
             <h3>Médiathèque</h3>
           </div>
-          <span class="badge"><?= count($images) ?></span>
+          <span class="badge"><?= count($images) ?> fichier<?= count($images) !== 1 ? 's' : '' ?></span>
         </div>
         <div class="card-body">
           <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
@@ -1371,6 +1458,7 @@ case 'contact': $d = $pageData; ?>
             <?php foreach ($images as $img): ?>
             <div class="img-thumb" data-file="<?= htmlspecialchars($img['filename']) ?>">
               <img src="<?= htmlspecialchars($img['url']) ?>" alt="" loading="lazy">
+              <div class="img-thumb-name"><?= htmlspecialchars($img['filename']) ?></div>
               <div class="img-overlay">
                 <button class="img-btn img-btn-copy" onclick="copyUrl('<?= htmlspecialchars($img['url']) ?>',event)">Copier</button>
                 <button class="img-btn img-btn-del" onclick="askDel('<?= htmlspecialchars($img['filename']) ?>',event)">Suppr.</button>
@@ -1466,13 +1554,30 @@ const CSRF         = <?= json_encode($csrf) ?>;
 const CURRENT_PAGE = <?= json_encode($current) ?>;
 let pendingDelFile = null, pickerTarget = null, hasChanges = false;
 
-document.querySelectorAll('[data-path]').forEach(el => el.addEventListener('input', markChanged));
+// ── Auto-save debounce ──────────────────────────────────────────────────────
+let saveTimer = null;
+let lastSaved  = null;
+
+function setSaveStatus(state, msg) {
+  const el = document.getElementById('saveStatus');
+  if (!el) return;
+  el.className = 'save-status ' + state;
+  const dotStyle = 'width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0';
+  const spinStyle = 'width:11px;height:11px;border:2px solid rgba(255,255,255,0.2);border-top-color:#9999a8;border-radius:50%;animation:spin 0.55s linear infinite;display:inline-block';
+  const map = {
+    idle:   `<span style="${dotStyle};background:#22c55e"></span> ${msg || 'Sauvegardé'}`,
+    dirty:  `<span style="${dotStyle};background:#f59e0b;animation:blink 1.2s ease infinite"></span> ${msg || 'Non sauvegardé'}`,
+    saving: `<span style="${spinStyle}"></span> Sauvegarde…`,
+    error:  `<span>✗</span> ${msg || 'Erreur'}`,
+  };
+  el.innerHTML = map[state] || msg;
+}
 
 function markChanged() {
-  if (!hasChanges) {
-    hasChanges = true;
-    document.getElementById('unsavedBadge')?.classList.add('show');
-  }
+  hasChanges = true;
+  setSaveStatus('dirty');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveAll, 2000);
 }
 
 // Sidebar mobile
@@ -1520,11 +1625,13 @@ function setNested(obj, keys, val) {
   cur[keys[keys.length - 1]] = val;
 }
 
-// Save
+// Save (used by button, Ctrl+S, and auto-save timer)
 function saveAll() {
+  clearTimeout(saveTimer);
+  if (CURRENT_PAGE === '_submissions') return;
   const btn = document.getElementById('saveBtn');
-  if (!btn) return;
-  btn.classList.add('loading'); btn.disabled = true;
+  setSaveStatus('saving');
+  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
   const body = new FormData();
   body.append('action', 'save_fields');
   body.append('csrf_token', CSRF);
@@ -1533,15 +1640,85 @@ function saveAll() {
   fetch('dashboard.php?page=' + CURRENT_PAGE, { method: 'POST', body })
     .then(r => r.json())
     .then(data => {
-      showToast(data.msg, data.ok ? 'success' : 'error');
       if (data.ok) {
         hasChanges = false;
-        document.getElementById('unsavedBadge')?.classList.remove('show');
+        lastSaved = new Date();
+        setSaveStatus('idle', 'Sauvegardé');
+        showToast(data.msg, 'success');
+      } else {
+        setSaveStatus('error', data.msg);
+        showToast(data.msg, 'error');
       }
     })
-    .catch(() => showToast('Erreur réseau', 'error'))
-    .finally(() => { btn.classList.remove('loading'); btn.disabled = false; });
+    .catch(() => { setSaveStatus('error'); showToast('Erreur réseau', 'error'); })
+    .finally(() => { if (btn) { btn.classList.remove('loading'); btn.disabled = false; } });
 }
+
+// ── Auto-resize textareas ───────────────────────────────────────────────────
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
+document.querySelectorAll('textarea[data-path]').forEach(ta => {
+  autoResize(ta);
+  ta.addEventListener('input', () => autoResize(ta));
+});
+
+// ── Character counts ────────────────────────────────────────────────────────
+document.querySelectorAll('[data-path]').forEach(el => {
+  const wrap = el.closest('.field-wrap');
+  if (!wrap) return;
+  const counter = document.createElement('div');
+  counter.className = 'char-count';
+  wrap.appendChild(counter);
+  const update = () => {
+    const len = el.value.length;
+    counter.textContent = len + ' car.';
+    counter.className = 'char-count' + (len > 500 ? ' over' : len > 300 ? ' warn' : '');
+  };
+  update();
+  el.addEventListener('input', update);
+});
+
+// ── Wire all data-path fields to markChanged ────────────────────────────────
+document.querySelectorAll('[data-path]').forEach(el => el.addEventListener('input', markChanged));
+
+// ── Collapsible section headers ─────────────────────────────────────────────
+document.querySelectorAll('.section-header').forEach(header => {
+  // Wrap existing children in a left-flex span
+  const leftContent = Array.from(header.childNodes).map(n => n.cloneNode(true));
+  header.innerHTML = '';
+  const leftSpan = document.createElement('span');
+  leftSpan.className = 'section-header-left';
+  leftContent.forEach(n => leftSpan.appendChild(n));
+  header.appendChild(leftSpan);
+
+  // Chevron SVG
+  const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  chevron.setAttribute('width', '14');
+  chevron.setAttribute('height', '14');
+  chevron.setAttribute('viewBox', '0 0 24 24');
+  chevron.setAttribute('fill', 'none');
+  chevron.setAttribute('stroke', 'currentColor');
+  chevron.setAttribute('stroke-width', '2');
+  chevron.classList.add('section-chevron');
+  const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  poly.setAttribute('points', '6 9 12 15 18 9');
+  chevron.appendChild(poly);
+  header.appendChild(chevron);
+
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    if (!body || !body.classList.contains('card-body')) return;
+    if (header.classList.contains('collapsed')) {
+      header.classList.remove('collapsed');
+      body.style.display = '';
+    } else {
+      header.classList.add('collapsed');
+      body.style.display = 'none';
+    }
+  });
+});
 
 // Lists
 function addItem(listId) {
@@ -1575,7 +1752,7 @@ function uploadImage(file) {
 }
 
 function addToGrids(filename, url) {
-  const thumbHtml = `<div class="img-thumb" data-file="${filename}"><img src="${url}" loading="lazy"><div class="img-overlay"><button class="img-btn img-btn-copy" onclick="copyUrl('${url}',event)">Copier</button><button class="img-btn img-btn-del" onclick="askDel('${filename}',event)">Suppr.</button></div></div>`;
+  const thumbHtml = `<div class="img-thumb" data-file="${filename}"><img src="${url}" loading="lazy"><div class="img-thumb-name">${filename}</div><div class="img-overlay"><button class="img-btn img-btn-copy" onclick="copyUrl('${url}',event)">Copier</button><button class="img-btn img-btn-del" onclick="askDel('${filename}',event)">Suppr.</button></div></div>`;
   const pickerHtml = `<div class="picker-item" onclick="pickImg('${url}')"><img src="${url}"></div>`;
   document.getElementById('imgGrid').insertAdjacentHTML('afterbegin', thumbHtml);
   document.getElementById('pickerGrid').insertAdjacentHTML('afterbegin', pickerHtml);
@@ -1644,9 +1821,11 @@ function showToast(msg, type = 'success') {
 
 // Drag & drop
 const zone = document.getElementById('uploadZone');
-zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag'); });
-zone.addEventListener('dragleave', ()  => zone.classList.remove('drag'));
-zone.addEventListener('drop',      e  => { e.preventDefault(); zone.classList.remove('drag'); uploadImage(e.dataTransfer.files[0]); });
+if (zone) {
+  zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', ()  => zone.classList.remove('drag'));
+  zone.addEventListener('drop',      e  => { e.preventDefault(); zone.classList.remove('drag'); uploadImage(e.dataTransfer.files[0]); });
+}
 
 // Ctrl+S
 document.addEventListener('keydown', e => {

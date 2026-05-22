@@ -22,6 +22,8 @@ import {
   VP,
 } from "@/lib/motion";
 import { ROUTES } from "@/lib/config";
+import { usePageContent } from "@/hooks/usePageContent";
+import type { IndexContent } from "@/types";
 
 const COACH_IMG =
   `${import.meta.env.BASE_URL}patron.webp`;
@@ -125,6 +127,17 @@ const H1_WORDS_A = "Développez votre".split(" ");
 const H1_WORDS_B = "potentiel".split(" ");
 
 export default function Index() {
+  const { content } = usePageContent<IndexContent>("index");
+
+  const mergedServices = SERVICES.map((s) => {
+    const fromJson = content?.services?.find((j) => j.key === s.key);
+    return {
+      ...s,
+      title: fromJson?.title ?? s.title,
+      desc: fromJson?.description ?? s.desc,
+    };
+  });
+
   return (
     <Layout>
       <SEO
@@ -246,8 +259,7 @@ export default function Index() {
               variants={fadeInUp}
               className="text-[1rem] text-gray-500 leading-relaxed max-w-md"
             >
-              Accompagnement personnalisé pour particuliers et entreprises.
-              Coach certifié, 26 ans d'expérience en sciences humaines.
+              {content?.hero?.subtitle ?? "Accompagnement personnalisé pour particuliers et entreprises. Coach certifié, 26 ans d'expérience en sciences humaines."}
             </motion.p>
 
             <motion.div
@@ -407,8 +419,7 @@ export default function Index() {
               variants={fadeInUp}
               className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
             >
-              Un accompagnement unique
-              <br className="hidden sm:block" /> pour des résultats durables
+              {content?.servicesSection?.title ?? "Un accompagnement unique pour des résultats durables"}
             </motion.h2>
           </motion.div>
 
@@ -420,7 +431,7 @@ export default function Index() {
             className="grid grid-cols-1 sm:grid-cols-2 gap-5"
             aria-label="Nos services de coaching"
           >
-            {SERVICES.map(({ key, Icon, title, desc, href, tag }, i) => {
+            {mergedServices.map(({ key, Icon, title, desc, href, tag }, i) => {
               const c = SERVICE_COLORS[i];
               return (
                 <motion.article
@@ -775,15 +786,14 @@ export default function Index() {
               variants={fadeInUp}
               className="text-[clamp(2rem,5vw,3.5rem)] font-semibold tracking-tight text-white leading-[1.05]"
             >
-              Passez au niveau supérieur.
+              {content?.cta?.title ?? "Passez au niveau supérieur."}
             </motion.h2>
 
             <motion.p
               variants={fadeInUp}
               className="text-[1rem] text-white/55 max-w-md leading-relaxed"
             >
-              Consultation initiale offerte. Sans engagement. Disponible pour de
-              nouveaux accompagnements.
+              {content?.cta?.subtitle ?? "Consultation initiale offerte. Sans engagement. Disponible pour de nouveaux accompagnements."}
             </motion.p>
 
             <motion.div
