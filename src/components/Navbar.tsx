@@ -110,7 +110,7 @@ const Navbar = () => {
               />
             </button>
 
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-3">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-3 pointer-events-none">
               <AnimatePresence>
                 {svcOpen && (
                   <motion.div
@@ -119,7 +119,7 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -4, scale: 0.97 }}
                     transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-[#0B0B0C] border border-white/10 rounded-[20px] p-2 shadow-2xl"
+                    className="bg-[#0B0B0C] border border-white/10 rounded-[20px] p-2 shadow-2xl pointer-events-auto"
                   >
                     {SERVICES.map(({ label, href }) => {
                       const Icon = SERVICE_ICONS[href] ?? Brain;
