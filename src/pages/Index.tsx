@@ -7,9 +7,9 @@ import {
   Zap,
   Brain,
   Users,
-  Play,
 } from "lucide-react";
 import Layout from "@/components/Layout";
+import VideoPlayer from "@/components/VideoPlayer";
 import SEO from "@/components/SEO";
 import {
   fadeInUp,
@@ -665,7 +665,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
           >
             {/* Texte */}
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
@@ -694,21 +694,12 @@ export default function Index() {
               </motion.div>
             </motion.div>
 
-            {/* Lecteur vidéo vertical (9:16) — fichier local */}
-            <motion.div variants={fadeInRight} className="flex justify-center lg:justify-end">
-              <div
-                className="relative w-full max-w-[300px] sm:max-w-[320px] rounded-[24px] overflow-hidden bg-[#0B0B0C] group"
-                style={{ aspectRatio: "9/16" }}
-              >
-                <video
-                  src={`${import.meta.env.BASE_URL}coaching-reel.mp4`}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  controls
-                  playsInline
-                  preload="metadata"
-                  aria-label="Vidéo ON Coaching — notre approche en action"
-                />
-              </div>
+            {/* Lecteur vidéo custom 16:9 */}
+            <motion.div variants={fadeInRight}>
+              <VideoPlayer
+                src={`${import.meta.env.BASE_URL}coaching-reel.mp4`}
+                facebookUrl="https://www.facebook.com/reel/2910146945849990"
+              />
             </motion.div>
           </motion.div>
         </div>
