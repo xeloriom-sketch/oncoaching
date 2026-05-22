@@ -181,46 +181,67 @@ const About = () => {
   return (
     <Layout>
       <SEO
-        title="À Propos — Coach ICF Certifié à Mâcon | ON Coaching"
-        description="Noureddine Omar, coach certifié ICF par Prisme Évolution. Ancien enseignant SES, 26 ans d'expérience humaine. Coaching à Sancé (Mâcon) et à distance."
+        title="À Propos — Noureddine Omar, Coach ICF Certifié à Mâcon (71) | ON Coaching"
+        description="Noureddine Omar, coach certifié ICF par Prisme Évolution. Ex-enseignant SES 26 ans. Coaching à Sancé (Mâcon, Saône-et-Loire 71) et à distance. Prenez RDV."
         canonical="/about"
-        keywords="coach certifié ICF mâcon, Noureddine Omar, prisme évolution, coach scolaire, coaching professionnel mâcon, coach de vie bourgogne"
+        keywords="Noureddine Omar coach, coach certifié ICF mâcon, Prisme Évolution, coach scolaire mâcon, coaching professionnel saône-et-loire, coach de vie bourgogne, neurofeedback mâcon"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "AboutPage",
             "@id": "https://www.oncoaching.fr/about#webpage",
-            name: "À Propos — ON Coaching",
+            name: "À Propos — Noureddine Omar, Coach ICF à Mâcon",
             url: "https://www.oncoaching.fr/about",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+            about: { "@id": "https://www.oncoaching.fr/#coach" },
+            description: "Parcours et valeurs de Noureddine Omar, coach certifié ICF à Mâcon, Sancé (71). 26 ans d'expérience enseignant SES, formé par Prisme Évolution.",
           },
           {
             "@context": "https://schema.org",
             "@type": "Person",
             "@id": "https://www.oncoaching.fr/#coach",
             name: "Noureddine Omar",
+            givenName: "Noureddine",
+            familyName: "Omar",
             jobTitle: "Coach certifié ICF",
-            description: "Coach certifié ICF, formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain.",
+            description: "Coach certifié ICF formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain à Mâcon (Sancé, Saône-et-Loire 71).",
             url: "https://www.oncoaching.fr/about",
             image: "https://www.oncoaching.fr/patron.webp",
             sameAs: [
               "https://www.facebook.com/profile.php?id=100050783821185",
               "https://www.instagram.com/oncoaching_",
+              "https://www.linkedin.com/in/noureddine-omar-587620346/",
+              "https://www.resalib.fr/praticien/118187-on-coaching-et-neurofeedback-coach-professionnel-certifie-sance",
             ],
             worksFor: { "@id": "https://www.oncoaching.fr/#business" },
-            knowsAbout: ["ICF Coaching", "Neurofeedback", "Coaching scolaire", "Coaching jeunes adultes", "Coaching d'équipe", "Sciences économiques et sociales"],
+            knowsAbout: [
+              "Coaching professionnel certifié ICF",
+              "Neurofeedback dynamique",
+              "Coaching scolaire",
+              "Coaching jeunes adultes",
+              "Coaching d'équipe en entreprise",
+              "Sciences économiques et sociales",
+              "Intelligence collective",
+            ],
             hasCredential: {
               "@type": "EducationalOccupationalCredential",
               name: "Certification ICF — Coach Professionnel",
               credentialCategory: "certification",
-              recognizedBy: { "@type": "Organization", name: "International Coaching Federation (ICF)" },
+              recognizedBy: { "@type": "Organization", name: "International Coaching Federation (ICF)", url: "https://coachingfederation.org" },
+              educationalLevel: "Professional certification",
             },
             address: {
               "@type": "PostalAddress",
               streetAddress: "14 rue des écureuils",
               addressLocality: "Sancé",
               postalCode: "71000",
+              addressRegion: "Saône-et-Loire",
               addressCountry: "FR",
+            },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: "46.3077",
+              longitude: "4.8288",
             },
           },
           {
@@ -228,7 +249,7 @@ const About = () => {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
-              { "@type": "ListItem", position: 2, name: "À Propos", item: "https://www.oncoaching.fr/about" },
+              { "@type": "ListItem", position: 2, name: "À Propos — Noureddine Omar", item: "https://www.oncoaching.fr/about" },
             ],
           },
         ]}

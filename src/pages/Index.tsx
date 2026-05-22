@@ -128,44 +128,41 @@ export default function Index() {
   return (
     <Layout>
       <SEO
-        title="ON Coaching — Coach Certifié ICF à Mâcon | Sancé"
-        description="Coach certifié ICF à Mâcon (Sancé, 71). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback, équipe. 1er rendez-vous offert sans engagement."
+        title="ON Coaching — Coach Certifié ICF à Mâcon, Sancé (71) | 1er RDV Offert"
+        description="Coach certifié ICF à Mâcon, Sancé (71, Saône-et-Loire). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback, équipe. 1er rendez-vous offert."
         canonical="/"
-        keywords="coaching mâcon, coach certifié ICF, coaching scolaire, neurofeedback mâcon, coaching jeunes, coaching équipe, sancé, bourgogne"
+        keywords="coaching mâcon, coach certifié ICF mâcon, coaching scolaire mâcon, neurofeedback mâcon, coach jeunes adultes, coaching équipe saône-et-loire, sancé 71, bourgogne, Noureddine Omar"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "WebPage",
             "@id": "https://www.oncoaching.fr/#webpage",
-            name: "ON Coaching — Accueil",
+            name: "ON Coaching — Coach certifié ICF à Mâcon (71)",
             url: "https://www.oncoaching.fr/",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
             about: { "@id": "https://www.oncoaching.fr/#business" },
-            description: "Coach certifié ICF à Mâcon. Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe.",
-          },
-          {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "@id": "https://www.oncoaching.fr/#website",
-            url: "https://www.oncoaching.fr",
-            name: "ON Coaching",
-            inLanguage: "fr-FR",
-            potentialAction: {
-              "@type": "SearchAction",
-              target: { "@type": "EntryPoint", urlTemplate: "https://www.oncoaching.fr/?s={search_term_string}" },
-              "query-input": "required name=search_term_string",
-            },
+            description: "Coach certifié ICF à Mâcon, Sancé (71). Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe. 1er rendez-vous offert.",
+            primaryImageOfPage: { "@type": "ImageObject", url: "https://www.oncoaching.fr/patron.webp" },
           },
           {
             "@context": "https://schema.org",
             "@type": "ItemList",
-            name: "Services de coaching — ON Coaching",
+            name: "Services de coaching — ON Coaching Mâcon",
+            description: "Tous les services de coaching certifié ICF proposés par ON Coaching à Mâcon (Sancé, 71)",
             itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Coaching scolaire & étudiant", url: "https://www.oncoaching.fr/coaching-scolaire" },
-              { "@type": "ListItem", position: 2, name: "Coaching jeunes & jeunes adultes", url: "https://www.oncoaching.fr/coaching-jeunes" },
-              { "@type": "ListItem", position: 3, name: "Coaching & Neurofeedback", url: "https://www.oncoaching.fr/coaching-neurofeedback" },
-              { "@type": "ListItem", position: 4, name: "Coaching d'équipe", url: "https://www.oncoaching.fr/coaching-equipe" },
+              { "@type": "ListItem", position: 1, name: "Coaching scolaire & étudiant à Mâcon", url: "https://www.oncoaching.fr/coaching-scolaire" },
+              { "@type": "ListItem", position: 2, name: "Coaching jeunes & jeunes adultes à Mâcon", url: "https://www.oncoaching.fr/coaching-jeunes" },
+              { "@type": "ListItem", position: 3, name: "Neurofeedback à Mâcon", url: "https://www.oncoaching.fr/coaching-neurofeedback" },
+              { "@type": "ListItem", position: 4, name: "Coaching d'équipe en Saône-et-Loire", url: "https://www.oncoaching.fr/coaching-equipe" },
             ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Review",
+            itemReviewed: { "@id": "https://www.oncoaching.fr/#business" },
+            author: { "@type": "Person", name: "Marc A." },
+            reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+            reviewBody: "L'accompagnement d'ON Coaching m'a permis de structurer ma vision et de retrouver une parfaite synergie entre ma vie professionnelle et personnelle. Un coach à l'écoute, bienveillant et efficace.",
           },
         ]}
       />

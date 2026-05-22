@@ -189,24 +189,27 @@ const Contact = () => {
   return (
     <Layout>
       <SEO
-        title="Contact & Rendez-vous — ON Coaching Mâcon | 1er RDV Offert"
-        description="Prenez rendez-vous avec ON Coaching à Mâcon (Sancé). 1er consultation offerte, réponse sous 24h. En présentiel ou visio. Tél : 06 63 04 18 12."
+        title="Contact & Rendez-vous — Coach ICF à Mâcon (71) | 1er RDV Gratuit"
+        description="Contactez ON Coaching à Mâcon, Sancé (71). 1re consultation gratuite, réponse sous 24h. Présentiel ou visio. Coach certifié ICF. Tél : 06 63 04 18 12."
         canonical="/contact"
-        keywords="contact coach mâcon, prendre rendez-vous coaching, consultation coaching offerte, coach sancé téléphone, coaching visio mâcon"
+        keywords="contact coach mâcon, prendre rendez-vous coaching mâcon, consultation coaching offerte sancé, coach sancé téléphone, coaching visio mâcon, coach ICF saône-et-loire"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "ContactPage",
             "@id": "https://www.oncoaching.fr/contact#webpage",
-            name: "Contact & Rendez-vous | ON Coaching",
+            name: "Contact & Rendez-vous | ON Coaching Mâcon",
             url: "https://www.oncoaching.fr/contact",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+            about: { "@id": "https://www.oncoaching.fr/#business" },
+            description: "Contactez ON Coaching à Mâcon (Sancé, 71). 1er rendez-vous gratuit, réponse sous 24h. Coach certifié ICF Noureddine Omar.",
           },
           {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "@id": "https://www.oncoaching.fr/#business",
             name: "ON Coaching",
+            alternateName: "ON Coaching Mâcon",
             telephone: "+33663041812",
             email: "contact@oncoaching.fr",
             url: "https://www.oncoaching.fr",
@@ -215,13 +218,18 @@ const Contact = () => {
               streetAddress: "14 rue des écureuils",
               addressLocality: "Sancé",
               postalCode: "71000",
-              addressRegion: "Bourgogne-Franche-Comté",
+              addressRegion: "Saône-et-Loire",
               addressCountry: "FR",
             },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: "46.3077",
+              longitude: "4.8288",
+            },
             openingHoursSpecification: [
-              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday"], opens: "14:00", closes: "19:00" },
-              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Tuesday"], opens: "08:00", closes: "12:00" },
-              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Friday"], opens: "08:00", closes: "19:00" },
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday"],   opens: "14:00", closes: "19:00" },
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Tuesday"],  opens: "08:00", closes: "12:00" },
+              { "@type": "OpeningHoursSpecification", dayOfWeek: ["Friday"],   opens: "08:00", closes: "19:00" },
               { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday"], opens: "08:00", closes: "13:00" },
             ],
           },
@@ -229,9 +237,26 @@ const Contact = () => {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: [
-              { "@type": "Question", name: "Est-ce que le 1er rendez-vous est vraiment gratuit ?", acceptedAnswer: { "@type": "Answer", text: "Oui, absolument. Le premier rendez-vous est offert, sans engagement de votre part. C'est l'occasion d'échanger sur vos besoins et de voir si nous sommes faits pour travailler ensemble." } },
-              { "@type": "Question", name: "Comment se déroule une séance de coaching ?", acceptedAnswer: { "@type": "Answer", text: "Chaque séance dure entre 45 minutes et 1 heure, en présentiel à Sancé (Mâcon) ou à distance en visioconférence." } },
-              { "@type": "Question", name: "Combien de séances sont nécessaires ?", acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'atteindre des résultats concrets. Nous définissons ensemble le parcours adapté." } },
+              {
+                "@type": "Question",
+                name: "Est-ce que le 1er rendez-vous est vraiment gratuit ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, absolument. Le premier rendez-vous est offert, sans engagement de votre part. C'est l'occasion d'échanger sur vos besoins et de voir si nous sommes faits pour travailler ensemble." }
+              },
+              {
+                "@type": "Question",
+                name: "Comment se déroule une séance de coaching à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Chaque séance dure entre 45 minutes et 1 heure, en présentiel dans notre cabinet à Sancé (Mâcon, 71) ou à distance en visioconférence, selon votre préférence." }
+              },
+              {
+                "@type": "Question",
+                name: "Combien de séances sont nécessaires ?",
+                acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'atteindre des résultats concrets. Nous définissons ensemble le parcours adapté à votre rythme et vos objectifs." }
+              },
+              {
+                "@type": "Question",
+                name: "Proposez-vous des forfaits ou des tarifs spéciaux ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, nous proposons des forfaits séances qui offrent une réduction par rapport au tarif à l'unité. Consultez notre page Tarifs ou demandez-nous directement lors du 1er RDV." }
+              },
             ],
           },
           {
@@ -239,7 +264,7 @@ const Contact = () => {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
-              { "@type": "ListItem", position: 2, name: "Contact", item: "https://www.oncoaching.fr/contact" },
+              { "@type": "ListItem", position: 2, name: "Contact & Rendez-vous", item: "https://www.oncoaching.fr/contact" },
             ],
           },
         ]}

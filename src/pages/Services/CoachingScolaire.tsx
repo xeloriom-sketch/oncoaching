@@ -92,30 +92,67 @@ const CoachingScolaire = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching Scolaire & Étudiant à Mâcon — Méthode, Motivation, Confiance"
-        description="Coach certifié ICF & ancien enseignant SES (26 ans). Collégiens, lycéens, étudiants à Mâcon : méthodes de travail, motivation, gestion du stress. 1er RDV offert."
+        title="Coaching Scolaire à Mâcon (71) — Collégiens, Lycéens, Étudiants | ON Coaching"
+        description="Coach scolaire certifié ICF à Mâcon, Sancé (71). Ex-enseignant SES 26 ans. Méthodes de travail, motivation, gestion du stress d'examen. 1er RDV offert."
         canonical="/coaching-scolaire"
-        keywords="coaching scolaire mâcon, soutien scolaire mâcon, coach lycéen, coach étudiant, méthode de travail, motivation scolaire, gestion stress examen, sancé"
+        keywords="coaching scolaire mâcon, coach scolaire mâcon 71, soutien scolaire sancé, coach lycéen mâcon, coach étudiant bourgogne, méthode de travail, motivation scolaire, gestion stress examen, orientation scolaire mâcon"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/coaching-scolaire#service",
-            name: "Coaching Scolaire & Étudiant",
+            name: "Coaching Scolaire & Étudiant à Mâcon",
             url: "https://www.oncoaching.fr/coaching-scolaire",
-            description: "Accompagnement personnalisé des collégiens, lycéens et étudiants : méthodes de travail, motivation, gestion du stress et orientation.",
+            description: "Coaching scolaire certifié ICF à Mâcon (Sancé, 71) pour collégiens, lycéens et étudiants : méthodes de travail, motivation, gestion du stress d'examen et orientation.",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
-            areaServed: { "@type": "City", name: "Mâcon" },
+            areaServed: [
+              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
+            ],
             audience: { "@type": "Audience", audienceType: "Collégiens, lycéens, étudiants (11-25 ans)" },
-            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "1er rendez-vous offert" },
+            serviceType: "Coaching scolaire",
+            offers: [
+              {
+                "@type": "Offer",
+                name: "Séance coaching scolaire",
+                price: "60",
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+                description: "Séance individuelle 60 min, en présentiel à Sancé (Mâcon) ou visioconférence.",
+              },
+              {
+                "@type": "Offer",
+                name: "1er rendez-vous découverte",
+                price: "0",
+                priceCurrency: "EUR",
+                description: "Consultation initiale offerte, sans engagement.",
+              },
+            ],
           },
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: [
-              { "@type": "Question", name: "À quel âge peut-on commencer le coaching scolaire ?", acceptedAnswer: { "@type": "Answer", text: "Le coaching scolaire est adapté dès le collège (11-12 ans) jusqu'aux études supérieures. Chaque accompagnement est personnalisé selon l'âge et les besoins." } },
-              { "@type": "Question", name: "Combien de séances faut-il pour voir des résultats ?", acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'obtenir des changements concrets sur les méthodes de travail, la motivation et la confiance en soi." } },
-              { "@type": "Question", name: "Le coaching scolaire remplace-t-il le soutien scolaire ?", acceptedAnswer: { "@type": "Answer", text: "Non, le coaching scolaire est complémentaire. Il travaille sur les blocages, la motivation et l'organisation — pas sur le contenu des matières." } },
+              {
+                "@type": "Question",
+                name: "À quel âge peut-on commencer le coaching scolaire à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching scolaire est adapté dès le collège (11-12 ans) jusqu'aux études supérieures. Chaque accompagnement est personnalisé selon l'âge et les besoins de l'élève à Mâcon et dans toute la Saône-et-Loire." }
+              },
+              {
+                "@type": "Question",
+                name: "Combien de séances faut-il pour voir des résultats en coaching scolaire ?",
+                acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'obtenir des changements concrets sur les méthodes de travail, la motivation et la confiance en soi." }
+              },
+              {
+                "@type": "Question",
+                name: "Le coaching scolaire remplace-t-il le soutien scolaire traditionnel ?",
+                acceptedAnswer: { "@type": "Answer", text: "Non, le coaching scolaire est complémentaire. Il travaille sur les blocages, la motivation et l'organisation — pas sur le contenu des matières comme le soutien scolaire." }
+              },
+              {
+                "@type": "Question",
+                name: "Le coaching scolaire fonctionne-t-il aussi en visioconférence ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, les séances de coaching scolaire peuvent se tenir en présentiel à Sancé (Mâcon, 71) ou à distance en visioconférence, selon votre préférence." }
+              },
             ],
           },
           {
@@ -124,7 +161,7 @@ const CoachingScolaire = () => {
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
               { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
-              { "@type": "ListItem", position: 3, name: "Coaching Scolaire", item: "https://www.oncoaching.fr/coaching-scolaire" },
+              { "@type": "ListItem", position: 3, name: "Coaching Scolaire Mâcon", item: "https://www.oncoaching.fr/coaching-scolaire" },
             ],
           },
         ]}

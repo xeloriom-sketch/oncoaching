@@ -89,29 +89,62 @@ const CoachingJeunes = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching Jeunes & Jeunes Adultes à Mâcon — Orientation & Projet de Vie"
-        description="Coaching pour jeunes de 15 à 30 ans à Mâcon (Sancé). Orientation scolaire & pro, confiance en soi, gestion du stress, projet de vie. Coach ICF certifié. 1er RDV offert."
+        title="Coaching Jeunes & Jeunes Adultes à Mâcon (71) — Orientation, Confiance, Projet de Vie"
+        description="Coaching pour les 15-30 ans à Mâcon (Sancé, 71). Orientation scolaire & pro, confiance en soi, projet de vie. Coach ICF certifié, 26 ans d'expérience. 1er RDV offert."
         canonical="/coaching-jeunes"
-        keywords="coaching jeunes mâcon, orientation scolaire, coach jeunes adultes, projet de vie, confiance en soi, insertion professionnelle, sancé bourgogne"
+        keywords="coaching jeunes mâcon, coach jeunes adultes mâcon 71, orientation scolaire sancé, projet de vie bourgogne, confiance en soi mâcon, insertion professionnelle saône-et-loire, coach ICF jeunes"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/coaching-jeunes#service",
-            name: "Coaching Jeunes & Jeunes Adultes",
+            name: "Coaching Jeunes & Jeunes Adultes à Mâcon",
             url: "https://www.oncoaching.fr/coaching-jeunes",
-            description: "Accompagnement des 15-30 ans dans leur orientation, construction du projet de vie, confiance en soi et insertion professionnelle.",
+            description: "Coaching certifié ICF pour les 15-30 ans à Mâcon (Sancé, Saône-et-Loire 71) : orientation scolaire et professionnelle, confiance en soi, construction du projet de vie et insertion professionnelle.",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
-            areaServed: { "@type": "City", name: "Mâcon" },
+            areaServed: [
+              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
+            ],
             audience: { "@type": "Audience", audienceType: "Jeunes et jeunes adultes (15-30 ans)" },
-            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "1er rendez-vous offert" },
+            serviceType: "Coaching jeunes adultes",
+            offers: [
+              {
+                "@type": "Offer",
+                name: "Séance coaching jeunes",
+                price: "60",
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+                description: "Séance individuelle à partir de 60€, en présentiel à Sancé (Mâcon) ou visio.",
+              },
+              {
+                "@type": "Offer",
+                name: "1er bilan de départ offert",
+                price: "0",
+                priceCurrency: "EUR",
+                description: "Première consultation offerte, sans engagement.",
+              },
+            ],
           },
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: [
-              { "@type": "Question", name: "Le coaching jeunes est-il différent du coaching adulte ?", acceptedAnswer: { "@type": "Answer", text: "Oui, il est adapté aux enjeux spécifiques des 15-30 ans : orientation, identité, confiance, transition vers la vie adulte. La relation coach-coaché est plus souple et dynamique." } },
-              { "@type": "Question", name: "Comment le coaching aide-t-il pour l'orientation ?", acceptedAnswer: { "@type": "Answer", text: "Le coaching permet de clarifier les valeurs, les forces et les aspirations du jeune, pour construire un projet d'orientation cohérent et motivant." } },
+              {
+                "@type": "Question",
+                name: "Le coaching jeunes est-il différent du coaching adulte ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, le coaching jeunes à Mâcon est adapté aux enjeux spécifiques des 15-30 ans : orientation, identité, confiance en soi, transition vers la vie adulte. La relation coach-coaché est plus souple et dynamique." }
+              },
+              {
+                "@type": "Question",
+                name: "Comment le coaching aide-t-il pour l'orientation à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching permet de clarifier les valeurs, les forces et les aspirations du jeune, pour construire un projet d'orientation cohérent et motivant, en présentiel à Mâcon ou en visioconférence." }
+              },
+              {
+                "@type": "Question",
+                name: "Quel est le tarif du coaching jeunes à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Les séances de coaching jeunes débutent à 60€. Le premier rendez-vous découverte est entièrement offert, sans engagement. Des forfaits sont disponibles selon vos besoins." }
+              },
             ],
           },
           {
@@ -120,7 +153,7 @@ const CoachingJeunes = () => {
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
               { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
-              { "@type": "ListItem", position: 3, name: "Coaching Jeunes", item: "https://www.oncoaching.fr/coaching-jeunes" },
+              { "@type": "ListItem", position: 3, name: "Coaching Jeunes Mâcon", item: "https://www.oncoaching.fr/coaching-jeunes" },
             ],
           },
         ]}

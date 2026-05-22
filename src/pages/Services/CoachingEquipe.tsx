@@ -105,32 +105,61 @@ const CoachingEquipe = () => {
   return (
     <Layout>
       <SEO
-        title="Coaching d'Équipe à Mâcon — Cohésion, Communication & Performance"
-        description="Coaching d'équipe ICF certifié à Mâcon. Cohésion, intelligence collective, communication et leadership pour TPE/PME et associations. 26 ans d'expérience. 1er RDV offert."
+        title="Coaching d'Équipe à Mâcon (71) — Cohésion, Performance & Intelligence Collective"
+        description="Coaching d'équipe certifié ICF à Mâcon, Saône-et-Loire (71). Cohésion, communication, leadership pour TPE/PME et associations. 26 ans d'expérience. Diagnostic offert."
         canonical="/coaching-equipe"
-        keywords="coaching équipe mâcon, team building bourgogne, cohésion équipe, coach entreprise mâcon, management bienveillant, intelligence collective, coaching PME"
+        keywords="coaching équipe mâcon, coaching entreprise mâcon 71, team building saône-et-loire, cohésion équipe bourgogne, coach PME mâcon, intelligence collective, management bienveillant, coaching d'équipe certifié ICF"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/coaching-equipe#service",
-            name: "Coaching d'Équipe",
+            name: "Coaching d'Équipe à Mâcon — ON Coaching",
             url: "https://www.oncoaching.fr/coaching-equipe",
-            description: "Coaching collectif certifié ICF pour renforcer la cohésion, améliorer la communication et développer l'intelligence collective des équipes professionnelles.",
+            description: "Coaching collectif certifié ICF à Mâcon (Saône-et-Loire 71) pour TPE, PME et associations : cohésion d'équipe, communication interne, leadership et intelligence collective.",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
-              { "@type": "City", name: "Mâcon" },
-              { "@type": "State", name: "Bourgogne-Franche-Comté" },
+              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
+              { "@type": "AdministrativeArea", name: "Bourgogne-Franche-Comté" },
             ],
-            audience: { "@type": "Audience", audienceType: "TPE, PME, associations, collectivités" },
-            offers: { "@type": "Offer", price: "0", priceCurrency: "EUR", description: "1er rendez-vous de diagnostic offert" },
+            audience: { "@type": "Audience", audienceType: "TPE, PME, associations, collectivités territoriales en Saône-et-Loire" },
+            serviceType: "Coaching d'équipe",
+            offers: [
+              {
+                "@type": "Offer",
+                name: "Diagnostic équipe offert",
+                price: "0",
+                priceCurrency: "EUR",
+                description: "Premier diagnostic d'équipe offert, sans engagement. Mâcon et environs.",
+              },
+              {
+                "@type": "Offer",
+                name: "Coaching d'équipe sur devis",
+                availability: "https://schema.org/InStock",
+                description: "Programme sur mesure adapté à la taille et aux objectifs de l'équipe. Demi-journée, journée ou multi-séances.",
+              },
+            ],
           },
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: [
-              { "@type": "Question", name: "En quoi le coaching d'équipe diffère-t-il de la formation ?", acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe travaille sur la dynamique réelle du groupe, les relations interpersonnelles et les blocages collectifs — pas sur l'acquisition de compétences techniques." } },
-              { "@type": "Question", name: "Combien de personnes peuvent participer à un coaching d'équipe ?", acceptedAnswer: { "@type": "Answer", text: "Un coaching d'équipe fonctionne idéalement pour des groupes de 4 à 15 personnes. Au-delà, des formats adaptés (ateliers, workshops) peuvent être proposés." } },
+              {
+                "@type": "Question",
+                name: "En quoi le coaching d'équipe diffère-t-il d'une formation à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe à Mâcon travaille sur la dynamique réelle du groupe, les relations interpersonnelles et les blocages collectifs — pas sur l'acquisition de compétences techniques comme une formation classique." }
+              },
+              {
+                "@type": "Question",
+                name: "Combien de personnes peuvent participer à un coaching d'équipe à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Un coaching d'équipe fonctionne idéalement pour des groupes de 4 à 15 personnes. Au-delà, des formats adaptés (ateliers, workshops) peuvent être proposés pour les équipes en Saône-et-Loire." }
+              },
+              {
+                "@type": "Question",
+                name: "Le coaching d'équipe peut-il se faire en visioconférence ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, les sessions peuvent se tenir en présentiel à Mâcon et dans toute la Saône-et-Loire (71), ou à distance en visioconférence selon les besoins de votre organisation." }
+              },
             ],
           },
           {
@@ -139,7 +168,7 @@ const CoachingEquipe = () => {
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
               { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
-              { "@type": "ListItem", position: 3, name: "Coaching Équipe", item: "https://www.oncoaching.fr/coaching-equipe" },
+              { "@type": "ListItem", position: 3, name: "Coaching d'Équipe Mâcon", item: "https://www.oncoaching.fr/coaching-equipe" },
             ],
           },
         ]}

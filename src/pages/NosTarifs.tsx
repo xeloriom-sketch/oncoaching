@@ -92,34 +92,100 @@ const NosTarifs = () => {
   return (
     <Layout>
       <SEO
-        title="Nos Tarifs — Prix du Coaching à Mâcon | ON Coaching"
-        description="Tarifs transparents : coaching scolaire, jeunes adultes, neurofeedback et équipe à Mâcon. Séances individuelles et forfaits. 1er rendez-vous offert."
+        title="Tarifs Coaching Mâcon (71) — Prix Séances & Forfaits | ON Coaching"
+        description="Prix clairs du coaching à Mâcon (71) : séance individuelle 60€, neurofeedback 80€, équipe sur devis. Forfaits disponibles. 1er rendez-vous offert sans engagement."
         canonical="/nos-tarifs"
-        keywords="tarif coaching mâcon, prix séance coaching, forfait coaching scolaire, neurofeedback tarif, coaching entreprise prix"
+        keywords="tarif coaching mâcon, prix séance coaching mâcon, forfait coaching scolaire sancé, neurofeedback tarif 71, coaching entreprise prix saône-et-loire, coach ICF tarif"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             "@id": "https://www.oncoaching.fr/nos-tarifs#webpage",
-            name: "Nos Tarifs | ON Coaching",
+            name: "Tarifs Coaching Mâcon (71) | ON Coaching",
             url: "https://www.oncoaching.fr/nos-tarifs",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+            about: { "@id": "https://www.oncoaching.fr/#business" },
+            description: "Tarifs transparents du coaching certifié ICF à Mâcon (Sancé, 71) : coaching individuel, neurofeedback, coaching d'équipe.",
           },
           {
             "@context": "https://schema.org",
             "@type": "Service",
-            name: "Coaching professionnel — ON Coaching",
+            "@id": "https://www.oncoaching.fr/nos-tarifs#service-catalog",
+            name: "Coaching professionnel certifié ICF — ON Coaching Mâcon",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
-            areaServed: { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+            areaServed: [
+              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
+            ],
             hasOfferCatalog: {
               "@type": "OfferCatalog",
-              name: "Formules de coaching",
+              name: "Formules de coaching à Mâcon (71)",
               itemListElement: [
-                { "@type": "Offer", name: "Séance coaching individuel", priceCurrency: "EUR", price: "80", availability: "https://schema.org/InStock" },
-                { "@type": "Offer", name: "Séance neurofeedback", priceCurrency: "EUR", price: "80", availability: "https://schema.org/InStock" },
-                { "@type": "Offer", name: "Consultation initiale", priceCurrency: "EUR", price: "0", availability: "https://schema.org/InStock", description: "1er rendez-vous offert, sans engagement" },
+                {
+                  "@type": "Offer",
+                  name: "Séance coaching individuel",
+                  priceCurrency: "EUR",
+                  price: "60",
+                  availability: "https://schema.org/InStock",
+                  url: "https://www.oncoaching.fr/nos-tarifs",
+                  description: "Coaching scolaire, jeunes adultes. Séance 60 min. En présentiel à Sancé (Mâcon) ou visio.",
+                  seller: { "@id": "https://www.oncoaching.fr/#business" },
+                },
+                {
+                  "@type": "Offer",
+                  name: "Séance neurofeedback",
+                  priceCurrency: "EUR",
+                  price: "80",
+                  availability: "https://schema.org/InStock",
+                  url: "https://www.oncoaching.fr/coaching-neurofeedback",
+                  description: "Séance neurofeedback 45-60 min. Non invasif. Résultats dès la 3e séance.",
+                  seller: { "@id": "https://www.oncoaching.fr/#business" },
+                },
+                {
+                  "@type": "Offer",
+                  name: "Consultation découverte — 1er RDV offert",
+                  priceCurrency: "EUR",
+                  price: "0",
+                  availability: "https://schema.org/InStock",
+                  description: "Première consultation offerte, 30 min, sans engagement.",
+                  seller: { "@id": "https://www.oncoaching.fr/#business" },
+                },
+                {
+                  "@type": "Offer",
+                  name: "Coaching d'équipe en entreprise",
+                  availability: "https://schema.org/InStock",
+                  url: "https://www.oncoaching.fr/coaching-equipe",
+                  description: "Coaching collectif TPE/PME. Sur devis selon taille équipe et objectifs.",
+                  seller: { "@id": "https://www.oncoaching.fr/#business" },
+                },
               ],
             },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Y a-t-il un engagement pour le coaching à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Non, aucun engagement. Chaque séance est indépendante : vous venez quand vous le souhaitez, sans abonnement ni contrat." }
+              },
+              {
+                "@type": "Question",
+                name: "Comment régler les séances de coaching ?",
+                acceptedAnswer: { "@type": "Answer", text: "Par chèque, virement bancaire ou espèces — directement en fin de séance, selon votre préférence." }
+              },
+              {
+                "@type": "Question",
+                name: "Les séances de coaching sont-elles remboursables ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching n'est pas pris en charge par la Sécurité sociale. En revanche, certaines mutuelles proposent des remboursements partiels ; renseignez-vous auprès de la vôtre." }
+              },
+              {
+                "@type": "Question",
+                name: "Le 1er RDV coaching est vraiment gratuit ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, la consultation découverte (30 min) est offerte et sans engagement. L'occasion de vous présenter, de comprendre vos besoins et de voir si l'accompagnement vous correspond." }
+              },
+            ],
           },
           {
             "@context": "https://schema.org",

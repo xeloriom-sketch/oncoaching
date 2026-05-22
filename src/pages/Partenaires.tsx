@@ -60,20 +60,48 @@ const Partenaires = () => {
   return (
     <Layout>
       <SEO
-        title="Partenaires & Institutions | ON Coaching"
-        description="Coaching et neurofeedback pour associations et organismes d'insertion. Développement des compétences psychosociales. 26 ans d'expérience, certifié ICF."
+        title="Partenaires & Institutions — Coaching & Neurofeedback Mâcon (71) | ON Coaching"
+        description="Coach certifié ICF partenaire des associations et organismes en Saône-et-Loire (71). Neurofeedback, compétences psychosociales, insertion. 26 ans d'expérience."
         canonical="/partenaires"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type":    "Service",
-          "name":     "Accompagnement des publics en insertion — Partenaires & Institutions",
-          "url":      "https://www.oncoaching.fr/partenaires",
-          "provider": { "@id": "https://www.oncoaching.fr/#business" },
-          "audience": {
-            "@type":       "Audience",
-            "audienceType": "Associations, fondations, organismes d'insertion, établissements éducatifs",
+        keywords="coaching associations mâcon, neurofeedback institutions saône-et-loire, coach insertion professionnelle 71, compétences psychosociales bourgogne, coaching établissements scolaires mâcon"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": "https://www.oncoaching.fr/partenaires#webpage",
+            name: "Partenaires & Institutions | ON Coaching Mâcon",
+            url: "https://www.oncoaching.fr/partenaires",
+            isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+            about: { "@id": "https://www.oncoaching.fr/#business" },
+            description: "ON Coaching — partenaire de confiance des associations, fondations et organismes d'insertion en Saône-et-Loire (71, Mâcon).",
           },
-        }}
+          {
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "@id": "https://www.oncoaching.fr/partenaires#service",
+            name: "Accompagnement institutionnel — Coaching & Neurofeedback Mâcon",
+            url: "https://www.oncoaching.fr/partenaires",
+            description: "Coaching et neurofeedback certifiés ICF pour associations, fondations et organismes d'insertion en Saône-et-Loire. Développement des compétences psychosociales et accompagnement des publics en difficulté.",
+            provider: { "@id": "https://www.oncoaching.fr/#business" },
+            areaServed: [
+              { "@type": "City", name: "Mâcon" },
+              { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
+              { "@type": "AdministrativeArea", name: "Bourgogne-Franche-Comté" },
+            ],
+            audience: {
+              "@type": "Audience",
+              audienceType: "Associations, fondations, organismes d'insertion, établissements éducatifs, collectivités en Saône-et-Loire",
+            },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+              { "@type": "ListItem", position: 2, name: "Partenaires & Institutions", item: "https://www.oncoaching.fr/partenaires" },
+            ],
+          },
+        ]}
       />
 
       <div className="w-full bg-white min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">

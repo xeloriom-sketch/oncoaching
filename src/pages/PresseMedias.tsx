@@ -12,9 +12,42 @@ export default function PresseMedias() {
   return (
       <Layout>
         <SEO
-            title="Presse & Médias — ON Coaching"
-            description="Retrouvez les publications, podcasts et références publiques autour de Noureddine Omar et ON Coaching."
+            title="Presse & Médias — Noureddine Omar, Coach ICF à Mâcon (71) | ON Coaching"
+            description="Revue de presse, podcasts et interviews de Noureddine Omar, coach certifié ICF à Mâcon (71). Découvrez les médias et références publiques d'ON Coaching."
             canonical="/presse-medias"
+            keywords="Noureddine Omar presse, ON Coaching médias, coach mâcon médias, interview coach ICF, podcast coaching bourgogne, JSL mâcon coaching"
+            structuredData={[
+              {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                "@id": "https://www.oncoaching.fr/presse-medias#webpage",
+                name: "Presse & Médias — Noureddine Omar, Coach ICF Mâcon",
+                url: "https://www.oncoaching.fr/presse-medias",
+                isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
+                about: { "@id": "https://www.oncoaching.fr/#coach" },
+                description: "Revue de presse, podcasts et références médiatiques de Noureddine Omar, coach certifié ICF à Mâcon (Saône-et-Loire, 71).",
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: "Références médias — ON Coaching Mâcon",
+                description: "Publications, interviews et podcasts autour de Noureddine Omar et ON Coaching",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Article Le JSL (Journal de Saône-et-Loire)", url: "https://www.facebook.com/LeJSL71/posts/pfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl" },
+                  { "@type": "ListItem", position: 2, name: "Podcast et Compagnie — Interview vidéo Noureddine Omar", url: "https://www.youtube.com/watch?v=Yu9CM4-DIXk" },
+                  { "@type": "ListItem", position: 3, name: "Profil LinkedIn Noureddine Omar", url: "https://www.linkedin.com/in/noureddine-omar-587620346/" },
+                  { "@type": "ListItem", position: 4, name: "Fiche praticien Resalib — ON Coaching Sancé", url: "https://www.resalib.fr/praticien/118187-on-coaching-et-neurofeedback-coach-professionnel-certifie-sance" },
+                ],
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
+                  { "@type": "ListItem", position: 2, name: "Presse & Médias", item: "https://www.oncoaching.fr/presse-medias" },
+                ],
+              },
+            ]}
         />
 
         <section className="bg-white pt-28 pb-20 md:pb-28" aria-labelledby="presse-title">
