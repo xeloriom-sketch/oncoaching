@@ -8,7 +8,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import ScrollToTop from "./components/ScrollToTop";
 import PageLoader  from "./components/PageLoader";
-import Cursor         from "./components/Cursor";
 import ScrollProgress from "./components/ScrollProgress";
 
 // ─── Lazy-loaded pages ────────────────────────────────────────────────────────
@@ -97,7 +96,6 @@ const App = () => {
         </BrowserRouter>
         {!loaderDone && <PageLoader onDone={() => setLoaderDone(true)} />}
       </TooltipProvider>
-        <Cursor />
         <ScrollProgress />
       </QueryClientProvider>
   );
