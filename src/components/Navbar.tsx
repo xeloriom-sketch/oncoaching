@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Building2, ChevronDown, GraduationCap, Menu, Users, X, Zap } from "lucide-react";
@@ -13,19 +13,41 @@ const SERVICE_ICONS: Record<string, React.ElementType> = {
   [ROUTES.partenaires]:   Building2,
 };
 
+const SERVICE_DESC: Record<string, string> = {
+  [ROUTES.scolaire]:      "Collégiens · Lycéens · Étudiants",
+  [ROUTES.jeunes]:        "15 – 30 ans · Orientation · Pro",
+  [ROUTES.neurofeedback]: "Non invasif · Scientifique",
+  [ROUTES.equipe]:        "Entreprises · TPE / PME",
+  [ROUTES.partenaires]:   "Institutions · Associations",
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -6 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.045, duration: 0.18, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
 const Navbar = () => {
-  const [isOpen,  setIsOpen]  = useState(false);
-  const [svcOpen, setSvcOpen] = useState(false);
-  const [hidden,  setHidden]  = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const lastY = useRef(0);
+  const [isOpen,    setIsOpen]    = useState(false);
+  const [svcOpen,   setSvcOpen]   = useState(false);
+  const [mobileSvc, setMobileSvc] = useState(false);
+  const [hidden,    setHidden]    = useState(false);
+  const [scrolled,  setScrolled]  = useState(false);
+  const closeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastY    = useRef(0);
   const location = useLocation();
 
+  // Close everything on route change
   useEffect(() => {
     setIsOpen(false);
     setSvcOpen(false);
+    setMobileSvc(false);
   }, [location.pathname]);
 
+  // Hide navbar on scroll down
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
@@ -36,6 +58,19 @@ const Navbar = () => {
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => () => { if (closeRef.current) clearTimeout(closeRef.current); }, []);
+
+  // Desktop dropdown — delayed close so the gap between button and panel is safe
+  const openSvc = useCallback(() => {
+    if (closeRef.current) clearTimeout(closeRef.current);
+    setSvcOpen(true);
+  }, []);
+
+  const scheduleSvcClose = useCallback(() => {
+    closeRef.current = setTimeout(() => setSvcOpen(false), 120);
   }, []);
 
   const isActive = (href: string) =>
@@ -49,6 +84,7 @@ const Navbar = () => {
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="fixed top-0 inset-x-0 z-50 px-4 pt-4"
     >
+      {/* ── Bar ── */}
       <nav
         aria-label="Navigation principale"
         className={`text-white rounded-full py-2.5 px-5 flex items-center justify-between max-w-7xl mx-auto shadow-xl shadow-black/25 transition-all duration-500 ease-out ${
@@ -75,83 +111,116 @@ const Navbar = () => {
                 className={`relative hover:text-white transition-colors group py-1 ${isActive(href) ? "text-white" : ""}`}
               >
                 {label}
-                <span
-                  className={`absolute -bottom-0.5 left-0 h-[2px] bg-[#1ab5c7] rounded-full transition-all duration-300 ease-out ${
-                    isActive(href) ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
-                  }`}
-                />
+                <span className={`absolute -bottom-0.5 left-0 h-[2px] bg-[#1ab5c7] rounded-full transition-all duration-300 ease-out ${
+                  isActive(href) ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+                }`} />
               </Link>
             </li>
           ))}
 
-          {/* Services dropdown */}
+          {/* ── Services dropdown ── */}
           <li
             className="relative"
-            onMouseEnter={() => setSvcOpen(true)}
-            onMouseLeave={() => setSvcOpen(false)}
+            onMouseEnter={openSvc}
+            onMouseLeave={scheduleSvcClose}
           >
             <button
               aria-haspopup="true"
               aria-expanded={svcOpen}
-              className={`flex items-center gap-1 hover:text-white transition-colors py-1 group relative ${isServiceActive ? "text-white" : ""}`}
+              className={`flex items-center gap-1.5 hover:text-white transition-colors py-1 group relative ${isServiceActive ? "text-white" : ""}`}
             >
               Services
               <motion.span
                 animate={{ rotate: svcOpen ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                 className="inline-flex"
               >
                 <ChevronDown className="w-3 h-3" aria-hidden="true" />
               </motion.span>
-              <span
-                className={`absolute -bottom-0.5 left-0 h-[2px] bg-[#1ab5c7] rounded-full transition-all duration-300 ease-out ${
-                  isServiceActive ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
-                }`}
-              />
+              <span className={`absolute -bottom-0.5 left-0 h-[2px] bg-[#1ab5c7] rounded-full transition-all duration-300 ease-out ${
+                isServiceActive ? "w-full opacity-100" : "w-0 opacity-0 group-hover:w-full group-hover:opacity-100"
+              }`} />
             </button>
 
-            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-3 pointer-events-none">
+            {/* Dropdown panel — pointer-events-none on wrapper, auto on panel */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] pt-2 pointer-events-none">
               <AnimatePresence>
                 {svcOpen && (
                   <motion.div
                     role="menu"
-                    initial={{ opacity: 0, y: -4, scale: 0.97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -4, scale: 0.97 }}
-                    transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-[#0B0B0C] border border-white/10 rounded-[20px] p-2 shadow-2xl pointer-events-auto"
+                    onMouseEnter={openSvc}
+                    onMouseLeave={scheduleSvcClose}
+                    initial={{ opacity: 0, y: -8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0,  scale: 1    }}
+                    exit={{    opacity: 0, y: -8, scale: 0.96 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="pointer-events-auto bg-[#0B0B0C] border border-white/10 rounded-[20px] overflow-hidden shadow-2xl shadow-black/40"
                   >
-                    {SERVICES.map(({ label, href }) => {
-                      const Icon = SERVICE_ICONS[href] ?? Brain;
-                      const active = location.pathname === href;
-                      return (
-                        <motion.div
-                          key={href}
-                          whileHover={{ x: 3 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 24 }}
-                        >
-                          <Link
-                            to={href}
-                            role="menuitem"
-                            aria-current={active ? "page" : undefined}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors group ${active ? "bg-white/8" : "hover:bg-white/5"}`}
+                    {/* Accent line */}
+                    <div className="h-[2px] w-full bg-gradient-to-r from-[#1ab5c7]/60 via-[#1ab5c7] to-[#1ab5c7]/60" />
+
+                    <div className="p-2">
+                      {SERVICES.map(({ label, href }, i) => {
+                        const Icon = SERVICE_ICONS[href] ?? Brain;
+                        const desc = SERVICE_DESC[href] ?? "";
+                        const active = location.pathname === href;
+                        return (
+                          <motion.div
+                            key={href}
+                            custom={i}
+                            initial="hidden"
+                            animate="visible"
+                            variants={itemVariants}
                           >
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${active ? "bg-[#1ab5c7]" : "bg-white/8 group-hover:bg-[#1ab5c7]/20"}`} aria-hidden="true">
-                              <Icon className={`w-3.5 h-3.5 transition-colors ${active ? "text-white" : "text-[#1ab5c7]"}`} strokeWidth={1.8} />
-                            </div>
-                            <span className={`text-[12px] font-medium transition-colors ${active ? "text-white" : "text-white/70 group-hover:text-white"}`}>
-                              {label}
-                            </span>
-                          </Link>
-                        </motion.div>
-                      );
-                    })}
-                    <div className="border-t border-white/8 mt-1 pt-2 px-2">
+                            <Link
+                              to={href}
+                              role="menuitem"
+                              aria-current={active ? "page" : undefined}
+                              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group ${
+                                active
+                                  ? "bg-white/[0.07]"
+                                  : "hover:bg-white/[0.05]"
+                              }`}
+                            >
+                              {/* Icon */}
+                              <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                                active ? "bg-[#1ab5c7]" : "bg-white/[0.07] group-hover:bg-[#1ab5c7]/20"
+                              }`} aria-hidden="true">
+                                <Icon className={`w-4 h-4 transition-colors ${
+                                  active ? "text-white" : "text-[#1ab5c7]"
+                                }`} strokeWidth={1.7} />
+                              </div>
+
+                              {/* Label + desc */}
+                              <div className="flex flex-col min-w-0">
+                                <span className={`text-[13px] font-semibold leading-tight transition-colors ${
+                                  active ? "text-white" : "text-white/80 group-hover:text-white"
+                                }`}>
+                                  {label}
+                                </span>
+                                <span className="text-[11px] text-white/35 mt-0.5 leading-tight truncate">
+                                  {desc}
+                                </span>
+                              </div>
+
+                              {/* Active dot */}
+                              {active && (
+                                <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" aria-hidden="true" />
+                              )}
+                            </Link>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+
+                    {/* CTA footer */}
+                    <div className="px-3 pb-3">
                       <Link
                         to="/contact"
-                        className="flex items-center justify-center w-full py-2.5 bg-[#1ab5c7] text-white text-[12px] font-bold rounded-xl hover:opacity-90 transition-opacity"
+                        className="flex items-center justify-center gap-1.5 w-full py-2.5 bg-[#1ab5c7] hover:bg-[#16a3b4] text-white text-[12px] font-bold rounded-xl transition-colors"
                       >
-                        Consultation gratuite →
+                        Consultation gratuite
+                        <span aria-hidden="true">→</span>
                       </Link>
                     </div>
                   </motion.div>
@@ -173,7 +242,7 @@ const Navbar = () => {
 
         {/* Mobile toggle */}
         <motion.button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsOpen(v => !v)}
           aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={isOpen}
           whileTap={{ scale: 0.9 }}
@@ -192,25 +261,25 @@ const Navbar = () => {
         </motion.button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* ── Mobile menu ── */}
       <AnimatePresence>
         {isOpen && (
           <motion.nav
             aria-label="Menu mobile"
             initial={{ opacity: 0, scale: 0.97, y: -6 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97, y: -6 }}
+            animate={{ opacity: 1, scale: 1,    y: 0  }}
+            exit={{    opacity: 0, scale: 0.97, y: -6 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className="mt-2 bg-[#0B0B0C] border border-white/10 rounded-[24px] p-5 max-w-7xl mx-auto shadow-2xl"
+            className="mt-2 bg-[#0B0B0C] border border-white/10 rounded-[24px] p-4 max-w-7xl mx-auto shadow-2xl overflow-hidden"
           >
-            <div className="flex flex-col gap-1 mb-4">
+            <div className="flex flex-col gap-0.5 mb-3">
               {[...NAV_LINKS, { label: "Contact", href: "/contact" }].map(({ label, href }) => (
                 <Link
                   key={href}
                   to={href}
                   aria-current={isActive(href) ? "page" : undefined}
                   className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center gap-2.5 ${
-                    isActive(href) ? "text-white bg-white/8" : "text-white/70 hover:text-white hover:bg-white/5"
+                    isActive(href) ? "text-white bg-white/[0.07]" : "text-white/65 hover:text-white hover:bg-white/[0.04]"
                   }`}
                 >
                   {isActive(href) && (
@@ -220,41 +289,60 @@ const Navbar = () => {
                 </Link>
               ))}
 
+              {/* Mobile Services accordion */}
               <button
-                onClick={() => setSvcOpen(!svcOpen)}
-                aria-expanded={svcOpen}
-                className={`flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] ${
-                  isServiceActive ? "text-white bg-white/8" : "text-white/70 hover:text-white hover:bg-white/5"
+                onClick={() => setMobileSvc(v => !v)}
+                aria-expanded={mobileSvc}
+                className={`flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] w-full ${
+                  isServiceActive ? "text-white bg-white/[0.07]" : "text-white/65 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
-                Services
-                <ChevronDown className={`w-4 h-4 transition-transform ${svcOpen ? "rotate-180" : ""}`} aria-hidden="true" />
+                <span className="flex items-center gap-2.5">
+                  {isServiceActive && <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" aria-hidden="true" />}
+                  Services
+                </span>
+                <motion.span
+                  animate={{ rotate: mobileSvc ? 180 : 0 }}
+                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                  className="inline-flex"
+                >
+                  <ChevronDown className="w-4 h-4" aria-hidden="true" />
+                </motion.span>
               </button>
 
-              <AnimatePresence>
-                {svcOpen && (
+              <AnimatePresence initial={false}>
+                {mobileSvc && (
                   <motion.div
+                    key="mobile-svc"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="pl-2 overflow-hidden"
+                    exit={{    opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
                   >
-                    {SERVICES.map(({ label, href }) => {
-                      const Icon = SERVICE_ICONS[href] ?? Brain;
-                      return (
-                        <Link
-                          key={href}
-                          to={href}
-                          aria-current={location.pathname === href ? "page" : undefined}
-                          className={`flex items-center gap-2 px-4 py-3 rounded-xl text-[14px] transition-colors min-h-[44px] ${
-                            location.pathname === href ? "text-white bg-white/8" : "text-white/55 hover:text-white hover:bg-white/5"
-                          }`}
-                        >
-                          <Icon className="w-3.5 h-3.5 text-[#1ab5c7]" strokeWidth={1.8} aria-hidden="true" />
-                          {label}
-                        </Link>
-                      );
-                    })}
+                    <div className="pl-3 pb-1 flex flex-col gap-0.5">
+                      {SERVICES.map(({ label, href }) => {
+                        const Icon = SERVICE_ICONS[href] ?? Brain;
+                        const active = location.pathname === href;
+                        return (
+                          <Link
+                            key={href}
+                            to={href}
+                            aria-current={active ? "page" : undefined}
+                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] transition-colors min-h-[44px] ${
+                              active ? "text-white bg-white/[0.07]" : "text-white/55 hover:text-white hover:bg-white/[0.04]"
+                            }`}
+                          >
+                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                              active ? "bg-[#1ab5c7]" : "bg-white/[0.07]"
+                            }`} aria-hidden="true">
+                              <Icon className={`w-3.5 h-3.5 ${active ? "text-white" : "text-[#1ab5c7]"}`} strokeWidth={1.7} />
+                            </div>
+                            {label}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -262,7 +350,7 @@ const Navbar = () => {
 
             <Link
               to="/contact"
-              className="block w-full text-center bg-[#1ab5c7] text-white font-bold text-[14px] py-3.5 rounded-full min-h-[44px] flex items-center justify-center"
+              className="flex items-center justify-center w-full bg-[#1ab5c7] hover:bg-[#16a3b4] text-white font-bold text-[14px] py-3.5 rounded-2xl min-h-[44px] transition-colors"
             >
               Prendre rendez-vous →
             </Link>
