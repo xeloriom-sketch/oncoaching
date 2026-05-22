@@ -304,7 +304,7 @@ export default function Index() {
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="relative"
+            className="relative order-first lg:order-last"
           >
             <div className="relative overflow-hidden h-[320px] sm:h-[420px] lg:h-[600px]">
               <img
