@@ -99,34 +99,18 @@ const CoachingScolaire = () => {
         structuredData={[
           {
             "@context": "https://schema.org",
-            "@type": "Service",
+            "@type": "EducationalOrganization",
             "@id": "https://www.oncoaching.fr/coaching-scolaire#service",
-            name: "Coaching Scolaire & Étudiant à Mâcon",
+            name: "Coaching Scolaire Mâcon — ON Coaching",
+            description: "Coaching scolaire certifié ICF pour collégiens, lycéens et étudiants à Mâcon (Sancé, 71). Ex-enseignant SES 26 ans. Méthodes de travail, motivation, gestion du stress.",
             url: "https://www.oncoaching.fr/coaching-scolaire",
-            description: "Coaching scolaire certifié ICF à Mâcon (Sancé, 71) pour collégiens, lycéens et étudiants : méthodes de travail, motivation, gestion du stress d'examen et orientation.",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
-              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "City", name: "Mâcon" },
+              { "@type": "City", name: "Sancé" },
+              { "@type": "City", name: "Tournus" },
+              { "@type": "City", name: "Chalon-sur-Saône" },
               { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
-            ],
-            audience: { "@type": "Audience", audienceType: "Collégiens, lycéens, étudiants (11-25 ans)" },
-            serviceType: "Coaching scolaire",
-            offers: [
-              {
-                "@type": "Offer",
-                name: "Séance coaching scolaire",
-                price: "60",
-                priceCurrency: "EUR",
-                availability: "https://schema.org/InStock",
-                description: "Séance individuelle 60 min, en présentiel à Sancé (Mâcon) ou visioconférence.",
-              },
-              {
-                "@type": "Offer",
-                name: "1er rendez-vous découverte",
-                price: "0",
-                priceCurrency: "EUR",
-                description: "Consultation initiale offerte, sans engagement.",
-              },
             ],
           },
           {
@@ -135,23 +119,23 @@ const CoachingScolaire = () => {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "À quel âge peut-on commencer le coaching scolaire à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Le coaching scolaire est adapté dès le collège (11-12 ans) jusqu'aux études supérieures. Chaque accompagnement est personnalisé selon l'âge et les besoins de l'élève à Mâcon et dans toute la Saône-et-Loire." }
+                name: "Comment fonctionne le coaching scolaire à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching scolaire à Mâcon (ON Coaching, Sancé 71) aide collégiens, lycéens et étudiants à améliorer leurs méthodes de travail, gérer leur stress d'examen et retrouver la motivation. Séances en présentiel à Sancé ou en visioconférence. 1er RDV offert." }
               },
               {
                 "@type": "Question",
-                name: "Combien de séances faut-il pour voir des résultats en coaching scolaire ?",
-                acceptedAnswer: { "@type": "Answer", text: "En général, 6 à 10 séances permettent d'obtenir des changements concrets sur les méthodes de travail, la motivation et la confiance en soi." }
+                name: "Quel est le prix du coaching scolaire à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching scolaire à Mâcon coûte 60€ par séance chez ON Coaching (Sancé, 71). Des forfaits sont disponibles pour réduire le coût. Le 1er rendez-vous est offert sans engagement pour évaluer les besoins de votre enfant." }
               },
               {
                 "@type": "Question",
-                name: "Le coaching scolaire remplace-t-il le soutien scolaire traditionnel ?",
-                acceptedAnswer: { "@type": "Answer", text: "Non, le coaching scolaire est complémentaire. Il travaille sur les blocages, la motivation et l'organisation — pas sur le contenu des matières comme le soutien scolaire." }
+                name: "Le coaching scolaire est-il différent du soutien scolaire à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui. Le soutien scolaire répète les leçons ; le coaching scolaire à Mâcon travaille sur la méthode, la confiance en soi et la gestion des émotions. Coach certifié ICF et ex-enseignant SES 26 ans, Noureddine Omar comprend parfaitement les exigences du système scolaire en Saône-et-Loire." }
               },
               {
                 "@type": "Question",
-                name: "Le coaching scolaire fonctionne-t-il aussi en visioconférence ?",
-                acceptedAnswer: { "@type": "Answer", text: "Oui, les séances de coaching scolaire peuvent se tenir en présentiel à Sancé (Mâcon, 71) ou à distance en visioconférence, selon votre préférence." }
+                name: "À partir de quel âge peut-on faire du coaching scolaire à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "ON Coaching à Mâcon accompagne les élèves dès la 6e (collège), au lycée et en études supérieures. Le coaching scolaire est adapté à chaque profil et à chaque niveau scolaire à Mâcon et Sancé (71)." }
               },
             ],
           },
@@ -163,6 +147,16 @@ const CoachingScolaire = () => {
               { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
               { "@type": "ListItem", position: 3, name: "Coaching Scolaire Mâcon", item: "https://www.oncoaching.fr/coaching-scolaire" },
             ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://www.oncoaching.fr/#business",
+            name: "ON Coaching",
+            telephone: "+33663041812",
+            url: "https://www.oncoaching.fr",
+            address: { "@type": "PostalAddress", streetAddress: "14 rue des écureuils", addressLocality: "Sancé", postalCode: "71000", addressRegion: "Saône-et-Loire", addressCountry: "FR" },
+            aggregateRating: { "@type": "AggregateRating", ratingValue: "5", reviewCount: "12", bestRating: "5" },
           },
         ]}
       />

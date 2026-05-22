@@ -252,6 +252,16 @@ const About = () => {
               { "@type": "ListItem", position: 2, name: "À Propos — Noureddine Omar", item: "https://www.oncoaching.fr/about" },
             ],
           },
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://www.oncoaching.fr/#business",
+            name: "ON Coaching",
+            telephone: "+33663041812",
+            url: "https://www.oncoaching.fr",
+            address: { "@type": "PostalAddress", streetAddress: "14 rue des écureuils", addressLocality: "Sancé", postalCode: "71000", addressRegion: "Saône-et-Loire", addressCountry: "FR" },
+            aggregateRating: { "@type": "AggregateRating", ratingValue: "5", reviewCount: "12", bestRating: "5" },
+          },
         ]}
       />
 

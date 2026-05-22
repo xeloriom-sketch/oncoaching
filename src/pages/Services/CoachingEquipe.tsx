@@ -114,31 +114,17 @@ const CoachingEquipe = () => {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/coaching-equipe#service",
-            name: "Coaching d'Équipe à Mâcon — ON Coaching",
+            name: "Coaching d'Équipe Mâcon — TPE PME Saône-et-Loire",
+            description: "Coaching d'équipe certifié ICF pour TPE, PME et associations à Mâcon (Sancé, 71). Cohésion, communication, performance collective. Diagnostic offert.",
             url: "https://www.oncoaching.fr/coaching-equipe",
-            description: "Coaching collectif certifié ICF à Mâcon (Saône-et-Loire 71) pour TPE, PME et associations : cohésion d'équipe, communication interne, leadership et intelligence collective.",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
-              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "City", name: "Mâcon" },
+              { "@type": "City", name: "Sancé" },
+              { "@type": "City", name: "Chalon-sur-Saône" },
+              { "@type": "City", name: "Bourg-en-Bresse" },
               { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
               { "@type": "AdministrativeArea", name: "Bourgogne-Franche-Comté" },
-            ],
-            audience: { "@type": "Audience", audienceType: "TPE, PME, associations, collectivités territoriales en Saône-et-Loire" },
-            serviceType: "Coaching d'équipe",
-            offers: [
-              {
-                "@type": "Offer",
-                name: "Diagnostic équipe offert",
-                price: "0",
-                priceCurrency: "EUR",
-                description: "Premier diagnostic d'équipe offert, sans engagement. Mâcon et environs.",
-              },
-              {
-                "@type": "Offer",
-                name: "Coaching d'équipe sur devis",
-                availability: "https://schema.org/InStock",
-                description: "Programme sur mesure adapté à la taille et aux objectifs de l'équipe. Demi-journée, journée ou multi-séances.",
-              },
             ],
           },
           {
@@ -147,18 +133,18 @@ const CoachingEquipe = () => {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "En quoi le coaching d'équipe diffère-t-il d'une formation à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe à Mâcon travaille sur la dynamique réelle du groupe, les relations interpersonnelles et les blocages collectifs — pas sur l'acquisition de compétences techniques comme une formation classique." }
+                name: "Qu'est-ce que le coaching d'équipe à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe à Mâcon (ON Coaching, Sancé 71) accompagne les équipes professionnelles pour améliorer leur cohésion, communication et performance collective. Coach certifié ICF, Noureddine Omar intervient auprès des TPE/PME et associations de Saône-et-Loire." }
               },
               {
                 "@type": "Question",
-                name: "Combien de personnes peuvent participer à un coaching d'équipe à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Un coaching d'équipe fonctionne idéalement pour des groupes de 4 à 15 personnes. Au-delà, des formats adaptés (ateliers, workshops) peuvent être proposés pour les équipes en Saône-et-Loire." }
+                name: "Quel est le prix du coaching d'équipe à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe à Mâcon est proposé sur devis selon la taille de l'équipe et les objectifs. ON Coaching offre un diagnostic initial gratuit pour les entreprises de Mâcon, Sancé et Saône-et-Loire (71)." }
               },
               {
                 "@type": "Question",
-                name: "Le coaching d'équipe peut-il se faire en visioconférence ?",
-                acceptedAnswer: { "@type": "Answer", text: "Oui, les sessions peuvent se tenir en présentiel à Mâcon et dans toute la Saône-et-Loire (71), ou à distance en visioconférence selon les besoins de votre organisation." }
+                name: "Le coaching d'équipe à Mâcon est-il adapté aux petites entreprises ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, ON Coaching à Mâcon est spécialisé dans l'accompagnement des TPE et PME de Saône-et-Loire. Le coach certifié ICF Noureddine Omar adapte chaque programme à la réalité des petites structures locales." }
               },
             ],
           },
@@ -168,8 +154,18 @@ const CoachingEquipe = () => {
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Accueil", item: "https://www.oncoaching.fr/" },
               { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
-              { "@type": "ListItem", position: 3, name: "Coaching d'Équipe Mâcon", item: "https://www.oncoaching.fr/coaching-equipe" },
+              { "@type": "ListItem", position: 3, name: "Coaching Équipe Mâcon", item: "https://www.oncoaching.fr/coaching-equipe" },
             ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://www.oncoaching.fr/#business",
+            name: "ON Coaching",
+            telephone: "+33663041812",
+            url: "https://www.oncoaching.fr",
+            address: { "@type": "PostalAddress", streetAddress: "14 rue des écureuils", addressLocality: "Sancé", postalCode: "71000", addressRegion: "Saône-et-Loire", addressCountry: "FR" },
+            aggregateRating: { "@type": "AggregateRating", ratingValue: "5", reviewCount: "12", bestRating: "5" },
           },
         ]}
       />

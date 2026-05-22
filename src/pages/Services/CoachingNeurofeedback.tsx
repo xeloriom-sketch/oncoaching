@@ -106,30 +106,19 @@ const CoachingNeurofeedback = () => {
         structuredData={[
           {
             "@context": "https://schema.org",
-            "@type": "Service",
-            "@id": "https://www.oncoaching.fr/coaching-neurofeedback#service",
-            name: "Neurofeedback à Mâcon — ON Coaching",
+            "@type": "MedicalTherapy",
+            "@id": "https://www.oncoaching.fr/coaching-neurofeedback#therapy",
+            name: "Neurofeedback dynamique",
+            alternateName: "Neurofeedback non invasif Mâcon",
+            description: "Technique de neurofeedback dynamique non invasif à Mâcon (Sancé, 71). Améliore concentration, gestion du stress, sommeil et performances cognitives.",
             url: "https://www.oncoaching.fr/coaching-neurofeedback",
-            description: "Neurofeedback non invasif à Mâcon (Sancé, Saône-et-Loire 71) : entraînement des ondes cérébrales certifié pour réduire le stress et l'anxiété, améliorer la concentration, le sommeil et les performances cognitives.",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
-              { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },
+              { "@type": "City", name: "Mâcon" },
+              { "@type": "City", name: "Sancé" },
+              { "@type": "City", name: "Chalon-sur-Saône" },
+              { "@type": "City", name: "Bourg-en-Bresse" },
               { "@type": "AdministrativeArea", name: "Saône-et-Loire" },
-              { "@type": "AdministrativeArea", name: "Bourgogne-Franche-Comté" },
-            ],
-            audience: { "@type": "Audience", audienceType: "Enfants, adolescents, adultes, sportifs, dirigeants" },
-            serviceType: "Neurofeedback dynamique",
-            offers: [
-              {
-                "@type": "Offer",
-                name: "Séance neurofeedback",
-                price: "80",
-                priceCurrency: "EUR",
-                availability: "https://schema.org/InStock",
-                url: "https://www.oncoaching.fr/coaching-neurofeedback",
-                description: "Séance de neurofeedback 45-60 min. Non invasif, sans ordonnance. Résultats dès la 3e séance.",
-                seller: { "@id": "https://www.oncoaching.fr/#business" },
-              },
             ],
           },
           {
@@ -138,23 +127,28 @@ const CoachingNeurofeedback = () => {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "Le neurofeedback est-il dangereux ou douloureux ?",
-                acceptedAnswer: { "@type": "Answer", text: "Non, le neurofeedback est une technique entièrement non invasive et sans effet secondaire. À Mâcon, les séances consistent à lire l'activité cérébrale et à la renvoyer en temps réel sous forme de signaux sonores ou visuels. Aucune ordonnance n'est requise." }
+                name: "Qu'est-ce que le neurofeedback dynamique à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le neurofeedback dynamique est une technique non invasive qui entraîne le cerveau à s'auto-réguler. Proposé à Mâcon (Sancé, 71) par ON Coaching, il améliore la concentration, réduit le stress et optimise le sommeil sans médicaments. Chaque séance dure 45 à 60 minutes." }
               },
               {
                 "@type": "Question",
-                name: "Pour qui le neurofeedback est-il recommandé à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Le neurofeedback à Mâcon convient aux enfants, adolescents et adultes souffrant de stress, de difficultés de concentration, de troubles du sommeil, ou souhaitant améliorer leurs performances cognitives ou sportives." }
+                name: "Le neurofeedback est-il efficace pour les enfants et adolescents à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Oui, le neurofeedback est particulièrement efficace pour les enfants et adolescents présentant des difficultés de concentration, TDAH, anxiété scolaire ou troubles du sommeil. ON Coaching propose ce suivi à Mâcon et Sancé (71) pour les jeunes de 8 à 18 ans." }
               },
               {
                 "@type": "Question",
-                name: "Combien de séances de neurofeedback faut-il ?",
-                acceptedAnswer: { "@type": "Answer", text: "Un protocole standard est de 20 séances pour des résultats durables, mais des améliorations sont souvent perceptibles dès les 3 premières sessions de neurofeedback." }
+                name: "Combien coûte une séance de neurofeedback à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Une séance de neurofeedback à Mâcon (ON Coaching, Sancé 71) est proposée à 80€. Des forfaits sont disponibles. Le 1er rendez-vous de bilan est offert sans engagement." }
               },
               {
                 "@type": "Question",
-                name: "Quel est le tarif d'une séance de neurofeedback à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Une séance de neurofeedback à Mâcon (Sancé, 71) est de 80€. Le premier rendez-vous découverte est offert, sans engagement." }
+                name: "Combien de séances de neurofeedback faut-il à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "En général, 10 à 20 séances de neurofeedback suffisent pour observer des résultats durables. Le protocole est établi lors du bilan initial offert par ON Coaching à Mâcon (Sancé, Saône-et-Loire)." }
+              },
+              {
+                "@type": "Question",
+                name: "Le neurofeedback remplace-t-il le coaching à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "Non, le neurofeedback complète le coaching. ON Coaching à Mâcon propose une approche combinée : neurofeedback pour réguler le cerveau et coaching ICF certifié pour développer les ressources personnelles et professionnelles." }
               },
             ],
           },
@@ -166,6 +160,28 @@ const CoachingNeurofeedback = () => {
               { "@type": "ListItem", position: 2, name: "Services", item: "https://www.oncoaching.fr/#services" },
               { "@type": "ListItem", position: 3, name: "Neurofeedback Mâcon", item: "https://www.oncoaching.fr/coaching-neurofeedback" },
             ],
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://www.oncoaching.fr/#business",
+            name: "ON Coaching",
+            telephone: "+33663041812",
+            url: "https://www.oncoaching.fr",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: "14 rue des écureuils",
+              addressLocality: "Sancé",
+              postalCode: "71000",
+              addressRegion: "Saône-et-Loire",
+              addressCountry: "FR",
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: "5",
+              reviewCount: "12",
+              bestRating: "5",
+            },
           },
         ]}
       />
