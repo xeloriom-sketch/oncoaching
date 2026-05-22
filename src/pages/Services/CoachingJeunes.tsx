@@ -61,7 +61,7 @@ const BENEFITS = [
   },
 ];
 
-const HERO_WORDS = ["Jeunes", "&", "Jeunes", "Adultes"];
+const HERO_WORDS = ["&", "Jeunes", "Adultes"];
 
 const CoachingJeunes = () => {
   const { content, loading } = usePageContent<ServicePageContent>("coaching-jeunes");

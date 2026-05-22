@@ -24,9 +24,9 @@ define('ADMIN_USERNAME', 'admin');
 // Générer le hash avec : echo password_hash('votre_mot_de_passe', PASSWORD_BCRYPT);
 define('ADMIN_PASSWORD_HASH', '$2y$12$EMbA2owj415oi8KVtO9sDuFezEVUOFPIS6gJRbBMuKPe4YkEzF1aS');
 
-define('CONTENT_DIR', __DIR__ . '/../content/');   // /content/ à la racine
-define('IMAGES_DIR',  __DIR__ . '/../images/');    // /images/ à la racine (créé auto)
-define('IMAGES_URL',  '/images/');
+define('CONTENT_DIR', __DIR__ . '/../public/content/');   // /public/content/
+define('IMAGES_DIR',  __DIR__ . '/../public/images/');    // /public/images/ (web-accessible)
+define('IMAGES_URL',  './images/');
 define('LOG_FILE',    __DIR__ . '/logs/auth.log');
 define('MAX_LOGIN_ATTEMPTS', 5);
 define('LOCKOUT_DURATION', 900); // 15 min
