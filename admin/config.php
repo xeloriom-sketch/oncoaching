@@ -22,7 +22,7 @@ if (session_status() === PHP_SESSION_NONE) {
 define('ADMIN_USERNAME', 'admin');
 
 // Générer le hash avec : echo password_hash('votre_mot_de_passe', PASSWORD_BCRYPT);
-define('ADMIN_PASSWORD_HASH', '$2a$12$TGJSThBQJdwNYC2mXGNO8.wzCRP/Tn.7AAZTz.gkCWIjzw.IE6qFK');
+define('ADMIN_PASSWORD_HASH', '$2y$12$EMbA2owj415oi8KVtO9sDuFezEVUOFPIS6gJRbBMuKPe4YkEzF1aS');
 
 define('CONTENT_DIR', __DIR__ . '/../content/');   // /content/ à la racine
 define('IMAGES_DIR',  __DIR__ . '/../images/');    // /images/ à la racine (créé auto)
