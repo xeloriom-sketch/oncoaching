@@ -28,10 +28,12 @@ interface LogoProps {
 /** Logo complet = marque + wordmark */
 const Logo = ({ showText = true, textColor = "text-white", size = 34 }: LogoProps) => (
   <div className="flex items-center gap-2 whitespace-nowrap">
-    <LogoMark size={size} animate />
+    <div className="bg-white rounded-[8px] p-[3px] flex-shrink-0">
+      <LogoMark size={size - 6} animate />
+    </div>
     {showText && (
-      <span className={`font-bold tracking-tight text-[15px] uppercase ${textColor}`}>
-        ON Coaching
+      <span className="font-bold tracking-tight text-[15px]">
+        <span className="text-[#1ab5c7]">ON</span><span className={textColor}>Coaching</span>
       </span>
     )}
   </div>

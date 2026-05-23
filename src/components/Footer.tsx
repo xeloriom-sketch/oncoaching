@@ -351,8 +351,12 @@ const Footer = () => {
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
               <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2 mb-4 group whitespace-nowrap">
-                <LogoMark size={28} />
-                <span className="font-bold text-[14px] uppercase tracking-tight group-hover:text-[#1ab5c7] transition-colors">ON Coaching</span>
+                <div className="bg-white rounded-[7px] p-[3px] flex-shrink-0">
+                  <LogoMark size={24} />
+                </div>
+                <span className="font-bold text-[14px] tracking-tight">
+                  <span className="text-[#1ab5c7]">ON</span><span className="group-hover:text-[#1ab5c7] transition-colors text-white">Coaching</span>
+                </span>
               </Link>
               <p className="text-white/35 text-[13px] leading-relaxed mb-5">
                 Coaching certifié. Mâcon, France. Pour les étudiants, les jeunes adultes et les équipes.
