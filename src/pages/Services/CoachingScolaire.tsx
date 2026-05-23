@@ -93,7 +93,7 @@ const CoachingScolaire = () => {
     <Layout>
       <SEO
         title="Coaching Scolaire à Mâcon (71) — Collégiens, Lycéens, Étudiants | ON Coaching"
-        description="Coach scolaire certifié ICF à Mâcon, Sancé (71). Ex-enseignant SES 26 ans. Méthodes de travail, motivation, gestion du stress d'examen. 1er RDV offert."
+        description="Coach scolaire certifié à Mâcon, Sancé (71). Ex-enseignant SES 26 ans. Méthodes de travail, motivation, gestion du stress d'examen. 1er RDV offert."
         canonical="/coaching-scolaire"
         keywords="coaching scolaire mâcon, coach scolaire mâcon 71, soutien scolaire sancé, coach lycéen mâcon, coach étudiant bourgogne, méthode de travail, motivation scolaire, gestion stress examen, orientation scolaire mâcon"
         structuredData={[
@@ -102,7 +102,7 @@ const CoachingScolaire = () => {
             "@type": "EducationalOrganization",
             "@id": "https://www.oncoaching.fr/coaching-scolaire#service",
             name: "Coaching Scolaire Mâcon — ON Coaching",
-            description: "Coaching scolaire certifié ICF pour collégiens, lycéens et étudiants à Mâcon (Sancé, 71). Ex-enseignant SES 26 ans. Méthodes de travail, motivation, gestion du stress.",
+            description: "Coaching scolaire certifié pour collégiens, lycéens et étudiants à Mâcon (Sancé, 71). Ex-enseignant SES 26 ans. Méthodes de travail, motivation, gestion du stress.",
             url: "https://www.oncoaching.fr/coaching-scolaire",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
@@ -130,7 +130,7 @@ const CoachingScolaire = () => {
               {
                 "@type": "Question",
                 name: "Le coaching scolaire est-il différent du soutien scolaire à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Oui. Le soutien scolaire répète les leçons ; le coaching scolaire à Mâcon travaille sur la méthode, la confiance en soi et la gestion des émotions. Coach certifié ICF et ex-enseignant SES 26 ans, Noureddine Omar comprend parfaitement les exigences du système scolaire en Saône-et-Loire." }
+                acceptedAnswer: { "@type": "Answer", text: "Oui. Le soutien scolaire répète les leçons ; le coaching scolaire à Mâcon travaille sur la méthode, la confiance en soi et la gestion des émotions. Coach certifié et ex-enseignant SES 26 ans, Noureddine Omar comprend parfaitement les exigences du système scolaire en Saône-et-Loire." }
               },
               {
                 "@type": "Question",
@@ -363,7 +363,7 @@ const CoachingScolaire = () => {
                 <div className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.18)]">
                   <img
                     src={COACH_PHOTO}
-                    alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
+                    alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
                     className="w-full h-full object-cover object-top"
                     loading="lazy"
                     decoding="async"
@@ -372,7 +372,7 @@ const CoachingScolaire = () => {
                 </div>
                 <div className="absolute bottom-5 left-5 flex flex-col gap-1">
                   <span className="bg-[#1ab5c7] text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit">
-                    Coach certifié ICF
+                    Coach certifié
                   </span>
                   <span className="bg-white/90 backdrop-blur-sm text-[#0B0B0C] text-[11px] font-semibold px-3 py-1 rounded-full w-fit">
                     26 ans enseignant SES
@@ -391,13 +391,13 @@ const CoachingScolaire = () => {
                 </div>
 
                 <p className="text-gray-500 text-[16px] leading-relaxed">
-                  Enseignant en SES pendant 26 ans, j'ai accompagné des centaines de jeunes dans leurs parcours scolaires. Formé comme coach certifié ICF chez Prisme Évolution, j'associe pédagogie de terrain et outils de coaching pour agir en profondeur sur la motivation, la méthode et la confiance.
+                  Enseignant en SES pendant 26 ans, j'ai accompagné des centaines de jeunes dans leurs parcours scolaires. Formé comme coach certifié chez Prisme Évolution, j'associe pédagogie de terrain et outils de coaching pour agir en profondeur sur la motivation, la méthode et la confiance.
                 </p>
 
                 <ul className="flex flex-col gap-3">
                   {[
                     { icon: GraduationCap, label: "26 ans d'expérience enseignant SES" },
-                    { icon: Users,         label: "Coach certifié ICF — Prisme Évolution" },
+                    { icon: Users,         label: "Coach certifié — Prisme Évolution" },
                     { icon: Brain,         label: "Formé en neurofeedback" },
                     { icon: Lightbulb,     label: "Double expertise pédagogique & humaine" },
                   ].map(({ icon: Icon, label }, i) => (
@@ -455,7 +455,7 @@ const CoachingScolaire = () => {
                     <span className="text-white/70 text-[18px] font-medium">/ séance</span>
                   </div>
                   <p className="text-white/80 text-[16px] leading-relaxed">
-                    Séance individuelle de 60 min, en présentiel à Sancé (Mâcon), en visio ou à domicile.
+                    Séance individuelle de 60 min — à mon cabinet, chez vous ou à distance.
                   </p>
                 </div>
 

@@ -3,7 +3,7 @@ export const SITE = {
   url:         "https://www.oncoaching.fr",
   locale:      "fr_FR",
   twitter:     "@oncoaching_",
-  description: "Coaching certifié ICF à Mâcon. Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe. Premier rendez-vous offert, sans engagement.",
+  description: "Coaching certifié à Mâcon. Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe. Premier rendez-vous offert, sans engagement.",
   phone:       "+33663041812",
   email:       "contact@oncoaching.fr",
   address:     "14 rue des écureuils, 71000 Sancé",

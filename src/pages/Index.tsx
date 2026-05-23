@@ -141,27 +141,27 @@ export default function Index() {
   return (
     <Layout>
       <SEO
-        title="ON Coaching — Coach Certifié ICF à Mâcon, Sancé (71) | 1er RDV Offert"
-        description="Coach certifié ICF à Mâcon, Sancé (71, Saône-et-Loire). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback, équipe. 1er rendez-vous offert."
+        title="ON Coaching — Coach Certifié à Mâcon, Sancé (71) | 1er RDV Offert"
+        description="Coach certifié à Mâcon, Sancé (71, Saône-et-Loire). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback, équipe. 1er rendez-vous offert."
         canonical="/"
-        keywords="coaching mâcon, coach certifié ICF mâcon, coaching scolaire mâcon, neurofeedback mâcon, coach jeunes adultes, coaching équipe saône-et-loire, sancé 71, bourgogne, Noureddine Omar"
+        keywords="coaching mâcon, coach certifié mâcon, coaching scolaire mâcon, neurofeedback mâcon, coach jeunes adultes, coaching équipe saône-et-loire, sancé 71, bourgogne, Noureddine Omar"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "WebPage",
             "@id": "https://www.oncoaching.fr/#webpage",
-            name: "ON Coaching — Coach certifié ICF à Mâcon (71)",
+            name: "ON Coaching — Coach certifié à Mâcon (71)",
             url: "https://www.oncoaching.fr/",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
             about: { "@id": "https://www.oncoaching.fr/#business" },
-            description: "Coach certifié ICF à Mâcon, Sancé (71). Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe. 1er rendez-vous offert.",
+            description: "Coach certifié à Mâcon, Sancé (71). Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe. 1er rendez-vous offert.",
             primaryImageOfPage: { "@type": "ImageObject", url: "https://www.oncoaching.fr/patron.webp" },
           },
           {
             "@context": "https://schema.org",
             "@type": "ItemList",
             name: "Services de coaching — ON Coaching Mâcon",
-            description: "Tous les services de coaching certifié ICF proposés par ON Coaching à Mâcon (Sancé, 71)",
+            description: "Tous les services de coaching certifié proposés par ON Coaching à Mâcon (Sancé, 71)",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Coaching scolaire & étudiant à Mâcon", url: "https://www.oncoaching.fr/coaching-scolaire" },
               { "@type": "ListItem", position: 2, name: "Coaching jeunes & jeunes adultes à Mâcon", url: "https://www.oncoaching.fr/coaching-jeunes" },
@@ -198,7 +198,7 @@ export default function Index() {
                   className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse"
                   aria-hidden="true"
                 />
-                Coaching certifié ICF · Mâcon
+                Coaching certifié · Mâcon
               </span>
             </motion.div>
 
@@ -321,7 +321,7 @@ export default function Index() {
             <div className="relative overflow-hidden h-[320px] sm:h-[420px] lg:h-[600px]">
               <img
                 src={COACH_IMG}
-                alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
+                alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
                 className="w-full h-full object-cover object-top"
                 fetchpriority="high"
                 loading="eager"
@@ -335,7 +335,7 @@ export default function Index() {
                 aria-hidden="true"
               />
 
-              {/* Bulle "Coach certifié ICF" */}
+              {/* Bulle "Coach certifié" */}
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -343,7 +343,7 @@ export default function Index() {
                 whileHover={{ y: -3 }}
                 className="absolute bottom-14 right-4 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-lg"
               >
-                <p className="text-white text-[13px] font-semibold">Coach certifié ICF</p>
+                <p className="text-white text-[13px] font-semibold">Coach certifié</p>
                 <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
               </motion.div>
 
@@ -496,7 +496,7 @@ export default function Index() {
             <div className="h-[340px] sm:h-[420px] rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
               <img
                 src={COACH_IMG}
-                alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
+                alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
                 className="w-full h-full object-cover object-top"
                 loading="lazy"
                 decoding="async"

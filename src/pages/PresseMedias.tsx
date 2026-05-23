@@ -12,20 +12,20 @@ export default function PresseMedias() {
   return (
       <Layout>
         <SEO
-            title="Presse & Médias — Noureddine Omar, Coach ICF à Mâcon (71) | ON Coaching"
-            description="Revue de presse, podcasts et interviews de Noureddine Omar, coach certifié ICF à Mâcon (71). Découvrez les médias et références publiques d'ON Coaching."
+            title="Presse & Médias — Noureddine Omar, Coach certifié à Mâcon (71) | ON Coaching"
+            description="Revue de presse, podcasts et interviews de Noureddine Omar, coach certifié à Mâcon (71). Découvrez les médias et références publiques d'ON Coaching."
             canonical="/presse-medias"
-            keywords="Noureddine Omar presse, ON Coaching médias, coach mâcon médias, interview coach ICF, podcast coaching bourgogne, JSL mâcon coaching"
+            keywords="Noureddine Omar presse, ON Coaching médias, coach mâcon médias, interview coach certifié, podcast coaching bourgogne, JSL mâcon coaching"
             structuredData={[
               {
                 "@context": "https://schema.org",
                 "@type": "WebPage",
                 "@id": "https://www.oncoaching.fr/presse-medias#webpage",
-                name: "Presse & Médias — Noureddine Omar, Coach ICF Mâcon",
+                name: "Presse & Médias — Noureddine Omar, Coach certifié Mâcon",
                 url: "https://www.oncoaching.fr/presse-medias",
                 isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
                 about: { "@id": "https://www.oncoaching.fr/#coach" },
-                description: "Revue de presse, podcasts et références médiatiques de Noureddine Omar, coach certifié ICF à Mâcon (Saône-et-Loire, 71).",
+                description: "Revue de presse, podcasts et références médiatiques de Noureddine Omar, coach certifié à Mâcon (Saône-et-Loire, 71).",
               },
               {
                 "@context": "https://schema.org",

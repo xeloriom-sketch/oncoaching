@@ -6,17 +6,12 @@ interface LogoMarkProps {
   className?: string;
 }
 
-/** Logo réel du client — favicon_dark.png (fond noir, logo blanc) */
-export const LogoMark = ({ size = 36, animate: doAnimate = false, className = "", color = "white" }: LogoMarkProps & { color?: "white" | "black" }) => (
+/** Logo réel du client — faviconNoText.webp (couleurs d'origine : or + bleu marine) */
+export const LogoMark = ({ size = 36, animate: doAnimate = false, className = "" }: LogoMarkProps) => (
   <motion.img
-    src={`${import.meta.env.BASE_URL}favicon_dark.png`}
+    src={`${import.meta.env.BASE_URL}faviconNoText.webp`}
     alt="ON Coaching — Logo"
-    style={{
-      width: size,
-      height: size,
-      borderRadius: 6,
-      filter: color === "black" ? "invert(1)" : "none",
-    }}
+    style={{ width: size, height: size }}
     className={`object-contain flex-shrink-0 ${className}`}
     {...(doAnimate
       ? { whileHover: { scale: 1.1, rotate: 5 }, whileTap: { scale: 0.95 } }
@@ -32,11 +27,11 @@ interface LogoProps {
 
 /** Logo complet = marque + wordmark */
 const Logo = ({ showText = true, textColor = "text-white", size = 34 }: LogoProps) => (
-  <div className="flex items-center gap-2.5">
+  <div className="flex items-center gap-2 whitespace-nowrap">
     <LogoMark size={size} animate />
     {showText && (
       <span className={`font-bold tracking-tight text-[15px] uppercase ${textColor}`}>
-        Coaching
+        ON Coaching
       </span>
     )}
   </div>

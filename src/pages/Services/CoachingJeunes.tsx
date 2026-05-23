@@ -90,16 +90,16 @@ const CoachingJeunes = () => {
     <Layout>
       <SEO
         title="Coaching Jeunes & Jeunes Adultes à Mâcon (71) — Orientation, Confiance, Projet de Vie"
-        description="Coaching pour les 15-30 ans à Mâcon (Sancé, 71). Orientation scolaire & pro, confiance en soi, projet de vie. Coach ICF certifié, 26 ans d'expérience. 1er RDV offert."
+        description="Coaching pour les 15-30 ans à Mâcon (Sancé, 71). Orientation scolaire & pro, confiance en soi, projet de vie. Coach certifié, 26 ans d'expérience. 1er RDV offert."
         canonical="/coaching-jeunes"
-        keywords="coaching jeunes mâcon, coach jeunes adultes mâcon 71, orientation scolaire sancé, projet de vie bourgogne, confiance en soi mâcon, insertion professionnelle saône-et-loire, coach ICF jeunes"
+        keywords="coaching jeunes mâcon, coach jeunes adultes mâcon 71, orientation scolaire sancé, projet de vie bourgogne, confiance en soi mâcon, insertion professionnelle saône-et-loire, coach certifié jeunes"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/coaching-jeunes#service",
             name: "Coaching Jeunes Adultes Mâcon — ON Coaching",
-            description: "Coaching pour les 15-30 ans à Mâcon (Sancé, 71). Orientation scolaire et professionnelle, confiance en soi, projet de vie. Coach ICF certifié.",
+            description: "Coaching pour les 15-30 ans à Mâcon (Sancé, 71). Orientation scolaire et professionnelle, confiance en soi, projet de vie. Coach certifié.",
             url: "https://www.oncoaching.fr/coaching-jeunes",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
@@ -122,7 +122,7 @@ const CoachingJeunes = () => {
               {
                 "@type": "Question",
                 name: "Comment le coaching aide-t-il les jeunes adultes à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Le coaching pour jeunes adultes à Mâcon (ON Coaching, Sancé 71) clarifie les objectifs de vie, développe la confiance en soi et aide à surmonter les blocages. Coach certifié ICF et ex-enseignant 26 ans, Noureddine Omar connaît parfaitement les défis des jeunes en Bourgogne." }
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching pour jeunes adultes à Mâcon (ON Coaching, Sancé 71) clarifie les objectifs de vie, développe la confiance en soi et aide à surmonter les blocages. Coach certifié et ex-enseignant 26 ans, Noureddine Omar connaît parfaitement les défis des jeunes en Bourgogne." }
               },
               {
                 "@type": "Question",
@@ -380,7 +380,7 @@ const CoachingJeunes = () => {
               >
                 <img
                   src={COACH_PHOTO}
-                  alt="Noureddine Omar — Coach certifié ICF, ON Coaching Mâcon"
+                  alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
                   className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                   decoding="async"
@@ -388,7 +388,7 @@ const CoachingJeunes = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/60 via-transparent to-transparent" />
                 <div className="absolute bottom-5 left-5 flex gap-2 flex-wrap">
                   <span className="bg-[#1ab5c7] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full">
-                    Coach certifié ICF
+                    Coach certifié
                   </span>
                   <span className="bg-white/15 text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
                     26 ans d'expérience
@@ -413,7 +413,7 @@ const CoachingJeunes = () => {
                 <ul className="space-y-3">
                   {[
                     { icon: GraduationCap, label: "26 ans d'expérience auprès des jeunes" },
-                    { icon: Users,         label: "Coach certifié ICF — Prisme Évolution" },
+                    { icon: Users,         label: "Coach certifié — Prisme Évolution" },
                     { icon: Target,        label: "Spécialisé orientation & projet de vie" },
                     { icon: Smile,         label: "Posture bienveillante et sans jugement" },
                   ].map(({ icon: Icon, label }, i) => (
@@ -471,7 +471,7 @@ const CoachingJeunes = () => {
                 <ul className="space-y-3">
                   {[
                     "Bilan de départ offert — sans engagement",
-                    "Séances en présentiel, visio ou domicile",
+                    "À mon cabinet, chez vous ou à distance",
                     "Outils personnalisés selon ton profil",
                     "Accompagnement sur mesure, à ton rythme",
                   ].map((item, i) => (

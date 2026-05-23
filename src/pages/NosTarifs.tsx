@@ -95,7 +95,7 @@ const NosTarifs = () => {
         title="Tarifs Coaching Mâcon (71) — Prix Séances & Forfaits | ON Coaching"
         description="Prix clairs du coaching à Mâcon (71) : séance individuelle 60€, neurofeedback 80€, équipe sur devis. Forfaits disponibles. 1er rendez-vous offert sans engagement."
         canonical="/nos-tarifs"
-        keywords="tarif coaching mâcon, prix séance coaching mâcon, forfait coaching scolaire sancé, neurofeedback tarif 71, coaching entreprise prix saône-et-loire, coach ICF tarif"
+        keywords="tarif coaching mâcon, prix séance coaching mâcon, forfait coaching scolaire sancé, neurofeedback tarif 71, coaching entreprise prix saône-et-loire, coach certifié tarif"
         structuredData={[
           {
             "@context": "https://schema.org",
@@ -105,13 +105,13 @@ const NosTarifs = () => {
             url: "https://www.oncoaching.fr/nos-tarifs",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
             about: { "@id": "https://www.oncoaching.fr/#business" },
-            description: "Tarifs transparents du coaching certifié ICF à Mâcon (Sancé, 71) : coaching individuel, neurofeedback, coaching d'équipe.",
+            description: "Tarifs transparents du coaching certifié à Mâcon (Sancé, 71) : coaching individuel, neurofeedback, coaching d'équipe.",
           },
           {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/nos-tarifs#service-catalog",
-            name: "Coaching professionnel certifié ICF — ON Coaching Mâcon",
+            name: "Coaching professionnel certifié — ON Coaching Mâcon",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
               { "@type": "City", name: "Mâcon", sameAs: "https://www.wikidata.org/wiki/Q178982" },

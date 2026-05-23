@@ -287,10 +287,10 @@ const Contact = () => {
   return (
     <Layout>
       <SEO
-        title="Contact & Rendez-vous — Coach ICF à Mâcon (71) | 1er RDV Gratuit"
-        description="Contactez ON Coaching à Mâcon, Sancé (71). 1re consultation gratuite, réponse sous 24h. Présentiel ou visio. Coach certifié ICF. Tél : 06 63 04 18 12."
+        title="Contact & Rendez-vous — Coach certifié à Mâcon (71) | 1er RDV Gratuit"
+        description="Contactez ON Coaching à Mâcon, Sancé (71). 1re consultation gratuite, réponse sous 24h. Présentiel ou visio. Coach certifié. Tél : 06 63 04 18 12."
         canonical="/contact"
-        keywords="contact coach mâcon, prendre rendez-vous coaching mâcon, consultation coaching offerte sancé, coach sancé téléphone, coaching visio mâcon, coach ICF saône-et-loire"
+        keywords="contact coach mâcon, prendre rendez-vous coaching mâcon, consultation coaching offerte sancé, coach sancé téléphone, coaching visio mâcon, coach certifié saône-et-loire"
         structuredData={[
           {
             "@context": "https://schema.org",
@@ -300,7 +300,7 @@ const Contact = () => {
             url: "https://www.oncoaching.fr/contact",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
             about: { "@id": "https://www.oncoaching.fr/#business" },
-            description: "Contactez ON Coaching à Mâcon (Sancé, 71). 1er rendez-vous gratuit, réponse sous 24h. Coach certifié ICF Noureddine Omar.",
+            description: "Contactez ON Coaching à Mâcon (Sancé, 71). 1er rendez-vous gratuit, réponse sous 24h. Coach certifié Noureddine Omar.",
           },
           {
             "@context": "https://schema.org",

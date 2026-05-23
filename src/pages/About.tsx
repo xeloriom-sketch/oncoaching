@@ -52,7 +52,7 @@ const TIMELINE_STEPS = [
     icon: Sparkles,
     title: "Formation coaching",
     period: "Prisme Évolution",
-    text: "Certification ICF obtenue auprès de Prisme Évolution, une des formations les plus exigeantes du secteur, ancrée dans les neurosciences et l'approche systémique.",
+    text: "Certification coaching obtenue auprès de Prisme Évolution, une des formations les plus exigeantes du secteur, ancrée dans les neurosciences et l'approche systémique.",
   },
   {
     num: "03",
@@ -73,7 +73,7 @@ const TIMELINE_STEPS = [
 const STATS = [
   { value: "26", label: "ans d'exp.", suffix: "" },
   { value: "100", label: "accompagnements", suffix: "+" },
-  { value: "ICF", label: "Certification", suffix: "" },
+  { value: "Certifié", label: "Prisme Évolution", suffix: "" },
   { value: "Mâcon", label: "& à distance", suffix: "" },
 ];
 
@@ -181,20 +181,20 @@ const About = () => {
   return (
     <Layout>
       <SEO
-        title="À Propos — Noureddine Omar, Coach ICF Certifié à Mâcon (71) | ON Coaching"
-        description="Noureddine Omar, coach certifié ICF par Prisme Évolution. Ex-enseignant SES 26 ans. Coaching à Sancé (Mâcon, Saône-et-Loire 71) et à distance. Prenez RDV."
+        title="À Propos — Noureddine Omar, Coach certifié Certifié à Mâcon (71) | ON Coaching"
+        description="Noureddine Omar, coach certifié par Prisme Évolution. Ex-enseignant SES 26 ans. Coaching à Sancé (Mâcon, Saône-et-Loire 71) et à distance. Prenez RDV."
         canonical="/about"
-        keywords="Noureddine Omar coach, coach certifié ICF mâcon, Prisme Évolution, coach scolaire mâcon, coaching professionnel saône-et-loire, coach de vie bourgogne, neurofeedback mâcon"
+        keywords="Noureddine Omar coach, coach certifié mâcon, Prisme Évolution, coach scolaire mâcon, coaching professionnel saône-et-loire, coach de vie bourgogne, neurofeedback mâcon"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "AboutPage",
             "@id": "https://www.oncoaching.fr/about#webpage",
-            name: "À Propos — Noureddine Omar, Coach ICF à Mâcon",
+            name: "À Propos — Noureddine Omar, Coach certifié à Mâcon",
             url: "https://www.oncoaching.fr/about",
             isPartOf: { "@id": "https://www.oncoaching.fr/#website" },
             about: { "@id": "https://www.oncoaching.fr/#coach" },
-            description: "Parcours et valeurs de Noureddine Omar, coach certifié ICF à Mâcon, Sancé (71). 26 ans d'expérience enseignant SES, formé par Prisme Évolution.",
+            description: "Parcours et valeurs de Noureddine Omar, coach certifié à Mâcon, Sancé (71). 26 ans d'expérience enseignant SES, formé par Prisme Évolution.",
           },
           {
             "@context": "https://schema.org",
@@ -203,8 +203,8 @@ const About = () => {
             name: "Noureddine Omar",
             givenName: "Noureddine",
             familyName: "Omar",
-            jobTitle: "Coach certifié ICF",
-            description: "Coach certifié ICF formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain à Mâcon (Sancé, Saône-et-Loire 71).",
+            jobTitle: "Coach certifié",
+            description: "Coach certifié formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain à Mâcon (Sancé, Saône-et-Loire 71).",
             url: "https://www.oncoaching.fr/about",
             image: "https://www.oncoaching.fr/patron.webp",
             sameAs: [
@@ -215,7 +215,7 @@ const About = () => {
             ],
             worksFor: { "@id": "https://www.oncoaching.fr/#business" },
             knowsAbout: [
-              "Coaching professionnel certifié ICF",
+              "Coaching professionnel certifié",
               "Neurofeedback dynamique",
               "Coaching scolaire",
               "Coaching jeunes adultes",
@@ -225,9 +225,9 @@ const About = () => {
             ],
             hasCredential: {
               "@type": "EducationalOccupationalCredential",
-              name: "Certification ICF — Coach Professionnel",
+              name: "Certification coaching — Coach Professionnel",
               credentialCategory: "certification",
-              recognizedBy: { "@type": "Organization", name: "International Coaching Federation (ICF)", url: "https://coachingfederation.org" },
+              recognizedBy: { "@type": "Organization", name: "Prisme Évolution", url: "https://www.prisme-evolution.fr" },
               educationalLevel: "Professional certification",
             },
             address: {
@@ -313,7 +313,7 @@ const About = () => {
                     {...pulseDot}
                     aria-hidden="true"
                   />
-                  <span className="text-[12px] font-bold text-white tracking-wide">ICF Certifié</span>
+                  <span className="text-[12px] font-bold text-white tracking-wide">Certifié</span>
                 </motion.div>
                 <motion.div
                   className="flex items-center gap-2 bg-[#F3F4F6] rounded-full px-5 py-2.5"
@@ -342,7 +342,7 @@ const About = () => {
               <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] md:max-h-[560px]">
                 <img
                   src={COACH_IMG}
-                  alt="Coach ON Coaching — coach certifié ICF à Mâcon"
+                  alt="Coach ON Coaching — coach certifié à Mâcon"
                   className="w-full h-full object-cover object-top"
                   loading="eager"
                   decoding="async"
@@ -354,7 +354,7 @@ const About = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9, type: "spring", damping: 20, stiffness: 200 }}
                 >
-                  <p className="text-[10px] font-mono tracking-widest uppercase text-black/50 mb-0.5" aria-hidden="true">Certifié ICF</p>
+                  <p className="text-[10px] font-mono tracking-widest uppercase text-black/50 mb-0.5" aria-hidden="true">Certifié</p>
                   <p className="text-[13px] font-bold text-[#0B0B0C] leading-tight">Prisme Évolution</p>
                 </motion.div>
 

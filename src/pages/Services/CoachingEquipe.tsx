@@ -106,16 +106,16 @@ const CoachingEquipe = () => {
     <Layout>
       <SEO
         title="Coaching d'Équipe à Mâcon (71) — Cohésion, Performance & Intelligence Collective"
-        description="Coaching d'équipe certifié ICF à Mâcon, Saône-et-Loire (71). Cohésion, communication, leadership pour TPE/PME et associations. 26 ans d'expérience. Diagnostic offert."
+        description="Coaching d'équipe certifié à Mâcon, Saône-et-Loire (71). Cohésion, communication, leadership pour TPE/PME et associations. 26 ans d'expérience. Diagnostic offert."
         canonical="/coaching-equipe"
-        keywords="coaching équipe mâcon, coaching entreprise mâcon 71, team building saône-et-loire, cohésion équipe bourgogne, coach PME mâcon, intelligence collective, management bienveillant, coaching d'équipe certifié ICF"
+        keywords="coaching équipe mâcon, coaching entreprise mâcon 71, team building saône-et-loire, cohésion équipe bourgogne, coach PME mâcon, intelligence collective, management bienveillant, coaching d'équipe certifié"
         structuredData={[
           {
             "@context": "https://schema.org",
             "@type": "Service",
             "@id": "https://www.oncoaching.fr/coaching-equipe#service",
             name: "Coaching d'Équipe Mâcon — TPE PME Saône-et-Loire",
-            description: "Coaching d'équipe certifié ICF pour TPE, PME et associations à Mâcon (Sancé, 71). Cohésion, communication, performance collective. Diagnostic offert.",
+            description: "Coaching d'équipe certifié pour TPE, PME et associations à Mâcon (Sancé, 71). Cohésion, communication, performance collective. Diagnostic offert.",
             url: "https://www.oncoaching.fr/coaching-equipe",
             provider: { "@id": "https://www.oncoaching.fr/#business" },
             areaServed: [
@@ -134,7 +134,7 @@ const CoachingEquipe = () => {
               {
                 "@type": "Question",
                 name: "Qu'est-ce que le coaching d'équipe à Mâcon ?",
-                acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe à Mâcon (ON Coaching, Sancé 71) accompagne les équipes professionnelles pour améliorer leur cohésion, communication et performance collective. Coach certifié ICF, Noureddine Omar intervient auprès des TPE/PME et associations de Saône-et-Loire." }
+                acceptedAnswer: { "@type": "Answer", text: "Le coaching d'équipe à Mâcon (ON Coaching, Sancé 71) accompagne les équipes professionnelles pour améliorer leur cohésion, communication et performance collective. Coach certifié, Noureddine Omar intervient auprès des TPE/PME et associations de Saône-et-Loire." }
               },
               {
                 "@type": "Question",
@@ -144,7 +144,7 @@ const CoachingEquipe = () => {
               {
                 "@type": "Question",
                 name: "Le coaching d'équipe à Mâcon est-il adapté aux petites entreprises ?",
-                acceptedAnswer: { "@type": "Answer", text: "Oui, ON Coaching à Mâcon est spécialisé dans l'accompagnement des TPE et PME de Saône-et-Loire. Le coach certifié ICF Noureddine Omar adapte chaque programme à la réalité des petites structures locales." }
+                acceptedAnswer: { "@type": "Answer", text: "Oui, ON Coaching à Mâcon est spécialisé dans l'accompagnement des TPE et PME de Saône-et-Loire. Le coach certifié Noureddine Omar adapte chaque programme à la réalité des petites structures locales." }
               },
             ],
           },
@@ -389,14 +389,14 @@ const CoachingEquipe = () => {
               >
                 <img
                   src={COACH_PHOTO}
-                  alt="Noureddine Omar — Coach certifié ICF, spécialiste coaching d'équipe — ON Coaching Mâcon"
+                  alt="Noureddine Omar — Coach certifié, spécialiste coaching d'équipe — ON Coaching Mâcon"
                   className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                   decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/60 via-transparent to-transparent" />
                 <div className="absolute bottom-5 left-5 flex flex-wrap gap-2">
-                  <span className="bg-[#1ab5c7] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full">Coach certifié ICF</span>
+                  <span className="bg-[#1ab5c7] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full">Coach certifié</span>
                   <span className="bg-white/10 text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">26 ans d'exp.</span>
                 </div>
               </motion.div>
@@ -416,13 +416,13 @@ const CoachingEquipe = () => {
                 <p className="text-gray-500 text-[15px] leading-relaxed">
                   Fort de 26 ans d'enseignement en sciences économiques et sociales, j'ai développé
                   une expertise unique sur les dynamiques collectives et les organisations humaines.
-                  Coach certifié ICF spécialisé en coaching d'équipe, j'allie analyse sociologique et
+                  Coach certifié spécialisé en coaching d'équipe, j'allie analyse sociologique et
                   outils de coaching pour transformer vos équipes de l'intérieur.
                 </p>
                 <ul className="space-y-3">
                   {[
                     { icon: GraduationCap, label: "26 ans d'enseignement SES — dynamiques sociales et organisationnelles" },
-                    { icon: Users,         label: "Coach certifié ICF — spécialiste coaching d'équipe en entreprise" },
+                    { icon: Users,         label: "Coach certifié — spécialiste coaching d'équipe en entreprise" },
                     { icon: Brain,         label: "Double expertise : pédagogie & intelligence collective" },
                     { icon: Lightbulb,     label: "Méthodes expérientielles et facilitation active" },
                   ].map(({ icon: Icon, label }, i) => (
@@ -485,7 +485,7 @@ const CoachingEquipe = () => {
                     "Demi-journée d'intervention possible",
                     "Journée complète en immersion",
                     "Programme multi-séances sur mesure",
-                    "Présentiel ou visioconférence",
+                    "À mon cabinet, chez vous ou à distance",
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-white text-[15px]">
                       <Check className="w-4 h-4 text-white/70 flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />

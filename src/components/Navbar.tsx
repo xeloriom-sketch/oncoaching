@@ -94,10 +94,10 @@ const Navbar = () => {
         }`}
       >
         {/* Logo */}
-        <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2.5 flex-shrink-0 group">
-          <LogoMark size={30} animate color="white" />
+        <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2 flex-shrink-0 group whitespace-nowrap">
+          <LogoMark size={30} animate />
           <span className="font-bold tracking-tight text-[15px] uppercase group-hover:text-[#1ab5c7] transition-colors">
-            Coaching
+            ON Coaching
           </span>
         </Link>
 
