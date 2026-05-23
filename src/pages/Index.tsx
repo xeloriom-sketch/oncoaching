@@ -49,9 +49,9 @@ const SERVICES = [
     key: "neurofeedback",
     Icon: Brain,
     title: "Coaching & Neurofeedback",
-    desc: "Amélioration des capacités cognitives et gestion du stress grâce au neurofeedback.",
+    desc: "Entraînement cérébral NeurOptimal® : réduction du stress, concentration, sommeil, performances cognitives. Non invasif, dès 6 à 10 séances.",
     href: ROUTES.neurofeedback,
-    tag: "Non invasif · Scientifique",
+    tag: "NeurOptimal® · Non invasif",
   },
   {
     key: "equipe",
@@ -480,6 +480,72 @@ export default function Index() {
         </div>
       </section>
 
+      {/* ── 03b. NEUROFEEDBACK SPOTLIGHT ─────────────────────────────── */}
+      <section className="py-16 bg-[#0B0B0C]" aria-label="Neurofeedback NeurOptimal®">
+        <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+          >
+            <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
+              <p className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                Technologie · Zengar Institute
+              </p>
+              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight">
+                Neurofeedback NeurOptimal®
+              </h2>
+              <p className="text-white/65 text-[16px] leading-relaxed max-w-lg">
+                Une technologie d'entraînement cérébral non invasive qui permet au système nerveux de développer flexibilité et résilience. Dès 6 à 10 séances, les clients rapportent un sommeil plus réparateur, une clarté mentale accrue, un calme intérieur et des performances renforcées.
+              </p>
+              <ul className="flex flex-col gap-2">
+                {[
+                  "Stress, anxiété, burn-out",
+                  "Concentration, mémoire, TDA/H",
+                  "Sommeil, fatigue chronique",
+                  "Performance cognitive et sportive",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2.5 text-white/60 text-[14px]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to={ROUTES.neurofeedback}
+                className="inline-flex items-center gap-2 bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-fit mt-2"
+              >
+                Découvrir le Neurofeedback <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              variants={fadeInRight}
+              className="relative h-[260px] sm:h-[320px] rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+            >
+              <img
+                src="https://dbneurofeedback.com/wp-content/uploads/2024/12/NEUROPTIMAL-1.jpg"
+                alt="Séance de neurofeedback NeurOptimal® — capteurs EEG"
+                className="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/70 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap">
+                <span className="bg-[#1ab5c7] text-[#0B0B0C] text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full font-bold">
+                  Non invasif
+                </span>
+                <span className="bg-white/15 text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
+                  NeurOptimal®
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ── 04. COACH BIO ────────────────────────────────────────────── */}
       <section
         className="py-20 md:py-28 bg-[#0B0B0C]"
@@ -530,7 +596,7 @@ export default function Index() {
               variants={fadeInUp}
               className="flex flex-wrap gap-2"
             >
-              {["ICF", "26 ans"].map((badge) => (
+              {["Certifié", "26 ans", "Neurofeedback"].map((badge) => (
                 <span
                   key={badge}
                   className="bg-white/10 border border-white/15 text-white text-[13px] font-medium px-3 py-1 rounded-full"
@@ -545,8 +611,8 @@ export default function Index() {
               className="text-[15px] text-white/65 leading-relaxed max-w-md"
             >
               Coach certifié, formé par Prisme Évolution, 26 ans enseignant SES.
-              Une double expertise pédagogique et humaine au service de votre
-              évolution personnelle et professionnelle.
+              Praticien en neurofeedback NeurOptimal® — une double expertise pour agir à la fois
+              sur le cerveau et sur les comportements, au service de votre évolution.
             </motion.p>
 
             <motion.blockquote

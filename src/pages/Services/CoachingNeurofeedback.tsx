@@ -19,8 +19,8 @@ import type { ServicePageContent } from "@/types";
 
 const HERO_IMG      = "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&q=85";
 const COACH_PHOTO   = `${import.meta.env.BASE_URL}patron.webp`;
-const SESSION_PHOTO    = "https://www.neurofeedbacktraining.com/hubfs/woman-braintraining-at-home-neuroptimal-system-.webp";
-const NF_VIDEO_ID      = "HyLd46df9yU";
+const SESSION_PHOTO    = "https://dbneurofeedback.com/wp-content/uploads/2024/12/NEUROPTIMAL-1.jpg";
+const NF_VIDEO_ID      = "qg1BfBMl0SE";
 const NEUROPTIMAL_LOGO = "https://neuroptimal.com/wp-content/uploads/2025/06/cropped-NO-head-logo-1024x1024-1-367x367.png";
 
 const HERO_WORDS = ["Coaching", "&", "Neurofeedback"];
@@ -380,13 +380,13 @@ const CoachingNeurofeedback = () => {
                 Les bénéfices du Neurofeedback NeurOptimal®
               </motion.h2>
 
-              {/* Texte exact PDF client */}
+              {/* Texte bienfaits */}
               <motion.div variants={fadeInUp} className="mb-12 max-w-3xl">
                 <p className="text-white/70 text-[16px] leading-relaxed mb-4">
-                  Les ressentis les plus fréquemment évoqués après les séances sont une plus grande clarté mentale, une sensation de légèreté et un état de calme intérieur. Au fil du temps, ce mieux-être peut progressivement s'installer comme un nouvel équilibre au quotidien.
+                  Les sensations décrites par les clients incluent souvent une clarté mentale, un sentiment de légèreté et une profonde sérénité, perceptibles rapidement. Avec le temps, cet état de mieux-être devient naturel, comme un nouvel équilibre intérieur.
                 </p>
                 <p className="text-white/70 text-[16px] leading-relaxed">
-                  Les défis ou événements difficiles de la vie peuvent toujours survenir, mais ils sont souvent vécus avec davantage de recul, permettant de retrouver plus facilement stabilité et sérénité.
+                  Même si un événement difficile peut perturber temporairement cet état, son impact émotionnel sera généralement moins marqué, et la capacité à retrouver son équilibre plus rapide.
                 </p>
               </motion.div>
 
@@ -502,15 +502,15 @@ const CoachingNeurofeedback = () => {
                   {[
                     {
                       title: "Comment se déroule une séance ?",
-                      text: "Pendant la séance, vous êtes installé confortablement dans un fauteuil, face à un écran. Cinq capteurs positionnés sur votre tête permettent de mesurer et d'analyser l'activité électrique de votre cerveau. Durant l'entraînement, vous profitez d'un moment agréable en écoutant de la musique ou en regardant un film de votre choix. L'entraînement se déroule de façon simple, naturelle et non contraignante.",
+                      text: "Durant la séance, vous serez confortablement assis dans un fauteuil face à un écran. Cinq capteurs placés sur votre tête mesurent et analysent l'activité électrique de votre cerveau. Pendant l'entraînement, vous êtes invité à savourer un moment plaisant, en écoutant de la musique ou en visionnant un film de votre choix. L'entraînement se fait de manière naturelle.",
                     },
                     {
-                      title: "Quel est le nombre de séances ?",
-                      text: "La technologie NeurOptimal® permet d'observer des évolutions positives dès 6 à 10 séances. De nombreuses personnes constatent rapidement des changements : un sommeil plus réparateur, une sensation de mieux-être général, une vision plus positive du quotidien ou encore des relations plus sereines avec leur entourage.",
+                      title: "Le nombre de séances",
+                      text: "La technologie NeurOptimal® permet aujourd'hui d'observer des effets bénéfiques dès 6 à 10 séances. Beaucoup de clients rapportent, dès les premières séances, un sommeil plus réparateur, un meilleur état général, une vision plus optimiste de la vie ou encore des interactions plus apaisées avec leur entourage.",
                     },
                     {
-                      title: "Un entraînement adapté à chacun",
-                      text: "Le rythme des séances se construit en fonction de vos besoins, de vos objectifs et de votre mode de vie. Comme dans tout apprentissage, la régularité favorise l'évolution et permet d'ancrer durablement les bénéfices dans le temps.",
+                      title: "Un entraînement personnalisé",
+                      text: "Le rythme des séances s'adapte à vos besoins et à votre mode de vie. Certains choisissent de revenir occasionnellement pour des séances de rappel, tandis que d'autres intègrent une pratique régulière, comme on le ferait avec un entraînement sportif. Comme pour toute discipline, la régularité et la pratique permettent de progresser et d'atteindre un niveau de maîtrise toujours plus élevé !",
                     },
                   ].map((block, i) => (
                     <div key={i} className="bg-[#F3F4F6] rounded-[24px] p-6">
