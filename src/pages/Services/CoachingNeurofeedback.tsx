@@ -19,8 +19,9 @@ import type { ServicePageContent } from "@/types";
 
 const HERO_IMG      = "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1200&q=85";
 const COACH_PHOTO   = `${import.meta.env.BASE_URL}patron.webp`;
-const SESSION_PHOTO = "https://www.neurofeedbacktraining.com/hubfs/woman-braintraining-at-home-neuroptimal-system-.webp";
-const NF_VIDEO_ID   = "SFXTfvAz8q4";
+const SESSION_PHOTO    = "https://www.neurofeedbacktraining.com/hubfs/woman-braintraining-at-home-neuroptimal-system-.webp";
+const NF_VIDEO_ID      = "HyLd46df9yU";
+const NEUROPTIMAL_LOGO = "https://neuroptimal.com/wp-content/uploads/2025/06/cropped-NO-head-logo-1024x1024-1-367x367.png";
 
 const HERO_WORDS = ["Coaching", "&", "Neurofeedback"];
 
@@ -374,10 +375,20 @@ const CoachingNeurofeedback = () => {
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
-                className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight mb-10"
+                className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight mb-6"
               >
-                Bénéfices
+                Les bénéfices du Neurofeedback NeurOptimal®
               </motion.h2>
+
+              {/* Texte exact PDF client */}
+              <motion.div variants={fadeInUp} className="mb-12 max-w-3xl">
+                <p className="text-white/70 text-[16px] leading-relaxed mb-4">
+                  Les ressentis les plus fréquemment évoqués après les séances sont une plus grande clarté mentale, une sensation de légèreté et un état de calme intérieur. Au fil du temps, ce mieux-être peut progressivement s'installer comme un nouvel équilibre au quotidien.
+                </p>
+                <p className="text-white/70 text-[16px] leading-relaxed">
+                  Les défis ou événements difficiles de la vie peuvent toujours survenir, mais ils sont souvent vécus avec davantage de recul, permettant de retrouver plus facilement stabilité et sérénité.
+                </p>
+              </motion.div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {BENEFITS.map((b, i) => {
@@ -425,13 +436,21 @@ const CoachingNeurofeedback = () => {
               viewport={VP}
               variants={staggerContainer}
             >
-              <motion.p
-                variants={fadeInUp}
-                className="font-mono tracking-widest uppercase text-[10px] text-[#1ab5c7] mb-3"
-                aria-hidden="true"
-              >
-                NeurOptimal® · Zengar Institute
-              </motion.p>
+              {/* Logo NeurOptimal® / Zengar — crédibilité praticien certifié */}
+              <motion.div variants={fadeInUp} className="flex items-center gap-4 mb-6">
+                <img
+                  src={NEUROPTIMAL_LOGO}
+                  alt="NeurOptimal® — Zengar Institute"
+                  className="h-14 w-14 object-contain rounded-xl bg-white p-1 shadow-sm"
+                  loading="lazy"
+                />
+                <div>
+                  <p className="font-mono tracking-widest uppercase text-[10px] text-[#1ab5c7]">
+                    Technologie certifiée · Zengar Institute
+                  </p>
+                  <p className="text-[#0B0B0C] font-semibold text-[15px]">NeurOptimal® Dynamical Neurofeedback®</p>
+                </div>
+              </motion.div>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight mb-4"
@@ -500,7 +519,29 @@ const CoachingNeurofeedback = () => {
                     </div>
                   ))}
                 </motion.div>
-              </div>
+              </div>{/* fin grille 2 colonnes */}
+
+              {/* Vidéo explicative NeurOptimal® — dans la section boucle */}
+              <motion.div variants={fadeInUp} className="mt-12">
+                <p className="text-[#0B0B0C] font-bold text-[17px] mb-4">
+                  Découvrir NeurOptimal® en vidéo
+                </p>
+                <div className="w-full bg-[#F3F4F6] rounded-[24px] p-4">
+                  <div className="w-full aspect-video rounded-xl overflow-hidden bg-black">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`https://www.youtube.com/embed/${NF_VIDEO_ID}`}
+                      title="À la découverte du Neurofeedback NeurOptimal®"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              </motion.div>
+
             </motion.div>
           </div>
         </section>
@@ -530,27 +571,6 @@ const CoachingNeurofeedback = () => {
               <motion.p variants={fadeInUp} className="text-gray-500 text-[16px] leading-relaxed max-w-2xl mb-12">
                 Pour comprendre le neurofeedback et lui faire confiance, voici les ressources qui en font la légitimité : témoignages de professionnels de santé, études scientifiques et vidéos explicatives.
               </motion.p>
-
-              {/* Vidéo explicative NeurOptimal® */}
-              <motion.div variants={fadeInUp} className="mb-12">
-                <p className="text-[#0B0B0C] font-bold text-[17px] mb-4">
-                  Comprendre NeurOptimal® en vidéo — comment ça marche ?
-                </p>
-                <div className="w-full bg-white rounded-[24px] p-4 shadow-sm">
-                  <div className="w-full aspect-video rounded-xl overflow-hidden bg-black">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`https://www.youtube.com/embed/${NF_VIDEO_ID}`}
-                      title="NeurOptimal® — Comment fonctionne le neurofeedback ?"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              </motion.div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {MEDIA_SECTIONS.map((item, i) => {
