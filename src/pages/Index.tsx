@@ -33,9 +33,9 @@ import type { IndexContent } from "@/types";
 const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
 
 const HERO_VIDEOS = [
-  `${import.meta.env.BASE_URL}8799147-hd_1920_1080_24fps.mp4`,
-  `${import.meta.env.BASE_URL}8558449-uhd_1440_2560_24fps.mp4`,
-  `${import.meta.env.BASE_URL}5697350-uhd_2160_3840_24fps.mp4`,
+  { webm: `${import.meta.env.BASE_URL}hero-1.webm`, mp4: `${import.meta.env.BASE_URL}8799147-hd_1920_1080_24fps.mp4` },
+  { webm: `${import.meta.env.BASE_URL}hero-2.webm`, mp4: `${import.meta.env.BASE_URL}8558449-uhd_1440_2560_24fps.mp4` },
+  { webm: `${import.meta.env.BASE_URL}hero-3.webm`, mp4: `${import.meta.env.BASE_URL}5697350-uhd_2160_3840_24fps.mp4` },
 ];
 
 const SERVICES = [
@@ -302,7 +302,6 @@ export default function Index() {
               <AnimatePresence mode="sync">
                 <motion.video
                   key={videoIdx}
-                  src={HERO_VIDEOS[videoIdx]}
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: videoReady ? 1 : 0 }}
@@ -314,7 +313,10 @@ export default function Index() {
                   preload="auto"
                   onCanPlay={handleCanPlay}
                   onEnded={nextVideo}
-                />
+                >
+                  <source src={HERO_VIDEOS[videoIdx].webm} type="video/webm" />
+                  <source src={HERO_VIDEOS[videoIdx].mp4} type="video/mp4" />
+                </motion.video>
               </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
             </div>
@@ -839,6 +841,7 @@ export default function Index() {
             <motion.div variants={fadeInRight}>
               <VideoPlayer
                 src={`${import.meta.env.BASE_URL}coaching-reel.mp4`}
+                webmSrc={`${import.meta.env.BASE_URL}coaching-reel.webm`}
                 facebookUrl="https://www.facebook.com/reel/2910146945849990"
               />
             </motion.div>

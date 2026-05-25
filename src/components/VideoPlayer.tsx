@@ -2,6 +2,7 @@ import { useRef, useState, useCallback } from "react";
 
 interface Props {
   src: string;
+  webmSrc?: string;
   facebookUrl?: string;
 }
 
@@ -10,7 +11,7 @@ const fmt = (s: number) => {
   return `${m}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
 };
 
-export default function VideoPlayer({ src, facebookUrl }: Props) {
+export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
   const ref                       = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying]     = useState(false);
   const [time,    setTime]        = useState(0);
@@ -58,13 +59,15 @@ export default function VideoPlayer({ src, facebookUrl }: Props) {
       {/* ── Vidéo ── */}
       <video
         ref={ref}
-        src={src}
         className="absolute inset-0 w-full h-full object-contain bg-black"
         onTimeUpdate={() => setTime(ref.current?.currentTime ?? 0)}
         onLoadedMetadata={() => setDur(ref.current?.duration ?? 0)}
         onEnded={() => setPlaying(false)}
         playsInline
-      />
+      >
+        {webmSrc && <source src={webmSrc} type="video/webm" />}
+        <source src={src} type="video/mp4" />
+      </video>
 
       {/* ── Dégradé overlay ── */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/55 pointer-events-none" />
