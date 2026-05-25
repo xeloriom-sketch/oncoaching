@@ -36,12 +36,36 @@ const Navbar = () => {
   const [isOpen,    setIsOpen]    = useState(false);
   const [svcOpen,   setSvcOpen]   = useState(false);
   const [mobileSvc, setMobileSvc] = useState(false);
-  const closeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const location = useLocation();
+  const [hidden,    setHidden]    = useState(false);
+  const closeRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastY     = useRef(0);
+  const ticking   = useRef(false);
+  const location  = useLocation();
 
   useEffect(() => {
     setIsOpen(false); setSvcOpen(false); setMobileSvc(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y <= 60) {
+          setHidden(false);                          // toujours visible en haut
+        } else if (y > lastY.current + 6) {
+          setHidden(true);                           // descend → cache
+        } else if (lastY.current - y > 6) {
+          setHidden(false);                          // remonte → montre
+        }
+        lastY.current = y;
+        ticking.current = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => () => { if (closeRef.current) clearTimeout(closeRef.current); }, []);
 
@@ -60,7 +84,11 @@ const Navbar = () => {
   const isServiceActive = SERVICES.some(s => location.pathname.startsWith(s.href));
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50">
+    <motion.header
+      className="fixed top-0 inset-x-0 z-50"
+      animate={{ y: hidden ? "-110%" : "0%" }}
+      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+    >
       <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-6">
 
         {/* Logo — gauche */}
@@ -294,7 +322,7 @@ const Navbar = () => {
           </motion.nav>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 };
 
