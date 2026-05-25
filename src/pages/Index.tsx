@@ -258,16 +258,15 @@ export default function Index() {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               className="relative w-full h-[520px] sm:h-[660px] lg:h-[800px] order-last lg:order-first"
           >
-            {/* ── Cercle 1 — grand, haut-droite ── */}
+            {/* ── Cercle 1 — grand dominant, centre-droite ── */}
             <motion.div
               style={{
                 position: "absolute",
-                top: 0, right: 0,
-                width: "78%",
+                top: "2%", right: "0%",
+                width: "84%",
                 aspectRatio: "1",
                 borderRadius: "50%",
                 overflow: "hidden",
-                boxShadow: "0 0 0 2px rgba(196,144,62,0.55)",
                 zIndex: 10,
                 x: sPhX,
                 y: sPhY,
@@ -290,12 +289,11 @@ export default function Index() {
             <motion.div
               style={{
                 position: "absolute",
-                bottom: "3%", left: "0%",
-                width: "46%",
+                bottom: "0%", left: "-2%",
+                width: "38%",
                 aspectRatio: "1",
                 borderRadius: "50%",
                 overflow: "hidden",
-                boxShadow: "0 0 0 2px rgba(196,144,62,0.40)",
                 zIndex: 11,
                 x: sPhX,
                 y: sPhY,
@@ -314,16 +312,15 @@ export default function Index() {
               />
             </motion.div>
 
-            {/* ── Cercle 3 — petit, bas-droite ── */}
+            {/* ── Cercle 3 — petit accent, bas-centre ── */}
             <motion.div
               style={{
                 position: "absolute",
-                bottom: "6%", right: "2%",
-                width: "28%",
+                bottom: "4%", left: "34%",
+                width: "14%",
                 aspectRatio: "1",
                 borderRadius: "50%",
                 overflow: "hidden",
-                boxShadow: "0 0 0 2px rgba(196,144,62,0.30)",
                 zIndex: 12,
                 x: sPhX,
                 y: sPhY,
