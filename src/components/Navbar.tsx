@@ -93,7 +93,7 @@ const Navbar = () => {
       animate={{ y: hidden ? "-110%" : "0%" }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="w-full px-3 md:px-6 py-4 flex items-center justify-between gap-6">
+      <div className="w-full px-5 md:px-10 py-4 flex items-center justify-between gap-6">
 
         {/* Logo — visible uniquement dans le hero */}
         <motion.div

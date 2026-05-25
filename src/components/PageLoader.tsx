@@ -15,7 +15,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
       document.body.style.overflow = "";
       setVisible(false);
       onDone?.();
-    }, 900);
+    }, 1100);
     return () => clearTimeout(t);
   }, [onDone]);
 
@@ -24,22 +24,44 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
       {visible && (
         <motion.div
           key="loader"
-          className="fixed inset-0 z-[200] bg-[#FBFBFB] flex flex-col items-center justify-center gap-6"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: "easeInOut" }}
+          className="fixed inset-0 z-[200] bg-[#FBFBFB] flex flex-col items-center justify-center gap-8"
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          <LogoMark size={52} animate />
+          {/* Logo central */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <LogoMark size={88} animate />
+          </motion.div>
 
-          {/* Barre de progression fine */}
-          <div className="w-24 h-[2px] bg-[#E5E7EB] rounded-full overflow-hidden">
+          {/* Nom de la marque */}
+          <motion.p
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
+            className="text-[13px] font-semibold tracking-[0.22em] uppercase text-[#1C3A52]/40"
+          >
+            ONCoaching
+          </motion.p>
+
+          {/* Barre de progression */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25 }}
+            className="w-40 h-[2px] bg-[#E5E7EB] rounded-full overflow-hidden"
+          >
             <motion.div
               className="h-full rounded-full"
               style={{ background: "#C4903E" }}
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 0.7, ease: "easeInOut" }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             />
-          </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

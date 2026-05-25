@@ -8,6 +8,10 @@ import {
   Zap,
   Brain,
   Users,
+  Newspaper,
+  Podcast,
+  Linkedin,
+  Award,
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import VideoPlayer from "@/components/VideoPlayer";
@@ -28,9 +32,11 @@ import type { IndexContent } from "@/types";
 
 const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
 
-/* ── Remplace cet ID par ton propre ID Vimeo ── */
-const HERO_VIMEO_ID = "1155511920";
-const HERO_VIMEO_SRC = `https://player.vimeo.com/video/${HERO_VIMEO_ID}?background=1&autoplay=1&loop=1&muted=1`;
+const HERO_VIDEOS = [
+  `${import.meta.env.BASE_URL}8799147-hd_1920_1080_24fps.mp4`,
+  `${import.meta.env.BASE_URL}8558449-uhd_1440_2560_24fps.mp4`,
+  `${import.meta.env.BASE_URL}5697350-uhd_2160_3840_24fps.mp4`,
+];
 
 const SERVICES = [
   {
@@ -167,6 +173,10 @@ function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", child
 export default function Index() {
   const { content } = usePageContent<IndexContent>("index");
 
+  /* ── Carousel vidéo hero ───────────────────────────────────── */
+  const [videoIdx, setVideoIdx] = useState(0);
+  const nextVideo = useCallback(() => setVideoIdx(i => (i + 1) % HERO_VIDEOS.length), []);
+
   /* ── Parallaxe souris — Hero ───────────────────────────────── */
   const heroRef = useRef<HTMLElement>(null);
   const rawX    = useMotionValue(0);
@@ -245,7 +255,7 @@ export default function Index() {
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
           ref={heroRef}
-          className="w-full relative bg-[#FBFBFB] min-h-screen flex items-center py-8 overflow-hidden"
+          className="w-full relative bg-[#FBFBFB] min-h-screen flex items-center"
           aria-labelledby="home-h1"
           onMouseMove={handleHeroMove}
           onMouseLeave={handleHeroLeave}
@@ -253,68 +263,48 @@ export default function Index() {
         {/* Grain subtil pour la texture */}
         <div className="hero-grain absolute inset-0 pointer-events-none opacity-30" aria-hidden="true" />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-[58%_42%] gap-8 lg:gap-12 items-center relative z-10">
+        <div className="w-full min-h-screen grid grid-cols-1 lg:grid-cols-[56%_44%] items-center relative z-10">
 
-          {/* ── GAUCHE : Une seule vidéo derrière 3 vrais OVALES parfaits et synchronisés ── */}
+          {/* ── GAUCHE : Vidéo derrière 3 ovales inclinés ── */}
           <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{ x: sPhX, y: sPhY }}
-              className="relative w-full aspect-square order-last lg:order-first lg:-ml-8 lg:scale-110 origin-left"
+              className="relative w-full h-[82vh] order-last lg:order-first"
           >
-            {/* Conteneur global masqué avec un clip-path composite pour les 3 ovales */}
-            <svg width="0" height="0" className="absolute">
+            {/* Masque SVG composite — les 3 ovals d'un coup */}
+            <svg width="0" height="0" className="absolute" aria-hidden="true">
               <defs>
-                {/* On utilise les coordonnées exactes des 3 ovales inclinés de ton image.
-        Puisqu'ils sont dans le même masque, l'iframe en dessous ne bouge pas d'un poil.
-      */}
-                <clipPath id="perfect-ovals-mask" clipPathUnits="objectBoundingBox">
-                  {/* Ovale 1 : Le grand dominant (Haut / Droite), incliné à environ -45° */}
-                  <path d="M 0.52,0.01 C 0.76,-0.04 0.99,0.18 0.95,0.48 C 0.91,0.78 0.68,0.88 0.44,0.82 C 0.30,0.75 0.37,0.50 0.35,0.34 C 0.32,0.16 0.28,0.06 0.52,0.01 Z" />
-
-                  {/* Ovale 2 : Le moyen (Milieu / Gauche), très aplati et incliné en diagonale */}
-                  <path d="M 0.34,0.40 C 0.53,0.40 0.60,0.61 0.49,0.80 C 0.38,0.98 0.14,0.95 0.08,0.76 C 0.02,0.57 0.15,0.40 0.34,0.40 Z" />
-
-                  {/* Ovale 3 : Le tout petit (Bas / Gauche), excentré */}
-                  <path d="M 0.12,0.76 C 0.21,0.76 0.24,0.85 0.19,0.93 C 0.14,1.00 0.04,0.98 0.02,0.89 C -0.01,0.81 0.03,0.76 0.12,0.76 Z" />
+                <clipPath id="ovals-clip" clipPathUnits="objectBoundingBox">
+                  <ellipse cx="0.62" cy="0.43" rx="0.31" ry="0.42" transform="rotate(-38 0.62 0.43)" />
+                  <ellipse cx="0.35" cy="0.65" rx="0.20" ry="0.27" transform="rotate(-30 0.35 0.65)" />
+                  <ellipse cx="0.16" cy="0.78" rx="0.11" ry="0.14" transform="rotate(-22 0.16 0.78)" />
                 </clipPath>
               </defs>
             </svg>
 
-            {/* Le masque magique qui applique la découpe des 3 ovales sur l'unique vidéo */}
+            {/* Une seule vidéo visible à travers les 3 ovals, cycle en boucle */}
             <div
-                className="absolute inset-0 w-full h-full overflow-hidden"
-                style={{
-                  clipPath: "url(#perfect-ovals-mask)",
-                  WebkitClipPath: "url(#perfect-ovals-mask)"
-                }}
+              className="absolute inset-0"
+              style={{ clipPath: "url(#ovals-clip)", WebkitClipPath: "url(#ovals-clip)" }}
             >
-              {/* UNE SEULE IFRAME : Elle prend tout l'espace, l'image est continue à 10000% */}
-              <iframe
-                  src={HERO_VIMEO_SRC}
-                  className="absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 border-none pointer-events-none"
-                  allow="autoplay; fullscreen"
-                  title="Vidéo coaching hero"
-                  style={{ objectFit: 'cover' }}
+              <video
+                key={videoIdx}
+                src={HERO_VIDEOS[videoIdx]}
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay
+                muted
+                playsInline
+                onEnded={nextVideo}
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
             </div>
+
           </motion.div>
 
-          {/* ── DROITE : Contenu textuel (Fidèle à tes textes et animations) ── */}
-          <div className="flex flex-col gap-7 lg:pl-6">
-
-            {/* Badge de localisation d'entrée */}
-            <motion.div
-                initial={{ opacity: 0, y: -12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            >
-        <span className="inline-flex items-center gap-2 bg-white border border-[#E5E7EB] text-[#1C3A52] text-xs md:text-sm font-medium px-4 py-2 rounded-full shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
-          Coaching certifié · Mâcon
-        </span>
-            </motion.div>
+          {/* ── DROITE : Contenu textuel ── */}
+          <div className="flex flex-col gap-7 px-8 md:px-12 lg:px-10">
 
             {/* H1 — 3 lignes, reveal ligne par ligne */}
             <h1
@@ -671,7 +661,7 @@ export default function Index() {
               "Le changement commence là où la zone de confort s'arrête."
             </motion.blockquote>
 
-            <motion.div variants={fadeInUp}>
+            <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">
               <Link
                 to={ROUTES.about}
                 className="flex sm:inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
@@ -680,6 +670,16 @@ export default function Index() {
                 Découvrir l'approche
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
+              <a
+                href={`${import.meta.env.BASE_URL}certification Neourofeedback.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex sm:inline-flex items-center justify-center gap-2 border border-white/20 text-white/70 text-[14px] px-5 py-4 rounded-full hover:bg-white/10 hover:text-white transition-all"
+                aria-label="Voir la certification NeurOptimal®"
+              >
+                <Award className="w-4 h-4" aria-hidden="true" />
+                Voir la certification
+              </a>
             </motion.div>
           </motion.div>
         </div>
@@ -883,7 +883,97 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── 08. CTA FINAL ────────────────────────────────────────────── */}
+      {/* ── 08. PRESSE ───────────────────────────────────────────────── */}
+      <section className="py-20 md:py-28 bg-[#FBFBFB]" aria-labelledby="presse-title">
+        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-12">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="text-center flex flex-col gap-4"
+          >
+            <motion.p variants={fadeInUp} className="text-[13px] font-mono tracking-widest uppercase text-[#C4903E]" aria-hidden="true">
+              Ils parlent de nous
+            </motion.p>
+            <motion.h2 id="presse-title" variants={fadeInUp} className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]">
+              Presse & Médias
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          >
+            {[
+              {
+                Icon: Newspaper,
+                source: "Le JSL",
+                label: "Journal de Saône-et-Loire",
+                quote: "Noureddine Omar, coach certifié, accompagne les jeunes et les entreprises de la région mâconnaise vers l'excellence.",
+                href: "https://www.facebook.com/LeJSL71/posts/pfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl",
+              },
+              {
+                Icon: Podcast,
+                source: "Podcast et Compagnie",
+                label: "Interview vidéo",
+                quote: "Une discussion captivante sur les méthodes de coaching cognitif et l'impact du neurofeedback sur la performance.",
+                href: "https://www.youtube.com/watch?v=Yu9CM4-DIXk",
+              },
+              {
+                Icon: Linkedin,
+                source: "LinkedIn",
+                label: "Profil professionnel",
+                quote: "Coach professionnel certifié, praticien NeurOptimal® et ancien enseignant. Rejoignez le réseau ONCoaching.",
+                href: "https://www.linkedin.com/in/noureddine-omar-587620346/",
+              },
+            ].map(({ Icon, source, label, quote, href }, i) => (
+              <motion.a
+                key={i}
+                variants={springUp}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col gap-4 bg-white border border-[#E5E7EB] rounded-[24px] p-6 hover:shadow-[0_12px_40px_rgba(28,58,82,0.1)] hover:-translate-y-1 transition-all duration-300"
+                aria-label={`Lire l'article ${source}`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[#1C3A52]/6 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-[#1C3A52]" strokeWidth={1.6} />
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-gray-300 group-hover:text-[#C4903E] transition-colors" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E]">{source}</span>
+                  <span className="text-[14px] font-semibold text-[#1C3A52]">{label}</span>
+                </div>
+                <p className="text-[14px] text-gray-500 leading-relaxed flex-1 italic">"{quote}"</p>
+              </motion.a>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={fadeInScale}
+            className="flex justify-center"
+          >
+            <Link
+              to={ROUTES.media}
+              className="inline-flex items-center gap-2.5 border-2 border-[#1C3A52] text-[#1C3A52] font-bold text-[15px] px-7 py-3.5 rounded-full hover:bg-[#1C3A52] hover:text-white transition-all duration-300"
+            >
+              En savoir plus
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── 09. CTA FINAL ────────────────────────────────────────────── */}
       <section
         className="py-20 md:py-28 bg-[#1C3A52]"
         aria-labelledby="cta-title"
