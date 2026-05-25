@@ -581,25 +581,33 @@ const About = () => {
                 Certification reconnue internationalement attestant d'une maîtrise complète du protocole NeurOptimal® et de son application clinique — non invasif, approuvé par le Zengar Institute.
               </p>
               <a
-                href={`${import.meta.env.BASE_URL}certification%20Neourofeedback.pdf`}
+                href={`${import.meta.env.BASE_URL}certification.png`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="self-start inline-flex items-center gap-2 bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity"
-                aria-label="Ouvrir la certification NeurOptimal® en PDF"
+                aria-label="Voir la certification NeurOptimal®"
               >
                 <Award className="w-4 h-4" aria-hidden="true" />
                 Voir la certification
               </a>
             </div>
 
-            {/* Aperçu PDF */}
-            <div className="hidden md:block w-full md:w-[280px] lg:w-[320px] h-[200px] md:h-[240px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 bg-white/5">
-              <iframe
-                src={`${import.meta.env.BASE_URL}certification%20Neourofeedback.pdf#toolbar=0&navpanes=0&scrollbar=0`}
-                className="w-full h-full"
-                title="Certification NeurOptimal® — Noureddine Omar"
+            {/* Aperçu certification PNG */}
+            <a
+              href={`${import.meta.env.BASE_URL}certification.png`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto md:w-[280px] lg:w-[320px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 block hover:opacity-90 transition-opacity"
+              aria-label="Voir la certification NeurOptimal® en grand"
+            >
+              <img
+                src={`${import.meta.env.BASE_URL}certification.png`}
+                alt="Certification NeurOptimal® — Noureddine Omar"
+                className="w-full h-auto block"
+                loading="lazy"
+                decoding="async"
               />
-            </div>
+            </a>
           </motion.div>
         </section>
 
