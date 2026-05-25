@@ -689,7 +689,7 @@ export default function Index() {
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               <a
-                href={`${import.meta.env.BASE_URL}certification.png`}
+                href={`${import.meta.env.BASE_URL}certification.webp`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 border border-white/20 text-white/70 text-[14px] px-5 py-4 rounded-full hover:bg-white/10 hover:text-white transition-all"

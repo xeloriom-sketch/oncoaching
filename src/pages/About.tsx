@@ -581,7 +581,7 @@ const About = () => {
                 Certification reconnue internationalement attestant d'une maîtrise complète du protocole NeurOptimal® et de son application clinique — non invasif, approuvé par le Zengar Institute.
               </p>
               <a
-                href={`${import.meta.env.BASE_URL}certification.png`}
+                href={`${import.meta.env.BASE_URL}certification.webp`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="self-start inline-flex items-center gap-2 bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity"
@@ -594,14 +594,14 @@ const About = () => {
 
             {/* Aperçu certification PNG */}
             <a
-              href={`${import.meta.env.BASE_URL}certification.png`}
+              href={`${import.meta.env.BASE_URL}certification.webp`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto md:w-[280px] lg:w-[320px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 block hover:opacity-90 transition-opacity"
               aria-label="Voir la certification NeurOptimal® en grand"
             >
               <img
-                src={`${import.meta.env.BASE_URL}certification.png`}
+                src={`${import.meta.env.BASE_URL}certification.webp`}
                 alt="Certification NeurOptimal® — Noureddine Omar"
                 className="w-full h-auto block"
                 loading="lazy"
