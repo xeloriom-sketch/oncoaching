@@ -256,7 +256,7 @@ export default function Index() {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="relative w-full h-[380px] sm:h-[480px] lg:h-[560px] order-last lg:order-first"
+              className="relative w-full h-[460px] sm:h-[580px] lg:h-[680px] order-last lg:order-first"
           >
             {/* Bulle décorative dorée derrière */}
             <div
@@ -271,31 +271,28 @@ export default function Index() {
               }}
             />
 
-            {/* SVG clip-path — 3 galets organiques = 1 forme composite */}
+            {/* SVG clip-path — 3 cercles parfaits */}
             <svg
               aria-hidden="true"
               style={{ position: "absolute", width: 0, height: 0 }}
             >
               <defs>
                 <clipPath id="hero-blobs-clip" clipPathUnits="objectBoundingBox">
-                  {/* Grand galet principal haut-droite */}
-                  <path d="M 0.96 0.22 C 0.98 0.42 0.92 0.68 0.76 0.75 C 0.60 0.82 0.36 0.74 0.27 0.60 C 0.18 0.46 0.22 0.24 0.36 0.13 C 0.50 0.02 0.94 0.02 0.96 0.22 Z" />
-                  {/* Galet moyen bas-gauche */}
-                  <path d="M 0.08 0.60 C 0.14 0.52 0.26 0.50 0.38 0.55 C 0.50 0.60 0.56 0.72 0.50 0.82 C 0.44 0.92 0.28 0.94 0.16 0.88 C 0.04 0.82 0.02 0.68 0.08 0.60 Z" />
-                  {/* Petit accent bas */}
-                  <path d="M 0.44 0.86 C 0.47 0.82 0.54 0.82 0.58 0.86 C 0.62 0.90 0.60 0.96 0.55 0.98 C 0.50 1.00 0.44 0.98 0.42 0.94 C 0.40 0.90 0.41 0.90 0.44 0.86 Z" />
+                  <circle cx="0.65" cy="0.36" r="0.34" />
+                  <circle cx="0.28" cy="0.74" r="0.22" />
+                  <circle cx="0.06" cy="0.90" r="0.09" />
                 </clipPath>
               </defs>
             </svg>
 
-            {/* Conteneur clippé — l'iframe est visible uniquement dans les 3 galets */}
+            {/* Conteneur clippé — l'iframe visible dans les 3 cercles */}
             <div
               className="absolute inset-0 z-10"
               style={{ clipPath: "url(#hero-blobs-clip)" }}
             >
               <motion.div
                 className="absolute"
-                style={{ top: "-10%", left: "-10%", width: "120%", height: "120%", x: sPhX, y: sPhY }}
+                style={{ top: "-15%", left: "-15%", width: "130%", height: "130%", x: sPhX, y: sPhY }}
               >
                 <iframe
                   src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
@@ -306,6 +303,18 @@ export default function Index() {
                 />
               </motion.div>
             </div>
+
+            {/* Traits des 3 cercles — SVG superposé */}
+            <svg
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full z-20 pointer-events-none"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <circle cx="65" cy="36" r="34" fill="none" stroke="rgba(196,144,62,0.55)" strokeWidth="0.6" />
+              <circle cx="28" cy="74" r="22" fill="none" stroke="rgba(196,144,62,0.45)" strokeWidth="0.6" />
+              <circle cx="6"  cy="90" r="9"  fill="none" stroke="rgba(196,144,62,0.35)" strokeWidth="0.6" />
+            </svg>
 
 
           </motion.div>
