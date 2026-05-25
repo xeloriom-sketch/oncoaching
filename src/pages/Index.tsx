@@ -278,104 +278,81 @@ export default function Index() {
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
 
-          {/* ── GAUCHE : Composition galets organiques (Inspirée de la maquette) ── */}
+          {/* ── GAUCHE : Une vidéo derrière 3 formes organiques unifiées ── */}
           <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="relative flex items-center justify-center w-full h-[380px] sm:h-[480px] lg:h-[560px] order-last lg:order-first"
+              className="relative w-full h-[380px] sm:h-[480px] lg:h-[560px] order-last lg:order-first"
           >
-            <div className="absolute inset-0 w-full h-full">
+            {/* Bulle décorative dorée derrière */}
+            <div
+              aria-hidden="true"
+              className="absolute"
+              style={{
+                top: "4%", right: "0%",
+                width: "74%", height: "80%",
+                borderRadius: "62% 38% 50% 50% / 56% 50% 50% 44%",
+                background: "rgba(196,144,62,0.13)",
+                zIndex: 0,
+              }}
+            />
 
-              {/* GALET 1 — Grand (Haut Droite) — crop haut de la vidéo */}
-              <div
-                  className="absolute top-0 right-[4%] w-[72%] h-[78%] overflow-hidden bg-gray-900 z-10"
-                  style={{ borderRadius: "60% 40% 45% 55% / 60% 45% 55% 40%" }}
-              >
-                <motion.video
-                    key={`g1-${vidIdx}`}
-                    src={currentVideo}
-                    autoPlay loop muted playsInline
-                    className="absolute inset-0 w-full h-full object-cover will-change-transform"
-                    style={{ x: sPhX, y: sPhY, scale: 1.18, objectPosition: "50% 20%" }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8 }}
-                />
-              </div>
+            {/* SVG clip-path — 3 ellipses organiques = 1 forme composite */}
+            <svg className="absolute w-0 h-0 overflow-hidden" aria-hidden="true">
+              <defs>
+                <clipPath id="hero-blobs-clip" clipPathUnits="objectBoundingBox">
+                  {/* Grand galet haut-droite */}
+                  <ellipse cx="0.60" cy="0.38" rx="0.36" ry="0.38" />
+                  {/* Galet moyen bas-gauche */}
+                  <ellipse cx="0.35" cy="0.73" rx="0.27" ry="0.27" />
+                  {/* Petit galet extrême bas-gauche */}
+                  <ellipse cx="0.10" cy="0.87" rx="0.10" ry="0.12" />
+                </clipPath>
+              </defs>
+            </svg>
 
-              {/* GALET 2 — Moyen (Bas Gauche) — crop milieu/bas */}
-              <motion.div
-                  className="absolute bottom-2 left-[8%] w-[54%] h-[54%] bg-[#FBFBFB] flex items-center justify-center p-[10px] z-20"
-                  style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div
-                    className="w-full h-full overflow-hidden relative bg-gray-900"
-                    style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
-                >
-                  <motion.video
-                      key={`g2-${vidIdx}`}
-                      src={currentVideo}
-                      autoPlay loop muted playsInline
-                      className="absolute inset-0 w-full h-full object-cover will-change-transform"
-                      style={{ x: sB2X, y: sB2Y, scale: 1.22, objectPosition: "30% 65%" }}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.8 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#1C3A52]/25 via-[#C4903E]/10 to-transparent mix-blend-multiply" />
-                </div>
-              </motion.div>
-
-              {/* GALET 3 — Petit (Extrême bas-gauche) — crop bas */}
-              <motion.div
-                  className="absolute bottom-10 left-0 w-[20%] h-[26%] overflow-hidden z-10 border border-white/20 shadow-md bg-gray-900"
-                  style={{ borderRadius: "40% 60% 50% 50% / 50% 50% 50% 50%" }}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <motion.video
-                    key={`g3-${vidIdx}`}
-                    src={currentVideo}
-                    autoPlay loop muted playsInline
-                    className="absolute inset-0 w-full h-full object-cover will-change-transform"
-                    style={{ x: sB1X, y: sB1Y, scale: 1.28, objectPosition: "70% 80%" }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8 }}
-                />
-                <div className="absolute inset-0 bg-[#C4903E]/15 mix-blend-overlay" />
-              </motion.div>
-
-              {/* Badge flottant "Coach certifié" */}
-              <motion.div
-                  style={{ x: sB1X, y: sB1Y }}
-                  initial={{ opacity: 0, y: 18, scale: 0.88 }}
-                  animate={{ opacity: 1, y: 0,  scale: 1   }}
-                  transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-[12%] left-[2%] bg-[#1C3A52]/90 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shadow-xl will-change-transform z-30"
-              >
-                <p className="text-white text-[13px] font-semibold tracking-wide">Coach certifié</p>
-                <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
-              </motion.div>
-
-              {/* Badge flottant "Disponible" (Repositionné en bas à droite de la compo) */}
-              <motion.div
-                  style={{ x: sB2X, y: sB2Y }}
-                  initial={{ opacity: 0, x: -14, scale: 0.88 }}
-                  animate={{ opacity: 1, x: 0,   scale: 1   }}
-                  transition={{ delay: 0.95, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB] rounded-full px-4 py-2.5 shadow-lg will-change-transform z-30"
-              >
-                <span className="w-2 h-2 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
-                <span className="text-[#1C3A52] text-[12px] font-semibold tracking-wide">Disponible</span>
-              </motion.div>
-
+            {/* Conteneur clippé — la vidéo est visible uniquement dans les 3 ellipses */}
+            <div
+              className="absolute inset-0 z-10"
+              style={{ clipPath: "url(#hero-blobs-clip)" }}
+            >
+              <motion.video
+                key={vidIdx}
+                src={currentVideo}
+                autoPlay loop muted playsInline
+                className="absolute w-[116%] h-[116%] object-cover"
+                style={{ top: "-8%", left: "-8%", x: sPhX, y: sPhY }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1 }}
+              />
             </div>
+
+            {/* Badge "Coach certifié" */}
+            <motion.div
+                style={{ x: sB1X, y: sB1Y }}
+                initial={{ opacity: 0, y: 18, scale: 0.88 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute top-[12%] left-[2%] bg-[#1C3A52] rounded-2xl px-4 py-3 will-change-transform z-20"
+            >
+              <p className="text-white text-[13px] font-semibold tracking-wide">Coach certifié</p>
+              <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
+            </motion.div>
+
+            {/* Badge "Disponible" */}
+            <motion.div
+                style={{ x: sB2X, y: sB2Y }}
+                initial={{ opacity: 0, x: -14, scale: 0.88 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 0.95, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB]/80 rounded-full px-4 py-2.5 will-change-transform z-20"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
+              <span className="text-[#1C3A52] text-[12px] font-semibold tracking-wide">Disponible</span>
+            </motion.div>
+
           </motion.div>
 
           {/* ── DROITE : Contenu textuel (Fidèle à tes textes et animations) ── */}
@@ -393,30 +370,34 @@ export default function Index() {
         </span>
             </motion.div>
 
-            {/* H1 — 2 lignes, reveal par ligne entière */}
+            {/* H1 — 3 lignes, reveal ligne par ligne */}
             <h1
                 id="home-h1"
-                className="font-bold leading-[1.06] tracking-tight text-[#1C3A52]"
-                style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
+                className="font-bold leading-[1.05] tracking-tight text-[#1C3A52]"
+                style={{ fontSize: "clamp(2.6rem, 6.5vw, 5.6rem)" }}
             >
-              <span className="word-mask block">
-                <motion.span
+              {[
+                { text: "Développez", delay: 0.18 },
+                { text: "votre potentiel", delay: 0.30 },
+              ].map(({ text, delay }) => (
+                <span key={text} className="word-mask block">
+                  <motion.span
                     className="inline-block"
                     initial={{ y: "105%" }}
                     animate={{ y: "0%" }}
-                    transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.18 }}
-                >
-                  Développez votre
-                </motion.span>
-              </span>
+                    transition={{ type: "spring", stiffness: 160, damping: 22, delay }}
+                  >
+                    {text}
+                  </motion.span>
+                </span>
+              ))}
               <span className="word-mask block">
                 <motion.span
-                    className="inline-block"
-                    initial={{ y: "105%" }}
-                    animate={{ y: "0%" }}
-                    transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.32 }}
+                  className="inline-block"
+                  initial={{ y: "105%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.42 }}
                 >
-                  potentiel{" "}
                   <span className="infini-word">infini.</span>
                 </motion.span>
               </span>
@@ -634,10 +615,12 @@ export default function Index() {
               </Link>
             </motion.div>
 
-            <motion.div
-              variants={fadeInRight}
-              className="relative h-[260px] sm:h-[340px] rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)]"
-            >
+            <motion.div variants={fadeInRight} className="relative">
+              <div aria-hidden="true" className="absolute -bottom-5 -left-5 w-[60%] h-[50%] rounded-[28px]"
+                style={{ background: "rgba(196,144,62,0.15)" }} />
+              <div aria-hidden="true" className="absolute -top-4 -right-4 w-[35%] h-[40%] rounded-[24px]"
+                style={{ background: "rgba(28,58,82,0.10)" }} />
+              <div className="relative h-[260px] sm:h-[340px] rounded-[28px] overflow-hidden z-10">
               <img
                 src="https://dbneurofeedback.com/wp-content/uploads/2024/12/NEUROPTIMAL-1.jpg"
                 alt="Séance de neurofeedback NeurOptimal® — capteurs EEG"
@@ -653,6 +636,7 @@ export default function Index() {
                 <span className="bg-white/90 text-[#1C3A52] text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
                   NeurOptimal®
                 </span>
+              </div>
               </div>
             </motion.div>
           </motion.div>
@@ -672,10 +656,16 @@ export default function Index() {
             variants={fadeInLeft}
             className="relative"
           >
-            <div className="h-[340px] sm:h-[420px] rounded-[24px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+            {/* Bulle décorative derrière la photo */}
+            <div
+              aria-hidden="true"
+              className="absolute -bottom-4 -right-4 w-[55%] h-[45%] rounded-[28px]"
+              style={{ background: "rgba(196,144,62,0.18)" }}
+            />
+            <div className="h-[340px] sm:h-[420px] rounded-[24px] overflow-hidden relative z-10">
               <img
                 src={COACH_IMG}
-                alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
+                alt="Noureddine Omar — Coach certifié, ONCoaching Mâcon"
                 className="w-full h-full object-cover object-top"
                 loading="lazy"
                 decoding="async"
@@ -857,7 +847,7 @@ export default function Index() {
             {/* Texte */}
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
               <p className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E]" aria-hidden="true">
-                On Coaching · En action
+                ONCoaching · En action
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]">
                 Découvrez<br />

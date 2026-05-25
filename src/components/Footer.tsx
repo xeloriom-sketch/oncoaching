@@ -315,7 +315,7 @@ const Footer = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end mb-20">
             <div>
               <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-5" aria-hidden="true">
-                ON COACHING · SANCÉ (MÂCON), FRANCE
+                ONCOACHING · SANCÉ (MÂCON), FRANCE
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight leading-[1.05] text-white">
                 Passez au niveau<br />supérieur.
@@ -441,7 +441,7 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-8 border-t border-white/8">
             <p className="text-white/25 text-[11px] font-mono">
-              © {year} ON Coaching · Tous droits réservés.{" "}
+              © {year} ONCoaching · Tous droits réservés.{" "}
               Site par{" "}
               <a
                 href="https://www.alhambra-web.com"

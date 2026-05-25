@@ -433,7 +433,7 @@ const About = () => {
                   className="text-[10px] font-mono tracking-widest uppercase text-[#C4903E]/70 mb-5"
                   aria-hidden="true"
                 >
-                  ON COACHING ☉ {whoSection.title}
+                  ONCOACHING ☉ {whoSection.title}
                 </motion.p>
                 <h2
                   id="about-who"
