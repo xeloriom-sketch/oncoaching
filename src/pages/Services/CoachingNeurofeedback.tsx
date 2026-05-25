@@ -220,8 +220,8 @@ const CoachingNeurofeedback = () => {
 
       <div className="w-full bg-[#FBFBFB] min-h-screen overflow-x-hidden">
 
-        <section className="pt-28 pb-16">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 md:pt-28 pb-12 md:pb-16">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
               <motion.div
@@ -312,8 +312,8 @@ const CoachingNeurofeedback = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-[#F3F4F6]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#F3F4F6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -340,7 +340,7 @@ const CoachingNeurofeedback = () => {
                     key={i}
                     variants={springLeft}
                     transition={{ delay: i * 0.08 }}
-                    className="bg-white rounded-[24px] p-8 flex flex-col gap-4"
+                    className="bg-white rounded-[24px] p-5 sm:p-8 flex flex-col gap-4"
                   >
                     <span className="font-mono text-[clamp(3rem,5vw,4rem)] font-bold text-[#C4903E]/20 leading-none select-none">
                       {step.num}
@@ -358,8 +358,8 @@ const CoachingNeurofeedback = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-[#1C3A52]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#1C3A52]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -428,8 +428,8 @@ const CoachingNeurofeedback = () => {
         </section>
 
         {/* ══ BOUCLE DU NEUROFEEDBACK ══════════════════════════════════════ */}
-        <section className="py-20 bg-[#FBFBFB]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#FBFBFB]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -464,7 +464,7 @@ const CoachingNeurofeedback = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
 
                 {/* Schéma de la boucle */}
-                <motion.div variants={springLeft} className="bg-[#1C3A52] rounded-[32px] p-8 flex flex-col gap-6">
+                <motion.div variants={springLeft} className="bg-[#1C3A52] rounded-[32px] p-5 sm:p-8 flex flex-col gap-6">
                   <p className="text-[#C4903E] font-mono text-[11px] tracking-widest uppercase">Boucle de feedback</p>
 
                   {[
@@ -547,8 +547,8 @@ const CoachingNeurofeedback = () => {
         </section>
 
         {/* ══ MÉDIAS & RESSOURCES ══════════════════════════════════════════ */}
-        <section className="py-20 bg-[#F3F4F6]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#F3F4F6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -599,8 +599,8 @@ const CoachingNeurofeedback = () => {
         </section>
 
         {/* ══ PRATICIEN ════════════════════════════════════════════════════ */}
-        <section className="py-20 bg-[#FBFBFB]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#FBFBFB]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -685,8 +685,8 @@ const CoachingNeurofeedback = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-[#C4903E]" aria-label="Tarif et prise de rendez-vous">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#C4903E]" aria-label="Tarif et prise de rendez-vous">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"

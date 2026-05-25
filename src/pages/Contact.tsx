@@ -163,7 +163,7 @@ function FloatingField({
         id={id} name={name} type={type} value={value} onChange={onChange}
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         required={required} autoComplete={autoComplete}
-        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#1C3A52] outline-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)]"
+        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-base text-[#1C3A52] outline-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)]"
         style={isDate ? { colorScheme: "light" } : {}}
       />
       <label
@@ -198,7 +198,7 @@ function FloatingTextarea({
         id={id} name={name} value={value} onChange={onChange}
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         required={required} rows={4}
-        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-7 pb-3 text-[15px] text-[#1C3A52] outline-none resize-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)]"
+        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-7 pb-3 text-base text-[#1C3A52] outline-none resize-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)]"
       />
       <label
         htmlFor={id}
@@ -371,7 +371,7 @@ const Contact = () => {
       <div className="w-full bg-[#FBFBFB]">
 
         {/* ── HERO ───────────────────────────────────────────────── */}
-        <section className="pt-10 pb-8 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-8 pb-6 sm:pt-10 sm:pb-8 max-w-7xl mx-auto px-5 md:px-12">
           <motion.div initial="hidden" animate="visible" variants={stagger} className="flex flex-col items-start gap-6">
             <motion.div variants={blurInUp} className="flex items-center gap-2">
               <motion.div
@@ -409,7 +409,7 @@ const Contact = () => {
         </section>
 
         {/* ── GRID CONTACT ────────────────────────────────────────── */}
-        <section className="py-0 pb-20 md:pb-28 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-0 pb-12 md:pb-20 lg:pb-28 max-w-7xl mx-auto px-5 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
             {/* ── GAUCHE : Formulaire ──────────────────────────── */}
@@ -478,7 +478,7 @@ const Contact = () => {
                     <div className="relative">
                       <select
                         id="service" name="service" value={formData.service} onChange={handleChange}
-                        className="w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#1C3A52] outline-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)] appearance-none cursor-pointer"
+                        className="w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-base text-[#1C3A52] outline-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)] appearance-none cursor-pointer"
                       >
                         {services.map((s) => (
                           <option key={s.value} value={s.value}>{s.label}</option>
@@ -586,7 +586,7 @@ const Contact = () => {
               className="flex flex-col lg:self-start lg:sticky lg:top-28"
             >
               <SpotlightCard
-                className="bg-[#1C3A52] rounded-[32px] p-8 md:p-10 flex flex-col gap-8"
+                className="bg-[#1C3A52] rounded-[32px] p-5 sm:p-8 md:p-10 flex flex-col gap-6 sm:gap-8"
                 spotlightColor="rgba(196,144,62,0.15)"
               >
                 <div
@@ -690,7 +690,7 @@ const Contact = () => {
         </section>
 
         {/* ── FAQ ─────────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28 bg-[#F3F4F6]">
+        <section className="py-12 md:py-20 lg:py-28 bg-[#F3F4F6]">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden" whileInView="visible" viewport={VP} variants={stagger}
@@ -701,7 +701,7 @@ const Contact = () => {
               </motion.p>
               <motion.h2
                 variants={blurInUp}
-                className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#1C3A52] text-center mb-12 leading-tight tracking-tight"
+                className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#1C3A52] text-center mb-8 md:mb-12 leading-tight tracking-tight"
               >
                 Vous avez des questions ?
               </motion.h2>
@@ -750,11 +750,11 @@ const Contact = () => {
         </section>
 
         {/* ── CTA ─────────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28">
+        <section className="py-12 md:py-20 lg:py-28">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}>
               <SpotlightCard
-                className="bg-[#1C3A52] rounded-[40px] py-20 px-8 md:px-16 text-center"
+                className="bg-[#1C3A52] rounded-[40px] py-12 md:py-20 px-6 sm:px-8 md:px-16 text-center"
                 spotlightColor="rgba(196,144,62,0.18)"
               >
                 <motion.p variants={blurInUp} initial="hidden" whileInView="visible" viewport={VP}

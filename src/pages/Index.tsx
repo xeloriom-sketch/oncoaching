@@ -174,8 +174,18 @@ export default function Index() {
   const { content } = usePageContent<IndexContent>("index");
 
   /* ── Carousel vidéo hero ───────────────────────────────────── */
-  const [videoIdx, setVideoIdx] = useState(0);
-  const nextVideo = useCallback(() => setVideoIdx(i => (i + 1) % HERO_VIDEOS.length), []);
+  const [videoIdx,   setVideoIdx]   = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
+
+  const nextVideo = useCallback(() => {
+    setVideoReady(false);
+    setVideoIdx(i => (i + 1) % HERO_VIDEOS.length);
+  }, []);
+
+  const handleCanPlay = useCallback((e: React.SyntheticEvent<HTMLVideoElement>) => {
+    setVideoReady(true);
+    void (e.currentTarget as HTMLVideoElement).play().catch(() => {});
+  }, []);
 
   /* ── Parallaxe souris — Hero ───────────────────────────────── */
   const heroRef = useRef<HTMLElement>(null);
@@ -255,7 +265,7 @@ export default function Index() {
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
           ref={heroRef}
-          className="w-full relative bg-[#FBFBFB] min-h-[calc(100vh-82px)] lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row lg:items-center"
+          className="w-full relative bg-[#FBFBFB] min-h-[calc(100vh-82px)] lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row lg:items-center overflow-x-hidden"
           aria-labelledby="home-h1"
           onMouseMove={handleHeroMove}
           onMouseLeave={handleHeroLeave}
@@ -295,13 +305,14 @@ export default function Index() {
                   src={HERO_VIDEOS[videoIdx]}
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                  animate={{ opacity: videoReady ? 1 : 0 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
                   autoPlay
                   muted
                   playsInline
-                  preload="none"
+                  preload="auto"
+                  onCanPlay={handleCanPlay}
                   onEnded={nextVideo}
                 />
               </AnimatePresence>
@@ -311,12 +322,12 @@ export default function Index() {
           </motion.div>
 
           {/* ── DROITE : Contenu textuel ── */}
-          <div className="flex flex-col gap-6 lg:gap-7 px-5 py-8 sm:px-8 sm:py-10 md:px-12 lg:px-10 lg:py-0 text-center lg:text-left items-center lg:items-start">
+          <div className="flex flex-col gap-6 lg:gap-7 px-5 py-6 sm:px-8 sm:py-10 md:px-12 lg:px-10 lg:py-0 text-center lg:text-left items-center lg:items-start">
 
             {/* H1 — 3 lignes, reveal ligne par ligne */}
             <h1
                 id="home-h1"
-                className="font-bold leading-[1.05] tracking-tight text-[#1C3A52]"
+                className="font-bold leading-[1.1] tracking-tight text-[#1C3A52] max-w-full"
                 style={{ fontSize: "clamp(2.2rem, 8vw, 5.6rem)" }}
             >
               {[
@@ -417,7 +428,7 @@ export default function Index() {
                 className="flex flex-col items-center gap-2"
               >
                 <span
-                  className="text-[clamp(1.8rem,4vw,3rem)] font-bold tracking-tight text-[#1C3A52] leading-none font-mono"
+                  className="text-[clamp(1.5rem,5vw,3rem)] font-bold tracking-tight text-[#1C3A52] leading-none font-mono"
                   aria-label={value}
                 >
                   {value}
@@ -433,7 +444,7 @@ export default function Index() {
 
       {/* ── 03. SERVICES ─────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#FBFBFB]"
+        className="py-12 md:py-20 lg:py-28 bg-[#FBFBFB]"
         aria-labelledby="services-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-12">
@@ -465,7 +476,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"
             aria-label="Nos services de coaching"
           >
             {mergedServices.map(({ key, Icon, title, desc, href, tag }, i) => {
@@ -486,7 +497,7 @@ export default function Index() {
                       <Icon className="w-6 h-6" strokeWidth={1.6} />
                     </div>
                     <span
-                      className={`text-[12px] font-mono tracking-widest uppercase px-3 py-1 rounded-full flex-shrink-0 ${c.tag}`}
+                      className={`text-[11px] sm:text-[12px] font-mono tracking-wide sm:tracking-widest uppercase px-2 sm:px-3 py-0.5 sm:py-1 rounded-full min-w-0 shrink ${c.tag}`}
                     >
                       {tag}
                     </span>
@@ -518,7 +529,7 @@ export default function Index() {
       </section>
 
       {/* ── 03b. NEUROFEEDBACK SPOTLIGHT ─────────────────────────────── */}
-      <section className="py-20 bg-[#FBFBFB]" aria-label="Neurofeedback NeurOptimal®">
+      <section className="py-12 md:py-20 lg:py-28 bg-[#FBFBFB]" aria-label="Neurofeedback NeurOptimal®">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -588,7 +599,7 @@ export default function Index() {
 
       {/* ── 04. COACH BIO ────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#1C3A52]"
+        className="py-12 md:py-20 lg:py-28 bg-[#1C3A52]"
         aria-labelledby="coach-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
@@ -668,10 +679,10 @@ export default function Index() {
               "Le changement commence là où la zone de confort s'arrête."
             </motion.blockquote>
 
-            <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">
+            <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3">
               <Link
                 to={ROUTES.about}
-                className="flex sm:inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
+                className="flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
                 aria-label="Découvrir l'approche de Noureddine Omar"
               >
                 Découvrir l'approche
@@ -681,7 +692,7 @@ export default function Index() {
                 href={`${import.meta.env.BASE_URL}certification Neourofeedback.pdf`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex sm:inline-flex items-center justify-center gap-2 border border-white/20 text-white/70 text-[14px] px-5 py-4 rounded-full hover:bg-white/10 hover:text-white transition-all"
+                className="flex items-center justify-center gap-2 border border-white/20 text-white/70 text-[14px] px-5 py-4 rounded-full hover:bg-white/10 hover:text-white transition-all"
                 aria-label="Voir la certification NeurOptimal®"
               >
                 <Award className="w-4 h-4" aria-hidden="true" />
@@ -694,7 +705,7 @@ export default function Index() {
 
       {/* ── 05. PROCESSUS ────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#FBFBFB]"
+        className="py-12 md:py-20 lg:py-28 bg-[#FBFBFB]"
         aria-labelledby="processus-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-14">
@@ -788,7 +799,7 @@ export default function Index() {
       </section>
 
       {/* ── 06. VIDÉO ────────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 bg-[#F3F4F6]" aria-label="Vidéo ON Coaching">
+      <section className="py-12 md:py-20 lg:py-28 bg-[#F3F4F6]" aria-label="Vidéo ON Coaching">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -837,7 +848,7 @@ export default function Index() {
 
       {/* ── 07. TÉMOIGNAGE ───────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#F3F4F6]"
+        className="py-12 md:py-20 lg:py-28 bg-[#F3F4F6]"
         aria-label="Témoignage client"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12">
@@ -891,7 +902,7 @@ export default function Index() {
       </section>
 
       {/* ── 08. PRESSE ───────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 bg-[#FBFBFB]" aria-labelledby="presse-title">
+      <section className="py-12 md:py-20 lg:py-28 bg-[#FBFBFB]" aria-labelledby="presse-title">
         <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-12">
           <motion.div
             initial="hidden"
@@ -944,7 +955,7 @@ export default function Index() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col gap-4 bg-white border border-[#E5E7EB] rounded-[24px] p-6 hover:shadow-[0_12px_40px_rgba(28,58,82,0.1)] hover:-translate-y-1 transition-all duration-300"
+                className="group flex flex-col gap-4 bg-white border border-[#E5E7EB] rounded-[24px] p-6 min-h-[200px] hover:shadow-[0_12px_40px_rgba(28,58,82,0.1)] hover:-translate-y-1 transition-all duration-300"
                 aria-label={`Lire l'article ${source}`}
               >
                 <div className="flex items-center justify-between">
@@ -982,7 +993,7 @@ export default function Index() {
 
       {/* ── 09. CTA FINAL ────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#1C3A52]"
+        className="py-12 md:py-20 lg:py-28 bg-[#1C3A52]"
         aria-labelledby="cta-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12">
@@ -1010,7 +1021,7 @@ export default function Index() {
 
             <motion.div
               variants={fadeInUp}
-              className="flex flex-wrap items-center justify-center gap-4"
+              className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto"
             >
               <motion.div
                 whileHover={{ scale: 1.04 }}
@@ -1018,7 +1029,7 @@ export default function Index() {
               >
                 <Link
                   to={ROUTES.contact}
-                  className="bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-7 py-4 rounded-full flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+                  className="bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-7 py-4 rounded-full flex items-center justify-center gap-2.5 hover:opacity-90 transition-opacity w-full sm:w-auto"
                   aria-label="Contacter un coach ON Coaching"
                 >
                   Contacter un coach
@@ -1031,7 +1042,7 @@ export default function Index() {
               >
                 <Link
                   to={ROUTES.tarifs}
-                  className="border border-white/25 text-white font-bold text-[15px] px-7 py-4 rounded-full hover:bg-white/10 transition-colors"
+                  className="border border-white/25 text-white font-bold text-[15px] px-7 py-4 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors w-full sm:w-auto"
                 >
                   Voir les tarifs
                 </Link>

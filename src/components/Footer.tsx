@@ -308,7 +308,7 @@ const Footer = () => {
       </aside>
 
       {/* ── Footer principal ─────────────────────────── */}
-      <footer className="bg-[#1C3A52] text-white" aria-label="Pied de page">
+      <footer className="bg-[#1C3A52] text-white overflow-x-hidden" aria-label="Pied de page">
         <div className="max-w-7xl mx-auto px-4 md:px-12 pt-12 md:pt-16 lg:pt-20 pb-10 md:pb-16">
 
           {/* CTA strip */}

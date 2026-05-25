@@ -162,8 +162,8 @@ const CoachingScolaire = () => {
       />
 
       {/* ── 01. HERO ─────────────────────────────────────────────── */}
-      <section className="bg-[#FBFBFB] pt-28 pb-16">
-        <div className="max-w-7xl mx-auto px-5 md:px-12">
+      <section className="bg-[#FBFBFB] pt-20 md:pt-28 pb-12 md:pb-16">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
             <motion.div
@@ -254,8 +254,8 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 02. POUR QUI ─────────────────────────────────────────── */}
-      <section className="bg-[#F3F4F6] py-20" aria-label="Pour qui est ce coaching">
-        <div className="max-w-7xl mx-auto px-5 md:px-12">
+      <section className="bg-[#F3F4F6] py-12 md:py-20" aria-label="Pour qui est ce coaching">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -294,8 +294,8 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 03. CE QUE TU VAS GAGNER ─────────────────────────────── */}
-      <section className="bg-[#1C3A52] py-20" aria-label="Bénéfices du coaching">
-        <div className="max-w-7xl mx-auto px-5 md:px-12">
+      <section className="bg-[#1C3A52] py-12 md:py-20" aria-label="Bénéfices du coaching">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -349,8 +349,8 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 04. COACH BIO ────────────────────────────────────────── */}
-      <section className="bg-[#FBFBFB] py-20" aria-label="Le coach">
-        <div className="max-w-7xl mx-auto px-5 md:px-12">
+      <section className="bg-[#FBFBFB] py-12 md:py-20" aria-label="Le coach">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -433,8 +433,8 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 05. TARIF + CTA ──────────────────────────────────────── */}
-      <section id="tarif" className="bg-[#C4903E] py-20" aria-label="Tarif et prise de rendez-vous">
-        <div className="max-w-7xl mx-auto px-5 md:px-12">
+      <section id="tarif" className="bg-[#C4903E] py-12 md:py-20" aria-label="Tarif et prise de rendez-vous">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -475,7 +475,7 @@ const CoachingScolaire = () => {
               </motion.div>
 
               <motion.div variants={blurInUp} className="flex flex-col gap-5">
-                <div className="bg-white/15 backdrop-blur-sm rounded-[28px] p-8 flex flex-col gap-5">
+                <div className="bg-white/15 backdrop-blur-sm rounded-[28px] p-5 sm:p-8 flex flex-col gap-5">
                   <p className="text-white font-semibold text-[18px] leading-snug">
                     Prêt à changer les choses ?
                   </p>

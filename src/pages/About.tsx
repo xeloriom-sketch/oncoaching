@@ -278,7 +278,7 @@ const About = () => {
               initial="hidden"
               animate="visible"
               variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
-              className="space-y-7"
+              className="space-y-5 sm:space-y-7"
             >
               <motion.p
                 variants={blurInUp}
@@ -339,7 +339,7 @@ const About = () => {
               variants={fadeInScale}
               className="relative"
             >
-              <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] md:max-h-[560px]">
+              <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] max-h-[340px] sm:max-h-[420px] md:max-h-[560px]">
                 <img
                   src={COACH_IMG}
                   alt="Coach ON Coaching — coach certifié à Mâcon"
@@ -394,7 +394,7 @@ const About = () => {
             whileInView="visible"
             viewport={VP}
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-            className="bg-[#F3F4F6] rounded-[32px] px-8 py-10 md:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-gray-200"
+            className="bg-[#F3F4F6] rounded-[32px] px-4 sm:px-8 py-8 sm:py-10 md:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x divide-gray-200"
           >
             {STATS.map((stat) => (
               <motion.div
@@ -417,7 +417,7 @@ const About = () => {
             className="bg-[#1C3A52] rounded-[40px] p-5 sm:p-8 md:p-14 overflow-hidden"
             spotlightColor="rgba(196,144,62,0.10)"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-start relative">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 md:gap-10 lg:gap-16 items-start relative">
 
               <motion.div
                 className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#C4903E]/5 blur-3xl pointer-events-none"
@@ -528,7 +528,7 @@ const About = () => {
                   key={step.num}
                   variants={springLeft}
                   whileHover={{ y: -4, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-                  className="group relative rounded-[28px] border border-gray-100 bg-white p-8 overflow-hidden cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
+                  className="group relative rounded-[28px] border border-gray-100 bg-white p-5 sm:p-6 md:p-8 overflow-hidden cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
                 >
                   <div
                     className="absolute inset-0 bg-gradient-to-br from-[#C4903E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -593,7 +593,7 @@ const About = () => {
             </div>
 
             {/* Aperçu PDF */}
-            <div className="w-full md:w-[280px] lg:w-[320px] h-[200px] md:h-[240px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 bg-white/5">
+            <div className="hidden md:block w-full md:w-[280px] lg:w-[320px] h-[200px] md:h-[240px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 bg-white/5">
               <iframe
                 src={`${import.meta.env.BASE_URL}certification%20Neourofeedback.pdf#toolbar=0&navpanes=0&scrollbar=0`}
                 className="w-full h-full"

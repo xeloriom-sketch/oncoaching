@@ -38,6 +38,7 @@ const Navbar = () => {
   const [mobileSvc, setMobileSvc] = useState(false);
   const [hidden,    setHidden]    = useState(false);
   const [logoVisible, setLogoVisible] = useState(true);
+  const [scrolled,  setScrolled]  = useState(false);
   const closeRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastY     = useRef(0);
   const ticking   = useRef(false);
@@ -53,6 +54,7 @@ const Navbar = () => {
       ticking.current = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
+        setScrolled(y > 60);
         // Logo : visible uniquement dans la zone hero (≈ 88vh)
         setLogoVisible(y <= window.innerHeight * 0.88);
         // Navbar hide/show
@@ -93,7 +95,22 @@ const Navbar = () => {
       animate={{ y: hidden ? "-110%" : "0%" }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="w-full px-5 md:px-10 py-4 flex items-center justify-between gap-6">
+      <div className="w-full px-5 md:px-10 py-4 flex items-center justify-between gap-6 relative z-0">
+
+        {/* Mobile frosted background — s'affiche quand scrollé */}
+        <motion.div
+          className="lg:hidden absolute inset-0 pointer-events-none"
+          animate={{ opacity: scrolled ? 1 : 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
+          style={{
+            zIndex: -1,
+            background: "rgba(251,251,251,0.95)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            borderBottom: "1px solid rgba(0,0,0,0.07)",
+          }}
+          aria-hidden="true"
+        />
 
         {/* Logo — visible uniquement dans le hero */}
         <motion.div
@@ -224,8 +241,8 @@ const Navbar = () => {
           aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={isOpen}
           whileTap={{ scale: 0.9 }}
-          className="lg:hidden p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
-          style={{ color: NAVY }}
+          className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full"
+          style={{ background: NAVY, color: "white" }}
         >
           <AnimatePresence mode="wait" initial={false}>
             {isOpen

@@ -172,7 +172,7 @@ const CoachingEquipe = () => {
 
       <div className="w-full bg-[#FBFBFB] min-h-screen overflow-x-hidden">
 
-        <section className="pt-28 pb-16 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 md:pt-28 pb-12 md:pb-16 max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
             <motion.div
@@ -262,8 +262,8 @@ const CoachingEquipe = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-[#F3F4F6]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#F3F4F6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -315,8 +315,8 @@ const CoachingEquipe = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-[#1C3A52]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#1C3A52]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -374,8 +374,8 @@ const CoachingEquipe = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-[#FBFBFB]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#FBFBFB]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -458,10 +458,10 @@ const CoachingEquipe = () => {
         </section>
 
         <section
-          className="py-20 bg-[#C4903E]"
+          className="py-12 md:py-20 bg-[#C4903E]"
           aria-label="Tarif et prise de rendez-vous coaching équipe"
         >
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"

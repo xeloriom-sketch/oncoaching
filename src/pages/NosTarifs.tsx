@@ -212,7 +212,7 @@ const NosTarifs = () => {
       <div className="w-full bg-[#FBFBFB] overflow-x-hidden">
 
         {/* ── HERO ──────────────────────────────────────────────────────── */}
-        <section className="pt-20 md:pt-28 pb-10 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-12 md:pt-20 lg:pt-28 pb-8 md:pb-10 max-w-7xl mx-auto px-5 md:px-12">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -277,7 +277,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── CARTES TARIFS ─────────────────────────────────────────────── */}
-        <section className="pb-20 md:pb-28 max-w-7xl mx-auto px-5 md:px-12" aria-labelledby="section-tarifs">
+        <section className="pb-12 md:pb-20 lg:pb-28 max-w-7xl mx-auto px-5 md:px-12" aria-labelledby="section-tarifs">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -312,13 +312,13 @@ const NosTarifs = () => {
                 onMouseMove={tiltRefs[0].onMouseMove}
                 onMouseLeave={tiltRefs[0].onMouseLeave}
                 onMouseEnter={tiltRefs[0].onMouseEnter}
-                className="rounded-[28px] p-6 sm:p-8 flex flex-col h-full bg-[#F3F4F6] cursor-default"
+                className="rounded-[28px] p-5 sm:p-8 flex flex-col h-full bg-[#F3F4F6] cursor-default"
                 style={{ willChange: "transform" }}
               >
                 <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400 mb-3">Particuliers</p>
                 <h3 className="text-[1.6rem] font-bold text-[#1C3A52] leading-tight mb-1">Coaching<br />Individuel</h3>
                 <div className="flex items-end gap-1 mt-4 mb-6">
-                  <span className="text-[3rem] font-black text-[#1C3A52] leading-none">60€</span>
+                  <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}>60€</span>
                   <span className="text-gray-400 text-[14px] mb-2">/séance</span>
                 </div>
                 <p className="text-gray-500 text-[14px] mb-6">Particuliers, étudiants, jeunes adultes.</p>
@@ -334,7 +334,7 @@ const NosTarifs = () => {
                 </ul>
                 <Link
                   to="/contact"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:bg-[#C4903E] transition-colors"
+                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:bg-[#C4903E] transition-colors w-full sm:w-auto"
                 >
                   Prendre RDV <ArrowUpRight className="w-4 h-4" />
                 </Link>
@@ -355,7 +355,7 @@ const NosTarifs = () => {
                   boxShadow: "0 0 0 1.5px #C4903E, 0 24px 60px rgba(196,144,62,0.22), 0 8px 24px rgba(28,58,82,0.18)",
                 }}
               >
-                <SpotlightCard className="bg-[#1C3A52] p-8 flex flex-col" spotlightColor="rgba(196,144,62,0.15)">
+                <SpotlightCard className="bg-[#1C3A52] p-5 sm:p-8 flex flex-col" spotlightColor="rgba(196,144,62,0.15)">
                   <div className="flex items-center justify-between mb-6">
                     <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]/60">Spécialité</p>
                     <motion.span
@@ -368,7 +368,7 @@ const NosTarifs = () => {
                   </div>
                   <h3 className="text-[1.6rem] font-bold text-white leading-tight mb-1">Neuro-<br />feedback</h3>
                   <div className="flex items-end gap-1 mt-4 mb-6">
-                    <span className="text-[3rem] font-black text-[#C4903E] leading-none">60€</span>
+                    <span className="font-black text-[#C4903E] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}>60€</span>
                     <span className="text-white/40 text-[14px] mb-2">/30 min</span>
                   </div>
                   <p className="text-white/50 text-[14px] mb-6">{neurofeedback.subtitle}</p>
@@ -384,7 +384,7 @@ const NosTarifs = () => {
                   </ul>
                   <Link
                     to="/contact"
-                    className="mt-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-[#1C3A52] font-black text-[14px] px-6 py-3.5 rounded-full hover:brightness-110 transition-all"
+                    className="mt-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-[#1C3A52] font-black text-[14px] px-6 py-3.5 rounded-full hover:brightness-110 transition-all w-full sm:w-auto"
                   >
                     Prendre RDV <ArrowUpRight className="w-4 h-4" />
                   </Link>
@@ -399,13 +399,13 @@ const NosTarifs = () => {
                 onMouseMove={tiltRefs[2].onMouseMove}
                 onMouseLeave={tiltRefs[2].onMouseLeave}
                 onMouseEnter={tiltRefs[2].onMouseEnter}
-                className="rounded-[28px] p-6 sm:p-8 flex flex-col h-full bg-[#C4903E] cursor-default"
+                className="rounded-[28px] p-5 sm:p-8 flex flex-col h-full bg-[#C4903E] cursor-default"
                 style={{ willChange: "transform" }}
               >
                 <p className="text-[11px] font-mono tracking-widest uppercase text-[#1C3A52]/50 mb-3">Entreprises</p>
                 <h3 className="text-[1.6rem] font-bold text-[#1C3A52] leading-tight mb-1">Coaching<br />Équipe</h3>
                 <div className="flex items-end gap-1 mt-4 mb-6">
-                  <span className="text-[2.4rem] font-black text-[#1C3A52] leading-none">Sur devis</span>
+                  <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)" }}>Sur devis</span>
                 </div>
                 <p className="text-[#1C3A52]/70 text-[14px] mb-6">{entreprises.subtitle}</p>
                 <ul className="space-y-3 flex-1 mb-8">
@@ -420,7 +420,7 @@ const NosTarifs = () => {
                 </ul>
                 <Link
                   to="/contact"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
+                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity w-full sm:w-auto"
                 >
                   Demander un devis <ArrowUpRight className="w-4 h-4" />
                 </Link>
@@ -431,7 +431,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── COMMENT ÇA MARCHE ─────────────────────────────────────────── */}
-        <section className="py-20 md:py-28">
+        <section className="py-12 md:py-20 lg:py-28">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"
@@ -456,7 +456,7 @@ const NosTarifs = () => {
               whileInView="visible"
               viewport={VP}
               variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}
-              className="bg-[#F3F4F6] rounded-[32px] p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6"
+              className="bg-[#F3F4F6] rounded-[32px] p-5 sm:p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6"
             >
               {STEPS.map((step, i) => (
                 <motion.div
@@ -481,7 +481,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── FAQ TARIFS ────────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 lg:py-28 max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -563,7 +563,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── CTA DARK ──────────────────────────────────────────────────── */}
-        <section className="py-20 md:py-28">
+        <section className="py-12 md:py-20 lg:py-28">
           <motion.div
             initial={{ opacity: 0, y: 32, scale: 0.98 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -571,7 +571,7 @@ const NosTarifs = () => {
             transition={{ type: "spring", damping: 22, stiffness: 160 }}
             className="max-w-7xl mx-auto px-5 md:px-12"
           >
-            <div className="bg-[#1C3A52] rounded-[32px] px-8 md:px-16 py-16 md:py-20 relative overflow-hidden text-center">
+            <div className="bg-[#1C3A52] rounded-[32px] px-5 sm:px-8 md:px-16 py-10 sm:py-14 md:py-20 relative overflow-hidden text-center">
               <motion.div
                 animate={{ scale: [1, 1.15, 1], opacity: [0.18, 0.28, 0.18] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -614,20 +614,20 @@ const NosTarifs = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VP}
                 transition={{ delay: 0.34 }}
-                className="flex flex-wrap items-center justify-center gap-4 relative z-10"
+                className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10 w-full sm:w-auto"
               >
-                <motion.div {...btnHoverProps}>
+                <motion.div {...btnHoverProps} className="w-full sm:w-auto">
                   <Link
                     to={cta.buttonLink}
-                    className="inline-flex items-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-black text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition-all"
+                    className="inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-black text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition-all w-full sm:w-auto"
                   >
                     {cta.buttonText} <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </motion.div>
-                <motion.div {...btnHoverProps}>
+                <motion.div {...btnHoverProps} className="w-full sm:w-auto">
                   <Link
                     to="/about"
-                    className="inline-flex items-center gap-2.5 bg-transparent border-2 border-white/20 text-white font-bold text-[15px] px-8 py-4 rounded-full hover:border-white/50 hover:bg-white/5 transition-all"
+                    className="inline-flex items-center justify-center gap-2.5 bg-transparent border-2 border-white/20 text-white font-bold text-[15px] px-8 py-4 rounded-full hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto"
                   >
                     Notre approche
                   </Link>

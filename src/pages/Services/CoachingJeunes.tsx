@@ -156,8 +156,8 @@ const CoachingJeunes = () => {
       <div className="w-full bg-[#FBFBFB] min-h-screen overflow-x-hidden">
 
         {/* 01. HERO */}
-        <section className="pt-28 pb-16">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 md:pt-28 pb-12 md:pb-16">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
               <motion.div
@@ -256,8 +256,8 @@ const CoachingJeunes = () => {
         </section>
 
         {/* 02. DÉFIS */}
-        <section className="py-20 bg-[#F3F4F6]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#F3F4F6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -305,8 +305,8 @@ const CoachingJeunes = () => {
         </section>
 
         {/* 03. CE QUE TU VAS GAGNER */}
-        <section className="py-20 bg-[#1C3A52]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#1C3A52]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -365,8 +365,8 @@ const CoachingJeunes = () => {
         </section>
 
         {/* 04. COACH BIO */}
-        <section className="py-20 bg-[#FBFBFB]">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#FBFBFB]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -449,8 +449,8 @@ const CoachingJeunes = () => {
         </section>
 
         {/* 05. TARIF + CTA */}
-        <section className="py-20 bg-[#C4903E]" aria-label="Tarif et prise de rendez-vous">
-          <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-12 md:py-20 bg-[#C4903E]" aria-label="Tarif et prise de rendez-vous">
+          <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
             <motion.div
               initial="hidden"
               whileInView="visible"
