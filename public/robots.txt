@@ -1,3 +1,5 @@
+Sitemap: https://www.oncoaching.fr/sitemap.xml
+
 User-agent: *
 Allow: /
 Disallow: /admin/
@@ -16,5 +18,3 @@ Crawl-delay: 10
 
 User-agent: SemrushBot
 Crawl-delay: 10
-
-Sitemap: https://www.oncoaching.fr/sitemap.xml

@@ -301,6 +301,7 @@ export default function Index() {
                   autoPlay
                   muted
                   playsInline
+                  preload="none"
                   onEnded={nextVideo}
                 />
               </AnimatePresence>
@@ -352,7 +353,7 @@ export default function Index() {
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
                 className="text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left"
             >
-              {content?.hero?.subtitle ?? "Accompagnement personnalisé pour particuliers et entreprises. Coach certifié, 26 ans d'expérience en sciences humaines."}
+              {content?.hero?.subtitle ?? "Coach certifié à Mâcon — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines."}
             </motion.p>
 
             {/* Boutons d'actions (CTAs) liquides */}
