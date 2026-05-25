@@ -256,66 +256,63 @@ export default function Index() {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="relative w-full h-[460px] sm:h-[580px] lg:h-[680px] order-last lg:order-first"
+              className="relative w-full h-[520px] sm:h-[660px] lg:h-[800px] order-last lg:order-first"
           >
-            {/* Bulle décorative dorée derrière */}
-            <div
-              aria-hidden="true"
-              className="absolute"
+            {/* ── Cercle 1 — grand, haut-droite ── */}
+            <motion.div
               style={{
-                top: "4%", right: "0%",
-                width: "74%", height: "80%",
-                borderRadius: "62% 38% 50% 50% / 56% 50% 50% 44%",
-                background: "rgba(196,144,62,0.13)",
-                zIndex: 0,
+                position: "absolute",
+                top: 0, right: 0,
+                width: "78%",
+                aspectRatio: "1",
+                borderRadius: "50%",
+                overflow: "hidden",
+                boxShadow: "0 0 0 2px rgba(196,144,62,0.55)",
+                zIndex: 10,
+                x: sPhX,
+                y: sPhY,
               }}
-            />
-
-            {/* SVG clip-path — 3 cercles parfaits */}
-            <svg
-              aria-hidden="true"
-              style={{ position: "absolute", width: 0, height: 0 }}
             >
-              <defs>
-                <clipPath id="hero-blobs-clip" clipPathUnits="objectBoundingBox">
-                  <circle cx="0.65" cy="0.36" r="0.34" />
-                  <circle cx="0.28" cy="0.74" r="0.22" />
-                  <circle cx="0.06" cy="0.90" r="0.09" />
-                </clipPath>
-              </defs>
-            </svg>
+              <iframe
+                src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
+                style={{
+                  position: "absolute",
+                  top: "-15%", left: "-15%",
+                  width: "130%", height: "130%",
+                  border: "none", pointerEvents: "none",
+                }}
+                allow="autoplay; fullscreen"
+                title="Vidéo coaching hero"
+              />
+            </motion.div>
 
-            {/* Conteneur clippé — l'iframe visible dans les 3 cercles */}
-            <div
-              className="absolute inset-0 z-10"
-              style={{ clipPath: "url(#hero-blobs-clip)" }}
+            {/* ── Cercle 2 — moyen, bas-gauche ── */}
+            <motion.div
+              style={{
+                bottom: "3%", left: "0%",
+                width: "46%",
+                aspectRatio: "1",
+                borderRadius: "50%",
+                overflow: "hidden",
+                boxShadow: "0 0 0 2px rgba(196,144,62,0.40)",
+                zIndex: 10,
+                position: "absolute",
+                x: sPhX,
+                y: sPhY,
+              }}
             >
-              <motion.div
-                className="absolute"
-                style={{ top: "-15%", left: "-15%", width: "130%", height: "130%", x: sPhX, y: sPhY }}
-              >
-                <iframe
-                  src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                  className="w-full h-full"
-                  style={{ border: "none", pointerEvents: "none" }}
-                  allow="autoplay; fullscreen"
-                  title="Vidéo coaching hero"
-                />
-              </motion.div>
-            </div>
-
-            {/* Traits des 3 cercles — SVG superposé */}
-            <svg
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-            >
-              <circle cx="65" cy="36" r="34" fill="none" stroke="rgba(196,144,62,0.55)" strokeWidth="0.6" />
-              <circle cx="28" cy="74" r="22" fill="none" stroke="rgba(196,144,62,0.45)" strokeWidth="0.6" />
-              <circle cx="6"  cy="90" r="9"  fill="none" stroke="rgba(196,144,62,0.35)" strokeWidth="0.6" />
-            </svg>
-
+              <iframe
+                src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
+                style={{
+                  position: "absolute",
+                  top: "-15%", left: "-15%",
+                  width: "130%", height: "130%",
+                  border: "none", pointerEvents: "none",
+                }}
+                allow="autoplay; fullscreen"
+                title="Vidéo coaching hero"
+              />
+            </motion.div>
 
           </motion.div>
 
