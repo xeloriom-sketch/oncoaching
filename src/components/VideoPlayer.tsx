@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 
 interface Props {
   src: string;
@@ -12,11 +12,35 @@ const fmt = (s: number) => {
 };
 
 export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
-  const ref                       = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying]     = useState(false);
-  const [time,    setTime]        = useState(0);
-  const [dur,     setDur]         = useState(0);
-  const [muted,   setMuted]       = useState(false);
+  const ref          = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [time,    setTime]    = useState(0);
+  const [dur,     setDur]     = useState(0);
+  const [muted,   setMuted]   = useState(true); // muet par défaut → autoplay mobile
+
+  // Autoplay quand le player entre dans le viewport (≥50% visible)
+  useEffect(() => {
+    const video = ref.current;
+    const container = containerRef.current;
+    if (!video || !container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.muted = true;
+          void video.play().then(() => { setPlaying(true); setMuted(true); }).catch(() => {});
+        } else {
+          video.pause();
+          setPlaying(false);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   const toggle = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -53,12 +77,14 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
 
   return (
     <div
+      ref={containerRef}
       onClick={toggle}
       className="group relative w-full aspect-video rounded-[15px] overflow-hidden bg-[rgb(30,30,30)] shadow-[inset_0px_0px_1px_black] hover:shadow-[inset_0px_10px_36px_-13px_rgba(0,0,0,0.75)] transition-shadow duration-200 cursor-pointer select-none"
     >
       {/* ── Vidéo ── */}
       <video
         ref={ref}
+        muted={muted}
         className="absolute inset-0 w-full h-full object-contain bg-black"
         onTimeUpdate={() => setTime(ref.current?.currentTime ?? 0)}
         onLoadedMetadata={() => setDur(ref.current?.duration ?? 0)}
@@ -72,7 +98,7 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
       {/* ── Dégradé overlay ── */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/55 pointer-events-none" />
 
-      {/* ── Gros bouton Play centré (quand en pause, disparaît au hover) ── */}
+      {/* ── Gros bouton Play centré (quand en pause) ── */}
       {!playing && (
         <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-200 pointer-events-none">
           <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
@@ -83,15 +109,14 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
         </div>
       )}
 
-      {/* ── Contrôles : toujours visibles si en pause, sinon apparaissent au hover ── */}
+      {/* ── Contrôles ── */}
       <div
         className={`absolute inset-0 flex flex-col p-[10px] transition-opacity duration-200 ${
           !playing ? "opacity-100" : "opacity-0 group-hover:opacity-100"
         }`}
       >
-        {/* ── Ligne du haut ── */}
+        {/* Ligne du haut */}
         <div className="flex flex-row justify-between items-start">
-          {/* Icône partage / Facebook */}
           {facebookUrl ? (
             <a
               href={facebookUrl}
@@ -109,11 +134,10 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
           ) : (
             <div />
           )}
-
           <div />
         </div>
 
-        {/* ── Barre de progression (milieu) ── */}
+        {/* Barre de progression */}
         <div className="flex-grow flex justify-center items-end">
           <div
             className="w-full h-[8px] mb-[8px] bg-[rgba(170,163,163,0.356)] rounded-full cursor-pointer relative"
@@ -132,10 +156,10 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
           </div>
         </div>
 
-        {/* ── Ligne du bas ── */}
+        {/* Ligne du bas */}
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-[20px]">
-            {/* Pause / Play (50×50) */}
+            {/* Play / Pause */}
             <button
               className="w-[50px] h-[50px] fill-[rgb(241,239,239)]"
               onClick={toggle}
@@ -152,7 +176,7 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
               )}
             </button>
 
-            {/* Avance rapide +10s */}
+            {/* +10s */}
             <button
               className="w-[30px] h-[30px] p-[5px] rounded-full hover:bg-black/50 transition-colors"
               onClick={skip}
@@ -163,7 +187,7 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
               </svg>
             </button>
 
-            {/* Volume / Muet */}
+            {/* Mute toggle */}
             <button
               className="w-[30px] h-[30px] p-[5px] rounded-full hover:bg-black/50 transition-colors"
               onClick={toggleMute}

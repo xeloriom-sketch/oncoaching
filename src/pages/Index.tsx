@@ -187,6 +187,12 @@ export default function Index() {
     void (e.currentTarget as HTMLVideoElement).play().catch(() => {});
   }, []);
 
+  // iOS Safari + <source> children : appel explicite de load() au montage
+  const heroVideoRef = useCallback((node: HTMLVideoElement | null) => {
+    if (!node) return;
+    node.load();
+  }, [videoIdx]); // eslint-disable-line react-hooks/exhaustive-deps
+
   /* ── Parallaxe souris — Hero ───────────────────────────────── */
   const heroRef = useRef<HTMLElement>(null);
   const rawX    = useMotionValue(0);
@@ -302,6 +308,7 @@ export default function Index() {
               <AnimatePresence mode="sync">
                 <motion.video
                   key={videoIdx}
+                  ref={heroVideoRef}
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: videoReady ? 1 : 0 }}
