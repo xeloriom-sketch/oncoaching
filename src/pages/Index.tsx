@@ -374,15 +374,15 @@ export default function Index() {
             <h1
                 id="home-h1"
                 className="font-bold leading-[1.05] tracking-tight text-[#1C3A52]"
-                style={{ fontSize: "clamp(2.6rem, 6.5vw, 5.6rem)" }}
+                style={{ fontSize: "clamp(2rem, 5.5vw, 5.6rem)" }}
             >
               {[
                 { text: "Développez", delay: 0.18 },
                 { text: "votre potentiel", delay: 0.30 },
               ].map(({ text, delay }) => (
-                <span key={text} className="word-mask block">
+                <span key={text} className="word-mask block overflow-hidden">
                   <motion.span
-                    className="inline-block"
+                    className="inline-block whitespace-nowrap"
                     initial={{ y: "105%" }}
                     animate={{ y: "0%" }}
                     transition={{ type: "spring", stiffness: 160, damping: 22, delay }}
@@ -391,9 +391,9 @@ export default function Index() {
                   </motion.span>
                 </span>
               ))}
-              <span className="word-mask block">
+              <span className="word-mask block overflow-hidden">
                 <motion.span
-                  className="inline-block"
+                  className="inline-block whitespace-nowrap"
                   initial={{ y: "105%" }}
                   animate={{ y: "0%" }}
                   transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.42 }}
