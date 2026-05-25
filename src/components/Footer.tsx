@@ -172,7 +172,7 @@ const Footer = () => {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 18 }}
-              className="ml-auto w-full max-w-[430px]"
+              className="ml-auto w-full max-w-[430px] overflow-hidden"
             >
               <div className="main-music-card">
                 <div className="track-info">
@@ -243,7 +243,7 @@ const Footer = () => {
               <style>{`
                 .main-music-card {
                   width: 100%;
-                  padding: 18px;
+                  padding: clamp(12px, 4vw, 18px);
                   border-radius: 28px;
                   background: #000;
                   box-shadow: 0 10px 28px rgba(0,0,0,.45);
@@ -254,7 +254,7 @@ const Footer = () => {
                 }
                 .track-info { display:flex; align-items:center; gap:12px; min-width:0; }
                 .album-art {
-                  width: 64px; height: 64px; border-radius: 14px; object-fit: cover; flex-shrink:0;
+                  width: clamp(48px, 12vw, 64px); height: clamp(48px, 12vw, 64px); border-radius: 14px; object-fit: cover; flex-shrink:0;
                   box-shadow: 0 6px 14px rgba(0,0,0,.45);
                 }
                 .track-details { min-width:0; flex:1; }
@@ -309,10 +309,10 @@ const Footer = () => {
 
       {/* ── Footer principal ─────────────────────────── */}
       <footer className="bg-[#1C3A52] text-white" aria-label="Pied de page">
-        <div className="max-w-7xl mx-auto px-4 md:px-12 pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-12 pt-12 md:pt-16 lg:pt-20 pb-10 md:pb-16">
 
           {/* CTA strip */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 items-end mb-12 md:mb-20">
             <div>
               <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-5" aria-hidden="true">
                 ONCOACHING · SANCÉ (MÂCON), FRANCE
@@ -325,16 +325,16 @@ const Footer = () => {
               <p className="text-white/40 text-[14px] font-light leading-relaxed max-w-xs lg:text-right">
                 Consultation initiale offerte. Sans engagement. Disponible pour de nouveaux accompagnements.
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 w-full sm:w-auto">
                 <Link
                   to="/contact"
-                  className="bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                  className="bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity text-center w-full sm:w-auto"
                 >
                   Contacter un coach
                 </Link>
                 <Link
                   to="/about"
-                  className="border border-white/15 text-white/60 hover:text-white font-medium text-[13px] px-6 py-3 rounded-full hover:border-white/30 transition-all"
+                  className="border border-white/15 text-white/60 hover:text-white font-medium text-[13px] px-6 py-3 rounded-full hover:border-white/30 transition-all text-center w-full sm:w-auto"
                 >
                   En savoir plus
                 </Link>
@@ -350,7 +350,7 @@ const Footer = () => {
 
             {/* Brand */}
             <div className="col-span-2 md:col-span-1">
-              <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2 mb-4 group whitespace-nowrap">
+              <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2 mb-4 group min-w-0 overflow-hidden">
                 <div className="bg-white rounded-[7px] p-[3px] flex-shrink-0">
                   <LogoMark size={24} />
                 </div>
@@ -439,7 +439,7 @@ const Footer = () => {
           </div>
 
           {/* Bottom bar */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-8 border-t border-white/8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-3 pt-8 border-t border-white/8">
             <p className="text-white/25 text-[11px] font-mono">
               © {year} ONCoaching · Tous droits réservés.{" "}
               Site par{" "}

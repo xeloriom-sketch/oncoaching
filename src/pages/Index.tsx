@@ -146,7 +146,7 @@ function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", child
   const [hovered, setHovered] = useState(false);
   return (
     <motion.div
-      className="relative overflow-hidden rounded-full"
+      className="relative overflow-hidden rounded-full w-full sm:w-auto"
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       whileTap={{ scale: 0.97 }}
@@ -351,7 +351,7 @@ export default function Index() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
-                className="text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left"
+                className="text-[0.95rem] sm:text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left"
             >
               {content?.hero?.subtitle ?? "Coach certifié à Mâcon — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines."}
             </motion.p>
@@ -436,7 +436,7 @@ export default function Index() {
         className="py-20 md:py-28 bg-[#FBFBFB]"
         aria-labelledby="services-title"
       >
-        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-12">
+        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -525,7 +525,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-center"
           >
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
               <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
@@ -534,7 +534,7 @@ export default function Index() {
               <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
                 Neurofeedback NeurOptimal®
               </h2>
-              <p className="text-gray-500 text-[16px] leading-relaxed max-w-lg">
+              <p className="text-gray-500 text-[15px] sm:text-[16px] leading-relaxed max-w-lg">
                 Une technologie d'entraînement cérébral non invasive qui permet au système nerveux de développer flexibilité et résilience. Dès 6 à 10 séances, les clients rapportent un sommeil plus réparateur, une clarté mentale accrue, un calme intérieur et des performances renforcées.
               </p>
               <ul className="flex flex-col gap-2">
@@ -591,7 +591,7 @@ export default function Index() {
         className="py-20 md:py-28 bg-[#1C3A52]"
         aria-labelledby="coach-title"
       >
-        <div className="max-w-7xl mx-auto px-5 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="max-w-7xl mx-auto px-5 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -697,7 +697,7 @@ export default function Index() {
         className="py-20 md:py-28 bg-[#FBFBFB]"
         aria-labelledby="processus-title"
       >
-        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-14">
+        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-14">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -795,7 +795,7 @@ export default function Index() {
             whileInView="visible"
             viewport={VP}
             variants={staggerContainer}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 lg:gap-16 items-center"
           >
             {/* Texte */}
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
@@ -892,7 +892,7 @@ export default function Index() {
 
       {/* ── 08. PRESSE ───────────────────────────────────────────────── */}
       <section className="py-20 md:py-28 bg-[#FBFBFB]" aria-labelledby="presse-title">
-        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-12">
+        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -1003,7 +1003,7 @@ export default function Index() {
 
             <motion.p
               variants={fadeInUp}
-              className="text-[1rem] text-white/55 max-w-md leading-relaxed"
+              className="text-[1rem] text-white/55 w-full sm:max-w-md leading-relaxed"
             >
               {content?.cta?.subtitle ?? "Consultation initiale offerte. Sans engagement. Disponible pour de nouveaux accompagnements."}
             </motion.p>

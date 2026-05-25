@@ -269,10 +269,10 @@ const About = () => {
 
         {/* ══ 01 — HERO ══════════════════════════════════════════════════ */}
         <section
-          className="max-w-7xl mx-auto px-5 md:px-12 py-20 md:py-28"
+          className="max-w-7xl mx-auto px-5 md:px-12 py-12 md:py-20 lg:py-28"
           aria-labelledby="about-h1"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16 items-center">
 
             <motion.div
               initial="hidden"
@@ -290,7 +290,7 @@ const About = () => {
 
               <h1
                 id="about-h1"
-                className="text-[clamp(2rem,5vw,5rem)] font-bold leading-[0.95] tracking-tight text-[#1C3A52]"
+                className="text-[clamp(2rem,5vw,5rem)] font-bold leading-tight md:leading-[0.95] tracking-tight text-[#1C3A52]"
               >
                 <WordByWord text={hero.title} />
               </h1>
@@ -302,7 +302,7 @@ const About = () => {
                 {hero.paragraph1}
               </motion.p>
 
-              <motion.div variants={blurInUp} className="flex flex-wrap gap-3">
+              <motion.div variants={blurInUp} className="flex flex-wrap gap-3 justify-center lg:justify-start">
                 <motion.div
                   className="flex items-center gap-2 bg-[#1C3A52] rounded-full px-5 py-2.5"
                   whileHover={{ scale: 1.04 }}
@@ -388,7 +388,7 @@ const About = () => {
       </section>
 
         {/* ══ 02 — STATS ROW ══════════════════════════════════════════════ */}
-        <section className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-24" aria-label="Chiffres clés">
+        <section className="max-w-7xl mx-auto px-5 md:px-12 pb-12 md:pb-20 lg:pb-24" aria-label="Chiffres clés">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -414,10 +414,10 @@ const About = () => {
         {/* ══ 03 — QUI SUIS-JE (dark + SpotlightCard) ═══════════════════ */}
         <section className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-28" aria-labelledby="about-who">
           <SpotlightCard
-            className="bg-[#1C3A52] rounded-[40px] p-8 md:p-14 overflow-hidden"
+            className="bg-[#1C3A52] rounded-[40px] p-5 sm:p-8 md:p-14 overflow-hidden"
             spotlightColor="rgba(196,144,62,0.10)"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start relative">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-start relative">
 
               <motion.div
                 className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#C4903E]/5 blur-3xl pointer-events-none"
@@ -493,7 +493,7 @@ const About = () => {
 
         {/* ══ 04 — PARCOURS / TIMELINE ════════════════════════════════════ */}
         <section
-          className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-28"
+          className="max-w-7xl mx-auto px-5 md:px-12 pb-12 md:pb-20 lg:pb-28"
           aria-labelledby="about-timeline"
         >
           <motion.div
@@ -605,7 +605,7 @@ const About = () => {
 
         {/* ══ 05 — VALEURS (useTilt cards) ════════════════════════════════ */}
         <section
-          className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-28"
+          className="max-w-7xl mx-auto px-5 md:px-12 pb-12 md:pb-20 lg:pb-28"
           aria-labelledby="about-values"
         >
           <motion.div
@@ -653,7 +653,7 @@ const About = () => {
           aria-labelledby="about-cta"
         >
           <SpotlightCard
-            className="relative bg-[#1C3A52] rounded-[40px] px-8 md:px-16 py-16 md:py-20 overflow-hidden"
+            className="relative bg-[#1C3A52] rounded-[40px] px-5 sm:px-8 md:px-16 py-10 sm:py-16 md:py-20 overflow-hidden"
             spotlightColor="rgba(196,144,62,0.12)"
           >
             <motion.div

@@ -146,7 +146,7 @@ const Navbar = () => {
                   </motion.span>
                 </button>
 
-                <div className="absolute top-full right-0 w-[300px] pt-3 pointer-events-none">
+                <div className="absolute top-full right-0 w-[min(300px,calc(100vw-2rem))] pt-3 pointer-events-none">
                   <AnimatePresence>
                     {svcOpen && (
                       <motion.div
@@ -249,7 +249,7 @@ const Navbar = () => {
             animate={{ opacity: 1, scale: 1,    y: 0  }}
             exit={{    opacity: 0, scale: 0.97, y: -6 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className="mx-4 mb-3 border border-white/10 rounded-[20px] p-4 shadow-2xl overflow-hidden"
+            className="mx-3 sm:mx-4 mb-3 border border-white/10 rounded-[20px] p-3 sm:p-4 shadow-2xl overflow-hidden"
             style={{ background: NAVY }}
           >
             <div className="flex flex-col gap-0.5 mb-3">
@@ -258,7 +258,7 @@ const Navbar = () => {
                   key={href}
                   to={href}
                   aria-current={isActive(href) ? "page" : undefined}
-                  className="px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center gap-2.5 text-white/65 hover:text-white hover:bg-white/[0.06]"
+                  className="px-4 py-3 rounded-xl text-[14px] sm:text-[15px] font-medium transition-colors min-h-[44px] flex items-center gap-2.5 text-white/65 hover:text-white hover:bg-white/[0.06]"
                   style={isActive(href) ? { color: "white", background: "rgba(255,255,255,0.08)" } : undefined}
                 >
                   {isActive(href) && (
@@ -271,7 +271,7 @@ const Navbar = () => {
               <button
                 onClick={() => setMobileSvc(v => !v)}
                 aria-expanded={mobileSvc}
-                className="flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] w-full text-white/65 hover:text-white hover:bg-white/[0.06]"
+                className="flex items-center justify-between px-4 py-3 rounded-xl text-[14px] sm:text-[15px] font-medium transition-colors min-h-[44px] w-full text-white/65 hover:text-white hover:bg-white/[0.06]"
                 style={isServiceActive ? { color: "white", background: "rgba(255,255,255,0.08)" } : undefined}
               >
                 <span className="flex items-center gap-2.5">
@@ -324,7 +324,7 @@ const Navbar = () => {
 
             <Link
               to="/contact"
-              className="flex items-center justify-center w-full font-bold text-[14px] py-3.5 rounded-2xl min-h-[44px] transition-opacity hover:opacity-90"
+              className="flex items-center justify-center w-full font-bold text-[14px] sm:text-[15px] py-3.5 rounded-2xl min-h-[44px] transition-opacity hover:opacity-90"
               style={{ background: GOLD, color: "#1C3A52" }}
             >
               Prendre rendez-vous →
