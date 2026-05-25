@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef, useCallback, useState } from "react";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -101,7 +102,7 @@ const SERVICE_COLORS = [
 const STATS = [
   { value: "26 ans", label: "Enseignant SES" },
   { value: "100+", label: "Accompagnements" },
-  { value: "ICF", label: "Certifié Prisme Évolution" },
+  { value: "Certifié", label: "Prisme Évolution" },
   { value: "4", label: "Programmes spécialisés" },
 ];
 
@@ -123,11 +124,80 @@ const STEPS = [
   },
 ];
 
-const H1_WORDS_A = "Développez votre".split(" ");
-const H1_WORDS_B = "potentiel".split(" ");
+/* ── Bouton CTA avec fond coulissant (liquid fill) ───────────────────────── */
+interface LiquidCTAProps {
+  to: string;
+  label?: string;
+  baseClass: string;
+  fillClass: string;
+  hoverTextClass?: string;
+  children: React.ReactNode;
+}
+function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", children }: LiquidCTAProps) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.div
+      className="relative overflow-hidden rounded-full"
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      whileTap={{ scale: 0.97 }}
+      data-cursor="magnetic"
+    >
+      {/* Fond coulissant de gauche à droite */}
+      <motion.span
+        className={`absolute inset-0 rounded-full ${fillClass}`}
+        animate={{ x: hovered ? "0%" : "-105%" }}
+        transition={{ duration: 0.44, ease: [0.16, 1, 0.3, 1] }}
+        aria-hidden="true"
+      />
+      <Link
+        to={to}
+        aria-label={label}
+        className={`relative z-10 flex items-center justify-center gap-2.5 py-3.5 px-6 text-[15px] font-semibold transition-colors duration-300 ${baseClass} ${hovered ? hoverTextClass : ""}`}
+      >
+        {children}
+      </Link>
+    </motion.div>
+  );
+}
 
 export default function Index() {
   const { content } = usePageContent<IndexContent>("index");
+
+  /* ── Parallaxe souris — Hero ───────────────────────────────── */
+  const heroRef = useRef<HTMLElement>(null);
+  const rawX    = useMotionValue(0);
+  const rawY    = useMotionValue(0);
+
+  /* Photo : déplacement très lent (profondeur basse) */
+  const photoX = useTransform(rawX, [-800, 800], [-10, 10]);
+  const photoY = useTransform(rawY, [-600, 600], [-7,   7]);
+  const sPhX   = useSpring(photoX, { stiffness: 100, damping: 22, mass: 1.2 });
+  const sPhY   = useSpring(photoY, { stiffness: 100, damping: 22, mass: 1.2 });
+
+  /* Badge 1 — vitesse medium, direction opposée */
+  const b1X  = useTransform(rawX, [-800, 800], [ 18, -18]);
+  const b1Y  = useTransform(rawY, [-600, 600], [-14,  14]);
+  const sB1X = useSpring(b1X, { stiffness: 70, damping: 14 });
+  const sB1Y = useSpring(b1Y, { stiffness: 70, damping: 14 });
+
+  /* Badge 2 — le plus rapide (profondeur haute) */
+  const b2X  = useTransform(rawX, [-800, 800], [-22,  22]);
+  const b2Y  = useTransform(rawY, [-600, 600], [ 16, -16]);
+  const sB2X = useSpring(b2X, { stiffness: 55, damping: 11 });
+  const sB2Y = useSpring(b2Y, { stiffness: 55, damping: 11 });
+
+  const handleHeroMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const r = heroRef.current?.getBoundingClientRect();
+    if (!r) return;
+    rawX.set(e.clientX - r.left  - r.width  / 2);
+    rawY.set(e.clientY - r.top   - r.height / 2);
+  }, [rawX, rawY]);
+
+  const handleHeroLeave = useCallback(() => {
+    rawX.set(0);
+    rawY.set(0);
+  }, [rawX, rawY]);
 
   const mergedServices = SERVICES.map((s) => {
     const fromJson = content?.services?.find((j) => j.key === s.key);
@@ -182,184 +252,211 @@ export default function Index() {
 
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
-        className="w-full bg-white min-h-[92vh] flex items-center py-12 md:py-16"
-        aria-labelledby="home-h1"
+          ref={heroRef}
+          className="w-full relative bg-[#FBFBFB] min-h-[92vh] flex items-center py-12 md:py-16 overflow-hidden"
+          aria-labelledby="home-h1"
+          onMouseMove={handleHeroMove}
+          onMouseLeave={handleHeroLeave}
       >
-        <div className="max-w-7xl mx-auto px-5 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        {/* Grain subtil pour la texture */}
+        <div className="hero-grain absolute inset-0 pointer-events-none opacity-30" aria-hidden="true" />
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+
+          {/* ── GAUCHE : Composition galets organiques (Inspirée de la maquette) ── */}
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={staggerContainer}
-            className="flex flex-col gap-7"
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="relative flex items-center justify-center w-full h-[380px] sm:h-[480px] lg:h-[560px] order-last lg:order-first"
           >
-            <motion.div variants={fadeInUp}>
-              <span className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#0B0B0C] text-sm font-medium px-4 py-2 rounded-full">
-                <span
-                  className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse"
-                  aria-hidden="true"
+            <div className="absolute inset-0 w-full h-full">
+
+              {/* GALET 1 — Grande forme principale (Haut/Milieu Droite) — Photo de ton coach */}
+              <div
+                  className="absolute top-0 right-[4%] w-[72%] h-[78%] overflow-hidden bg-gray-100"
+                  style={{ borderRadius: "60% 40% 45% 55% / 60% 45% 55% 40%" }}
+              >
+                <motion.img
+                    src={COACH_IMG}
+                    alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
+                    className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
+                    style={{ x: sPhX, y: sPhY, scale: 1.08 }}
+                    fetchpriority="high"
+                    loading="eager"
+                    decoding="async"
                 />
-                Coaching certifié · Mâcon
-              </span>
+              </div>
+
+              {/* GALET 2 — Forme moyenne (Bas Gauche) — Découpe du fond avec ton dégradé Teal/Noir */}
+              <motion.div
+                  className="absolute bottom-2 left-[8%] w-[54%] h-[54%] bg-[#FBFBFB] flex items-center justify-center p-[10px]"
+                  style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div
+                    className="w-full h-full overflow-hidden"
+                    style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
+                >
+                  <div
+                      className="w-full h-full"
+                      style={{ background: "linear-gradient(145deg, #1ab5c7 0%, #0ea5b7 40%, #0B0B0C 100%)" }}
+                  />
+                </div>
+              </motion.div>
+
+              {/* GALET 3 — Petit accent Teal transparent isolé (Tout en bas à gauche) */}
+              <motion.div
+                  className="absolute bottom-10 left-0 w-[20%] h-[26%]"
+                  style={{
+                    borderRadius: "40% 60% 50% 50% / 50% 50% 50% 50%",
+                    background: "rgba(26,181,199,0.15)",
+                    border: "1.5px solid rgba(26,181,199,0.35)",
+                  }}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              />
+
+              {/* Badge flottant "Coach certifié" (Repositionné en haut à gauche de la compo) */}
+              <motion.div
+                  style={{ x: sB1X, y: sB1Y }}
+                  initial={{ opacity: 0, y: 18, scale: 0.88 }}
+                  animate={{ opacity: 1, y: 0,  scale: 1   }}
+                  transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute top-[12%] left-[2%] bg-[#0B0B0C]/90 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shadow-xl will-change-transform z-20"
+              >
+                <p className="text-white text-[13px] font-semibold tracking-wide">Coach certifié</p>
+                <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
+              </motion.div>
+
+              {/* Badge flottant "Disponible" (Repositionné en bas à droite de la compo) */}
+              <motion.div
+                  style={{ x: sB2X, y: sB2Y }}
+                  initial={{ opacity: 0, x: -14, scale: 0.88 }}
+                  animate={{ opacity: 1, x: 0,   scale: 1   }}
+                  transition={{ delay: 0.95, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB] rounded-full px-4 py-2.5 shadow-lg will-change-transform z-20"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+                <span className="text-[#0B0B0C] text-[12px] font-semibold tracking-wide">Disponible</span>
+              </motion.div>
+
+            </div>
+          </motion.div>
+
+          {/* ── DROITE : Contenu textuel (Fidèle à tes textes et animations) ── */}
+          <div className="flex flex-col gap-7 lg:pl-6">
+
+            {/* Badge de localisation d'entrée */}
+            <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            >
+        <span className="inline-flex items-center gap-2 bg-white border border-[#E5E7EB] text-[#0B0B0C] text-xs md:text-sm font-medium px-4 py-2 rounded-full shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+          Coaching certifié · Mâcon
+        </span>
             </motion.div>
 
+            {/* H1 — Grand, compact et percutant comme le modèle original */}
             <h1
-              id="home-h1"
-              className="font-semibold leading-[1.0] tracking-tight text-[#0B0B0C]"
-              style={{ fontSize: "clamp(2.2rem,7vw,6rem)" }}
+                id="home-h1"
+                className="font-bold leading-[1.03] tracking-tight text-[#0B0B0C]"
+                style={{ fontSize: "clamp(2.5rem, 6.5vw, 5.2rem)" }}
             >
-              {H1_WORDS_A.map((word, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 180,
-                    damping: 18,
-                    delay: i * 0.1,
-                  }}
-                  className="inline-block mr-[0.2em]"
-                >
-                  {word}
-                </motion.span>
-              ))}
-              <br />
-              {H1_WORDS_B.map((word, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 180,
-                    damping: 18,
-                    delay: 0.22 + i * 0.1,
-                  }}
-                  className="inline-block mr-[0.2em]"
-                >
-                  {word}
-                </motion.span>
-              ))}{" "}
+        <span className="block">
+          {["Développez", "votre"].map((word, i) => (
+              <span key={word} className="word-mask mr-[0.22em]">
               <motion.span
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 180,
-                  damping: 18,
-                  delay: 0.34,
-                }}
-                className="inline-block text-[#1ab5c7]"
+                  className="inline-block"
+                  initial={{ y: "115%", opacity: 0 }}
+                  animate={{ y: "0%",   opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.18 + i * 0.09 }}
               >
-                infini.
+                {word}
               </motion.span>
+            </span>
+          ))}
+        </span>
+              <span className="block mt-[-0.02em]">
+          <span className="word-mask mr-[0.22em]">
+            <motion.span
+                className="inline-block"
+                initial={{ y: "115%", opacity: 0 }}
+                animate={{ y: "0%",   opacity: 1 }}
+                transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.36 }}
+            >
+              potentiel
+            </motion.span>
+          </span>
+          <span className="word-mask">
+            <motion.span
+                className="infini-word inline-block"
+                initial={{ y: "115%", opacity: 0 }}
+                animate={{ y: "0%",   opacity: 1 }}
+                transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.45 }}
+            >
+              infini.
+            </motion.span>
+          </span>
+        </span>
             </h1>
 
+            {/* Sous-titre descriptif */}
             <motion.p
-              variants={fadeInUp}
-              className="text-[1rem] text-gray-500 leading-relaxed max-w-md"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
+                className="text-[1.05rem] text-[#0B0B0C]/70 leading-relaxed max-w-lg"
             >
               {content?.hero?.subtitle ?? "Accompagnement personnalisé pour particuliers et entreprises. Coach certifié, 26 ans d'expérience en sciences humaines."}
             </motion.p>
 
+            {/* Boutons d'actions (CTAs) liquides */}
             <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.68 }}
+                className="flex flex-wrap gap-4 items-center"
             >
-              <motion.div
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Link
+              <LiquidCTA
                   to={ROUTES.contact}
-                  className="bg-[#0B0B0C] text-white rounded-full py-3.5 px-6 flex items-center justify-center gap-2.5 text-[15px] font-semibold hover:opacity-90 transition-opacity shadow-[0_8px_24px_rgba(11,11,12,0.2)]"
-                  aria-label="Prendre rendez-vous avec ON Coaching"
-                >
-                  Prendre RDV
-                  <motion.span
-                    whileHover={{ x: 2, y: -1 }}
-                    transition={{ type: "spring", stiffness: 380, damping: 22 }}
-                    className="w-6 h-6 bg-white/15 rounded-full flex items-center justify-center"
-                    aria-hidden="true"
-                  >
-                    <ArrowUpRight className="w-3.5 h-3.5 text-white" />
-                  </motion.span>
-                </Link>
-              </motion.div>
-              <motion.div
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
+                  label="Prendre rendez-vous avec ON Coaching"
+                  baseClass="bg-[#0B0B0C] text-white shadow-[0_8px_24px_rgba(11,11,12,0.15)] rounded-full px-6 py-3.5 flex items-center gap-2 font-medium"
+                  fillClass="bg-[#1ab5c7]"
               >
-                <Link
+                Prendre RDV
+                <ArrowUpRight className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+              </LiquidCTA>
+
+              <LiquidCTA
                   to={ROUTES.about}
-                  className="bg-[#F3F4F6] text-[#0B0B0C] rounded-full py-3.5 px-6 text-[15px] font-semibold hover:bg-gray-200 transition-colors"
-                >
-                  <motion.span whileHover={{ x: 1.5 }} transition={{ type: "spring", stiffness: 320, damping: 22 }} className="inline-block">
-                    Notre approche
-                  </motion.span>
-                </Link>
-              </motion.div>
+                  label="Découvrir l'approche de coaching"
+                  baseClass="bg-white text-[#0B0B0C] border border-[#E5E7EB] rounded-full px-6 py-3.5 font-medium"
+                  fillClass="bg-[#0B0B0C]"
+                  hoverTextClass="text-white"
+              >
+                Notre approche
+              </LiquidCTA>
             </motion.div>
 
+            {/* Signal de confiance / Réassurance */}
             <motion.p
-              variants={fadeInUp}
-              className="text-sm text-gray-400 flex items-center gap-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.84 }}
+                className="text-sm text-[#0B0B0C]/50 flex items-center gap-2 mt-2"
             >
-              <span className="text-[#1ab5c7]" aria-hidden="true">
-                ☉
-              </span>
+              <span className="text-[#1ab5c7] text-base" aria-hidden="true">☉</span>
               1er rendez-vous offert · Sans engagement
             </motion.p>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="relative order-first lg:order-last"
-          >
-            <div className="relative overflow-hidden h-[320px] sm:h-[420px] lg:h-[600px]">
-              <img
-                src={COACH_IMG}
-                alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
-                className="w-full h-full object-cover object-top"
-                fetchpriority="high"
-                loading="eager"
-                decoding="async"
-              />
+          </div>
 
-              {/* Dégradé bas */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.5) 75%, rgba(255,255,255,0.9) 90%, white 100%)" }}
-                aria-hidden="true"
-              />
-
-              {/* Bulle "Coach certifié" */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.5 }}
-                whileHover={{ y: -3 }}
-                className="absolute bottom-14 right-4 bg-[#0B0B0C]/85 backdrop-blur-xl border border-white/10 rounded-2xl px-4 py-3 shadow-lg"
-              >
-                <p className="text-white text-[13px] font-semibold">Coach certifié</p>
-                <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
-              </motion.div>
-
-              {/* Bulle "Disponible" */}
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.7, duration: 0.5 }}
-                whileHover={{ y: -2 }}
-                className="absolute bottom-4 left-4 flex items-center gap-2 bg-[#0B0B0C]/80 backdrop-blur-xl border border-white/10 rounded-full px-4 py-2.5 shadow-lg"
-              >
-                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
-                <span className="text-white text-[12px] font-semibold">Disponible</span>
-              </motion.div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
@@ -481,7 +578,7 @@ export default function Index() {
       </section>
 
       {/* ── 03b. NEUROFEEDBACK SPOTLIGHT ─────────────────────────────── */}
-      <section className="py-16 bg-[#0B0B0C]" aria-label="Neurofeedback NeurOptimal®">
+      <section className="py-20 bg-white" aria-label="Neurofeedback NeurOptimal®">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -494,10 +591,10 @@ export default function Index() {
               <p className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
                 Technologie · Zengar Institute
               </p>
-              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight">
+              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
                 Neurofeedback NeurOptimal®
               </h2>
-              <p className="text-white/65 text-[16px] leading-relaxed max-w-lg">
+              <p className="text-gray-500 text-[16px] leading-relaxed max-w-lg">
                 Une technologie d'entraînement cérébral non invasive qui permet au système nerveux de développer flexibilité et résilience. Dès 6 à 10 séances, les clients rapportent un sommeil plus réparateur, une clarté mentale accrue, un calme intérieur et des performances renforcées.
               </p>
               <ul className="flex flex-col gap-2">
@@ -507,7 +604,7 @@ export default function Index() {
                   "Sommeil, fatigue chronique",
                   "Performance cognitive et sportive",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-2.5 text-white/60 text-[14px]">
+                  <li key={i} className="flex items-center gap-2.5 text-gray-500 text-[14px]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" />
                     {item}
                   </li>
@@ -515,7 +612,7 @@ export default function Index() {
               </ul>
               <Link
                 to={ROUTES.neurofeedback}
-                className="inline-flex items-center gap-2 bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-fit mt-2"
+                className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-fit mt-2"
               >
                 Découvrir le Neurofeedback <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
@@ -523,7 +620,7 @@ export default function Index() {
 
             <motion.div
               variants={fadeInRight}
-              className="relative h-[260px] sm:h-[320px] rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+              className="relative h-[260px] sm:h-[340px] rounded-[28px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.14)]"
             >
               <img
                 src="https://dbneurofeedback.com/wp-content/uploads/2024/12/NEUROPTIMAL-1.jpg"
@@ -532,12 +629,12 @@ export default function Index() {
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/70 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap">
-                <span className="bg-[#1ab5c7] text-[#0B0B0C] text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full font-bold">
+                <span className="bg-[#1ab5c7] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full font-bold">
                   Non invasif
                 </span>
-                <span className="bg-white/15 text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <span className="bg-white/90 text-[#0B0B0C] text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
                   NeurOptimal®
                 </span>
               </div>

@@ -50,7 +50,7 @@
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-    background-color: var(--bone);
+    background-color: #ffffff;
     @apply text-slate-900 antialiased;
     -webkit-font-smoothing: antialiased;
     font-feature-settings: 'cv02','cv03','cv04','cv11';
@@ -185,3 +185,57 @@
          bg-coaching-400 origin-bottom-right transition-transform duration-300;
 }
 .animated-underline:hover::after { @apply scale-x-100 origin-bottom-left; }
+
+/* ── Curseur personnalisé (desktop pointer seulement) ────────── */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+/* ── Hero : mesh gradient animé ─────────────────────────────── */
+.hero-mesh {
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 42%, rgba(26,181,199,0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 65% at 88% 16%, rgba(26,181,199,0.065) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 45% at 55% 88%, rgba(196,144,62,0.04) 0%, transparent 55%);
+  animation: heroMeshDrift 14s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+@keyframes heroMeshDrift {
+  0%   { transform: scale(1)    translate(0,   0);   opacity: 1;    }
+  33%  { transform: scale(1.04) translate(12px,-8px); opacity: 0.85; }
+  66%  { transform: scale(0.97) translate(-10px,10px);opacity: 1;    }
+  100% { transform: scale(1.02) translate(6px,-12px); opacity: 0.9;  }
+}
+
+/* ── Hero : overlay grain/bruit ──────────────────────────────── */
+.hero-grain {
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ── Masque de mot (text reveal H1) ──────────────────────────── */
+.word-mask {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  line-height: 1.1;
+}
+
+/* ── "infini." : shimmer au survol ───────────────────────────── */
+.infini-word {
+  color: #1ab5c7;
+  background-image: linear-gradient(90deg, #1ab5c7 0%, #5dd9e8 35%, #b8f4fa 55%, #1ab5c7 100%);
+  background-size: 220% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  transition: -webkit-text-fill-color 0.28s ease;
+}
+.infini-word:hover {
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 1.4s linear infinite;
+}
+@keyframes shimmerText {
+  0%   { background-position: 0%   center; }
+  100% { background-position: 220% center; }
+}

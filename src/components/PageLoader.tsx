@@ -5,7 +5,7 @@ interface PageLoaderProps {
     onDone?: () => void;
 }
 
-const EXPO = [0.76, 0, 0.24, 1] as [number, number, number, number];
+const EXPO = [0.83, 0, 0.17, 1] as [number, number, number, number];
 
 export default function PageLoader({ onDone }: PageLoaderProps) {
     const [exiting, setExiting] = useState(false);
@@ -71,10 +71,10 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                             initial={{ opacity: 0, scale: 0.85, y: 10 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             // Durée de l'apparition initiale (ajustable au besoin)
-                            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                             // C'est ICI que la magie opère : dès que le ON est complètement affiché, on lance la sortie
                             onAnimationComplete={() => {
-                                setExiting(true);
+                                setTimeout(() => setExiting(true), 350);
                             }}
                         >
                             {/* Définitions des dégradés */}
@@ -119,7 +119,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                 className="absolute left-0 top-0 w-full bg-[#0B0B0C] z-[203] origin-top"
                 style={{ height: "50vh" }}
                 animate={exiting ? { scaleY: 0 } : { scaleY: 1 }}
-                transition={{ duration: 0.65, ease: EXPO }}
+                transition={{ duration: 0.75, ease: EXPO }}
             />
 
             {/* ── Panel bas ── */}
@@ -127,7 +127,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                 className="absolute left-0 bottom-0 w-full bg-[#0B0B0C] z-[203] origin-bottom"
                 style={{ height: "50vh" }}
                 animate={exiting ? { scaleY: 0 } : { scaleY: 1 }}
-                transition={{ duration: 0.65, ease: EXPO }}
+                transition={{ duration: 0.75, ease: EXPO }}
                 onAnimationComplete={(definition) => {
                     if (exiting && typeof definition === "object" && "scaleY" in definition && definition.scaleY === 0) {
                         handleAnimationComplete();
