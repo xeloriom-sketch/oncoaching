@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback, useState } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -27,13 +27,6 @@ import { usePageContent } from "@/hooks/usePageContent";
 import type { IndexContent } from "@/types";
 
 const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
-
-/* Playlist de vidéos pour les galets hero — ajoute tes fichiers ici */
-const HERO_VIDEOS = [
-  `${import.meta.env.BASE_URL}coaching-reel.mp4`,
-  /* `${import.meta.env.BASE_URL}coaching-reel-2.mp4`, */
-  /* `${import.meta.env.BASE_URL}coaching-reel-3.mp4`, */
-];
 
 const SERVICES = [
   {
@@ -170,15 +163,6 @@ function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", child
 export default function Index() {
   const { content } = usePageContent<IndexContent>("index");
 
-  /* ── Cycling vidéo hero ── */
-  const [vidIdx, setVidIdx] = useState(0);
-  useEffect(() => {
-    if (HERO_VIDEOS.length <= 1) return;
-    const t = setInterval(() => setVidIdx(i => (i + 1) % HERO_VIDEOS.length), 7000);
-    return () => clearInterval(t);
-  }, []);
-  const currentVideo = HERO_VIDEOS[vidIdx];
-
   /* ── Parallaxe souris — Hero ───────────────────────────────── */
   const heroRef = useRef<HTMLElement>(null);
   const rawX    = useMotionValue(0);
@@ -298,35 +282,40 @@ export default function Index() {
               }}
             />
 
-            {/* SVG clip-path — 3 ellipses organiques = 1 forme composite */}
-            <svg className="absolute w-0 h-0 overflow-hidden" aria-hidden="true">
+            {/* SVG clip-path — 3 galets organiques = 1 forme composite */}
+            <svg
+              aria-hidden="true"
+              style={{ position: "absolute", width: 0, height: 0 }}
+            >
               <defs>
                 <clipPath id="hero-blobs-clip" clipPathUnits="objectBoundingBox">
-                  {/* Grand galet haut-droite */}
-                  <ellipse cx="0.60" cy="0.38" rx="0.36" ry="0.38" />
+                  {/* Grand galet principal haut-droite */}
+                  <path d="M 0.96 0.22 C 0.98 0.42 0.92 0.68 0.76 0.75 C 0.60 0.82 0.36 0.74 0.27 0.60 C 0.18 0.46 0.22 0.24 0.36 0.13 C 0.50 0.02 0.94 0.02 0.96 0.22 Z" />
                   {/* Galet moyen bas-gauche */}
-                  <ellipse cx="0.35" cy="0.73" rx="0.27" ry="0.27" />
-                  {/* Petit galet extrême bas-gauche */}
-                  <ellipse cx="0.10" cy="0.87" rx="0.10" ry="0.12" />
+                  <path d="M 0.08 0.60 C 0.14 0.52 0.26 0.50 0.38 0.55 C 0.50 0.60 0.56 0.72 0.50 0.82 C 0.44 0.92 0.28 0.94 0.16 0.88 C 0.04 0.82 0.02 0.68 0.08 0.60 Z" />
+                  {/* Petit accent bas */}
+                  <path d="M 0.44 0.86 C 0.47 0.82 0.54 0.82 0.58 0.86 C 0.62 0.90 0.60 0.96 0.55 0.98 C 0.50 1.00 0.44 0.98 0.42 0.94 C 0.40 0.90 0.41 0.90 0.44 0.86 Z" />
                 </clipPath>
               </defs>
             </svg>
 
-            {/* Conteneur clippé — la vidéo est visible uniquement dans les 3 ellipses */}
+            {/* Conteneur clippé — l'iframe est visible uniquement dans les 3 galets */}
             <div
               className="absolute inset-0 z-10"
               style={{ clipPath: "url(#hero-blobs-clip)" }}
             >
-              <motion.video
-                key={vidIdx}
-                src={currentVideo}
-                autoPlay loop muted playsInline
-                className="absolute w-[116%] h-[116%] object-cover"
-                style={{ top: "-8%", left: "-8%", x: sPhX, y: sPhY }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1 }}
-              />
+              <motion.div
+                className="absolute"
+                style={{ top: "-10%", left: "-10%", width: "120%", height: "120%", x: sPhX, y: sPhY }}
+              >
+                <iframe
+                  src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
+                  className="w-full h-full"
+                  style={{ border: "none", pointerEvents: "none" }}
+                  allow="autoplay; fullscreen"
+                  title="Vidéo coaching hero"
+                />
+              </motion.div>
             </div>
 
             {/* Badge "Coach certifié" */}
