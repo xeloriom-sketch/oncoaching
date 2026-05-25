@@ -86,18 +86,21 @@ const Navbar = () => {
         </Link>
 
         {/* Liens + CTA — droite desktop */}
-        <div className="hidden lg:flex items-center gap-7">
-          <nav aria-label="Navigation principale">
-            <ul className="flex items-center gap-6 list-none m-0 p-0" role="list">
+        <div className="hidden lg:flex items-center gap-3">
+          {/* Pilule navy — liens nav */}
+          <nav
+            aria-label="Navigation principale"
+            className="flex items-center rounded-full px-2 py-1.5"
+            style={{ background: NAVY }}
+          >
+            <ul className="flex items-center gap-1 list-none m-0 p-0 text-[13px] font-medium text-white/70" role="list">
               {NAV_LINKS.map(({ label, href }) => (
                 <li key={href}>
                   <Link
                     to={href}
                     aria-current={isActive(href) ? "page" : undefined}
-                    className="text-[13px] font-medium transition-colors duration-150"
-                    style={{ color: isActive(href) ? NAVY : `${NAVY}99` }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = NAVY}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = isActive(href) ? NAVY : `${NAVY}99`}
+                    className="px-4 py-2 rounded-full block transition-colors duration-150 hover:text-white"
+                    style={isActive(href) ? { color: "white", background: "rgba(255,255,255,0.12)" } : undefined}
                   >
                     {label}
                   </Link>
@@ -109,8 +112,8 @@ const Navbar = () => {
                 <button
                   aria-haspopup="true"
                   aria-expanded={svcOpen}
-                  className="flex items-center gap-1 text-[13px] font-medium transition-colors duration-150"
-                  style={{ color: isServiceActive ? NAVY : `${NAVY}99` }}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors duration-150 hover:text-white"
+                  style={isServiceActive ? { color: "white", background: "rgba(255,255,255,0.12)" } : undefined}
                 >
                   Services
                   <motion.span
