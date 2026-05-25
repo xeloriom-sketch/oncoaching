@@ -37,16 +37,6 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
             <LogoMark size={88} animate />
           </motion.div>
 
-          {/* Nom de la marque */}
-          <motion.p
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
-            className="text-[13px] font-semibold tracking-[0.22em] uppercase text-[#1C3A52]/40"
-          >
-            ONCoaching
-          </motion.p>
-
           {/* Barre de progression */}
           <motion.div
             initial={{ opacity: 0 }}

@@ -558,6 +558,51 @@ const About = () => {
           </motion.div>
         </section>
 
+        {/* ══ 04b — CERTIFICATION ══════════════════════════════════════════ */}
+        <section className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-28" aria-label="Certification NeurOptimal®">
+          <motion.div
+            initial="hidden" whileInView="visible" viewport={VP}
+            variants={fadeInScale}
+            className="relative bg-[#1C3A52] rounded-[36px] p-8 md:p-12 flex flex-col md:flex-row items-center gap-8 md:gap-12 overflow-hidden"
+          >
+            <div className="absolute -top-12 -right-12 w-56 h-56 rounded-full bg-[#C4903E]/10 blur-3xl pointer-events-none" aria-hidden="true" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 rounded-full bg-[#C4903E]/6 blur-2xl pointer-events-none" aria-hidden="true" />
+
+            {/* Texte */}
+            <div className="flex flex-col gap-5 flex-1 relative z-10">
+              <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]/80" aria-hidden="true">
+                ↳ Certification officielle
+              </p>
+              <h2 className="text-[clamp(1.6rem,3vw,2.2rem)] font-bold text-white leading-tight tracking-tight">
+                Certification NeurOptimal®
+                <span className="block text-white/45 text-[0.85rem] font-medium mt-1">Praticien Neurofeedback — Zengar Institute</span>
+              </h2>
+              <p className="text-white/50 text-[15px] leading-relaxed max-w-md">
+                Certification reconnue internationalement attestant d'une maîtrise complète du protocole NeurOptimal® et de son application clinique — non invasif, approuvé par le Zengar Institute.
+              </p>
+              <a
+                href={`${import.meta.env.BASE_URL}certification%20Neourofeedback.pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="self-start inline-flex items-center gap-2 bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                aria-label="Ouvrir la certification NeurOptimal® en PDF"
+              >
+                <Award className="w-4 h-4" aria-hidden="true" />
+                Voir la certification
+              </a>
+            </div>
+
+            {/* Aperçu PDF */}
+            <div className="w-full md:w-[280px] lg:w-[320px] h-[200px] md:h-[240px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 bg-white/5">
+              <iframe
+                src={`${import.meta.env.BASE_URL}certification%20Neourofeedback.pdf#toolbar=0&navpanes=0&scrollbar=0`}
+                className="w-full h-full"
+                title="Certification NeurOptimal® — Noureddine Omar"
+              />
+            </div>
+          </motion.div>
+        </section>
+
         {/* ══ 05 — VALEURS (useTilt cards) ════════════════════════════════ */}
         <section
           className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-28"
