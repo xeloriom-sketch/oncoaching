@@ -37,7 +37,7 @@ const queryClient = new QueryClient({
 // ─── Suspense fallback minimal ─────────────────────────────────────────────────
 const SuspenseFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-white">
-    <div className="w-6 h-6 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
+    <div className="w-6 h-6 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
   </div>
 );
 

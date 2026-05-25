@@ -55,13 +55,13 @@ export default function PresseMedias() {
 
             {/* Header */}
             <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="mb-12 md:mb-16">
-              <motion.p variants={fadeInUp} className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+              <motion.p variants={fadeInUp} className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E]">
                 Références publiques
               </motion.p>
               <motion.h1
                   id="presse-title"
                   variants={fadeInUp}
-                  className="mt-3 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.02]"
+                  className="mt-3 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.02]"
               >
                 Ils parlent de nous
               </motion.h1>
@@ -78,16 +78,16 @@ export default function PresseMedias() {
                 <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Newspaper className="w-3.5 h-3.5" /> Presse Locale
                     </span>
-                      <h2 className="text-xl font-semibold text-[#0B0B0C] mt-1">Le JSL</h2>
+                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Le JSL</h2>
                     </div>
                     <a
                         href="https://www.facebook.com/LeJSL71/posts/pfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#1ab5c7] transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
                         title="Ouvrir sur Facebook"
                     >
                       Voir <ExternalLink className="w-3 h-3" />
@@ -114,16 +114,16 @@ export default function PresseMedias() {
                 <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Linkedin className="w-3.5 h-3.5" /> Actualités
                     </span>
-                      <h2 className="text-xl font-semibold text-[#0B0B0C] mt-1">Partage & Réflexions</h2>
+                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Partage & Réflexions</h2>
                     </div>
                     <a
                         href="https://www.linkedin.com/feed/update/urn:li:share:7386461943089291270"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#1ab5c7] transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
                         title="Ouvrir sur LinkedIn"
                     >
                       Voir <ExternalLink className="w-3 h-3" />
@@ -148,16 +148,16 @@ export default function PresseMedias() {
                 <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                   <div className="mb-4 flex items-center justify-between">
                     <div>
-                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Linkedin className="w-3.5 h-3.5" /> En Direct
                     </span>
-                      <h2 className="text-xl font-semibold text-[#0B0B0C] mt-1">Dernières Actualités</h2>
+                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Dernières Actualités</h2>
                     </div>
                     <a
                         href="https://www.linkedin.com/feed/update/urn:li:ugcPost:7454573698885459968"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#1ab5c7] transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
                         title="Ouvrir sur LinkedIn"
                     >
                       Voir <ExternalLink className="w-3 h-3" />
@@ -192,16 +192,16 @@ export default function PresseMedias() {
                   <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                     <div className="mb-4 flex items-center justify-between">
                       <div>
-                      <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                      <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                         <Newspaper className="w-3.5 h-3.5" /> Interview Vidéo
                       </span>
-                        <h2 className="text-xl font-semibold text-[#0B0B0C] mt-1">Podcast et Compagnie — L'Émission</h2>
+                        <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Podcast et Compagnie — L'Émission</h2>
                       </div>
                       <a
                           href="https://www.youtube.com/watch?v=Yu9CM4-DIXk"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#1ab5c7] transition-colors"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
                       >
                         Regarder <ExternalLink className="w-3 h-3" />
                       </a>
@@ -226,16 +226,16 @@ export default function PresseMedias() {
                   <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                     <div className="mb-4 flex items-center justify-between">
                       <div>
-                      <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                      <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                         <Podcast className="w-3.5 h-3.5" /> Écoute Nomade
                       </span>
-                        <h2 className="text-xl font-semibold text-[#0B0B0C] mt-1">Le Podcast au Format Audio</h2>
+                        <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Le Podcast au Format Audio</h2>
                       </div>
                       <a
                           href="https://play.acast.com/s/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#1ab5c7] transition-colors"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
                       >
                         Écouter <ExternalLink className="w-3 h-3" />
                       </a>
@@ -263,10 +263,10 @@ export default function PresseMedias() {
                   {/* Carte LinkedIn */}
                   <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                     <div className="mb-3">
-                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Linkedin className="w-3.5 h-3.5" /> Réseau
                     </span>
-                      <h2 className="text-lg font-semibold text-[#0B0B0C] mt-1">Profil Professionnel</h2>
+                      <h2 className="text-lg font-semibold text-[#1C3A52] mt-1">Profil Professionnel</h2>
                     </div>
                     <a
                         href="https://www.linkedin.com/in/noureddine-omar-587620346/"
@@ -277,10 +277,10 @@ export default function PresseMedias() {
                       <img
                           src={PATRON_IMG}
                           alt="Noureddine Omar - LinkedIn"
-                          className="h-28 w-28 mx-auto rounded-full object-cover border-4 border-[#1ab5c7]/10 group-hover:scale-105 transition-transform duration-300"
+                          className="h-28 w-28 mx-auto rounded-full object-cover border-4 border-[#C4903E]/10 group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                       />
-                      <h3 className="mt-4 text-base font-semibold text-[#0B0B0C] group-hover:text-[#1ab5c7] transition-colors inline-flex items-center gap-1.5 justify-center">
+                      <h3 className="mt-4 text-base font-semibold text-[#1C3A52] group-hover:text-[#C4903E] transition-colors inline-flex items-center gap-1.5 justify-center">
                         Noureddine Omar <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
                       </h3>
                       <p className="text-gray-400 font-mono text-[10px] uppercase tracking-wider mt-1">LinkedIn</p>
@@ -293,10 +293,10 @@ export default function PresseMedias() {
                   {/* Carte Resalib */}
                   <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
                     <div className="mb-3">
-                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+                    <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Users className="w-3.5 h-3.5" /> Annuaire Praticiens
                     </span>
-                      <h2 className="text-lg font-semibold text-[#0B0B0C] mt-1">Praticien Certifié</h2>
+                      <h2 className="text-lg font-semibold text-[#1C3A52] mt-1">Praticien Certifié</h2>
                     </div>
                     <a
                         href="https://www.resalib.fr/praticien/118187-on-coaching-et-neurofeedback-coach-professionnel-certifie-sance"
@@ -307,10 +307,10 @@ export default function PresseMedias() {
                       <img
                           src={PATRON_IMG}
                           alt="Noureddine Omar - Resalib Sancé"
-                          className="h-28 w-28 mx-auto rounded-full object-cover border-4 border-[#1ab5c7]/10 group-hover:scale-105 transition-transform duration-300"
+                          className="h-28 w-28 mx-auto rounded-full object-cover border-4 border-[#C4903E]/10 group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                       />
-                      <h3 className="mt-4 text-base font-semibold text-[#0B0B0C] group-hover:text-[#1ab5c7] transition-colors inline-flex items-center gap-1.5 justify-center">
+                      <h3 className="mt-4 text-base font-semibold text-[#1C3A52] group-hover:text-[#C4903E] transition-colors inline-flex items-center gap-1.5 justify-center">
                         Fiche Officielle Resalib <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
                       </h3>
                       <p className="text-gray-400 font-mono text-[10px] uppercase tracking-wider mt-1">Avis & Spécialités</p>
@@ -326,8 +326,8 @@ export default function PresseMedias() {
             </div>
 
             {/* Bloc d'ancrage local final */}
-            <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInScale} className="mt-16 rounded-2xl bg-[#0B0B0C] p-6 md:p-8">
-              <h3 className="text-[#1ab5c7] font-mono text-[12px] uppercase tracking-widest mb-2">Ancrage régional & Accompagnement</h3>
+            <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInScale} className="mt-16 rounded-2xl bg-[#1C3A52] p-6 md:p-8">
+              <h3 className="text-[#C4903E] font-mono text-[12px] uppercase tracking-widest mb-2">Ancrage régional & Accompagnement</h3>
               <p className="text-white/80 text-[15px] leading-relaxed">
                 Basé à Sancé et actif sur l'ensemble du bassin de Mâcon, Noureddine Omar met à profit son double parcours pour proposer un accompagnement sur-mesure (coaching de vie, scolaire, professionnel et neurofeedback dynamique), validé par des retours concrets du terrain.
               </p>

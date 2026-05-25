@@ -81,7 +81,7 @@ const CoachingScolaire = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
-          <div className="w-8 h-8 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
     );
@@ -174,14 +174,14 @@ const CoachingScolaire = () => {
             >
               <motion.p
                 variants={blurInUp}
-                className="font-mono tracking-widest uppercase text-[11px] text-[#1ab5c7] font-semibold"
+                className="font-mono tracking-widest uppercase text-[11px] text-[#C4903E] font-semibold"
                 aria-hidden="true"
               >
                 ↳ Coaching Scolaire
               </motion.p>
 
               <h1
-                className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
+                className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]"
               >
                 {H1_WORDS.map((word, i) => (
                   <motion.span
@@ -207,7 +207,7 @@ const CoachingScolaire = () => {
                 <motion.span className="inline-block" {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
                   >
                     1er RDV offert <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </Link>
@@ -215,7 +215,7 @@ const CoachingScolaire = () => {
                 <motion.span className="inline-block" {...btnHoverProps}>
                   <Link
                     to="/coaching-scolaire#tarif"
-                    className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#0B0B0C] font-semibold text-[13px] px-6 py-3 rounded-full hover:bg-gray-200 transition-colors"
+                    className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[13px] px-6 py-3 rounded-full hover:bg-gray-200 transition-colors"
                   >
                     Voir les tarifs
                   </Link>
@@ -237,13 +237,13 @@ const CoachingScolaire = () => {
                   loading="eager"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/40 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1C3A52]/40 via-transparent to-transparent" />
               </div>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.55, duration: 0.5 }}
-                className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm text-[#0B0B0C] px-4 py-2 rounded-full text-[12px] font-semibold shadow-md"
+                className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm text-[#1C3A52] px-4 py-2 rounded-full text-[12px] font-semibold shadow-md"
               >
                 Collégiens · Lycéens · Étudiants
               </motion.div>
@@ -267,7 +267,7 @@ const CoachingScolaire = () => {
               <p className="font-mono tracking-widest uppercase text-[11px] text-gray-400" aria-hidden="true">
                 Pour toi si…
               </p>
-              <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
+              <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
                 Ce coaching est fait pour toi si…
               </h2>
             </motion.div>
@@ -281,10 +281,10 @@ const CoachingScolaire = () => {
                     variants={springUp}
                     className="flex items-center gap-4 bg-white rounded-2xl px-5 py-4"
                   >
-                    <div className="w-9 h-9 rounded-xl bg-[#1ab5c7]/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                      <Icon className="w-4.5 h-4.5 text-[#1ab5c7]" strokeWidth={1.8} />
+                    <div className="w-9 h-9 rounded-xl bg-[#C4903E]/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                      <Icon className="w-4.5 h-4.5 text-[#C4903E]" strokeWidth={1.8} />
                     </div>
-                    <p className="text-[#0B0B0C] text-[15px] font-semibold leading-snug">{item.text}</p>
+                    <p className="text-[#1C3A52] text-[15px] font-semibold leading-snug">{item.text}</p>
                   </motion.div>
                 );
               })}
@@ -294,7 +294,7 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 03. CE QUE TU VAS GAGNER ─────────────────────────────── */}
-      <section className="bg-[#0B0B0C] py-20" aria-label="Bénéfices du coaching">
+      <section className="bg-[#1C3A52] py-20" aria-label="Bénéfices du coaching">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -314,7 +314,7 @@ const CoachingScolaire = () => {
 
             <SpotlightCard
               className="rounded-[32px]"
-              spotlightColor="rgba(26,181,199,0.08)"
+              spotlightColor="rgba(196,144,62,0.08)"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {BENEFITS.map((b, i) => {
@@ -332,7 +332,7 @@ const CoachingScolaire = () => {
                       style={{ willChange: "transform" }}
                     >
                       <div
-                        className="w-10 h-10 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0"
+                        className="w-10 h-10 rounded-xl bg-[#C4903E] flex items-center justify-center flex-shrink-0"
                         aria-hidden="true"
                       >
                         <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
@@ -368,13 +368,13 @@ const CoachingScolaire = () => {
                     loading="lazy"
                     decoding="async"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/50 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1C3A52]/50 via-transparent to-transparent" />
                 </div>
                 <div className="absolute bottom-5 left-5 flex flex-col gap-1">
-                  <span className="bg-[#1ab5c7] text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit">
+                  <span className="bg-[#C4903E] text-white text-[11px] font-bold px-3 py-1 rounded-full w-fit">
                     Coach certifié
                   </span>
-                  <span className="bg-white/90 backdrop-blur-sm text-[#0B0B0C] text-[11px] font-semibold px-3 py-1 rounded-full w-fit">
+                  <span className="bg-white/90 backdrop-blur-sm text-[#1C3A52] text-[11px] font-semibold px-3 py-1 rounded-full w-fit">
                     26 ans enseignant SES
                   </span>
                 </div>
@@ -385,7 +385,7 @@ const CoachingScolaire = () => {
                   <p className="font-mono tracking-widest uppercase text-[11px] text-gray-400" aria-hidden="true">
                     Notre coach
                   </p>
-                  <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
+                  <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
                     26 ans auprès des jeunes
                   </h2>
                 </div>
@@ -409,10 +409,10 @@ const CoachingScolaire = () => {
                       transition={{ delay: 0.1 + i * 0.07, type: "spring", stiffness: 240, damping: 22 }}
                       className="flex items-center gap-3"
                     >
-                      <div className="w-8 h-8 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                      <div className="w-8 h-8 rounded-xl bg-[#C4903E] flex items-center justify-center flex-shrink-0" aria-hidden="true">
                         <Icon className="w-4 h-4 text-white" strokeWidth={1.8} />
                       </div>
-                      <span className="text-[#0B0B0C] text-[14px]">{label}</span>
+                      <span className="text-[#1C3A52] text-[14px]">{label}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -420,7 +420,7 @@ const CoachingScolaire = () => {
                 <motion.span className="inline-block w-fit" {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
                   >
                     Prendre contact <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </Link>
@@ -433,7 +433,7 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 05. TARIF + CTA ──────────────────────────────────────── */}
-      <section id="tarif" className="bg-[#1ab5c7] py-20" aria-label="Tarif et prise de rendez-vous">
+      <section id="tarif" className="bg-[#C4903E] py-20" aria-label="Tarif et prise de rendez-vous">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -485,7 +485,7 @@ const CoachingScolaire = () => {
                   <motion.span className="inline-block w-fit" {...btnHoverProps}>
                     <Link
                       to={cta.buttonLink}
-                      className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                      className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
                     >
                       Prendre RDV <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>

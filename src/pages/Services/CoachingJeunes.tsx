@@ -78,7 +78,7 @@ const CoachingJeunes = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
-          <div className="w-8 h-8 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
     );
@@ -169,7 +169,7 @@ const CoachingJeunes = () => {
               >
                 <motion.p
                   variants={fadeInUp}
-                  className="font-mono tracking-widest uppercase text-[10px] text-[#1ab5c7]"
+                  className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]"
                   aria-hidden="true"
                 >
                   ↳ Coaching Jeunes
@@ -177,7 +177,7 @@ const CoachingJeunes = () => {
 
                 <h1
                   id="jeunes-h1"
-                  className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.15]"
+                  className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.15]"
                 >
                   <div>{page.title.split(" ").slice(0, 2).join(" ")}</div>
                   <div className="flex flex-wrap gap-x-3">
@@ -211,7 +211,7 @@ const CoachingJeunes = () => {
                   <motion.div {...btnHoverProps}>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                      className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
                       aria-label="Réserver un premier échange gratuit"
                     >
                       1er échange gratuit <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
@@ -220,7 +220,7 @@ const CoachingJeunes = () => {
                   <motion.div {...btnHoverProps}>
                     <Link
                       to="/nos-tarifs"
-                      className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#0B0B0C] font-semibold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
+                      className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
                     >
                       Voir les tarifs
                     </Link>
@@ -241,12 +241,12 @@ const CoachingJeunes = () => {
                   loading="eager"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1C3A52]/60 via-transparent to-transparent" />
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-5 left-5 bg-[#1ab5c7] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold shadow-md"
+                  className="absolute bottom-5 left-5 bg-[#C4903E] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold shadow-md"
                 >
                   Coaching Jeunes &amp; Jeunes Adultes
                 </motion.div>
@@ -273,7 +273,7 @@ const CoachingJeunes = () => {
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
-                className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight mb-10"
+                className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight mb-10"
               >
                 Ces défis te parlent&nbsp;?
               </motion.h2>
@@ -288,12 +288,12 @@ const CoachingJeunes = () => {
                       className="flex items-start gap-4"
                     >
                       <div
-                        className="w-9 h-9 rounded-full bg-[#1ab5c7]/15 flex items-center justify-center flex-shrink-0 mt-0.5"
+                        className="w-9 h-9 rounded-full bg-[#C4903E]/15 flex items-center justify-center flex-shrink-0 mt-0.5"
                         aria-hidden="true"
                       >
-                        <Icon className="w-4 h-4 text-[#1ab5c7]" strokeWidth={1.8} />
+                        <Icon className="w-4 h-4 text-[#C4903E]" strokeWidth={1.8} />
                       </div>
-                      <p className="text-[#0B0B0C] text-[15px] leading-snug font-medium pt-1.5">
+                      <p className="text-[#1C3A52] text-[15px] leading-snug font-medium pt-1.5">
                         {item.text}
                       </p>
                     </motion.div>
@@ -305,7 +305,7 @@ const CoachingJeunes = () => {
         </section>
 
         {/* 03. CE QUE TU VAS GAGNER */}
-        <section className="py-20 bg-[#0B0B0C]">
+        <section className="py-20 bg-[#1C3A52]">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"
@@ -315,7 +315,7 @@ const CoachingJeunes = () => {
             >
               <motion.p
                 variants={fadeInUp}
-                className="font-mono tracking-widest uppercase text-[10px] text-[#1ab5c7]/70 mb-3"
+                className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]/70 mb-3"
                 aria-hidden="true"
               >
                 Bénéfices
@@ -329,14 +329,14 @@ const CoachingJeunes = () => {
 
               <SpotlightCard
                 className="rounded-[32px] border border-white/8 bg-transparent"
-                spotlightColor="rgba(26,181,199,0.12)"
+                spotlightColor="rgba(196,144,62,0.12)"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 rounded-[32px] overflow-hidden">
                   {BENEFITS.map((b, i) => {
                     const Icon = b.icon;
                     const tilt = tiltRefs[i];
                     return (
-                      <motion.div key={i} variants={springUp} className="bg-[#0B0B0C]">
+                      <motion.div key={i} variants={springUp} className="bg-[#1C3A52]">
                         <div
                           ref={tilt.ref}
                           onMouseMove={tilt.onMouseMove}
@@ -346,7 +346,7 @@ const CoachingJeunes = () => {
                           style={{ transformStyle: "preserve-3d" }}
                         >
                           <motion.div
-                            className="w-11 h-11 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0"
+                            className="w-11 h-11 rounded-xl bg-[#C4903E] flex items-center justify-center flex-shrink-0"
                             whileHover={{ rotate: [0, -12, 12, 0], transition: { duration: 0.4 } }}
                             aria-hidden="true"
                           >
@@ -385,9 +385,9 @@ const CoachingJeunes = () => {
                   loading="lazy"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0C]/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1C3A52]/60 via-transparent to-transparent" />
                 <div className="absolute bottom-5 left-5 flex gap-2 flex-wrap">
-                  <span className="bg-[#1ab5c7] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full">
+                  <span className="bg-[#C4903E] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full">
                     Coach certifié
                   </span>
                   <span className="bg-white/15 text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
@@ -398,10 +398,10 @@ const CoachingJeunes = () => {
 
               <motion.div variants={springRight} className="space-y-6">
                 <div>
-                  <p className="font-mono tracking-widest uppercase text-[10px] text-[#1ab5c7] mb-3" aria-hidden="true">
+                  <p className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E] mb-3" aria-hidden="true">
                     Le coach
                   </p>
-                  <h2 className="text-[clamp(1.6rem,3.5vw,2rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
+                  <h2 className="text-[clamp(1.6rem,3.5vw,2rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
                     Un accompagnateur qui te comprend
                   </h2>
                 </div>
@@ -426,19 +426,19 @@ const CoachingJeunes = () => {
                       className="flex items-center gap-3"
                     >
                       <div
-                        className="w-8 h-8 rounded-xl bg-[#1ab5c7] flex items-center justify-center flex-shrink-0"
+                        className="w-8 h-8 rounded-xl bg-[#C4903E] flex items-center justify-center flex-shrink-0"
                         aria-hidden="true"
                       >
                         <Icon className="w-4 h-4 text-white" strokeWidth={1.8} />
                       </div>
-                      <span className="text-[#0B0B0C]/70 text-[14px]">{label}</span>
+                      <span className="text-[#1C3A52]/70 text-[14px]">{label}</span>
                     </motion.li>
                   ))}
                 </ul>
                 <motion.div {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
                   >
                     Prendre rendez-vous <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
@@ -449,7 +449,7 @@ const CoachingJeunes = () => {
         </section>
 
         {/* 05. TARIF + CTA */}
-        <section className="py-20 bg-[#1ab5c7]" aria-label="Tarif et prise de rendez-vous">
+        <section className="py-20 bg-[#C4903E]" aria-label="Tarif et prise de rendez-vous">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"
@@ -492,7 +492,7 @@ const CoachingJeunes = () => {
                 <motion.div {...btnHoverProps}>
                   <Link
                     to={cta.buttonLink}
-                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[16px] px-8 py-5 rounded-2xl hover:opacity-90 transition-opacity"
+                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 rounded-2xl hover:opacity-90 transition-opacity"
                     aria-label="Prendre rendez-vous pour un coaching jeunes"
                   >
                     {cta.buttonText} <ArrowUpRight className="w-5 h-5" aria-hidden="true" />

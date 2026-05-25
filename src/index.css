@@ -6,8 +6,8 @@
   :root {
     /* ── Brand tokens ── */
     --bone:       #F4F1EC;
-    --ink:        #0B0B0C;
-    --teal:       #1ab5c7;
+    --ink:        #1C3A52;
+    --teal:       #C4903E;
     --teal-pale:  #EDF9FA;
     --gold:       #C4903E;
 
@@ -69,7 +69,7 @@
 
   /* ── Gradient text ── */
   .text-gradient-teal {
-    background: linear-gradient(135deg, #66ccd5 0%, #1ab5c7 60%, #0f7a85 100%);
+    background: linear-gradient(135deg, #DDB06A 0%, #C4903E 60%, #8A6020 100%);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -79,7 +79,7 @@
     -webkit-text-fill-color: transparent;
   }
   .text-gradient-aurora {
-    background: linear-gradient(90deg, #33bbc7 0%, #a78bfa 50%, #33bbc7 100%);
+    background: linear-gradient(90deg, #C4903E 0%, #a78bfa 50%, #C4903E 100%);
     background-size: 200% auto;
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -114,7 +114,7 @@
     content: '';
     position: absolute; inset: 0;
     border-radius: inherit; padding: 1px;
-    background: linear-gradient(135deg, rgba(102,204,213,0.5) 0%, rgba(167,139,250,0.3) 50%, rgba(26,181,199,0.1) 100%);
+    background: linear-gradient(135deg, rgba(102,204,213,0.5) 0%, rgba(167,139,250,0.3) 50%, rgba(196,144,62,0.1) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor; mask-composite: exclude;
@@ -170,10 +170,10 @@
 /* ── Custom scrollbar ─────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bone); }
-::-webkit-scrollbar-thumb { background: #1ab5c7; border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: #C4903E; border-radius: 10px; }
 
 /* ── Selection ───────────────────────────────── */
-::selection { background: rgba(26,181,199,0.2); color: inherit; }
+::selection { background: rgba(196,144,62,0.2); color: inherit; }
 
 /* ── Layout helpers ──────────────────────────── */
 .section-container {
@@ -189,8 +189,8 @@
 /* ── Hero : mesh gradient animé ─────────────────────────────── */
 .hero-mesh {
   background:
-    radial-gradient(ellipse 70% 55% at 12% 42%, rgba(26,181,199,0.09) 0%, transparent 65%),
-    radial-gradient(ellipse 55% 65% at 88% 16%, rgba(26,181,199,0.065) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 55% at 12% 42%, rgba(196,144,62,0.09) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 65% at 88% 16%, rgba(196,144,62,0.065) 0%, transparent 60%),
     radial-gradient(ellipse 45% 45% at 55% 88%, rgba(196,144,62,0.04) 0%, transparent 55%);
   animation: heroMeshDrift 14s ease-in-out infinite alternate;
   will-change: transform, opacity;
@@ -219,8 +219,8 @@
 
 /* ── "infini." : shimmer au survol ───────────────────────────── */
 .infini-word {
-  color: #1ab5c7;
-  background-image: linear-gradient(90deg, #1ab5c7 0%, #5dd9e8 35%, #b8f4fa 55%, #1ab5c7 100%);
+  color: #C4903E;
+  background-image: linear-gradient(90deg, #C4903E 0%, #E8BA5A 35%, #F5E8D0 55%, #C4903E 100%);
   background-size: 220% auto;
   background-clip: text;
   -webkit-background-clip: text;

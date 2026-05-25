@@ -34,9 +34,9 @@ const VALUES_ICONS: Record<string, React.ElementType> = {
 };
 
 const CARD_CONFIGS = [
-  { bg: "#0B0B0C", text: "text-white",     sub: "text-white/60",  iconBg: "bg-[#1ab5c7]", iconColor: "text-[#0B0B0C]", border: "border-white/10" },
-  { bg: "#1ab5c7", text: "text-[#0B0B0C]", sub: "text-black/70",  iconBg: "bg-[#0B0B0C]", iconColor: "text-[#1ab5c7]", border: "border-transparent" },
-  { bg: "#F3F4F6", text: "text-[#0B0B0C]", sub: "text-gray-600",  iconBg: "bg-[#0B0B0C]", iconColor: "text-[#1ab5c7]", border: "border-gray-200" },
+  { bg: "#1C3A52", text: "text-white",     sub: "text-white/60",  iconBg: "bg-[#C4903E]", iconColor: "text-[#1C3A52]", border: "border-white/10" },
+  { bg: "#C4903E", text: "text-[#1C3A52]", sub: "text-black/70",  iconBg: "bg-[#1C3A52]", iconColor: "text-[#C4903E]", border: "border-transparent" },
+  { bg: "#F3F4F6", text: "text-[#1C3A52]", sub: "text-gray-600",  iconBg: "bg-[#1C3A52]", iconColor: "text-[#C4903E]", border: "border-gray-200" },
 ];
 
 const TIMELINE_STEPS = [
@@ -167,7 +167,7 @@ const About = () => {
       <Layout>
         <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
           <motion.div
-            className="w-10 h-10 border-2 border-[#1ab5c7] border-t-transparent rounded-full"
+            className="w-10 h-10 border-2 border-[#C4903E] border-t-transparent rounded-full"
             animate={{ rotate: 360 }}
             transition={{ duration: 0.9, repeat: Infinity, ease: "linear" }}
           />
@@ -282,7 +282,7 @@ const About = () => {
             >
               <motion.p
                 variants={blurInUp}
-                className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]"
+                className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]"
                 aria-hidden="true"
               >
                 ↳ À propos
@@ -290,7 +290,7 @@ const About = () => {
 
               <h1
                 id="about-h1"
-                className="text-[clamp(2rem,5vw,5rem)] font-bold leading-[0.95] tracking-tight text-[#0B0B0C]"
+                className="text-[clamp(2rem,5vw,5rem)] font-bold leading-[0.95] tracking-tight text-[#1C3A52]"
               >
                 <WordByWord text={hero.title} />
               </h1>
@@ -304,12 +304,12 @@ const About = () => {
 
               <motion.div variants={blurInUp} className="flex flex-wrap gap-3">
                 <motion.div
-                  className="flex items-center gap-2 bg-[#0B0B0C] rounded-full px-5 py-2.5"
+                  className="flex items-center gap-2 bg-[#1C3A52] rounded-full px-5 py-2.5"
                   whileHover={{ scale: 1.04 }}
                   transition={{ type: "spring", stiffness: 400, damping: 22 }}
                 >
                   <motion.div
-                    className="w-2 h-2 rounded-full bg-[#1ab5c7]"
+                    className="w-2 h-2 rounded-full bg-[#C4903E]"
                     {...pulseDot}
                     aria-hidden="true"
                   />
@@ -320,15 +320,15 @@ const About = () => {
                   whileHover={{ scale: 1.04 }}
                   transition={{ type: "spring", stiffness: 400, damping: 22 }}
                 >
-                  <span className="text-[12px] font-bold text-[#0B0B0C]">26 ans d'expérience</span>
+                  <span className="text-[12px] font-bold text-[#1C3A52]">26 ans d'expérience</span>
                 </motion.div>
                 <motion.div
                   className="flex items-center gap-2 bg-[#F3F4F6] rounded-full px-5 py-2.5"
                   whileHover={{ scale: 1.04 }}
                   transition={{ type: "spring", stiffness: 400, damping: 22 }}
                 >
-                  <MapPin className="w-3 h-3 text-[#1ab5c7]" aria-hidden="true" />
-                  <span className="text-[12px] font-bold text-[#0B0B0C]">Mâcon & à distance</span>
+                  <MapPin className="w-3 h-3 text-[#C4903E]" aria-hidden="true" />
+                  <span className="text-[12px] font-bold text-[#1C3A52]">Mâcon & à distance</span>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -349,13 +349,13 @@ const About = () => {
                 />
 
                 <motion.div
-                  className="absolute bottom-5 left-5 bg-[#1ab5c7] rounded-2xl px-5 py-3.5"
+                  className="absolute bottom-5 left-5 bg-[#C4903E] rounded-2xl px-5 py-3.5"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9, type: "spring", damping: 20, stiffness: 200 }}
                 >
                   <p className="text-[10px] font-mono tracking-widest uppercase text-black/50 mb-0.5" aria-hidden="true">Certifié</p>
-                  <p className="text-[13px] font-bold text-[#0B0B0C] leading-tight">Prisme Évolution</p>
+                  <p className="text-[13px] font-bold text-[#1C3A52] leading-tight">Prisme Évolution</p>
                 </motion.div>
 
                 <motion.div
@@ -364,21 +364,21 @@ const About = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.1, type: "spring", damping: 20, stiffness: 200 }}
                 >
-                  <motion.div className="w-2 h-2 rounded-full bg-[#1ab5c7]" {...pulseDot} aria-hidden="true" />
+                  <motion.div className="w-2 h-2 rounded-full bg-[#C4903E]" {...pulseDot} aria-hidden="true" />
                   <span className="text-white text-[11px] font-semibold">Disponible</span>
                 </motion.div>
               </div>
 
               <motion.div
-                className="absolute -bottom-4 -right-4 w-14 h-14 rounded-2xl bg-[#1ab5c7] flex items-center justify-center shadow-lg shadow-[#1ab5c7]/30"
+                className="absolute -bottom-4 -right-4 w-14 h-14 rounded-2xl bg-[#C4903E] flex items-center justify-center shadow-lg shadow-[#C4903E]/30"
                 {...floatAnim}
                 aria-hidden="true"
               >
-                <CheckCircle2 className="w-7 h-7 text-[#0B0B0C]" strokeWidth={2} />
+                <CheckCircle2 className="w-7 h-7 text-[#1C3A52]" strokeWidth={2} />
               </motion.div>
 
               <motion.div
-                className="absolute -top-5 -left-5 w-10 h-10 rounded-full border-2 border-[#1ab5c7]/40"
+                className="absolute -top-5 -left-5 w-10 h-10 rounded-full border-2 border-[#C4903E]/40"
                 animate={{ rotate: 360 }}
                 transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
                 aria-hidden="true"
@@ -402,7 +402,7 @@ const About = () => {
                 variants={springUp}
                 className="flex flex-col items-center text-center px-4"
               >
-                <span className="font-mono font-black text-[clamp(2rem,5vw,3.5rem)] text-[#0B0B0C] leading-none tracking-tight">
+                <span className="font-mono font-black text-[clamp(2rem,5vw,3.5rem)] text-[#1C3A52] leading-none tracking-tight">
                   {stat.value}{stat.suffix}
                 </span>
                 <span className="text-[13px] text-gray-500 mt-2 font-medium">{stat.label}</span>
@@ -414,13 +414,13 @@ const About = () => {
         {/* ══ 03 — QUI SUIS-JE (dark + SpotlightCard) ═══════════════════ */}
         <section className="max-w-7xl mx-auto px-5 md:px-12 pb-20 md:pb-28" aria-labelledby="about-who">
           <SpotlightCard
-            className="bg-[#0B0B0C] rounded-[40px] p-8 md:p-14 overflow-hidden"
-            spotlightColor="rgba(26,181,199,0.10)"
+            className="bg-[#1C3A52] rounded-[40px] p-8 md:p-14 overflow-hidden"
+            spotlightColor="rgba(196,144,62,0.10)"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start relative">
 
               <motion.div
-                className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#1ab5c7]/5 blur-3xl pointer-events-none"
+                className="absolute top-0 right-0 w-64 h-64 rounded-full bg-[#C4903E]/5 blur-3xl pointer-events-none"
                 animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 aria-hidden="true"
@@ -430,7 +430,7 @@ const About = () => {
                 <motion.p
                   initial="hidden" whileInView="visible" viewport={VP}
                   variants={blurInUp}
-                  className="text-[10px] font-mono tracking-widest uppercase text-[#1ab5c7]/70 mb-5"
+                  className="text-[10px] font-mono tracking-widest uppercase text-[#C4903E]/70 mb-5"
                   aria-hidden="true"
                 >
                   ON COACHING ☉ {whoSection.title}
@@ -454,7 +454,7 @@ const About = () => {
                     decoding="async"
                   />
                   <motion.div
-                    className="absolute inset-0 rounded-[24px] border-2 border-[#1ab5c7]/40"
+                    className="absolute inset-0 rounded-[24px] border-2 border-[#C4903E]/40"
                     animate={{ rotate: [0, 2, 0, -2, 0] }}
                     transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                     aria-hidden="true"
@@ -482,7 +482,7 @@ const About = () => {
                   variants={blurInUp}
                   className="border-t border-white/10 pt-7 mt-3 space-y-4"
                 >
-                  <h3 className="text-[16px] font-bold text-[#1ab5c7]">{whoSection.differenceTitle}</h3>
+                  <h3 className="text-[16px] font-bold text-[#C4903E]">{whoSection.differenceTitle}</h3>
                   <p className="text-[15px] text-white/55 leading-relaxed">{whoSection.paragraph3}</p>
                   <p className="text-[15px] text-white/55 leading-relaxed">{whoSection.paragraph4}</p>
                 </motion.div>
@@ -503,14 +503,14 @@ const About = () => {
           >
             <motion.p
               variants={blurInUp}
-              className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7] mb-3"
+              className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E] mb-3"
               aria-hidden="true"
             >
               ↳ Mon parcours
             </motion.p>
             <h2
               id="about-timeline"
-              className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold tracking-tight text-[#0B0B0C] leading-tight"
+              className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold tracking-tight text-[#1C3A52] leading-tight"
             >
               <WordByWordInView text="Une trajectoire construite sur l'humain" />
             </h2>
@@ -531,7 +531,7 @@ const About = () => {
                   className="group relative rounded-[28px] border border-gray-100 bg-white p-8 overflow-hidden cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
                 >
                   <div
-                    className="absolute inset-0 bg-gradient-to-br from-[#1ab5c7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    className="absolute inset-0 bg-gradient-to-br from-[#C4903E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     aria-hidden="true"
                   />
                   <div className="flex items-start gap-5">
@@ -543,12 +543,12 @@ const About = () => {
                     </span>
                     <div className="space-y-2 pt-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="w-8 h-8 rounded-xl bg-[#0B0B0C] flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                          <StepIcon className="w-4 h-4 text-[#1ab5c7]" strokeWidth={1.8} />
+                        <div className="w-8 h-8 rounded-xl bg-[#1C3A52] flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                          <StepIcon className="w-4 h-4 text-[#C4903E]" strokeWidth={1.8} />
                         </div>
-                        <span className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">{step.period}</span>
+                        <span className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">{step.period}</span>
                       </div>
-                      <h3 className="text-[1.1rem] font-bold text-[#0B0B0C] tracking-tight">{step.title}</h3>
+                      <h3 className="text-[1.1rem] font-bold text-[#1C3A52] tracking-tight">{step.title}</h3>
                       <p className="text-[15px] text-gray-500 leading-relaxed">{step.text}</p>
                     </div>
                   </div>
@@ -571,14 +571,14 @@ const About = () => {
             <div>
               <motion.p
                 variants={blurInUp}
-                className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7] mb-3"
+                className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E] mb-3"
                 aria-hidden="true"
               >
                 ↳ {valuesSection.title}
               </motion.p>
               <h2
                 id="about-values"
-                className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold tracking-tight text-[#0B0B0C] leading-tight"
+                className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold tracking-tight text-[#1C3A52] leading-tight"
               >
                 <WordByWordInView text="Ce qui nous distingue" />
               </h2>
@@ -608,23 +608,23 @@ const About = () => {
           aria-labelledby="about-cta"
         >
           <SpotlightCard
-            className="relative bg-[#0B0B0C] rounded-[40px] px-8 md:px-16 py-16 md:py-20 overflow-hidden"
-            spotlightColor="rgba(26,181,199,0.12)"
+            className="relative bg-[#1C3A52] rounded-[40px] px-8 md:px-16 py-16 md:py-20 overflow-hidden"
+            spotlightColor="rgba(196,144,62,0.12)"
           >
             <motion.div
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] rounded-full bg-[#1ab5c7]/8 blur-3xl pointer-events-none"
+              className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] rounded-full bg-[#C4903E]/8 blur-3xl pointer-events-none"
               animate={{ opacity: [0.4, 0.8, 0.4] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               aria-hidden="true"
             />
 
             <motion.div
-              className="absolute -top-6 -right-6 w-24 h-24 rounded-full border border-[#1ab5c7]/20"
+              className="absolute -top-6 -right-6 w-24 h-24 rounded-full border border-[#C4903E]/20"
               {...floatAnim}
               aria-hidden="true"
             />
             <motion.div
-              className="absolute bottom-10 left-10 w-6 h-6 rounded-full bg-[#1ab5c7]/30"
+              className="absolute bottom-10 left-10 w-6 h-6 rounded-full bg-[#C4903E]/30"
               animate={{ y: [0, -14, 0], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               aria-hidden="true"
@@ -634,7 +634,7 @@ const About = () => {
               <motion.p
                 initial="hidden" whileInView="visible" viewport={VP}
                 variants={blurInUp}
-                className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]/70"
+                className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]/70"
                 aria-hidden="true"
               >
                 ↳ Première séance gratuite
@@ -664,7 +664,7 @@ const About = () => {
                   <motion.div {...btnHoverProps}>
                     <Link
                       to={cta.buttonLink}
-                      className="bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[14px] px-8 py-4 rounded-full flex items-center gap-2.5 shadow-lg shadow-[#1ab5c7]/30"
+                      className="bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-8 py-4 rounded-full flex items-center gap-2.5 shadow-lg shadow-[#C4903E]/30"
                     >
                       {cta.buttonText}
                       <ArrowUpRight className="w-4 h-4" aria-hidden="true" />

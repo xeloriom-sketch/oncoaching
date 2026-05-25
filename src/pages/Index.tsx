@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -26,11 +26,14 @@ import { ROUTES } from "@/lib/config";
 import { usePageContent } from "@/hooks/usePageContent";
 import type { IndexContent } from "@/types";
 
-const COACH_IMG    = `${import.meta.env.BASE_URL}patron.webp`;
-/* Remplace par 3 fichiers distincts si disponibles (ex. hero-1.mp4, hero-2.mp4, hero-3.mp4) */
-const HERO_VIDEO_1 = `${import.meta.env.BASE_URL}coaching-reel.mp4`;
-const HERO_VIDEO_2 = `${import.meta.env.BASE_URL}coaching-reel.mp4`;
-const HERO_VIDEO_3 = `${import.meta.env.BASE_URL}coaching-reel.mp4`;
+const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
+
+/* Playlist de vidéos pour les galets hero — ajoute tes fichiers ici */
+const HERO_VIDEOS = [
+  `${import.meta.env.BASE_URL}coaching-reel.mp4`,
+  /* `${import.meta.env.BASE_URL}coaching-reel-2.mp4`, */
+  /* `${import.meta.env.BASE_URL}coaching-reel-3.mp4`, */
+];
 
 const SERVICES = [
   {
@@ -69,36 +72,36 @@ const SERVICES = [
 
 const SERVICE_COLORS = [
   {
-    bg: "#0B0B0C",
+    bg: "#1C3A52",
     text: "text-white",
     sub: "text-white/55",
     tag: "bg-white/10 text-white/60",
-    icon: "bg-[#1ab5c7] text-white",
-    link: "text-[#1ab5c7]",
+    icon: "bg-[#C4903E] text-white",
+    link: "text-[#C4903E]",
   },
   {
-    bg: "#1ab5c7",
-    text: "text-[#0B0B0C]",
+    bg: "#C4903E",
+    text: "text-[#1C3A52]",
     sub: "text-black/65",
     tag: "bg-black/10 text-black/60",
-    icon: "bg-[#0B0B0C] text-[#1ab5c7]",
-    link: "text-[#0B0B0C]",
+    icon: "bg-[#1C3A52] text-[#C4903E]",
+    link: "text-[#1C3A52]",
   },
   {
     bg: "#F3F4F6",
-    text: "text-[#0B0B0C]",
+    text: "text-[#1C3A52]",
     sub: "text-gray-500",
-    tag: "bg-[#0B0B0C]/8 text-gray-500",
-    icon: "bg-[#0B0B0C] text-[#1ab5c7]",
-    link: "text-[#0B0B0C]",
+    tag: "bg-[#1C3A52]/8 text-gray-500",
+    icon: "bg-[#1C3A52] text-[#C4903E]",
+    link: "text-[#1C3A52]",
   },
   {
-    bg: "#0B0B0C",
+    bg: "#1C3A52",
     text: "text-white",
     sub: "text-white/55",
     tag: "bg-white/10 text-white/60",
-    icon: "bg-[#1ab5c7] text-white",
-    link: "text-[#1ab5c7]",
+    icon: "bg-[#C4903E] text-white",
+    link: "text-[#C4903E]",
   },
 ];
 
@@ -166,6 +169,15 @@ function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", child
 
 export default function Index() {
   const { content } = usePageContent<IndexContent>("index");
+
+  /* ── Cycling vidéo hero ── */
+  const [vidIdx, setVidIdx] = useState(0);
+  useEffect(() => {
+    if (HERO_VIDEOS.length <= 1) return;
+    const t = setInterval(() => setVidIdx(i => (i + 1) % HERO_VIDEOS.length), 7000);
+    return () => clearInterval(t);
+  }, []);
+  const currentVideo = HERO_VIDEOS[vidIdx];
 
   /* ── Parallaxe souris — Hero ───────────────────────────────── */
   const heroRef = useRef<HTMLElement>(null);
@@ -275,20 +287,24 @@ export default function Index() {
           >
             <div className="absolute inset-0 w-full h-full">
 
-              {/* GALET 1 — Grande forme principale (Haut Droite) — Vidéo principale */}
+              {/* GALET 1 — Grand (Haut Droite) — crop haut de la vidéo */}
               <div
                   className="absolute top-0 right-[4%] w-[72%] h-[78%] overflow-hidden bg-gray-900 z-10"
                   style={{ borderRadius: "60% 40% 45% 55% / 60% 45% 55% 40%" }}
               >
                 <motion.video
-                    src={HERO_VIDEO_1}
+                    key={`g1-${vidIdx}`}
+                    src={currentVideo}
                     autoPlay loop muted playsInline
                     className="absolute inset-0 w-full h-full object-cover will-change-transform"
-                    style={{ x: sPhX, y: sPhY, scale: 1.15 }}
+                    style={{ x: sPhX, y: sPhY, scale: 1.18, objectPosition: "50% 20%" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8 }}
                 />
               </div>
 
-              {/* GALET 2 — Forme moyenne (Bas Gauche) — Vidéo avec overlay teal */}
+              {/* GALET 2 — Moyen (Bas Gauche) — crop milieu/bas */}
               <motion.div
                   className="absolute bottom-2 left-[8%] w-[54%] h-[54%] bg-[#FBFBFB] flex items-center justify-center p-[10px] z-20"
                   style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
@@ -301,16 +317,20 @@ export default function Index() {
                     style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
                 >
                   <motion.video
-                      src={HERO_VIDEO_2}
+                      key={`g2-${vidIdx}`}
+                      src={currentVideo}
                       autoPlay loop muted playsInline
                       className="absolute inset-0 w-full h-full object-cover will-change-transform"
-                      style={{ x: sB2X, y: sB2Y, scale: 1.2 }}
+                      style={{ x: sB2X, y: sB2Y, scale: 1.22, objectPosition: "30% 65%" }}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0B0B0C]/30 via-[#1ab5c7]/15 to-transparent mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#1C3A52]/25 via-[#C4903E]/10 to-transparent mix-blend-multiply" />
                 </div>
               </motion.div>
 
-              {/* GALET 3 — Petit galet (Bas Gauche) — Vidéo d'ambiance */}
+              {/* GALET 3 — Petit (Extrême bas-gauche) — crop bas */}
               <motion.div
                   className="absolute bottom-10 left-0 w-[20%] h-[26%] overflow-hidden z-10 border border-white/20 shadow-md bg-gray-900"
                   style={{ borderRadius: "40% 60% 50% 50% / 50% 50% 50% 50%" }}
@@ -319,12 +339,16 @@ export default function Index() {
                   transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               >
                 <motion.video
-                    src={HERO_VIDEO_3}
+                    key={`g3-${vidIdx}`}
+                    src={currentVideo}
                     autoPlay loop muted playsInline
                     className="absolute inset-0 w-full h-full object-cover will-change-transform"
-                    style={{ x: sB1X, y: sB1Y, scale: 1.25 }}
+                    style={{ x: sB1X, y: sB1Y, scale: 1.28, objectPosition: "70% 80%" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8 }}
                 />
-                <div className="absolute inset-0 bg-[#1ab5c7]/10 mix-blend-color" />
+                <div className="absolute inset-0 bg-[#C4903E]/15 mix-blend-overlay" />
               </motion.div>
 
               {/* Badge flottant "Coach certifié" */}
@@ -333,7 +357,7 @@ export default function Index() {
                   initial={{ opacity: 0, y: 18, scale: 0.88 }}
                   animate={{ opacity: 1, y: 0,  scale: 1   }}
                   transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-[12%] left-[2%] bg-[#0B0B0C]/90 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shadow-xl will-change-transform z-30"
+                  className="absolute top-[12%] left-[2%] bg-[#1C3A52]/90 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shadow-xl will-change-transform z-30"
               >
                 <p className="text-white text-[13px] font-semibold tracking-wide">Coach certifié</p>
                 <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
@@ -347,8 +371,8 @@ export default function Index() {
                   transition={{ delay: 0.95, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB] rounded-full px-4 py-2.5 shadow-lg will-change-transform z-30"
               >
-                <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
-                <span className="text-[#0B0B0C] text-[12px] font-semibold tracking-wide">Disponible</span>
+                <span className="w-2 h-2 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
+                <span className="text-[#1C3A52] text-[12px] font-semibold tracking-wide">Disponible</span>
               </motion.div>
 
             </div>
@@ -363,54 +387,39 @@ export default function Index() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
-        <span className="inline-flex items-center gap-2 bg-white border border-[#E5E7EB] text-[#0B0B0C] text-xs md:text-sm font-medium px-4 py-2 rounded-full shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+        <span className="inline-flex items-center gap-2 bg-white border border-[#E5E7EB] text-[#1C3A52] text-xs md:text-sm font-medium px-4 py-2 rounded-full shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
           Coaching certifié · Mâcon
         </span>
             </motion.div>
 
-            {/* H1 — Grand, compact et percutant comme le modèle original */}
+            {/* H1 — 2 lignes, reveal par ligne entière */}
             <h1
                 id="home-h1"
-                className="font-bold leading-[1.03] tracking-tight text-[#0B0B0C]"
-                style={{ fontSize: "clamp(2.5rem, 6.5vw, 5.2rem)" }}
+                className="font-bold leading-[1.06] tracking-tight text-[#1C3A52]"
+                style={{ fontSize: "clamp(2.8rem, 7vw, 6rem)" }}
             >
-        <span className="block">
-          {["Développez", "votre"].map((word, i) => (
-              <span key={word} className="word-mask mr-[0.22em]">
-              <motion.span
-                  className="inline-block"
-                  initial={{ y: "115%", opacity: 0 }}
-                  animate={{ y: "0%",   opacity: 1 }}
-                  transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.18 + i * 0.09 }}
-              >
-                {word}
-              </motion.span>
-            </span>
-          ))}
-        </span>
-              <span className="block mt-[-0.02em]">
-          <span className="word-mask mr-[0.22em]">
-            <motion.span
-                className="inline-block"
-                initial={{ y: "115%", opacity: 0 }}
-                animate={{ y: "0%",   opacity: 1 }}
-                transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.36 }}
-            >
-              potentiel
-            </motion.span>
-          </span>
-          <span className="word-mask">
-            <motion.span
-                className="infini-word inline-block"
-                initial={{ y: "115%", opacity: 0 }}
-                animate={{ y: "0%",   opacity: 1 }}
-                transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.45 }}
-            >
-              infini.
-            </motion.span>
-          </span>
-        </span>
+              <span className="word-mask block">
+                <motion.span
+                    className="inline-block"
+                    initial={{ y: "105%" }}
+                    animate={{ y: "0%" }}
+                    transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.18 }}
+                >
+                  Développez votre
+                </motion.span>
+              </span>
+              <span className="word-mask block">
+                <motion.span
+                    className="inline-block"
+                    initial={{ y: "105%" }}
+                    animate={{ y: "0%" }}
+                    transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.32 }}
+                >
+                  potentiel{" "}
+                  <span className="infini-word">infini.</span>
+                </motion.span>
+              </span>
             </h1>
 
             {/* Sous-titre descriptif */}
@@ -418,7 +427,7 @@ export default function Index() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
-                className="text-[1.05rem] text-[#0B0B0C]/70 leading-relaxed max-w-lg"
+                className="text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg"
             >
               {content?.hero?.subtitle ?? "Accompagnement personnalisé pour particuliers et entreprises. Coach certifié, 26 ans d'expérience en sciences humaines."}
             </motion.p>
@@ -433,8 +442,8 @@ export default function Index() {
               <LiquidCTA
                   to={ROUTES.contact}
                   label="Prendre rendez-vous avec ON Coaching"
-                  baseClass="bg-[#0B0B0C] text-white shadow-[0_8px_24px_rgba(11,11,12,0.15)] rounded-full px-6 py-3.5 flex items-center gap-2 font-medium"
-                  fillClass="bg-[#1ab5c7]"
+                  baseClass="bg-[#1C3A52] text-white shadow-[0_8px_24px_rgba(28,58,82,0.15)] rounded-full px-6 py-3.5 flex items-center gap-2 font-medium"
+                  fillClass="bg-[#C4903E]"
               >
                 Prendre RDV
                 <ArrowUpRight className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
@@ -443,8 +452,8 @@ export default function Index() {
               <LiquidCTA
                   to={ROUTES.about}
                   label="Découvrir l'approche de coaching"
-                  baseClass="bg-white text-[#0B0B0C] border border-[#E5E7EB] rounded-full px-6 py-3.5 font-medium"
-                  fillClass="bg-[#0B0B0C]"
+                  baseClass="bg-white text-[#1C3A52] border border-[#E5E7EB] rounded-full px-6 py-3.5 font-medium"
+                  fillClass="bg-[#1C3A52]"
                   hoverTextClass="text-white"
               >
                 Notre approche
@@ -456,9 +465,9 @@ export default function Index() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.84 }}
-                className="text-sm text-[#0B0B0C]/50 flex items-center gap-2 mt-2"
+                className="text-sm text-[#1C3A52]/50 flex items-center gap-2 mt-2"
             >
-              <span className="text-[#1ab5c7] text-base" aria-hidden="true">☉</span>
+              <span className="text-[#C4903E] text-base" aria-hidden="true">☉</span>
               1er rendez-vous offert · Sans engagement
             </motion.p>
 
@@ -484,7 +493,7 @@ export default function Index() {
                 className="flex flex-col items-center gap-2"
               >
                 <span
-                  className="text-[clamp(1.8rem,4vw,3rem)] font-bold tracking-tight text-[#0B0B0C] leading-none font-mono"
+                  className="text-[clamp(1.8rem,4vw,3rem)] font-bold tracking-tight text-[#1C3A52] leading-none font-mono"
                   aria-label={value}
                 >
                   {value}
@@ -521,7 +530,7 @@ export default function Index() {
             <motion.h2
               id="services-title"
               variants={fadeInUp}
-              className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
+              className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]"
             >
               {content?.servicesSection?.title ?? "Un accompagnement unique pour des résultats durables"}
             </motion.h2>
@@ -595,10 +604,10 @@ export default function Index() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
           >
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
-              <p className="text-[11px] font-mono tracking-widest uppercase text-[#1ab5c7]">
+              <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                 Technologie · Zengar Institute
               </p>
-              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-tight">
+              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
                 Neurofeedback NeurOptimal®
               </h2>
               <p className="text-gray-500 text-[16px] leading-relaxed max-w-lg">
@@ -612,14 +621,14 @@ export default function Index() {
                   "Performance cognitive et sportive",
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-2.5 text-gray-500 text-[14px]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C4903E] flex-shrink-0" />
                     {item}
                   </li>
                 ))}
               </ul>
               <Link
                 to={ROUTES.neurofeedback}
-                className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-fit mt-2"
+                className="inline-flex items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-fit mt-2"
               >
                 Découvrir le Neurofeedback <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
@@ -638,10 +647,10 @@ export default function Index() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap">
-                <span className="bg-[#1ab5c7] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full font-bold">
+                <span className="bg-[#C4903E] text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full font-bold">
                   Non invasif
                 </span>
-                <span className="bg-white/90 text-[#0B0B0C] text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <span className="bg-white/90 text-[#1C3A52] text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 rounded-full backdrop-blur-sm">
                   NeurOptimal®
                 </span>
               </div>
@@ -652,7 +661,7 @@ export default function Index() {
 
       {/* ── 04. COACH BIO ────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#0B0B0C]"
+        className="py-20 md:py-28 bg-[#1C3A52]"
         aria-labelledby="coach-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -721,7 +730,7 @@ export default function Index() {
 
             <motion.blockquote
               variants={fadeInUp}
-              className="border-l-2 border-[#1ab5c7] pl-5 text-[15px] italic text-white/50 leading-relaxed"
+              className="border-l-2 border-[#C4903E] pl-5 text-[15px] italic text-white/50 leading-relaxed"
             >
               "Le changement commence là où la zone de confort s'arrête."
             </motion.blockquote>
@@ -729,7 +738,7 @@ export default function Index() {
             <motion.div variants={fadeInUp}>
               <Link
                 to={ROUTES.about}
-                className="flex sm:inline-flex items-center justify-center gap-2.5 bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
+                className="flex sm:inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
                 aria-label="Découvrir l'approche de Noureddine Omar"
               >
                 Découvrir l'approche
@@ -763,7 +772,7 @@ export default function Index() {
             <motion.h2
               id="processus-title"
               variants={fadeInUp}
-              className="text-[clamp(1.8rem,4.5vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]"
+              className="text-[clamp(1.8rem,4.5vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]"
             >
               Trois étapes vers votre transformation
             </motion.h2>
@@ -797,7 +806,7 @@ export default function Index() {
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-[18px] font-bold text-[#0B0B0C]">
+                  <h3 className="text-[18px] font-bold text-[#1C3A52]">
                     {title}
                   </h3>
                   <p className="text-[15px] text-gray-500 leading-relaxed">
@@ -825,7 +834,7 @@ export default function Index() {
           >
             <Link
               to={ROUTES.contact}
-              className="w-full sm:w-auto justify-center bg-[#0B0B0C] text-white font-bold text-[15px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:opacity-85 transition-opacity shadow-[0_8px_32px_rgba(11,11,12,0.25)]"
+              className="w-full sm:w-auto justify-center bg-[#1C3A52] text-white font-bold text-[15px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:opacity-85 transition-opacity shadow-[0_8px_32px_rgba(28,58,82,0.25)]"
               aria-label="Commencer la consultation gratuite"
             >
               Démarrer gratuitement
@@ -847,12 +856,12 @@ export default function Index() {
           >
             {/* Texte */}
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
-              <p className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7]" aria-hidden="true">
+              <p className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E]" aria-hidden="true">
                 On Coaching · En action
               </p>
-              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#0B0B0C] leading-[1.05]">
+              <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]">
                 Découvrez<br />
-                <span className="text-[#1ab5c7]">notre approche</span><br />
+                <span className="text-[#C4903E]">notre approche</span><br />
                 en vidéo.
               </h2>
               <p className="text-[15px] text-gray-500 leading-relaxed max-w-md">
@@ -863,7 +872,7 @@ export default function Index() {
                   href="https://www.facebook.com/reel/2910146945849990"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#0B0B0C] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
+                  className="inline-flex items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
                   aria-label="Voir la vidéo ON Coaching sur Facebook"
                 >
                   Voir sur Facebook
@@ -906,7 +915,7 @@ export default function Index() {
                 .map((_, i) => (
                   <span
                     key={i}
-                    className="text-[#1ab5c7] text-[1.4rem]"
+                    className="text-[#C4903E] text-[1.4rem]"
                     aria-hidden="true"
                   >
                     ★
@@ -914,7 +923,7 @@ export default function Index() {
                 ))}
             </div>
 
-            <blockquote className="text-[1.25rem] md:text-[1.5rem] font-medium text-[#0B0B0C] leading-relaxed italic">
+            <blockquote className="text-[1.25rem] md:text-[1.5rem] font-medium text-[#1C3A52] leading-relaxed italic">
               "L'accompagnement d'ON Coaching m'a permis de structurer ma vision
               et de retrouver une parfaite synergie entre ma vie professionnelle
               et personnelle. Un coach à l'écoute, bienveillant et efficace."
@@ -922,15 +931,15 @@ export default function Index() {
 
             <div className="flex items-center gap-3">
               <div
-                className="w-11 h-11 rounded-full bg-[#0B0B0C] flex items-center justify-center flex-shrink-0"
+                className="w-11 h-11 rounded-full bg-[#1C3A52] flex items-center justify-center flex-shrink-0"
                 aria-hidden="true"
               >
-                <span className="text-[#1ab5c7] text-[13px] font-bold">
+                <span className="text-[#C4903E] text-[13px] font-bold">
                   MA
                 </span>
               </div>
               <div className="text-left">
-                <p className="text-[15px] font-bold text-[#0B0B0C]">Marc A.</p>
+                <p className="text-[15px] font-bold text-[#1C3A52]">Marc A.</p>
                 <p className="text-[14px] text-gray-500">Directeur Associé</p>
               </div>
             </div>
@@ -940,7 +949,7 @@ export default function Index() {
 
       {/* ── 08. CTA FINAL ────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-[#0B0B0C]"
+        className="py-20 md:py-28 bg-[#1C3A52]"
         aria-labelledby="cta-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12">
@@ -976,7 +985,7 @@ export default function Index() {
               >
                 <Link
                   to={ROUTES.contact}
-                  className="bg-[#1ab5c7] text-[#0B0B0C] font-bold text-[15px] px-7 py-4 rounded-full flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+                  className="bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-7 py-4 rounded-full flex items-center gap-2.5 hover:opacity-90 transition-opacity"
                   aria-label="Contacter un coach ON Coaching"
                 >
                   Contacter un coach

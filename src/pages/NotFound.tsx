@@ -21,7 +21,7 @@ const NotFound = () => {
           404
         </span>
         <div className="flex flex-col gap-2">
-          <h1 className="text-[clamp(1.4rem,4vw,2rem)] font-bold text-[#0B0B0C] tracking-tight">
+          <h1 className="text-[clamp(1.4rem,4vw,2rem)] font-bold text-[#1C3A52] tracking-tight">
             Page introuvable
           </h1>
           <p className="text-gray-500 text-[15px]">
@@ -30,7 +30,7 @@ const NotFound = () => {
         </div>
         <Link
           to="/"
-          className="bg-[#0B0B0C] text-white font-semibold text-[15px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
+          className="bg-[#1C3A52] text-white font-semibold text-[15px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
         >
           Retour à l'accueil
         </Link>

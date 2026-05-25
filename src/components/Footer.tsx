@@ -262,30 +262,30 @@ const Footer = () => {
                 .artist-name { font-size: .75rem; color: #a1a1aa; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 .volume-bars { display:flex; align-items:flex-end; gap:2px; width:38px; height:28px; }
                 .volume-bars .bar {
-                  width: 3px; background: linear-gradient(180deg,#1ab5c7,#8BE6EF); border-radius: 2px;
+                  width: 3px; background: linear-gradient(180deg,#C4903E,#E8C07A); border-radius: 2px;
                   animation: bounce .8s infinite ease-in-out;
                 }
                 .playback-controls { display:flex; flex-direction:column; gap:8px; }
                 .time-info { display:flex; justify-content:space-between; font-size:.72rem; color:#8e8e93; font-variant-numeric: tabular-nums; }
                 .progress-wrap { position:relative; height:16px; display:flex; align-items:center; }
                 .progress-track { position:absolute; inset-inline:0; height:4px; border-radius:999px; background: rgba(255,255,255,.14); }
-                .progress-fill { position:absolute; left:0; height:4px; border-radius:999px; background: linear-gradient(90deg,#1ab5c7,#8BE6EF); }
+                .progress-fill { position:absolute; left:0; height:4px; border-radius:999px; background: linear-gradient(90deg,#C4903E,#E8C07A); }
                 .progress-seek {
                   position:relative; width:100%; appearance:none; background:transparent; cursor:pointer;
                 }
                 .progress-seek::-webkit-slider-runnable-track { height:4px; background: transparent; }
                 .progress-seek::-webkit-slider-thumb {
-                  appearance:none; width:10px; height:10px; border-radius:50%; background:#fff; border:1px solid #1ab5c7; margin-top:-3px;
+                  appearance:none; width:10px; height:10px; border-radius:50%; background:#fff; border:1px solid #C4903E; margin-top:-3px;
                 }
                 .progress-seek::-moz-range-track { height:4px; background:transparent; }
-                .progress-seek::-moz-range-thumb { width:10px; height:10px; border-radius:50%; background:#fff; border:1px solid #1ab5c7; }
+                .progress-seek::-moz-range-thumb { width:10px; height:10px; border-radius:50%; background:#fff; border:1px solid #C4903E; }
                 .button-row { display:flex; align-items:center; justify-content:center; gap:10px; }
                 .control-button {
                   width:42px; height:42px; border-radius:999px; border:none; background:transparent; color:#fff;
                   display:flex; align-items:center; justify-content:center; cursor:pointer; transition:.2s;
                 }
                 .control-button:hover { background: rgba(255,255,255,.1); transform: scale(1.05); }
-                .control-button.play-pause { width:50px; height:50px; background:#1ab5c7; }
+                .control-button.play-pause { width:50px; height:50px; background:#C4903E; }
                 .control-button.play-pause:hover { background:#15a2b3; }
                 @keyframes bounce { 0%,100% { height:6px; } 50% { height:24px; } }
               `}</style>
@@ -299,7 +299,7 @@ const Footer = () => {
               whileTap={{ scale: 0.95 }}
               onClick={openAndPlay}
               aria-label="Ouvrir le lecteur podcast"
-              className="ml-auto w-14 h-14 bg-[#1ab5c7] text-white rounded-full shadow-xl flex items-center justify-center"
+              className="ml-auto w-14 h-14 bg-[#C4903E] text-white rounded-full shadow-xl flex items-center justify-center"
             >
               <Play size={18} className="ml-0.5 fill-white" aria-hidden="true" />
             </motion.button>
@@ -308,7 +308,7 @@ const Footer = () => {
       </aside>
 
       {/* ── Footer principal ─────────────────────────── */}
-      <footer className="bg-[#0B0B0C] text-white" aria-label="Pied de page">
+      <footer className="bg-[#1C3A52] text-white" aria-label="Pied de page">
         <div className="max-w-7xl mx-auto px-4 md:px-12 pt-20 pb-16">
 
           {/* CTA strip */}
@@ -328,7 +328,7 @@ const Footer = () => {
               <div className="flex flex-wrap gap-3">
                 <Link
                   to="/contact"
-                  className="bg-[#1ab5c7] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                  className="bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
                 >
                   Contacter un coach
                 </Link>
@@ -355,7 +355,7 @@ const Footer = () => {
                   <LogoMark size={24} />
                 </div>
                 <span className="font-bold text-[14px] tracking-tight">
-                  <span className="text-[#1ab5c7]">ON</span><span className="group-hover:text-[#1ab5c7] transition-colors text-white">Coaching</span>
+                  <span className="text-[#C4903E]">ON</span><span className="group-hover:text-[#C4903E] transition-colors text-white">Coaching</span>
                 </span>
               </Link>
               <p className="text-white/35 text-[13px] leading-relaxed mb-5">
@@ -371,7 +371,7 @@ const Footer = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={platform}
-                      className="w-10 h-10 rounded-full bg-white/8 hover:bg-[#1ab5c7]/20 flex items-center justify-center text-white/40 hover:text-[#1ab5c7] transition-all border border-white/8"
+                      className="w-10 h-10 rounded-full bg-white/8 hover:bg-[#C4903E]/20 flex items-center justify-center text-white/40 hover:text-[#C4903E] transition-all border border-white/8"
                     >
                       <Icon size={13} aria-hidden="true" />
                     </a>
@@ -388,7 +388,7 @@ const Footer = () => {
                   <li key={href}>
                     <Link
                       to={href}
-                      className="text-white/50 hover:text-[#1ab5c7] text-[13px] font-medium transition-colors"
+                      className="text-white/50 hover:text-[#C4903E] text-[13px] font-medium transition-colors"
                     >
                       {label}
                     </Link>
@@ -405,7 +405,7 @@ const Footer = () => {
                   <li key={s.href}>
                     <Link
                       to={s.href}
-                      className="text-white/50 hover:text-[#1ab5c7] text-[13px] font-medium transition-colors"
+                      className="text-white/50 hover:text-[#C4903E] text-[13px] font-medium transition-colors"
                     >
                       {s.label}
                     </Link>
@@ -419,17 +419,17 @@ const Footer = () => {
               <p className="text-[10px] font-mono tracking-widest uppercase text-white/30 mb-4" aria-hidden="true">Contact</p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-2.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#1ab5c7]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
+                  <MapPin className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
                   <span className="text-white/40 text-[13px]">14 rue des écureuils, 71000 Sancé</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Phone className="w-3.5 h-3.5 text-[#1ab5c7]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
+                  <Phone className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
                   <a href={`tel:${SITE.phone}`} className="text-white/40 hover:text-white text-[13px] transition-colors">
                     +33 06 63 04 18 12
                   </a>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Mail className="w-3.5 h-3.5 text-[#1ab5c7]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
+                  <Mail className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
                   <a href={`mailto:${SITE.email}`} className="text-white/40 hover:text-white text-[13px] transition-colors">
                     {SITE.email}
                   </a>
@@ -447,13 +447,13 @@ const Footer = () => {
                 href="https://www.alhambra-web.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/40 hover:text-[#1ab5c7] transition-colors font-semibold"
+                className="text-white/40 hover:text-[#C4903E] transition-colors font-semibold"
               >
                 Alhambra Web
               </a>
             </p>
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
               <span className="text-white/25 text-[11px] font-mono">Disponible pour de nouveaux accompagnements</span>
             </div>
           </div>

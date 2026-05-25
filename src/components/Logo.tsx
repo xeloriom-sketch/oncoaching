@@ -33,7 +33,7 @@ const Logo = ({ showText = true, textColor = "text-white", size = 34 }: LogoProp
     </div>
     {showText && (
       <span className="font-bold tracking-tight text-[15px]">
-        <span className="text-[#1ab5c7]">ON</span><span className={textColor}>Coaching</span>
+        <span className="text-[#C4903E]">ON</span><span className={textColor}>Coaching</span>
       </span>
     )}
   </div>

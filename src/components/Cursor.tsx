@@ -55,7 +55,7 @@ export default function Cursor() {
       {/* Dot */}
       <motion.div
         className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999]"
-        style={{ x: dotX, y: dotY, translateX: "-50%", translateY: "-50%", backgroundColor: "#1ab5c7" }}
+        style={{ x: dotX, y: dotY, translateX: "-50%", translateY: "-50%", backgroundColor: "#C4903E" }}
         animate={{
           width:   clicking ? 4  : hovered ? 10 : 6,
           height:  clicking ? 4  : hovered ? 10 : 6,
@@ -70,13 +70,13 @@ export default function Cursor() {
         style={{
           x: ringX, y: ringY,
           translateX: "-50%", translateY: "-50%",
-          borderColor: "rgba(26,181,199,0.55)",
+          borderColor: "rgba(196,144,62,0.55)",
         }}
         animate={{
           width:           clicking ? 24 : hovered ? 52 : 38,
           height:          clicking ? 24 : hovered ? 52 : 38,
           opacity:         visible  ? 1  : 0,
-          backgroundColor: hovered ? "rgba(26,181,199,0.07)" : "transparent",
+          backgroundColor: hovered ? "rgba(196,144,62,0.07)" : "transparent",
           scale:           clicking ? 0.82 : 1,
           borderWidth:     hovered  ? 1.5 : 1,
         }}

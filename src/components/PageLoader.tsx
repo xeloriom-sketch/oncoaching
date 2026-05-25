@@ -34,7 +34,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
             {/* ── Barre de progression supérieure ── */}
             <motion.div
                 className="absolute top-0 left-0 h-[2px] z-[205] pointer-events-none"
-                style={{ background: "linear-gradient(90deg, #0ea5b7, #1ab5c7, #b8f4fa)" }}
+                style={{ background: "linear-gradient(90deg, #B8792E, #C4903E, #F5E8D0)" }}
                 initial={{ width: "0%" }}
                 // La barre se remplit pendant l'apparition du logo, puis passe à 100% lors de la sortie
                 animate={exiting ? { width: "100%", opacity: 0 } : { width: "75%" }}
@@ -60,7 +60,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                             aria-hidden="true"
                             className="absolute w-96 h-96 rounded-full opacity-80 animate-[haloBreath_2.8s_ease-in-out_infinite]"
                             style={{
-                                background: "radial-gradient(circle, rgba(26,181,199,0.2) 0%, rgba(26,181,199,0.05) 50%, transparent 70%)",
+                                background: "radial-gradient(circle, rgba(196,144,62,0.2) 0%, rgba(196,144,62,0.05) 50%, transparent 70%)",
                                 filter: "blur(32px)",
                             }}
                         />
@@ -81,9 +81,9 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                             <svg className="absolute w-0 h-0" aria-hidden="true">
                                 <defs>
                                     <linearGradient id="on-grad-ring" x1="0" y1="64" x2="0" y2="0" gradientUnits="userSpaceOnUse">
-                                        <stop stopColor="#0ea5b7" />
-                                        <stop offset="0.52" stopColor="#1ab5c7" />
-                                        <stop offset="1" stopColor="#b8f4fa" />
+                                        <stop stopColor="#B8792E" />
+                                        <stop offset="0.52" stopColor="#C4903E" />
+                                        <stop offset="1" stopColor="#F5E8D0" />
                                         <animateTransform
                                             attributeName="gradientTransform" type="rotate"
                                             values="0 32 32;-270 32 32;-270 32 32;-540 32 32;-540 32 32;-810 32 32;-810 32 32;-1080 32 32;-1080 32 32"
@@ -94,8 +94,8 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                                     </linearGradient>
                                     <linearGradient id="on-grad-n" x1="0" y1="62" x2="0" y2="2" gradientUnits="userSpaceOnUse">
                                         <stop stopColor="#ffffff" />
-                                        <stop offset="0.55" stopColor="#8BE6EF" />
-                                        <stop offset="1" stopColor="#1ab5c7" />
+                                        <stop offset="0.55" stopColor="#E8C07A" />
+                                        <stop offset="1" stopColor="#C4903E" />
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -116,7 +116,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
 
             {/* ── Panel haut ── */}
             <motion.div
-                className="absolute left-0 top-0 w-full bg-[#0B0B0C] z-[203] origin-top"
+                className="absolute left-0 top-0 w-full bg-[#1C3A52] z-[203] origin-top"
                 style={{ height: "50vh" }}
                 animate={exiting ? { scaleY: 0 } : { scaleY: 1 }}
                 transition={{ duration: 0.75, ease: EXPO }}
@@ -124,7 +124,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
 
             {/* ── Panel bas ── */}
             <motion.div
-                className="absolute left-0 bottom-0 w-full bg-[#0B0B0C] z-[203] origin-bottom"
+                className="absolute left-0 bottom-0 w-full bg-[#1C3A52] z-[203] origin-bottom"
                 style={{ height: "50vh" }}
                 animate={exiting ? { scaleY: 0 } : { scaleY: 1 }}
                 transition={{ duration: 0.75, ease: EXPO }}
@@ -141,7 +141,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
                 initial={{ opacity: 0 }}
                 animate={exiting ? { opacity: [0, 0.8, 0], scaleX: [0, 1, 0.7] } : { opacity: 0 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                style={{ background: "linear-gradient(90deg, transparent, #1ab5c7, transparent)" }}
+                style={{ background: "linear-gradient(90deg, transparent, #C4903E, transparent)" }}
             />
 
             <style>{`

@@ -63,7 +63,7 @@ function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string
   return (
     <div
       className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-gray-300 rdp-wrapper"
-      style={{ "--rdp-accent-color": "#1ab5c7", "--rdp-background-color": "rgba(26,181,199,0.08)" } as React.CSSProperties}
+      style={{ "--rdp-accent-color": "#C4903E", "--rdp-background-color": "rgba(196,144,62,0.08)" } as React.CSSProperties}
     >
       <DayPicker
         mode="single"
@@ -80,8 +80,8 @@ function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string
         }}
       />
       {selected && (
-        <div className="px-4 py-2.5 border-t border-gray-100 bg-[#1ab5c7]/5">
-          <p className="text-[12px] font-semibold text-[#1ab5c7] capitalize text-center">
+        <div className="px-4 py-2.5 border-t border-gray-100 bg-[#C4903E]/5">
+          <p className="text-[12px] font-semibold text-[#C4903E] capitalize text-center">
             {format(selected, "EEEE d MMMM yyyy", { locale: fr })}
           </p>
         </div>
@@ -96,9 +96,9 @@ function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string
         .rdp-wrapper .rdp-head_cell { font-size: 11px; font-weight: 600; color: #9ca3af; text-align: center; padding: 4px 0; }
         .rdp-wrapper .rdp-cell { text-align: center; padding: 2px 0; }
         .rdp-wrapper .rdp-day { border-radius: 50%; font-size: 13px; font-weight: 500; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
-        .rdp-wrapper .rdp-button:hover:not([disabled]):not(.rdp-day_selected) { background: rgba(26,181,199,0.08); color: #1ab5c7; }
-        .rdp-wrapper .rdp-day_selected, .rdp-wrapper .rdp-day_selected:hover { background: #1ab5c7 !important; color: white !important; box-shadow: 0 4px 12px rgba(26,181,199,0.35); }
-        .rdp-wrapper .rdp-day_today:not(.rdp-day_selected) { border: 1.5px solid #1ab5c7; color: #1ab5c7; }
+        .rdp-wrapper .rdp-button:hover:not([disabled]):not(.rdp-day_selected) { background: rgba(196,144,62,0.08); color: #C4903E; }
+        .rdp-wrapper .rdp-day_selected, .rdp-wrapper .rdp-day_selected:hover { background: #C4903E !important; color: white !important; box-shadow: 0 4px 12px rgba(196,144,62,0.35); }
+        .rdp-wrapper .rdp-day_today:not(.rdp-day_selected) { border: 1.5px solid #C4903E; color: #C4903E; }
         .rdp-wrapper .rdp-button[disabled]:not(.rdp-day_selected) { opacity: 1 !important; color: #d1d5db !important; }
         .rdp-wrapper .rdp-nav_button { border-radius: 8px; color: #6b7280; }
         .rdp-wrapper .rdp-nav_button:hover { background: #f3f4f6; }
@@ -125,16 +125,16 @@ function TimePicker({ value, onChange }: { value: string; onChange: (v: string) 
               key={v} type="button" onClick={() => onChange(v)}
               className={`flex flex-col items-center gap-2 py-3.5 px-2 rounded-2xl border-2 transition-all duration-200 group ${
                 active
-                  ? "border-[#1ab5c7] bg-[#1ab5c7]/5 shadow-[0_0_0_3px_rgba(26,181,199,0.12)]"
+                  ? "border-[#C4903E] bg-[#C4903E]/5 shadow-[0_0_0_3px_rgba(196,144,62,0.12)]"
                   : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
-                active ? "bg-[#1ab5c7] text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
+                active ? "bg-[#C4903E] text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
               }`}>
                 <Icon className="w-4 h-4" strokeWidth={1.8} />
               </div>
-              <span className={`font-semibold text-[12px] transition-colors ${active ? "text-[#1ab5c7]" : "text-[#0B0B0C]"}`}>
+              <span className={`font-semibold text-[12px] transition-colors ${active ? "text-[#C4903E]" : "text-[#1C3A52]"}`}>
                 {label}
               </span>
               <span className="text-[10px] text-gray-400 leading-tight">{hours}</span>
@@ -163,7 +163,7 @@ function FloatingField({
         id={id} name={name} type={type} value={value} onChange={onChange}
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         required={required} autoComplete={autoComplete}
-        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#0B0B0C] outline-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]"
+        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#1C3A52] outline-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)]"
         style={isDate ? { colorScheme: "light" } : {}}
       />
       <label
@@ -172,7 +172,7 @@ function FloatingField({
         style={{
           top: active ? "8px" : "50%",
           transform: active ? "translateY(0) scale(0.75)" : "translateY(-50%) scale(1)",
-          color: focused ? "#1ab5c7" : "#9ca3af",
+          color: focused ? "#C4903E" : "#9ca3af",
           fontSize: "15px", fontWeight: 500,
         }}
       >
@@ -198,14 +198,14 @@ function FloatingTextarea({
         id={id} name={name} value={value} onChange={onChange}
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
         required={required} rows={4}
-        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-7 pb-3 text-[15px] text-[#0B0B0C] outline-none resize-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)]"
+        className="peer w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-7 pb-3 text-[15px] text-[#1C3A52] outline-none resize-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)]"
       />
       <label
         htmlFor={id}
         className="pointer-events-none absolute left-4 top-4 transition-all duration-200 origin-left"
         style={{
           transform: active ? "translateY(-6px) scale(0.75)" : "translateY(0) scale(1)",
-          color: focused ? "#1ab5c7" : "#9ca3af",
+          color: focused ? "#C4903E" : "#9ca3af",
           fontSize: "15px", fontWeight: 500,
         }}
       >
@@ -274,7 +274,7 @@ const Contact = () => {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center bg-white">
-          <div className="w-8 h-8 border-2 border-[#1ab5c7] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
     );
@@ -375,18 +375,18 @@ const Contact = () => {
           <motion.div initial="hidden" animate="visible" variants={stagger} className="flex flex-col items-start gap-6">
             <motion.div variants={blurInUp} className="flex items-center gap-2">
               <motion.div
-                className="w-2.5 h-2.5 rounded-full bg-[#1ab5c7]"
+                className="w-2.5 h-2.5 rounded-full bg-[#C4903E]"
                 animate={pulseDot.animate}
                 transition={pulseDot.transition}
               />
-              <span className="text-[13px] font-semibold tracking-widest uppercase text-[#1ab5c7]">
+              <span className="text-[13px] font-semibold tracking-widest uppercase text-[#C4903E]">
                 Réponse sous 24h
               </span>
             </motion.div>
 
             <h1
               aria-label="Parlons de votre projet."
-              className="leading-[1.1] font-bold tracking-tight text-[#0B0B0C]"
+              className="leading-[1.1] font-bold tracking-tight text-[#1C3A52]"
               style={{ fontSize: "clamp(2.8rem,6vw,5rem)" }}
             >
               {WORDS.map((word, i) => (
@@ -395,7 +395,7 @@ const Contact = () => {
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ type: "spring", stiffness: 200, damping: 20, delay: i * 0.08 }}
-                  className={`inline-block mr-[0.22em] ${word === "projet." ? "text-[#1ab5c7]" : ""}`}
+                  className={`inline-block mr-[0.22em] ${word === "projet." ? "text-[#C4903E]" : ""}`}
                 >
                   {word}
                 </motion.span>
@@ -425,7 +425,7 @@ const Contact = () => {
                     onClick={() => setFormType("contact")}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[14px] font-semibold transition-all duration-200 ${
                       !isRdv
-                        ? "bg-white text-[#0B0B0C] shadow-sm"
+                        ? "bg-white text-[#1C3A52] shadow-sm"
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
@@ -437,7 +437,7 @@ const Contact = () => {
                     onClick={() => setFormType("rdv")}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-[14px] font-semibold transition-all duration-200 ${
                       isRdv
-                        ? "bg-[#1ab5c7] text-white shadow-sm"
+                        ? "bg-[#C4903E] text-white shadow-sm"
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
@@ -449,7 +449,7 @@ const Contact = () => {
                 <p className="text-[12px] font-mono tracking-widest uppercase text-gray-400 mb-1 mt-4">
                   {isRdv ? "RÉSERVATION" : formulaire.title}
                 </p>
-                <h2 className="text-[1.65rem] font-bold text-[#0B0B0C] leading-snug tracking-tight">
+                <h2 className="text-[1.65rem] font-bold text-[#1C3A52] leading-snug tracking-tight">
                   {isRdv
                     ? "Choisissez vos disponibilités"
                     : formulaire.subtitle}
@@ -478,7 +478,7 @@ const Contact = () => {
                     <div className="relative">
                       <select
                         id="service" name="service" value={formData.service} onChange={handleChange}
-                        className="w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#0B0B0C] outline-none transition-all duration-200 focus:border-[#1ab5c7] focus:shadow-[0_0_0_4px_rgba(26,181,199,0.12)] appearance-none cursor-pointer"
+                        className="w-full bg-white border-2 border-gray-200 rounded-2xl px-4 pt-6 pb-2 text-[15px] text-[#1C3A52] outline-none transition-all duration-200 focus:border-[#C4903E] focus:shadow-[0_0_0_4px_rgba(196,144,62,0.12)] appearance-none cursor-pointer"
                       >
                         {services.map((s) => (
                           <option key={s.value} value={s.value}>{s.label}</option>
@@ -546,8 +546,8 @@ const Contact = () => {
                       {...btnHoverProps}
                       className={`w-full flex items-center justify-center gap-2 text-white font-bold text-[15px] py-4 rounded-2xl transition-opacity disabled:opacity-50 min-h-[56px] ${
                         isRdv
-                          ? "bg-[#1ab5c7] shadow-[0_8px_32px_rgba(26,181,199,0.35)]"
-                          : "bg-[#0B0B0C] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
+                          ? "bg-[#C4903E] shadow-[0_8px_32px_rgba(196,144,62,0.35)]"
+                          : "bg-[#1C3A52] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
                       }`}
                     >
                       {isSubmitting ? (
@@ -573,7 +573,7 @@ const Contact = () => {
                     variants={fadeInUp}
                     className="text-gray-400 text-[13px] text-center flex items-center justify-center gap-1.5"
                   >
-                    <Check className="w-3.5 h-3.5 text-[#1ab5c7]" strokeWidth={3} />
+                    <Check className="w-3.5 h-3.5 text-[#C4903E]" strokeWidth={3} />
                     {isRdv ? "Confirmation sous 24h · 1er RDV offert" : "Consultation initiale gratuite · Sans engagement"}
                   </motion.p>
                 </motion.div>
@@ -586,8 +586,8 @@ const Contact = () => {
               className="flex flex-col lg:self-start lg:sticky lg:top-28"
             >
               <SpotlightCard
-                className="bg-[#0B0B0C] rounded-[32px] p-8 md:p-10 flex flex-col gap-8"
-                spotlightColor="rgba(26,181,199,0.15)"
+                className="bg-[#1C3A52] rounded-[32px] p-8 md:p-10 flex flex-col gap-8"
+                spotlightColor="rgba(196,144,62,0.15)"
               >
                 <div
                   ref={tilt.ref}
@@ -609,12 +609,12 @@ const Contact = () => {
                       {...liftHoverProps}
                       className="flex items-center gap-4 group cursor-pointer"
                     >
-                      <div className="w-11 h-11 rounded-xl bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1ab5c7]/20 transition-colors">
-                        <MapPin className="w-5 h-5 text-[#1ab5c7]" strokeWidth={2} />
+                      <div className="w-11 h-11 rounded-xl bg-[#C4903E]/10 border border-[#C4903E]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#C4903E]/20 transition-colors">
+                        <MapPin className="w-5 h-5 text-[#C4903E]" strokeWidth={2} />
                       </div>
                       <div>
                         <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.adresse.label}</p>
-                        <p className="text-white font-semibold text-[15px] leading-snug whitespace-pre-line group-hover:text-[#1ab5c7] transition-colors">
+                        <p className="text-white font-semibold text-[15px] leading-snug whitespace-pre-line group-hover:text-[#C4903E] transition-colors">
                           {coordonnees.adresse.value}
                         </p>
                       </div>
@@ -627,12 +627,12 @@ const Contact = () => {
                       {...liftHoverProps}
                       className="flex items-center gap-4 group cursor-pointer"
                     >
-                      <div className="w-11 h-11 rounded-xl bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1ab5c7]/20 transition-colors">
-                        <Phone className="w-5 h-5 text-[#1ab5c7]" strokeWidth={2} />
+                      <div className="w-11 h-11 rounded-xl bg-[#C4903E]/10 border border-[#C4903E]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#C4903E]/20 transition-colors">
+                        <Phone className="w-5 h-5 text-[#C4903E]" strokeWidth={2} />
                       </div>
                       <div>
                         <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.telephone.label}</p>
-                        <p className="text-white font-semibold text-[15px] group-hover:text-[#1ab5c7] transition-colors">
+                        <p className="text-white font-semibold text-[15px] group-hover:text-[#C4903E] transition-colors">
                           {coordonnees.telephone.value}
                         </p>
                       </div>
@@ -645,12 +645,12 @@ const Contact = () => {
                       {...liftHoverProps}
                       className="flex items-center gap-4 group cursor-pointer"
                     >
-                      <div className="w-11 h-11 rounded-xl bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#1ab5c7]/20 transition-colors">
-                        <Mail className="w-5 h-5 text-[#1ab5c7]" strokeWidth={2} />
+                      <div className="w-11 h-11 rounded-xl bg-[#C4903E]/10 border border-[#C4903E]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#C4903E]/20 transition-colors">
+                        <Mail className="w-5 h-5 text-[#C4903E]" strokeWidth={2} />
                       </div>
                       <div>
                         <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.email.label}</p>
-                        <p className="text-white font-semibold text-[15px] break-all group-hover:text-[#1ab5c7] transition-colors">
+                        <p className="text-white font-semibold text-[15px] break-all group-hover:text-[#C4903E] transition-colors">
                           {coordonnees.email.value}
                         </p>
                       </div>
@@ -671,15 +671,15 @@ const Contact = () => {
 
                   <div className="mt-auto pt-6 border-t border-white/5">
                     <motion.div
-                      className="flex items-center gap-3 bg-[#1ab5c7]/10 border border-[#1ab5c7]/20 rounded-2xl px-5 py-4 w-fit"
+                      className="flex items-center gap-3 bg-[#C4903E]/10 border border-[#C4903E]/20 rounded-2xl px-5 py-4 w-fit"
                       whileHover={{ scale: 1.04, transition: { type: "spring", stiffness: 400, damping: 20 } }}
                     >
                       <motion.div
-                        className="w-3 h-3 rounded-full bg-[#1ab5c7]"
+                        className="w-3 h-3 rounded-full bg-[#C4903E]"
                         animate={pulseDot.animate}
                         transition={pulseDot.transition}
                       />
-                      <span className="text-[#1ab5c7] font-bold text-[14px]">1er RDV offert</span>
+                      <span className="text-[#C4903E] font-bold text-[14px]">1er RDV offert</span>
                       <span className="text-white/40 text-[13px]">· Sans engagement</span>
                     </motion.div>
                   </div>
@@ -696,12 +696,12 @@ const Contact = () => {
               initial="hidden" whileInView="visible" viewport={VP} variants={stagger}
               className="max-w-3xl mx-auto"
             >
-              <motion.p variants={blurInUp} className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7] mb-3 text-center">
+              <motion.p variants={blurInUp} className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E] mb-3 text-center">
                 Questions fréquentes
               </motion.p>
               <motion.h2
                 variants={blurInUp}
-                className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#0B0B0C] text-center mb-12 leading-tight tracking-tight"
+                className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#1C3A52] text-center mb-12 leading-tight tracking-tight"
               >
                 Vous avez des questions ?
               </motion.h2>
@@ -714,15 +714,15 @@ const Contact = () => {
                       className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left group"
                       aria-expanded={openFaq === i}
                     >
-                      <span className="font-semibold text-[15px] text-[#0B0B0C] group-hover:text-[#1ab5c7] transition-colors leading-snug pr-2">
+                      <span className="font-semibold text-[15px] text-[#1C3A52] group-hover:text-[#C4903E] transition-colors leading-snug pr-2">
                         {item.q}
                       </span>
                       <motion.div
                         animate={{ rotate: openFaq === i ? 180 : 0 }}
                         transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                        className="flex-shrink-0 w-8 h-8 rounded-full bg-[#F3F4F6] group-hover:bg-[#1ab5c7]/10 flex items-center justify-center transition-colors"
+                        className="flex-shrink-0 w-8 h-8 rounded-full bg-[#F3F4F6] group-hover:bg-[#C4903E]/10 flex items-center justify-center transition-colors"
                       >
-                        <ChevronDown className={`w-4 h-4 transition-colors ${openFaq === i ? "text-[#1ab5c7]" : "text-gray-400"}`} strokeWidth={2.5} />
+                        <ChevronDown className={`w-4 h-4 transition-colors ${openFaq === i ? "text-[#C4903E]" : "text-gray-400"}`} strokeWidth={2.5} />
                       </motion.div>
                     </button>
 
@@ -754,11 +754,11 @@ const Contact = () => {
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}>
               <SpotlightCard
-                className="bg-[#0B0B0C] rounded-[40px] py-20 px-8 md:px-16 text-center"
-                spotlightColor="rgba(26,181,199,0.18)"
+                className="bg-[#1C3A52] rounded-[40px] py-20 px-8 md:px-16 text-center"
+                spotlightColor="rgba(196,144,62,0.18)"
               >
                 <motion.p variants={blurInUp} initial="hidden" whileInView="visible" viewport={VP}
-                  className="text-[12px] font-mono tracking-widest uppercase text-[#1ab5c7] mb-4"
+                  className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E] mb-4"
                 >
                   Prêt à commencer ?
                 </motion.p>
@@ -770,7 +770,7 @@ const Contact = () => {
                   style={{ fontSize: "clamp(2rem,5vw,3.5rem)" }}
                 >
                   Votre premier pas<br />
-                  <span className="text-[#1ab5c7]">ne coûte rien.</span>
+                  <span className="text-[#C4903E]">ne coûte rien.</span>
                 </motion.h2>
 
                 <motion.p
@@ -788,7 +788,7 @@ const Contact = () => {
                 >
                   <motion.a
                     href="tel:+33663041812" {...btnHoverProps}
-                    className="inline-flex items-center gap-2 bg-[#1ab5c7] text-white font-bold text-[15px] px-8 py-4 rounded-2xl shadow-[0_8px_40px_rgba(26,181,199,0.4)] cursor-pointer"
+                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[15px] px-8 py-4 rounded-2xl shadow-[0_8px_40px_rgba(196,144,62,0.4)] cursor-pointer"
                   >
                     <Phone className="w-4 h-4" />
                     Appeler maintenant

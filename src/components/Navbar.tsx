@@ -87,18 +87,9 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-4">
 
-        {/* ── Logo — tout à gauche ── */}
-        <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2.5 flex-shrink-0 group">
-          <LogoMark size={32} animate />
-          <span className="font-bold tracking-tight text-[15px]">
-            <span style={{ color: GOLD }}>ON</span>
-            <span
-              className="transition-colors duration-200"
-              style={{ color: NAVY }}
-            >
-              Coaching
-            </span>
-          </span>
+        {/* ── Logo — tout à gauche, sans texte ── */}
+        <Link to="/" aria-label="ON Coaching — Accueil" className="flex-shrink-0">
+          <LogoMark size={44} animate />
         </Link>
 
         {/* ── Pilule navy — liens desktop ── */}
