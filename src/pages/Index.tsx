@@ -27,9 +27,10 @@ import { usePageContent } from "@/hooks/usePageContent";
 import type { IndexContent } from "@/types";
 
 const COACH_IMG    = `${import.meta.env.BASE_URL}patron.webp`;
-const HERO_VIDEO_1 = `${import.meta.env.BASE_URL}hero-coach-1.mp4`;
-const HERO_VIDEO_2 = `${import.meta.env.BASE_URL}hero-coach-2.mp4`;
-const HERO_VIDEO_3 = `${import.meta.env.BASE_URL}hero-coach-3.mp4`;
+/* Remplace par 3 fichiers distincts si disponibles (ex. hero-1.mp4, hero-2.mp4, hero-3.mp4) */
+const HERO_VIDEO_1 = `${import.meta.env.BASE_URL}coaching-reel.mp4`;
+const HERO_VIDEO_2 = `${import.meta.env.BASE_URL}coaching-reel.mp4`;
+const HERO_VIDEO_3 = `${import.meta.env.BASE_URL}coaching-reel.mp4`;
 
 const SERVICES = [
   {

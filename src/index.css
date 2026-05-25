@@ -186,11 +186,6 @@
 }
 .animated-underline:hover::after { @apply scale-x-100 origin-bottom-left; }
 
-/* ── Curseur personnalisé (desktop pointer seulement) ────────── */
-@media (pointer: fine) {
-  *, *::before, *::after { cursor: none !important; }
-}
-
 /* ── Hero : mesh gradient animé ─────────────────────────────── */
 .hero-mesh {
   background:

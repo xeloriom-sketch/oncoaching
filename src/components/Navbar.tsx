@@ -5,6 +5,10 @@ import { Brain, Building2, ChevronDown, GraduationCap, Menu, Users, X, Zap } fro
 import { NAV_LINKS, ROUTES, SERVICES } from "@/lib/config";
 import { LogoMark } from "@/components/Logo";
 
+/* ── Couleurs issues du logo ON Coaching ── */
+const NAVY = "#1C3A52";   // "N" + silhouette du logo
+const GOLD = "#C4903E";   // "O" + étoile du logo
+
 const SERVICE_ICONS: Record<string, React.ElementType> = {
   [ROUTES.scolaire]:      GraduationCap,
   [ROUTES.jeunes]:        Zap,
@@ -24,8 +28,7 @@ const SERVICE_DESC: Record<string, string> = {
 const itemVariants = {
   hidden: { opacity: 0, x: -6 },
   visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
+    opacity: 1, x: 0,
     transition: { delay: i * 0.045, duration: 0.18, ease: [0.16, 1, 0.3, 1] },
   }),
 };
@@ -41,9 +44,7 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setIsOpen(false);
-    setSvcOpen(false);
-    setMobileSvc(false);
+    setIsOpen(false); setSvcOpen(false); setMobileSvc(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -80,24 +81,30 @@ const Navbar = () => {
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-xl shadow-[0_2px_16px_rgba(0,0,0,0.08)] border-b border-[#E5E7EB]"
+          ? "bg-white/96 backdrop-blur-xl shadow-[0_2px_20px_rgba(28,58,82,0.10)] border-b border-[#E5E7EB]"
           : "bg-[#FBFBFB]"
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-4">
 
-        {/* ── Logo ── */}
+        {/* ── Logo — tout à gauche ── */}
         <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2.5 flex-shrink-0 group">
-          <LogoMark size={30} animate />
-          <span className="font-bold tracking-tight text-[15px] text-[#0B0B0C]">
-            <span className="text-[#1ab5c7]">ON</span>
-            <span className="group-hover:text-[#1ab5c7] transition-colors">Coaching</span>
+          <LogoMark size={32} animate />
+          <span className="font-bold tracking-tight text-[15px]">
+            <span style={{ color: GOLD }}>ON</span>
+            <span
+              className="transition-colors duration-200"
+              style={{ color: NAVY }}
+            >
+              Coaching
+            </span>
           </span>
         </Link>
 
-        {/* ── Pilule centrale — liens desktop ── */}
+        {/* ── Pilule navy — liens desktop ── */}
         <nav
-          className="hidden lg:flex items-center bg-[#0B0B0C] rounded-full px-2 py-1.5 shadow-sm"
+          className="hidden lg:flex items-center rounded-full px-2 py-1.5 shadow-sm"
+          style={{ background: NAVY }}
           aria-label="Navigation principale"
         >
           <ul className="flex items-center gap-1 list-none m-0 p-0 text-[13px] font-medium text-white/70" role="list">
@@ -106,11 +113,8 @@ const Navbar = () => {
                 <Link
                   to={href}
                   aria-current={isActive(href) ? "page" : undefined}
-                  className={`px-4 py-2 rounded-full block transition-colors duration-150 ${
-                    isActive(href)
-                      ? "text-white bg-white/10"
-                      : "hover:text-white hover:bg-white/[0.07]"
-                  }`}
+                  className="px-4 py-2 rounded-full block transition-colors duration-150 hover:text-white"
+                  style={isActive(href) ? { color: "white", background: "rgba(255,255,255,0.12)" } : undefined}
                 >
                   {label}
                 </Link>
@@ -118,17 +122,12 @@ const Navbar = () => {
             ))}
 
             {/* Services dropdown */}
-            <li
-              className="relative"
-              onMouseEnter={openSvc}
-              onMouseLeave={scheduleSvcClose}
-            >
+            <li className="relative" onMouseEnter={openSvc} onMouseLeave={scheduleSvcClose}>
               <button
                 aria-haspopup="true"
                 aria-expanded={svcOpen}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors duration-150 ${
-                  isServiceActive ? "text-white bg-white/10" : "hover:text-white hover:bg-white/[0.07]"
-                }`}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors duration-150 hover:text-white"
+                style={isServiceActive ? { color: "white", background: "rgba(255,255,255,0.12)" } : undefined}
               >
                 Services
                 <motion.span
@@ -151,9 +150,11 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0,  scale: 1    }}
                       exit={{    opacity: 0, y: -8, scale: 0.96 }}
                       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="pointer-events-auto bg-[#0B0B0C] border border-white/10 rounded-[24px] overflow-hidden shadow-2xl shadow-black/40"
+                      className="pointer-events-auto border border-white/10 rounded-[24px] overflow-hidden shadow-2xl"
+                      style={{ background: NAVY, boxShadow: "0 24px 60px rgba(28,58,82,0.45)" }}
                     >
-                      <div className="h-[2px] w-full bg-gradient-to-r from-[#1ab5c7]/60 via-[#1ab5c7] to-[#1ab5c7]/60" />
+                      {/* Accent line or */}
+                      <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)` }} />
                       <div className="p-3">
                         {SERVICES.map(({ label, href }, i) => {
                           const Icon = SERVICE_ICONS[href] ?? Brain;
@@ -165,29 +166,26 @@ const Navbar = () => {
                                 to={href}
                                 role="menuitem"
                                 aria-current={active ? "page" : undefined}
-                                className={`flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-150 group ${
-                                  active ? "bg-white/[0.07]" : "hover:bg-white/[0.05]"
-                                }`}
+                                className="flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-150 group"
+                                style={active ? { background: "rgba(255,255,255,0.07)" } : undefined}
+                                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+                                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = ""; }}
                               >
-                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                                  active ? "bg-[#1ab5c7]" : "bg-white/[0.07] group-hover:bg-[#1ab5c7]/20"
-                                }`} aria-hidden="true">
-                                  <Icon className={`w-4 h-4 transition-colors ${
-                                    active ? "text-white" : "text-[#1ab5c7]"
-                                  }`} strokeWidth={1.7} />
+                                <div
+                                  className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
+                                  style={{ background: active ? GOLD : "rgba(196,144,62,0.15)" }}
+                                  aria-hidden="true"
+                                >
+                                  <Icon className="w-4 h-4" style={{ color: active ? "white" : GOLD }} strokeWidth={1.7} />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                  <span className={`text-[13px] font-semibold leading-tight transition-colors ${
-                                    active ? "text-white" : "text-white/80 group-hover:text-white"
-                                  }`}>
+                                  <span className="text-[13px] font-semibold leading-tight text-white/80 group-hover:text-white transition-colors">
                                     {label}
                                   </span>
-                                  <span className="text-[11px] text-white/35 mt-0.5 leading-tight truncate">
-                                    {desc}
-                                  </span>
+                                  <span className="text-[11px] text-white/35 mt-0.5 leading-tight truncate">{desc}</span>
                                 </div>
                                 {active && (
-                                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" aria-hidden="true" />
+                                  <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: GOLD }} aria-hidden="true" />
                                 )}
                               </Link>
                             </motion.div>
@@ -197,7 +195,8 @@ const Navbar = () => {
                       <div className="px-3 pb-3 pt-1">
                         <Link
                           to="/contact"
-                          className="flex items-center justify-center gap-1.5 w-full py-3 bg-[#1ab5c7] hover:bg-[#16a3b4] text-white text-[12px] font-bold rounded-xl transition-colors"
+                          className="flex items-center justify-center gap-1.5 w-full py-3 text-[#1C3A52] text-[12px] font-bold rounded-xl transition-opacity hover:opacity-90"
+                          style={{ background: GOLD }}
                         >
                           Consultation gratuite <span aria-hidden="true">→</span>
                         </Link>
@@ -210,12 +209,13 @@ const Navbar = () => {
           </ul>
         </nav>
 
-        {/* ── Droite : CTA lime + toggle mobile ── */}
+        {/* ── Droite : CTA or + toggle mobile ── */}
         <div className="flex items-center gap-3">
           <motion.div className="hidden lg:block" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
             <Link
               to="/contact"
-              className="inline-block bg-[#d4f799] text-[#163324] font-semibold text-[13px] px-6 py-3 rounded-full hover:bg-[#c3e887] transition-all duration-200 shadow-sm"
+              className="inline-block font-semibold text-[13px] px-6 py-3 rounded-full transition-all duration-200 shadow-sm hover:opacity-90"
+              style={{ background: GOLD, color: "#fff" }}
             >
               Prendre RDV
             </Link>
@@ -226,7 +226,8 @@ const Navbar = () => {
             aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={isOpen}
             whileTap={{ scale: 0.9 }}
-            className="lg:hidden text-[#0B0B0C] p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="lg:hidden p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            style={{ color: NAVY }}
           >
             <AnimatePresence mode="wait" initial={false}>
               {isOpen
@@ -251,7 +252,8 @@ const Navbar = () => {
             animate={{ opacity: 1, scale: 1,    y: 0  }}
             exit={{    opacity: 0, scale: 0.97, y: -6 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className="mx-4 mb-3 bg-[#0B0B0C] border border-white/10 rounded-[24px] p-4 shadow-2xl overflow-hidden"
+            className="mx-4 mb-3 border border-white/10 rounded-[24px] p-4 shadow-2xl overflow-hidden"
+            style={{ background: NAVY }}
           >
             <div className="flex flex-col gap-0.5 mb-3">
               {[...NAV_LINKS, { label: "Contact", href: "/contact" }].map(({ label, href }) => (
@@ -259,12 +261,11 @@ const Navbar = () => {
                   key={href}
                   to={href}
                   aria-current={isActive(href) ? "page" : undefined}
-                  className={`px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center gap-2.5 ${
-                    isActive(href) ? "text-white bg-white/[0.07]" : "text-white/65 hover:text-white hover:bg-white/[0.04]"
-                  }`}
+                  className="px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] flex items-center gap-2.5 text-white/65 hover:text-white hover:bg-white/[0.06]"
+                  style={isActive(href) ? { color: "white", background: "rgba(255,255,255,0.08)" } : undefined}
                 >
                   {isActive(href) && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" aria-hidden="true" />
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: GOLD }} aria-hidden="true" />
                   )}
                   {label}
                 </Link>
@@ -273,12 +274,11 @@ const Navbar = () => {
               <button
                 onClick={() => setMobileSvc(v => !v)}
                 aria-expanded={mobileSvc}
-                className={`flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] w-full ${
-                  isServiceActive ? "text-white bg-white/[0.07]" : "text-white/65 hover:text-white hover:bg-white/[0.04]"
-                }`}
+                className="flex items-center justify-between px-4 py-3 rounded-xl text-[15px] font-medium transition-colors min-h-[44px] w-full text-white/65 hover:text-white hover:bg-white/[0.06]"
+                style={isServiceActive ? { color: "white", background: "rgba(255,255,255,0.08)" } : undefined}
               >
                 <span className="flex items-center gap-2.5">
-                  {isServiceActive && <span className="w-1.5 h-1.5 rounded-full bg-[#1ab5c7] flex-shrink-0" aria-hidden="true" />}
+                  {isServiceActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: GOLD }} aria-hidden="true" />}
                   Services
                 </span>
                 <motion.span
@@ -309,14 +309,15 @@ const Navbar = () => {
                             key={href}
                             to={href}
                             aria-current={active ? "page" : undefined}
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] transition-colors min-h-[44px] ${
-                              active ? "text-white bg-white/[0.07]" : "text-white/55 hover:text-white hover:bg-white/[0.04]"
-                            }`}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[14px] transition-colors min-h-[44px] text-white/55 hover:text-white hover:bg-white/[0.04]"
+                            style={active ? { color: "white", background: "rgba(255,255,255,0.08)" } : undefined}
                           >
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                              active ? "bg-[#1ab5c7]" : "bg-white/[0.07]"
-                            }`} aria-hidden="true">
-                              <Icon className={`w-3.5 h-3.5 ${active ? "text-white" : "text-[#1ab5c7]"}`} strokeWidth={1.7} />
+                            <div
+                              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                              style={{ background: active ? GOLD : "rgba(196,144,62,0.18)" }}
+                              aria-hidden="true"
+                            >
+                              <Icon className="w-3.5 h-3.5" style={{ color: active ? "white" : GOLD }} strokeWidth={1.7} />
                             </div>
                             {label}
                           </Link>
@@ -330,7 +331,8 @@ const Navbar = () => {
 
             <Link
               to="/contact"
-              className="flex items-center justify-center w-full bg-[#d4f799] text-[#163324] font-bold text-[14px] py-3.5 rounded-2xl min-h-[44px] hover:bg-[#c3e887] transition-colors"
+              className="flex items-center justify-center w-full font-bold text-[14px] py-3.5 rounded-2xl min-h-[44px] transition-opacity hover:opacity-90"
+              style={{ background: GOLD, color: "#1C3A52" }}
             >
               Prendre rendez-vous →
             </Link>

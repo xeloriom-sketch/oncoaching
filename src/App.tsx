@@ -9,7 +9,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ScrollToTop    from "./components/ScrollToTop";
 import PageLoader     from "./components/PageLoader";
 import ScrollProgress from "./components/ScrollProgress";
-import CustomCursor   from "./components/CustomCursor";
 
 // ─── Lazy-loaded pages ────────────────────────────────────────────────────────
 const Index               = lazy(() => import("./pages/Index"));
@@ -96,7 +95,6 @@ const App = () => {
           </Suspense>
         </BrowserRouter>
         {!loaderDone && <PageLoader onDone={() => setLoaderDone(true)} />}
-        <CustomCursor />
       </TooltipProvider>
         <ScrollProgress />
       </QueryClientProvider>
