@@ -256,86 +256,50 @@ export default function Index() {
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="relative w-full h-[520px] sm:h-[660px] lg:h-[800px] order-last lg:order-first"
+              className="relative w-full h-[440px] sm:h-[520px] lg:h-[600px] order-last lg:order-first"
           >
-            {/* ── Cercle 1 — grand dominant, centre-droite ── */}
-            <motion.div
-              style={{
-                position: "absolute",
-                top: "2%", right: "0%",
-                width: "84%",
-                aspectRatio: "1",
-                borderRadius: "50%",
-                overflow: "hidden",
-                zIndex: 10,
-                x: sPhX,
-                y: sPhY,
+            {/* ── Cercle 1 — grand dominant, haut-droite ── */}
+            <motion.div style={{
+                position: "absolute", top: 0, right: 0,
+                width: "80%", aspectRatio: "1",
+                borderRadius: "50%", overflow: "hidden", zIndex: 10,
+                x: sPhX, y: sPhY,
               }}
             >
               <iframe
                 src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                style={{
-                  position: "absolute",
-                  top: "-15%", left: "-15%",
-                  width: "130%", height: "130%",
-                  border: "none", pointerEvents: "none",
-                }}
-                allow="autoplay; fullscreen"
-                title="Vidéo coaching hero"
+                style={{ position: "absolute", top: "-15%", left: "-15%", width: "130%", height: "130%", border: "none", pointerEvents: "none" }}
+                allow="autoplay; fullscreen" title="Vidéo coaching hero"
               />
             </motion.div>
 
-            {/* ── Cercle 2 — moyen, bas-gauche ── */}
-            <motion.div
-              style={{
-                position: "absolute",
-                bottom: "0%", left: "-2%",
-                width: "38%",
-                aspectRatio: "1",
-                borderRadius: "50%",
-                overflow: "hidden",
-                zIndex: 11,
-                x: sPhX,
-                y: sPhY,
+            {/* ── Cercle 2 — moyen, bas-gauche, touche le cercle 1 ── */}
+            <motion.div style={{
+                position: "absolute", bottom: "14%", left: 0,
+                width: "46%", aspectRatio: "1",
+                borderRadius: "50%", overflow: "hidden", zIndex: 11,
+                x: sPhX, y: sPhY,
               }}
             >
               <iframe
                 src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                style={{
-                  position: "absolute",
-                  top: "-15%", left: "-15%",
-                  width: "130%", height: "130%",
-                  border: "none", pointerEvents: "none",
-                }}
-                allow="autoplay; fullscreen"
-                title="Vidéo coaching hero"
+                style={{ position: "absolute", top: "-15%", left: "-15%", width: "130%", height: "130%", border: "none", pointerEvents: "none" }}
+                allow="autoplay; fullscreen" title="Vidéo coaching hero"
               />
             </motion.div>
 
-            {/* ── Cercle 3 — petit accent, bas-centre ── */}
-            <motion.div
-              style={{
-                position: "absolute",
-                bottom: "4%", left: "34%",
-                width: "14%",
-                aspectRatio: "1",
-                borderRadius: "50%",
-                overflow: "hidden",
-                zIndex: 12,
-                x: sPhX,
-                y: sPhY,
+            {/* ── Cercle 3 — petit, entre les deux, les relie ── */}
+            <motion.div style={{
+                position: "absolute", bottom: "30%", left: "37%",
+                width: "14%", aspectRatio: "1",
+                borderRadius: "50%", overflow: "hidden", zIndex: 12,
+                x: sPhX, y: sPhY,
               }}
             >
               <iframe
                 src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                style={{
-                  position: "absolute",
-                  top: "-15%", left: "-15%",
-                  width: "130%", height: "130%",
-                  border: "none", pointerEvents: "none",
-                }}
-                allow="autoplay; fullscreen"
-                title="Vidéo coaching hero"
+                style={{ position: "absolute", top: "-15%", left: "-15%", width: "130%", height: "130%", border: "none", pointerEvents: "none" }}
+                allow="autoplay; fullscreen" title="Vidéo coaching hero"
               />
             </motion.div>
 
