@@ -174,17 +174,6 @@ export default function Index() {
   const sPhX   = useSpring(photoX, { stiffness: 100, damping: 22, mass: 1.2 });
   const sPhY   = useSpring(photoY, { stiffness: 100, damping: 22, mass: 1.2 });
 
-  /* Badge 1 — vitesse medium, direction opposée */
-  const b1X  = useTransform(rawX, [-800, 800], [ 18, -18]);
-  const b1Y  = useTransform(rawY, [-600, 600], [-14,  14]);
-  const sB1X = useSpring(b1X, { stiffness: 70, damping: 14 });
-  const sB1Y = useSpring(b1Y, { stiffness: 70, damping: 14 });
-
-  /* Badge 2 — le plus rapide (profondeur haute) */
-  const b2X  = useTransform(rawX, [-800, 800], [-22,  22]);
-  const b2Y  = useTransform(rawY, [-600, 600], [ 16, -16]);
-  const sB2X = useSpring(b2X, { stiffness: 55, damping: 11 });
-  const sB2Y = useSpring(b2Y, { stiffness: 55, damping: 11 });
 
   const handleHeroMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
     const r = heroRef.current?.getBoundingClientRect();
@@ -318,29 +307,6 @@ export default function Index() {
               </motion.div>
             </div>
 
-            {/* Badge "Coach certifié" */}
-            <motion.div
-                style={{ x: sB1X, y: sB1Y }}
-                initial={{ opacity: 0, y: 18, scale: 0.88 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute top-[12%] left-[2%] bg-[#1C3A52] rounded-2xl px-4 py-3 will-change-transform z-20"
-            >
-              <p className="text-white text-[13px] font-semibold tracking-wide">Coach certifié</p>
-              <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
-            </motion.div>
-
-            {/* Badge "Disponible" */}
-            <motion.div
-                style={{ x: sB2X, y: sB2Y }}
-                initial={{ opacity: 0, x: -14, scale: 0.88 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ delay: 0.95, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB]/80 rounded-full px-4 py-2.5 will-change-transform z-20"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
-              <span className="text-[#1C3A52] text-[12px] font-semibold tracking-wide">Disponible</span>
-            </motion.div>
 
           </motion.div>
 
