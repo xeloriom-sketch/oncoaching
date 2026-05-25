@@ -10,6 +10,7 @@ interface SEOProps {
   type?: "website" | "article";
   noindex?: boolean;
   structuredData?: object | object[];
+  publishedTime?: string;
 }
 
 const setMeta = (attr: string, key: string, content: string) => {
@@ -26,11 +27,12 @@ const SEO = ({
   title,
   description,
   canonical,
-  ogImage = "/favicon_dark.png",
+  ogImage = "/patron.webp",
   keywords,
   type = "website",
   noindex = false,
   structuredData,
+  publishedTime,
 }: SEOProps) => {
   const fullTitle    = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
   const canonicalUrl = `${SITE.url}${canonical ?? ""}`;
@@ -49,25 +51,33 @@ const SEO = ({
 
     if (keywords) setMeta("name", "keywords", keywords);
 
+    // Theme
+    setMeta("name",  "theme-color",          "#1C3A52");
+    setMeta("name",  "viewport",             "width=device-width, initial-scale=1, viewport-fit=cover");
+
     // Open Graph
     setMeta("property", "og:title",       fullTitle);
     setMeta("property", "og:description", description);
     setMeta("property", "og:type",        type);
     setMeta("property", "og:url",         canonicalUrl);
     setMeta("property", "og:image",       ogImageUrl);
-    setMeta("property", "og:image:width",  "512");
-    setMeta("property", "og:image:height", "512");
-    setMeta("property", "og:image:alt",    `${SITE.name} — Logo`);
+    setMeta("property", "og:image:width",  "1200");
+    setMeta("property", "og:image:height", "630");
+    setMeta("property", "og:image:type",   "image/webp");
+    setMeta("property", "og:image:alt",    `${SITE.name} — Coach ICF Certifié à Mâcon`);
     setMeta("property", "og:locale",       SITE.locale);
     setMeta("property", "og:site_name",    SITE.name);
+    if (type === "article" && publishedTime) {
+      setMeta("property", "article:published_time", publishedTime);
+    }
 
     // Twitter
-    setMeta("name", "twitter:card",        "summary");
+    setMeta("name", "twitter:card",        "summary_large_image");
     setMeta("name", "twitter:site",        SITE.twitter);
     setMeta("name", "twitter:title",       fullTitle);
     setMeta("name", "twitter:description", description);
     setMeta("name", "twitter:image",       ogImageUrl);
-    setMeta("name", "twitter:image:alt",   `${SITE.name} — Logo`);
+    setMeta("name", "twitter:image:alt",   `${SITE.name} — Coach ICF Certifié à Mâcon`);
 
     // Canonical
     let link = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
@@ -95,7 +105,7 @@ const SEO = ({
     return () => {
       document.querySelectorAll('script[data-seo="page"]').forEach(s => s.remove());
     };
-  }, [fullTitle, description, canonicalUrl, ogImageUrl, keywords, type, noindex, structuredData]);
+  }, [fullTitle, description, canonicalUrl, ogImageUrl, keywords, type, noindex, structuredData, publishedTime]);
 
   return null;
 };

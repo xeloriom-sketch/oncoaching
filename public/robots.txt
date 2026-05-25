@@ -2,4 +2,19 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Crawl-delay: 5
+
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
 Sitemap: https://www.oncoaching.fr/sitemap.xml

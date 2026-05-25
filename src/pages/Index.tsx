@@ -1,5 +1,5 @@
 import { useRef, useCallback, useState } from "react";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -255,7 +255,7 @@ export default function Index() {
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
           ref={heroRef}
-          className="w-full relative bg-[#FBFBFB] min-h-screen flex items-center"
+          className="w-full relative bg-[#FBFBFB] min-h-[calc(100vh-82px)] lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row lg:items-center"
           aria-labelledby="home-h1"
           onMouseMove={handleHeroMove}
           onMouseLeave={handleHeroLeave}
@@ -263,7 +263,7 @@ export default function Index() {
         {/* Grain subtil pour la texture */}
         <div className="hero-grain absolute inset-0 pointer-events-none opacity-30" aria-hidden="true" />
 
-        <div className="w-full min-h-screen grid grid-cols-1 lg:grid-cols-[56%_44%] items-center relative z-10">
+        <div className="w-full lg:h-full grid grid-cols-1 lg:grid-cols-[56%_44%] lg:items-center relative z-10">
 
           {/* ── GAUCHE : Vidéo derrière 3 ovales inclinés ── */}
           <motion.div
@@ -271,7 +271,7 @@ export default function Index() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{ x: sPhX, y: sPhY }}
-              className="relative w-full h-[82vh] order-last lg:order-first"
+              className="relative w-full h-[52vh] sm:h-[50vh] lg:h-[74vh] order-first lg:order-first"
           >
             {/* Masque SVG composite — les 3 ovals d'un coup */}
             <svg width="0" height="0" className="absolute" aria-hidden="true">
@@ -279,38 +279,44 @@ export default function Index() {
                 <clipPath id="ovals-clip" clipPathUnits="objectBoundingBox">
                   <ellipse cx="0.62" cy="0.43" rx="0.31" ry="0.42" transform="rotate(-38 0.62 0.43)" />
                   <ellipse cx="0.35" cy="0.65" rx="0.20" ry="0.27" transform="rotate(-30 0.35 0.65)" />
-                  <ellipse cx="0.16" cy="0.78" rx="0.11" ry="0.14" transform="rotate(-22 0.16 0.78)" />
+                  <ellipse cx="0.11" cy="0.86" rx="0.09" ry="0.12" transform="rotate(-22 0.11 0.86)" />
                 </clipPath>
               </defs>
             </svg>
 
-            {/* Une seule vidéo visible à travers les 3 ovals, cycle en boucle */}
+            {/* Vidéos en crossfade à travers les 3 ovals */}
             <div
               className="absolute inset-0"
               style={{ clipPath: "url(#ovals-clip)", WebkitClipPath: "url(#ovals-clip)" }}
             >
-              <video
-                key={videoIdx}
-                src={HERO_VIDEOS[videoIdx]}
-                className="absolute inset-0 w-full h-full object-cover"
-                autoPlay
-                muted
-                playsInline
-                onEnded={nextVideo}
-              />
+              <AnimatePresence mode="sync">
+                <motion.video
+                  key={videoIdx}
+                  src={HERO_VIDEOS[videoIdx]}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.2, ease: "easeInOut" }}
+                  autoPlay
+                  muted
+                  playsInline
+                  onEnded={nextVideo}
+                />
+              </AnimatePresence>
               <div className="absolute inset-0 bg-gradient-to-t from-black/15 to-transparent pointer-events-none" />
             </div>
 
           </motion.div>
 
           {/* ── DROITE : Contenu textuel ── */}
-          <div className="flex flex-col gap-7 px-8 md:px-12 lg:px-10">
+          <div className="flex flex-col gap-6 lg:gap-7 px-5 py-8 sm:px-8 sm:py-10 md:px-12 lg:px-10 lg:py-0 text-center lg:text-left items-center lg:items-start">
 
             {/* H1 — 3 lignes, reveal ligne par ligne */}
             <h1
                 id="home-h1"
                 className="font-bold leading-[1.05] tracking-tight text-[#1C3A52]"
-                style={{ fontSize: "clamp(2rem, 5.5vw, 5.6rem)" }}
+                style={{ fontSize: "clamp(2.2rem, 8vw, 5.6rem)" }}
             >
               {[
                 { text: "Développez", delay: 0.18 },
@@ -344,7 +350,7 @@ export default function Index() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
-                className="text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg"
+                className="text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left"
             >
               {content?.hero?.subtitle ?? "Accompagnement personnalisé pour particuliers et entreprises. Coach certifié, 26 ans d'expérience en sciences humaines."}
             </motion.p>
@@ -354,12 +360,12 @@ export default function Index() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.68 }}
-                className="flex flex-wrap gap-4 items-center"
+                className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center w-full sm:w-auto"
             >
               <LiquidCTA
                   to={ROUTES.contact}
                   label="Prendre rendez-vous avec ON Coaching"
-                  baseClass="bg-[#1C3A52] text-white shadow-[0_8px_24px_rgba(28,58,82,0.15)] rounded-full px-6 py-3.5 flex items-center gap-2 font-medium"
+                  baseClass="bg-[#1C3A52] text-white shadow-[0_8px_24px_rgba(28,58,82,0.15)] rounded-full px-6 py-3.5 flex items-center justify-center gap-2 font-medium w-full sm:w-auto"
                   fillClass="bg-[#C4903E]"
               >
                 Prendre RDV
@@ -369,7 +375,7 @@ export default function Index() {
               <LiquidCTA
                   to={ROUTES.about}
                   label="Découvrir l'approche de coaching"
-                  baseClass="bg-white text-[#1C3A52] border border-[#E5E7EB] rounded-full px-6 py-3.5 font-medium"
+                  baseClass="bg-white text-[#1C3A52] border border-[#E5E7EB] rounded-full px-6 py-3.5 font-medium w-full sm:w-auto justify-center"
                   fillClass="bg-[#1C3A52]"
                   hoverTextClass="text-white"
               >
@@ -382,7 +388,7 @@ export default function Index() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.84 }}
-                className="text-sm text-[#1C3A52]/50 flex items-center gap-2 mt-2"
+                className="text-sm text-[#1C3A52]/50 flex items-center justify-center lg:justify-start gap-2 mt-1"
             >
               <span className="text-[#C4903E] text-base" aria-hidden="true">☉</span>
               1er rendez-vous offert · Sans engagement

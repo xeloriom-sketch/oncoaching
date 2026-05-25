@@ -25,6 +25,8 @@ export default defineConfig(({ mode }) => ({
     cssCodeSplit: false,
     reportCompressedSize: false,
     modulePreload: { polyfill: false },
+    assetsInlineLimit: 4096,
+    sourcemap: false,
     rollupOptions: {
       output: {
         compact: true,
