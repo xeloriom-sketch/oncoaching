@@ -28,6 +28,10 @@ import type { IndexContent } from "@/types";
 
 const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
 
+/* ── Remplace cet ID par ton propre ID Vimeo ── */
+const HERO_VIMEO_ID = "1155511920";
+const HERO_VIMEO_SRC = `https://player.vimeo.com/video/${HERO_VIMEO_ID}?background=1&autoplay=1&loop=1&muted=1`;
+
 const SERVICES = [
   {
     key: "scolaire",
@@ -251,58 +255,50 @@ export default function Index() {
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
 
-          {/* ── GAUCHE : Une vidéo derrière 3 formes organiques unifiées ── */}
+          {/* ── GAUCHE : Une seule vidéo derrière 3 vrais OVALES parfaits et synchronisés ── */}
           <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="relative w-full h-[440px] sm:h-[520px] lg:h-[600px] order-last lg:order-first"
+              style={{ x: sPhX, y: sPhY }}
+              className="relative w-full aspect-square order-last lg:order-first"
           >
-            {/* ── Cercle 1 — grand dominant, haut-droite ── */}
-            <motion.div style={{
-                position: "absolute", top: 0, right: 0,
-                width: "80%", aspectRatio: "1",
-                borderRadius: "50%", overflow: "hidden", zIndex: 10,
-                x: sPhX, y: sPhY,
-              }}
-            >
-              <iframe
-                src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                style={{ position: "absolute", top: "-15%", left: "-15%", width: "130%", height: "130%", border: "none", pointerEvents: "none" }}
-                allow="autoplay; fullscreen" title="Vidéo coaching hero"
-              />
-            </motion.div>
+            {/* Conteneur global masqué avec un clip-path composite pour les 3 ovales */}
+            <svg width="0" height="0" className="absolute">
+              <defs>
+                {/* On utilise les coordonnées exactes des 3 ovales inclinés de ton image.
+        Puisqu'ils sont dans le même masque, l'iframe en dessous ne bouge pas d'un poil.
+      */}
+                <clipPath id="perfect-ovals-mask" clipPathUnits="objectBoundingBox">
+                  {/* Ovale 1 : Le grand dominant (Haut / Droite), incliné à environ -45° */}
+                  <path d="M 0.52,0.01 C 0.76,-0.04 0.99,0.18 0.95,0.48 C 0.91,0.78 0.68,0.88 0.44,0.82 C 0.30,0.75 0.37,0.50 0.35,0.34 C 0.32,0.16 0.28,0.06 0.52,0.01 Z" />
 
-            {/* ── Cercle 2 — moyen, bas-gauche, touche le cercle 1 ── */}
-            <motion.div style={{
-                position: "absolute", bottom: "14%", left: 0,
-                width: "46%", aspectRatio: "1",
-                borderRadius: "50%", overflow: "hidden", zIndex: 11,
-                x: sPhX, y: sPhY,
-              }}
-            >
-              <iframe
-                src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                style={{ position: "absolute", top: "-15%", left: "-15%", width: "130%", height: "130%", border: "none", pointerEvents: "none" }}
-                allow="autoplay; fullscreen" title="Vidéo coaching hero"
-              />
-            </motion.div>
+                  {/* Ovale 2 : Le moyen (Milieu / Gauche), très aplati et incliné en diagonale */}
+                  <path d="M 0.34,0.40 C 0.53,0.40 0.60,0.61 0.49,0.80 C 0.38,0.98 0.14,0.95 0.08,0.76 C 0.02,0.57 0.15,0.40 0.34,0.40 Z" />
 
-            {/* ── Cercle 3 — petit, entre les deux, les relie ── */}
-            <motion.div style={{
-                position: "absolute", bottom: "30%", left: "37%",
-                width: "14%", aspectRatio: "1",
-                borderRadius: "50%", overflow: "hidden", zIndex: 12,
-                x: sPhX, y: sPhY,
-              }}
-            >
-              <iframe
-                src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
-                style={{ position: "absolute", top: "-15%", left: "-15%", width: "130%", height: "130%", border: "none", pointerEvents: "none" }}
-                allow="autoplay; fullscreen" title="Vidéo coaching hero"
-              />
-            </motion.div>
+                  {/* Ovale 3 : Le tout petit (Bas / Gauche), excentré */}
+                  <path d="M 0.12,0.76 C 0.21,0.76 0.24,0.85 0.19,0.93 C 0.14,1.00 0.04,0.98 0.02,0.89 C -0.01,0.81 0.03,0.76 0.12,0.76 Z" />
+                </clipPath>
+              </defs>
+            </svg>
 
+            {/* Le masque magique qui applique la découpe des 3 ovales sur l'unique vidéo */}
+            <div
+                className="absolute inset-0 w-full h-full overflow-hidden"
+                style={{
+                  clipPath: "url(#perfect-ovals-mask)",
+                  WebkitClipPath: "url(#perfect-ovals-mask)"
+                }}
+            >
+              {/* UNE SEULE IFRAME : Elle prend tout l'espace, l'image est continue à 10000% */}
+              <iframe
+                  src={HERO_VIMEO_SRC}
+                  className="absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2 border-none pointer-events-none"
+                  allow="autoplay; fullscreen"
+                  title="Vidéo coaching hero"
+                  style={{ objectFit: 'cover' }}
+              />
+            </div>
           </motion.div>
 
           {/* ── DROITE : Contenu textuel (Fidèle à tes textes et animations) ── */}

@@ -5,9 +5,8 @@ import { Brain, Building2, ChevronDown, GraduationCap, Menu, Users, X, Zap } fro
 import { NAV_LINKS, ROUTES, SERVICES } from "@/lib/config";
 import { LogoMark } from "@/components/Logo";
 
-/* ── Couleurs issues du logo ON Coaching ── */
-const NAVY = "#1C3A52";   // "N" + silhouette du logo
-const GOLD = "#C4903E";   // "O" + étoile du logo
+const NAVY = "#1C3A52";
+const GOLD = "#C4903E";
 
 const SERVICE_ICONS: Record<string, React.ElementType> = {
   [ROUTES.scolaire]:      GraduationCap,
@@ -26,9 +25,9 @@ const SERVICE_DESC: Record<string, string> = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, x: -6 },
+  hidden: { opacity: 0, y: -4 },
   visible: (i: number) => ({
-    opacity: 1, x: 0,
+    opacity: 1, y: 0,
     transition: { delay: i * 0.045, duration: 0.18, ease: [0.16, 1, 0.3, 1] },
   }),
 };
@@ -38,7 +37,6 @@ const Navbar = () => {
   const [svcOpen,   setSvcOpen]   = useState(false);
   const [mobileSvc, setMobileSvc] = useState(false);
   const [hidden,    setHidden]    = useState(false);
-  const [scrolled,  setScrolled]  = useState(false);
   const closeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastY    = useRef(0);
   const location = useLocation();
@@ -50,9 +48,8 @@ const Navbar = () => {
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 20);
-      if (y > lastY.current + 6 && y > 100) setHidden(true);
-      else if (y < lastY.current - 6) setHidden(false);
+      if (y > lastY.current + 8 && y > 120) setHidden(true);
+      else if (y < lastY.current - 8)        setHidden(false);
       lastY.current = y;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -67,7 +64,7 @@ const Navbar = () => {
   }, []);
 
   const scheduleSvcClose = useCallback(() => {
-    closeRef.current = setTimeout(() => setSvcOpen(false), 120);
+    closeRef.current = setTimeout(() => setSvcOpen(false), 150);
   }, []);
 
   const isActive = (href: string) =>
@@ -79,162 +76,147 @@ const Navbar = () => {
     <motion.header
       animate={{ y: hidden ? "-110%" : "0%" }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white border-b border-[#E5E7EB]/60"
-          : "bg-[#FBFBFB]"
-      }`}
+      className="fixed top-0 inset-x-0 z-50"
     >
-      <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-6">
 
-        {/* ── Logo — tout à gauche, sans texte ── */}
+        {/* Logo — gauche */}
         <Link to="/" aria-label="ON Coaching — Accueil" className="flex-shrink-0">
           <LogoMark size={44} animate />
         </Link>
 
-        {/* ── Pilule navy — liens desktop ── */}
-        <nav
-          className="hidden lg:flex items-center rounded-full px-2 py-1.5 shadow-sm"
-          style={{ background: NAVY }}
-          aria-label="Navigation principale"
-        >
-          <ul className="flex items-center gap-1 list-none m-0 p-0 text-[13px] font-medium text-white/70" role="list">
-            {NAV_LINKS.map(({ label, href }) => (
-              <li key={href}>
-                <Link
-                  to={href}
-                  aria-current={isActive(href) ? "page" : undefined}
-                  className="px-4 py-2 rounded-full block transition-colors duration-150 hover:text-white"
-                  style={isActive(href) ? { color: "white", background: "rgba(255,255,255,0.12)" } : undefined}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
+        {/* Liens + CTA — droite desktop */}
+        <div className="hidden lg:flex items-center gap-7">
+          <nav aria-label="Navigation principale">
+            <ul className="flex items-center gap-6 list-none m-0 p-0" role="list">
+              {NAV_LINKS.map(({ label, href }) => (
+                <li key={href}>
+                  <Link
+                    to={href}
+                    aria-current={isActive(href) ? "page" : undefined}
+                    className="text-[13px] font-medium transition-colors duration-150"
+                    style={{ color: isActive(href) ? NAVY : `${NAVY}99` }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = NAVY}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = isActive(href) ? NAVY : `${NAVY}99`}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
 
-            {/* Services dropdown */}
-            <li className="relative" onMouseEnter={openSvc} onMouseLeave={scheduleSvcClose}>
-              <button
-                aria-haspopup="true"
-                aria-expanded={svcOpen}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full transition-colors duration-150 hover:text-white"
-                style={isServiceActive ? { color: "white", background: "rgba(255,255,255,0.12)" } : undefined}
-              >
-                Services
-                <motion.span
-                  animate={{ rotate: svcOpen ? 180 : 0 }}
-                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  className="inline-flex"
+              {/* Services dropdown */}
+              <li className="relative" onMouseEnter={openSvc} onMouseLeave={scheduleSvcClose}>
+                <button
+                  aria-haspopup="true"
+                  aria-expanded={svcOpen}
+                  className="flex items-center gap-1 text-[13px] font-medium transition-colors duration-150"
+                  style={{ color: isServiceActive ? NAVY : `${NAVY}99` }}
                 >
-                  <ChevronDown className="w-3 h-3" aria-hidden="true" />
-                </motion.span>
-              </button>
+                  Services
+                  <motion.span
+                    animate={{ rotate: svcOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="inline-flex"
+                  >
+                    <ChevronDown className="w-3 h-3" aria-hidden="true" />
+                  </motion.span>
+                </button>
 
-              <div className="absolute top-full left-1/2 -translate-x-1/2 w-[320px] pt-3 pointer-events-none">
-                <AnimatePresence>
-                  {svcOpen && (
-                    <motion.div
-                      role="menu"
-                      onMouseEnter={openSvc}
-                      onMouseLeave={scheduleSvcClose}
-                      initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0,  scale: 1    }}
-                      exit={{    opacity: 0, y: -8, scale: 0.96 }}
-                      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="pointer-events-auto border border-white/10 rounded-[24px] overflow-hidden shadow-2xl"
-                      style={{ background: NAVY, boxShadow: "0 24px 60px rgba(28,58,82,0.45)" }}
-                    >
-                      {/* Accent line or */}
-                      <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)` }} />
-                      <div className="p-3">
-                        {SERVICES.map(({ label, href }, i) => {
-                          const Icon = SERVICE_ICONS[href] ?? Brain;
-                          const desc = SERVICE_DESC[href] ?? "";
-                          const active = location.pathname === href;
-                          return (
-                            <motion.div key={href} custom={i} initial="hidden" animate="visible" variants={itemVariants}>
-                              <Link
-                                to={href}
-                                role="menuitem"
-                                aria-current={active ? "page" : undefined}
-                                className="flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-150 group"
-                                style={active ? { background: "rgba(255,255,255,0.07)" } : undefined}
-                                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
-                                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = ""; }}
-                              >
-                                <div
-                                  className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors"
-                                  style={{ background: active ? GOLD : "rgba(196,144,62,0.15)" }}
-                                  aria-hidden="true"
+                <div className="absolute top-full right-0 w-[300px] pt-3 pointer-events-none">
+                  <AnimatePresence>
+                    {svcOpen && (
+                      <motion.div
+                        role="menu"
+                        onMouseEnter={openSvc}
+                        onMouseLeave={scheduleSvcClose}
+                        initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0,  scale: 1   }}
+                        exit={{    opacity: 0, y: -8, scale: 0.97 }}
+                        transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                        className="pointer-events-auto border border-white/10 rounded-[20px] overflow-hidden shadow-2xl"
+                        style={{ background: NAVY, boxShadow: "0 20px 50px rgba(28,58,82,0.4)" }}
+                      >
+                        <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)` }} />
+                        <div className="p-2.5">
+                          {SERVICES.map(({ label, href }, i) => {
+                            const Icon = SERVICE_ICONS[href] ?? Brain;
+                            const desc = SERVICE_DESC[href] ?? "";
+                            const active = location.pathname === href;
+                            return (
+                              <motion.div key={href} custom={i} initial="hidden" animate="visible" variants={itemVariants}>
+                                <Link
+                                  to={href}
+                                  role="menuitem"
+                                  aria-current={active ? "page" : undefined}
+                                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-150 group"
+                                  style={active ? { background: "rgba(255,255,255,0.07)" } : undefined}
+                                  onMouseEnter={e => { if (!active) (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+                                  onMouseLeave={e => { if (!active) (e.currentTarget as HTMLElement).style.background = ""; }}
                                 >
-                                  <Icon className="w-4 h-4" style={{ color: active ? "white" : GOLD }} strokeWidth={1.7} />
-                                </div>
-                                <div className="flex flex-col min-w-0">
-                                  <span className="text-[13px] font-semibold leading-tight text-white/80 group-hover:text-white transition-colors">
-                                    {label}
-                                  </span>
-                                  <span className="text-[11px] text-white/35 mt-0.5 leading-tight truncate">{desc}</span>
-                                </div>
-                                {active && (
-                                  <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: GOLD }} aria-hidden="true" />
-                                )}
-                              </Link>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                      <div className="px-3 pb-3 pt-1">
-                        <Link
-                          to="/contact"
-                          className="flex items-center justify-center gap-1.5 w-full py-3 text-[#1C3A52] text-[12px] font-bold rounded-xl transition-opacity hover:opacity-90"
-                          style={{ background: GOLD }}
-                        >
-                          Consultation gratuite <span aria-hidden="true">→</span>
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </li>
-          </ul>
-        </nav>
+                                  <div
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                                    style={{ background: active ? GOLD : "rgba(196,144,62,0.15)" }}
+                                    aria-hidden="true"
+                                  >
+                                    <Icon className="w-3.5 h-3.5" style={{ color: active ? "white" : GOLD }} strokeWidth={1.7} />
+                                  </div>
+                                  <div className="flex flex-col min-w-0">
+                                    <span className="text-[12px] font-semibold leading-tight text-white/80 group-hover:text-white transition-colors">
+                                      {label}
+                                    </span>
+                                    <span className="text-[10px] text-white/35 mt-0.5 leading-tight truncate">{desc}</span>
+                                  </div>
+                                  {active && (
+                                    <span className="ml-auto w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: GOLD }} aria-hidden="true" />
+                                  )}
+                                </Link>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </li>
+            </ul>
+          </nav>
 
-        {/* ── Droite : CTA or + toggle mobile ── */}
-        <div className="flex items-center gap-3">
-          <motion.div className="hidden lg:block" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+          {/* CTA Prendre RDV */}
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
             <Link
               to="/contact"
-              className="inline-block font-semibold text-[13px] px-6 py-3 rounded-full transition-all duration-200 shadow-sm hover:opacity-90"
+              className="inline-block font-semibold text-[13px] px-5 py-2.5 rounded-full transition-opacity hover:opacity-90"
               style={{ background: GOLD, color: "#fff" }}
             >
               Prendre RDV
             </Link>
           </motion.div>
-
-          <motion.button
-            onClick={() => setIsOpen(v => !v)}
-            aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            aria-expanded={isOpen}
-            whileTap={{ scale: 0.9 }}
-            className="lg:hidden p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
-            style={{ color: NAVY }}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {isOpen
-                ? <motion.span key="x"    initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <X className="w-5 h-5" aria-hidden="true" />
-                  </motion.span>
-                : <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                    <Menu className="w-5 h-5" aria-hidden="true" />
-                  </motion.span>
-              }
-            </AnimatePresence>
-          </motion.button>
         </div>
+
+        {/* Burger mobile */}
+        <motion.button
+          onClick={() => setIsOpen(v => !v)}
+          aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-expanded={isOpen}
+          whileTap={{ scale: 0.9 }}
+          className="lg:hidden p-2 -mr-1 min-w-[44px] min-h-[44px] flex items-center justify-center"
+          style={{ color: NAVY }}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {isOpen
+              ? <motion.span key="x"    initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <X className="w-5 h-5" aria-hidden="true" />
+                </motion.span>
+              : <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <Menu className="w-5 h-5" aria-hidden="true" />
+                </motion.span>
+            }
+          </AnimatePresence>
+        </motion.button>
       </div>
 
-      {/* ── Menu mobile ── */}
+      {/* Menu mobile */}
       <AnimatePresence>
         {isOpen && (
           <motion.nav
@@ -243,7 +225,7 @@ const Navbar = () => {
             animate={{ opacity: 1, scale: 1,    y: 0  }}
             exit={{    opacity: 0, scale: 0.97, y: -6 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className="mx-4 mb-3 border border-white/10 rounded-[24px] p-4 shadow-2xl overflow-hidden"
+            className="mx-4 mb-3 border border-white/10 rounded-[20px] p-4 shadow-2xl overflow-hidden"
             style={{ background: NAVY }}
           >
             <div className="flex flex-col gap-0.5 mb-3">
@@ -272,11 +254,7 @@ const Navbar = () => {
                   {isServiceActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: GOLD }} aria-hidden="true" />}
                   Services
                 </span>
-                <motion.span
-                  animate={{ rotate: mobileSvc ? 180 : 0 }}
-                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  className="inline-flex"
-                >
+                <motion.span animate={{ rotate: mobileSvc ? 180 : 0 }} transition={{ duration: 0.2 }} className="inline-flex">
                   <ChevronDown className="w-4 h-4" aria-hidden="true" />
                 </motion.span>
               </button>
@@ -288,7 +266,7 @@ const Navbar = () => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{    opacity: 0, height: 0 }}
-                    transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
                     <div className="pl-3 pb-1 flex flex-col gap-0.5">
