@@ -48,7 +48,7 @@ const Partenaires = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]" aria-label="Chargement…">
           <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
@@ -104,7 +104,7 @@ const Partenaires = () => {
         ]}
       />
 
-      <div className="w-full bg-white min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">
+      <div className="w-full bg-[#FBFBFB] min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">
 
         {/* ── HERO ────────────────────────────────── */}
         <motion.header

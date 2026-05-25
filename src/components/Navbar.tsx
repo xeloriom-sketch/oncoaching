@@ -37,6 +37,7 @@ const Navbar = () => {
   const [svcOpen,   setSvcOpen]   = useState(false);
   const [mobileSvc, setMobileSvc] = useState(false);
   const [hidden,    setHidden]    = useState(false);
+  const [logoVisible, setLogoVisible] = useState(true);
   const closeRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastY     = useRef(0);
   const ticking   = useRef(false);
@@ -52,12 +53,15 @@ const Navbar = () => {
       ticking.current = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
+        // Logo : visible uniquement dans la zone hero (≈ 88vh)
+        setLogoVisible(y <= window.innerHeight * 0.88);
+        // Navbar hide/show
         if (y <= 60) {
-          setHidden(false);                          // toujours visible en haut
+          setHidden(false);
         } else if (y > lastY.current + 6) {
-          setHidden(true);                           // descend → cache
+          setHidden(true);
         } else if (lastY.current - y > 6) {
-          setHidden(false);                          // remonte → montre
+          setHidden(false);
         }
         lastY.current = y;
         ticking.current = false;
@@ -91,10 +95,16 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-6">
 
-        {/* Logo — gauche */}
-        <Link to="/" aria-label="ON Coaching — Accueil" className="flex-shrink-0">
-          <LogoMark size={44} animate />
-        </Link>
+        {/* Logo — visible uniquement dans le hero */}
+        <motion.div
+          className="flex-shrink-0"
+          animate={{ opacity: logoVisible ? 1 : 0, pointerEvents: logoVisible ? "auto" : "none" }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+        >
+          <Link to="/" aria-label="ON Coaching — Accueil">
+            <LogoMark size={44} animate />
+          </Link>
+        </motion.div>
 
         {/* Liens + CTA — droite desktop */}
         <div className="hidden lg:flex items-center gap-3">

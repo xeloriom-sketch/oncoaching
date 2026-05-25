@@ -93,7 +93,7 @@ const CoachingEquipe = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]" aria-label="Chargement…">
           <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
@@ -170,7 +170,7 @@ const CoachingEquipe = () => {
         ]}
       />
 
-      <div className="w-full bg-white min-h-screen overflow-x-hidden">
+      <div className="w-full bg-[#FBFBFB] min-h-screen overflow-x-hidden">
 
         <section className="pt-28 pb-16 max-w-7xl mx-auto px-5 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -374,7 +374,7 @@ const CoachingEquipe = () => {
           </div>
         </section>
 
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-[#FBFBFB]">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"

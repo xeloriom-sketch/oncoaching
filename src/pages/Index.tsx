@@ -245,7 +245,7 @@ export default function Index() {
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
           ref={heroRef}
-          className="w-full relative bg-[#FBFBFB] min-h-[92vh] flex items-center py-12 md:py-16 overflow-hidden"
+          className="w-full relative bg-[#FBFBFB] min-h-screen flex items-center py-8 overflow-hidden"
           aria-labelledby="home-h1"
           onMouseMove={handleHeroMove}
           onMouseLeave={handleHeroLeave}
@@ -253,7 +253,7 @@ export default function Index() {
         {/* Grain subtil pour la texture */}
         <div className="hero-grain absolute inset-0 pointer-events-none opacity-30" aria-hidden="true" />
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-[58%_42%] gap-8 lg:gap-12 items-center relative z-10">
 
           {/* ── GAUCHE : Une seule vidéo derrière 3 vrais OVALES parfaits et synchronisés ── */}
           <motion.div
@@ -261,7 +261,7 @@ export default function Index() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{ x: sPhX, y: sPhY }}
-              className="relative w-full aspect-square order-last lg:order-first"
+              className="relative w-full aspect-square order-last lg:order-first lg:-ml-8 lg:scale-110 origin-left"
           >
             {/* Conteneur global masqué avec un clip-path composite pour les 3 ovales */}
             <svg width="0" height="0" className="absolute">
@@ -404,7 +404,7 @@ export default function Index() {
       </section>
 
       {/* ── 02. STATS ────────────────────────────────────────────────── */}
-      <section className="py-8 md:py-12 bg-white" aria-label="Points forts">
+      <section className="py-8 md:py-12 bg-[#FBFBFB]" aria-label="Points forts">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -436,7 +436,7 @@ export default function Index() {
 
       {/* ── 03. SERVICES ─────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-white"
+        className="py-20 md:py-28 bg-[#FBFBFB]"
         aria-labelledby="services-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-12">
@@ -521,7 +521,7 @@ export default function Index() {
       </section>
 
       {/* ── 03b. NEUROFEEDBACK SPOTLIGHT ─────────────────────────────── */}
-      <section className="py-20 bg-white" aria-label="Neurofeedback NeurOptimal®">
+      <section className="py-20 bg-[#FBFBFB]" aria-label="Neurofeedback NeurOptimal®">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
@@ -687,7 +687,7 @@ export default function Index() {
 
       {/* ── 05. PROCESSUS ────────────────────────────────────────────── */}
       <section
-        className="py-20 md:py-28 bg-white"
+        className="py-20 md:py-28 bg-[#FBFBFB]"
         aria-labelledby="processus-title"
       >
         <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-14">

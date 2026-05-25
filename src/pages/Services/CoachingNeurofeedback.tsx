@@ -119,7 +119,7 @@ const CoachingNeurofeedback = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]" aria-label="Chargement…">
           <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
@@ -218,7 +218,7 @@ const CoachingNeurofeedback = () => {
         ]}
       />
 
-      <div className="w-full bg-white min-h-screen overflow-x-hidden">
+      <div className="w-full bg-[#FBFBFB] min-h-screen overflow-x-hidden">
 
         <section className="pt-28 pb-16">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
@@ -428,7 +428,7 @@ const CoachingNeurofeedback = () => {
         </section>
 
         {/* ══ BOUCLE DU NEUROFEEDBACK ══════════════════════════════════════ */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-[#FBFBFB]">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"
@@ -599,7 +599,7 @@ const CoachingNeurofeedback = () => {
         </section>
 
         {/* ══ PRATICIEN ════════════════════════════════════════════════════ */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-[#FBFBFB]">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"

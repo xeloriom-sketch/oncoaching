@@ -74,7 +74,7 @@ const NosTarifs = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 0.9, repeat: Infinity, ease: "linear" }}
@@ -209,7 +209,7 @@ const NosTarifs = () => {
         ]}
       />
 
-      <div className="w-full bg-white overflow-x-hidden">
+      <div className="w-full bg-[#FBFBFB] overflow-x-hidden">
 
         {/* ── HERO ──────────────────────────────────────────────────────── */}
         <section className="pt-20 md:pt-28 pb-10 max-w-7xl mx-auto px-5 md:px-12">

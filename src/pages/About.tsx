@@ -165,7 +165,7 @@ const About = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]" aria-label="Chargement…">
           <motion.div
             className="w-10 h-10 border-2 border-[#C4903E] border-t-transparent rounded-full"
             animate={{ rotate: 360 }}
@@ -265,7 +265,7 @@ const About = () => {
         ]}
       />
 
-      <div className="w-full bg-white overflow-x-hidden">
+      <div className="w-full bg-[#FBFBFB] overflow-x-hidden">
 
         {/* ══ 01 — HERO ══════════════════════════════════════════════════ */}
         <section

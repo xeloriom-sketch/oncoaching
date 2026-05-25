@@ -273,7 +273,7 @@ const Contact = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]">
           <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
@@ -368,7 +368,7 @@ const Contact = () => {
         ]}
       />
 
-      <div className="w-full bg-white">
+      <div className="w-full bg-[#FBFBFB]">
 
         {/* ── HERO ───────────────────────────────────────────────── */}
         <section className="pt-10 pb-8 max-w-7xl mx-auto px-5 md:px-12">

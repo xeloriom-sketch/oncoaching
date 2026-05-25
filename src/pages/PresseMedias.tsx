@@ -50,7 +50,7 @@ export default function PresseMedias() {
             ]}
         />
 
-        <section className="bg-white pt-28 pb-20 md:pb-28" aria-labelledby="presse-title">
+        <section className="bg-[#FBFBFB] pt-28 pb-20 md:pb-28" aria-labelledby="presse-title">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
 
             {/* Header */}

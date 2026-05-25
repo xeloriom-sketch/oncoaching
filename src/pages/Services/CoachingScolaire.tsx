@@ -80,7 +80,7 @@ const CoachingScolaire = () => {
   if (loading || !content) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center bg-white" aria-label="Chargement…">
+        <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]" aria-label="Chargement…">
           <div className="w-8 h-8 border-2 border-[#C4903E] border-t-transparent rounded-full animate-spin" />
         </div>
       </Layout>
@@ -162,7 +162,7 @@ const CoachingScolaire = () => {
       />
 
       {/* ── 01. HERO ─────────────────────────────────────────────── */}
-      <section className="bg-white pt-28 pb-16">
+      <section className="bg-[#FBFBFB] pt-28 pb-16">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
@@ -349,7 +349,7 @@ const CoachingScolaire = () => {
       </section>
 
       {/* ── 04. COACH BIO ────────────────────────────────────────── */}
-      <section className="bg-white py-20" aria-label="Le coach">
+      <section className="bg-[#FBFBFB] py-20" aria-label="Le coach">
         <div className="max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
