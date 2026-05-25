@@ -26,8 +26,10 @@ import { ROUTES } from "@/lib/config";
 import { usePageContent } from "@/hooks/usePageContent";
 import type { IndexContent } from "@/types";
 
-const COACH_IMG =
-  `${import.meta.env.BASE_URL}patron.webp`;
+const COACH_IMG    = `${import.meta.env.BASE_URL}patron.webp`;
+const HERO_VIDEO_1 = `${import.meta.env.BASE_URL}hero-coach-1.mp4`;
+const HERO_VIDEO_2 = `${import.meta.env.BASE_URL}hero-coach-2.mp4`;
+const HERO_VIDEO_3 = `${import.meta.env.BASE_URL}hero-coach-3.mp4`;
 
 const SERVICES = [
   {
@@ -272,61 +274,65 @@ export default function Index() {
           >
             <div className="absolute inset-0 w-full h-full">
 
-              {/* GALET 1 — Grande forme principale (Haut/Milieu Droite) — Photo de ton coach */}
+              {/* GALET 1 — Grande forme principale (Haut Droite) — Vidéo principale */}
               <div
-                  className="absolute top-0 right-[4%] w-[72%] h-[78%] overflow-hidden bg-gray-100"
+                  className="absolute top-0 right-[4%] w-[72%] h-[78%] overflow-hidden bg-gray-900 z-10"
                   style={{ borderRadius: "60% 40% 45% 55% / 60% 45% 55% 40%" }}
               >
-                <motion.img
-                    src={COACH_IMG}
-                    alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
-                    className="absolute inset-0 w-full h-full object-cover object-top will-change-transform"
-                    style={{ x: sPhX, y: sPhY, scale: 1.08 }}
-                    fetchpriority="high"
-                    loading="eager"
-                    decoding="async"
+                <motion.video
+                    src={HERO_VIDEO_1}
+                    autoPlay loop muted playsInline
+                    className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                    style={{ x: sPhX, y: sPhY, scale: 1.15 }}
                 />
               </div>
 
-              {/* GALET 2 — Forme moyenne (Bas Gauche) — Découpe du fond avec ton dégradé Teal/Noir */}
+              {/* GALET 2 — Forme moyenne (Bas Gauche) — Vidéo avec overlay teal */}
               <motion.div
-                  className="absolute bottom-2 left-[8%] w-[54%] h-[54%] bg-[#FBFBFB] flex items-center justify-center p-[10px]"
+                  className="absolute bottom-2 left-[8%] w-[54%] h-[54%] bg-[#FBFBFB] flex items-center justify-center p-[10px] z-20"
                   style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
                   initial={{ opacity: 0, scale: 0.85 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
                 <div
-                    className="w-full h-full overflow-hidden"
+                    className="w-full h-full overflow-hidden relative bg-gray-900"
                     style={{ borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%" }}
                 >
-                  <div
-                      className="w-full h-full"
-                      style={{ background: "linear-gradient(145deg, #1ab5c7 0%, #0ea5b7 40%, #0B0B0C 100%)" }}
+                  <motion.video
+                      src={HERO_VIDEO_2}
+                      autoPlay loop muted playsInline
+                      className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                      style={{ x: sB2X, y: sB2Y, scale: 1.2 }}
                   />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0B0B0C]/30 via-[#1ab5c7]/15 to-transparent mix-blend-multiply" />
                 </div>
               </motion.div>
 
-              {/* GALET 3 — Petit accent Teal transparent isolé (Tout en bas à gauche) */}
+              {/* GALET 3 — Petit galet (Bas Gauche) — Vidéo d'ambiance */}
               <motion.div
-                  className="absolute bottom-10 left-0 w-[20%] h-[26%]"
-                  style={{
-                    borderRadius: "40% 60% 50% 50% / 50% 50% 50% 50%",
-                    background: "rgba(26,181,199,0.15)",
-                    border: "1.5px solid rgba(26,181,199,0.35)",
-                  }}
+                  className="absolute bottom-10 left-0 w-[20%] h-[26%] overflow-hidden z-10 border border-white/20 shadow-md bg-gray-900"
+                  style={{ borderRadius: "40% 60% 50% 50% / 50% 50% 50% 50%" }}
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              />
+              >
+                <motion.video
+                    src={HERO_VIDEO_3}
+                    autoPlay loop muted playsInline
+                    className="absolute inset-0 w-full h-full object-cover will-change-transform"
+                    style={{ x: sB1X, y: sB1Y, scale: 1.25 }}
+                />
+                <div className="absolute inset-0 bg-[#1ab5c7]/10 mix-blend-color" />
+              </motion.div>
 
-              {/* Badge flottant "Coach certifié" (Repositionné en haut à gauche de la compo) */}
+              {/* Badge flottant "Coach certifié" */}
               <motion.div
                   style={{ x: sB1X, y: sB1Y }}
                   initial={{ opacity: 0, y: 18, scale: 0.88 }}
                   animate={{ opacity: 1, y: 0,  scale: 1   }}
                   transition={{ delay: 0.8, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-[12%] left-[2%] bg-[#0B0B0C]/90 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shadow-xl will-change-transform z-20"
+                  className="absolute top-[12%] left-[2%] bg-[#0B0B0C]/90 backdrop-blur-md border border-white/10 rounded-2xl px-4 py-3 shadow-xl will-change-transform z-30"
               >
                 <p className="text-white text-[13px] font-semibold tracking-wide">Coach certifié</p>
                 <p className="text-white/50 text-[11px] mt-0.5">Prisme Évolution</p>
@@ -338,7 +344,7 @@ export default function Index() {
                   initial={{ opacity: 0, x: -14, scale: 0.88 }}
                   animate={{ opacity: 1, x: 0,   scale: 1   }}
                   transition={{ delay: 0.95, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB] rounded-full px-4 py-2.5 shadow-lg will-change-transform z-20"
+                  className="absolute bottom-[20%] right-[2%] flex items-center gap-2 bg-white border border-[#E5E7EB] rounded-full px-4 py-2.5 shadow-lg will-change-transform z-30"
               >
                 <span className="w-2 h-2 rounded-full bg-[#1ab5c7] animate-pulse" aria-hidden="true" />
                 <span className="text-[#0B0B0C] text-[12px] font-semibold tracking-wide">Disponible</span>
