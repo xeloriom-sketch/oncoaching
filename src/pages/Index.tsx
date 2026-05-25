@@ -289,14 +289,42 @@ export default function Index() {
             {/* ── Cercle 2 — moyen, bas-gauche ── */}
             <motion.div
               style={{
+                position: "absolute",
                 bottom: "3%", left: "0%",
                 width: "46%",
                 aspectRatio: "1",
                 borderRadius: "50%",
                 overflow: "hidden",
                 boxShadow: "0 0 0 2px rgba(196,144,62,0.40)",
-                zIndex: 10,
+                zIndex: 11,
+                x: sPhX,
+                y: sPhY,
+              }}
+            >
+              <iframe
+                src="https://player.vimeo.com/video/1155511920?background=1&autoplay=1&loop=1&muted=1"
+                style={{
+                  position: "absolute",
+                  top: "-15%", left: "-15%",
+                  width: "130%", height: "130%",
+                  border: "none", pointerEvents: "none",
+                }}
+                allow="autoplay; fullscreen"
+                title="Vidéo coaching hero"
+              />
+            </motion.div>
+
+            {/* ── Cercle 3 — petit, bas-droite ── */}
+            <motion.div
+              style={{
                 position: "absolute",
+                bottom: "6%", right: "2%",
+                width: "28%",
+                aspectRatio: "1",
+                borderRadius: "50%",
+                overflow: "hidden",
+                boxShadow: "0 0 0 2px rgba(196,144,62,0.30)",
+                zIndex: 12,
                 x: sPhX,
                 y: sPhY,
               }}
