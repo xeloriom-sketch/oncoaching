@@ -7,7 +7,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => (
-  <div className="flex flex-col min-h-screen bg-white">
+  <div className="flex flex-col min-h-screen bg-[#FBFBFB]">
     <Navbar />
     {/* pt-[76px]: pill nav (44px) + top padding (16px) + gap (16px) */}
     <main className="flex-grow pt-[82px]" id="main-content">

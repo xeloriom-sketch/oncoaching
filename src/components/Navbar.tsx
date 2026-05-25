@@ -36,25 +36,12 @@ const Navbar = () => {
   const [isOpen,    setIsOpen]    = useState(false);
   const [svcOpen,   setSvcOpen]   = useState(false);
   const [mobileSvc, setMobileSvc] = useState(false);
-  const [hidden,    setHidden]    = useState(false);
   const closeRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const lastY    = useRef(0);
   const location = useLocation();
 
   useEffect(() => {
     setIsOpen(false); setSvcOpen(false); setMobileSvc(false);
   }, [location.pathname]);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (y > lastY.current + 8 && y > 120) setHidden(true);
-      else if (y < lastY.current - 8)        setHidden(false);
-      lastY.current = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => () => { if (closeRef.current) clearTimeout(closeRef.current); }, []);
 
@@ -73,11 +60,7 @@ const Navbar = () => {
   const isServiceActive = SERVICES.some(s => location.pathname.startsWith(s.href));
 
   return (
-    <motion.header
-      animate={{ y: hidden ? "-110%" : "0%" }}
-      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 inset-x-0 z-50"
-    >
+    <header className="fixed top-0 inset-x-0 z-50">
       <div className="max-w-7xl mx-auto px-5 md:px-12 py-4 flex items-center justify-between gap-6">
 
         {/* Logo — gauche */}
@@ -311,7 +294,7 @@ const Navbar = () => {
           </motion.nav>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 };
 
