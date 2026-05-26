@@ -239,6 +239,24 @@ const Contact = () => {
         note:            null,
       });
       if (insertError) throw new Error(insertError.message || msgs.errorDefault);
+
+      // Envoi email de confirmation via PHP (IONOS)
+      fetch(`${import.meta.env.BASE_URL}api/send-mail.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type:          formType,
+          name:          formData.name,
+          email:         formData.email,
+          phone:         formData.phone,
+          service:       formData.service,
+          subject:       formData.subject,
+          message:       formData.message,
+          preferredDate: formData.preferredDate,
+          preferredTime: formData.preferredTime,
+        }),
+      }).catch(() => {}); // silencieux si PHP non dispo (dev local)
+
       const successMsg = formType === "rdv"
         ? { title: "Demande envoyée !", description: "Nous confirmerons votre rendez-vous dans les 24h." }
         : { title: msgs.successTitle, description: msgs.successDescription };
