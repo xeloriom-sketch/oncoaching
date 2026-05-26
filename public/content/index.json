@@ -64,5 +64,22 @@
     "subtitle": "1er rendez-vous offert à Mâcon (Sancé, 71) ou en visioconférence. Sans engagement. Coach certifié disponible pour de nouveaux accompagnements.",
     "buttonText": "Prendre rendez-vous",
     "buttonLink": "/contact"
-  }
+  },
+  "stats": [
+    { "value": "26 ans", "label": "Enseignant SES" },
+    { "value": "100+", "label": "Accompagnements" },
+    { "value": "Certifié", "label": "Prisme Évolution" },
+    { "value": "4", "label": "Programmes spécialisés" }
+  ],
+  "steps": [
+    { "num": "01", "title": "Consultation", "desc": "Premier RDV offert, diagnostic complet" },
+    { "num": "02", "title": "Plan sur mesure", "desc": "Programme aligné avec vos objectifs" },
+    { "num": "03", "title": "Transformation", "desc": "Résultats mesurables et durables" }
+  ],
+  "servicesCards": [
+    { "key": "scolaire", "title": "Coaching scolaire & étudiant", "desc": "Soutien, méthodologie et orientation pour réussir sa scolarité ou ses études.", "tag": "Collégiens · Lycéens · Étudiants" },
+    { "key": "jeunes", "title": "Coaching jeunes & jeunes adultes", "desc": "Accompagnement lors des choix d'orientation, insertion pro et construction du projet de vie.", "tag": "15 – 30 ans" },
+    { "key": "neurofeedback", "title": "Coaching & Neurofeedback", "desc": "Entraînement cérébral NeurOptimal® : réduction du stress, concentration, sommeil, performances cognitives. Non invasif, dès 6 à 10 séances.", "tag": "NeurOptimal® · Non invasif" },
+    { "key": "equipe", "title": "Coaching d'équipe", "desc": "Développez la cohésion, la performance et l'intelligence collective de votre équipe.", "tag": "Entreprises · TPE/PME" }
+  ]
 }

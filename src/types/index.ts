@@ -187,12 +187,19 @@ export interface HeroIndex {
   image: string;
 }
 
+export interface StatItem { value: string; label: string; }
+export interface StepItem { num: string; title: string; desc: string; }
+export interface ServiceCard { key: string; title: string; desc: string; tag: string; }
+
 export interface IndexContent {
   hero: HeroIndex;
   servicesSection: ServicesSection;
   services: ServiceItem[];
   whyUsSection: WhyUsSection;
   cta: CTA;
+  stats: StatItem[];
+  steps: StepItem[];
+  servicesCards: ServiceCard[];
 }
 
 // ─── Shared ───────────────────────────────────────────────────────────────────
