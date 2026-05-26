@@ -294,6 +294,8 @@ const CoachingNeurofeedback = () => {
                   src={SESSION_PHOTO}
                   alt="Séance de neurofeedback NeurOptimal® — capteurs EEG — ON Coaching Mâcon"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  width="800"
+                  height="600"
                   loading="eager"
                   decoding="async"
                 />
@@ -616,6 +618,8 @@ const CoachingNeurofeedback = () => {
                   src={COACH_PHOTO}
                   alt="Noureddine Omar — Coach certifié & Neurofeedback, ON Coaching Mâcon"
                   className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  width="600"
+                  height="800"
                   loading="lazy"
                   decoding="async"
                 />

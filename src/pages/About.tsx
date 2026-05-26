@@ -344,6 +344,8 @@ const About = () => {
                   src={COACH_IMG}
                   alt="Coach ON Coaching — coach certifié à Mâcon"
                   className="w-full h-full object-cover object-top"
+                  width="600"
+                  height="800"
                   loading="eager"
                   decoding="async"
                 />
@@ -450,6 +452,8 @@ const About = () => {
                     src={COACH_IMG}
                     alt="Portrait du coach ON Coaching"
                     className="w-full h-full object-cover object-top"
+                    width="600"
+                    height="800"
                     loading="lazy"
                     decoding="async"
                   />
@@ -604,6 +608,8 @@ const About = () => {
                 src={`${import.meta.env.BASE_URL}certification.webp`}
                 alt="Certification NeurOptimal® — Noureddine Omar"
                 className="w-full h-auto block"
+                width="794"
+                height="1123"
                 loading="lazy"
                 decoding="async"
               />

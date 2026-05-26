@@ -90,6 +90,7 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
         onLoadedMetadata={() => setDur(ref.current?.duration ?? 0)}
         onEnded={() => setPlaying(false)}
         playsInline
+        preload="none"
       >
         {webmSrc && <source src={webmSrc} type="video/webm" />}
         <source src={src} type="video/mp4" />

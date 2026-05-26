@@ -234,6 +234,8 @@ const CoachingScolaire = () => {
                   src={HERO_IMG}
                   alt="Coaching scolaire à Mâcon — ON Coaching"
                   className="w-full h-full object-cover"
+                  width="1200"
+                  height="800"
                   loading="eager"
                   decoding="async"
                 />
@@ -365,6 +367,8 @@ const CoachingScolaire = () => {
                     src={COACH_PHOTO}
                     alt="Noureddine Omar — Coach certifié, ON Coaching Mâcon"
                     className="w-full h-full object-cover object-top"
+                    width="600"
+                    height="800"
                     loading="lazy"
                     decoding="async"
                   />

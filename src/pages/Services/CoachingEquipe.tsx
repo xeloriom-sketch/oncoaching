@@ -245,6 +245,8 @@ const CoachingEquipe = () => {
                 src={HERO_IMG}
                 alt="Coaching d'équipe — cohésion et performance collective — ON Coaching Mâcon"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                width="1200"
+                height="800"
                 loading="eager"
                 decoding="async"
               />
@@ -391,6 +393,8 @@ const CoachingEquipe = () => {
                   src={COACH_PHOTO}
                   alt="Noureddine Omar — Coach certifié, spécialiste coaching d'équipe — ON Coaching Mâcon"
                   className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                  width="600"
+                  height="800"
                   loading="lazy"
                   decoding="async"
                 />

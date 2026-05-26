@@ -588,6 +588,8 @@ export default function Index() {
                 src="https://dbneurofeedback.com/wp-content/uploads/2024/12/NEUROPTIMAL-1.jpg"
                 alt="Séance de neurofeedback NeurOptimal® — capteurs EEG"
                 className="w-full h-full object-cover"
+                width="800"
+                height="600"
                 loading="lazy"
                 decoding="async"
               />
@@ -630,6 +632,8 @@ export default function Index() {
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié, ONCoaching Mâcon"
                 className="w-full h-full object-cover object-top"
+                width="600"
+                height="800"
                 loading="lazy"
                 decoding="async"
               />

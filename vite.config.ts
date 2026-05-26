@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    target: "esnext",
+    target: "es2020",
     minify: "esbuild",
     cssMinify: "esbuild",
     cssCodeSplit: false,
@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => ({
     modulePreload: { polyfill: false },
     assetsInlineLimit: 4096,
     sourcemap: false,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         compact: true,
@@ -38,6 +39,11 @@ export default defineConfig(({ mode }) => ({
           "vendor-scroll":     ["lenis"],
           "vendor-datepicker": ["react-day-picker", "date-fns"],
         },
+      },
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false,
       },
     },
   },
