@@ -40,11 +40,6 @@ export default defineConfig(({ mode }) => ({
           "vendor-datepicker": ["react-day-picker", "date-fns"],
         },
       },
-      treeshake: {
-        moduleSideEffects: false,
-        propertyReadSideEffects: false,
-        unknownGlobalSideEffects: false,
-      },
     },
   },
 }));
