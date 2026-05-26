@@ -1,9 +1,10 @@
 /**
- * usePageContent — Loads page content from /public/content/*.json
+ * usePageContent — Loads page content from Supabase table `page_content`
  * Backed by React Query: data is cached for the session and never re-fetched
  * on back-navigation.
  */
 import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 
 interface UsePageContentResult<T> {
   content: T | null;
@@ -11,10 +12,15 @@ interface UsePageContentResult<T> {
   error:    string | null;
 }
 
-async function fetchJson<T>(page: string, baseUrl: string): Promise<T> {
-  const res = await fetch(`${baseUrl}content/${page}.json`);
-  if (!res.ok) throw new Error(`Impossible de charger ${page}.json (${res.status})`);
-  return res.json() as Promise<T>;
+async function fetchPageContent<T>(page: string): Promise<T> {
+  const { data, error } = await supabase
+    .from("page_content")
+    .select("content")
+    .eq("page_key", page)
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data.content as T;
 }
 
 export function usePageContent<T = Record<string, unknown>>(
@@ -22,7 +28,7 @@ export function usePageContent<T = Record<string, unknown>>(
 ): UsePageContentResult<T> {
   const { data, isPending, error } = useQuery<T, Error>({
     queryKey:  ["page-content", page],
-    queryFn:   () => fetchJson<T>(page, import.meta.env.BASE_URL ?? "/"),
+    queryFn:   () => fetchPageContent<T>(page),
     staleTime: Infinity,
   });
 

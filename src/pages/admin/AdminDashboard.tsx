@@ -18,7 +18,7 @@ import {
   ExternalLink,
   ArrowRight,
 } from "lucide-react";
-import { githubApi } from "@/lib/githubApi";
+import { supabase } from "@/lib/supabase";
 import { PAGES } from "@/lib/contentSchema";
 import { GITHUB_OWNER, GITHUB_REPO } from "@/lib/githubApi";
 import { fadeInUp, stagger, VP } from "@/lib/motion";
@@ -28,7 +28,7 @@ import { fadeInUp, stagger, VP } from "@/lib/motion";
 interface Submission {
   id: string;
   type: "contact" | "rdv";
-  date: string;
+  created_at: string;
   read: boolean;
   name: string;
   email: string;
@@ -55,17 +55,6 @@ const PAGE_ICONS: Record<string, React.ElementType> = {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
-const LS_KEY = "onc_read_ids";
-
-function getReadIds(): Set<string> {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    return raw ? new Set(JSON.parse(raw) as string[]) : new Set();
-  } catch {
-    return new Set();
-  }
-}
 
 function formatDateFR(date: Date): string {
   return date.toLocaleDateString("fr-FR", {
@@ -141,7 +130,7 @@ function MessageCard({ sub, onNavigate }: { sub: Submission; onNavigate: () => v
         >
           {isRdv ? "RDV" : "Contact"}
         </span>
-        <span className="text-xs text-slate-400">{formatShortDateFR(sub.date)}</span>
+        <span className="text-xs text-slate-400">{formatShortDateFR(sub.created_at)}</span>
       </div>
       <div>
         <p className="font-semibold text-[#1C3A52] text-sm leading-snug">{sub.name}</p>
@@ -196,46 +185,55 @@ function PageCard({
   );
 }
 
+// ── Stats state ───────────────────────────────────────────────────────────────
+
+interface DashboardStats {
+  total: number;
+  unread: number;
+  rdv: number;
+  recent: Submission[];
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [stats, setStats] = useState<DashboardStats>({ total: 0, unread: 0, rdv: 0, recent: [] });
   const [loading, setLoading] = useState(true);
 
-  // Fetch submissions
+  // Fetch stats from Supabase
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const data = (await githubApi.getRawFile("public/content/submissions.json")) as Submission[];
-        if (!cancelled) setSubmissions(Array.isArray(data) ? data : []);
+        const [
+          { count: total },
+          { count: unread },
+          { count: rdv },
+          { data: recent },
+        ] = await Promise.all([
+          supabase.from("submissions").select("*", { count: "exact", head: true }),
+          supabase.from("submissions").select("*", { count: "exact", head: true }).eq("read", false),
+          supabase.from("submissions").select("*", { count: "exact", head: true }).eq("type", "rdv"),
+          supabase.from("submissions").select("*").order("created_at", { ascending: false }).limit(3),
+        ]);
+        if (!cancelled) {
+          setStats({
+            total: total ?? 0,
+            unread: unread ?? 0,
+            rdv: rdv ?? 0,
+            recent: (recent as Submission[]) ?? [],
+          });
+        }
       } catch {
-        if (!cancelled) setSubmissions([]);
+        if (!cancelled) setStats({ total: 0, unread: 0, rdv: 0, recent: [] });
       } finally {
         if (!cancelled) setLoading(false);
       }
     })();
     return () => { cancelled = true; };
   }, []);
-
-  // ── Computed stats ────────────────────────────────────────────────────────
-
-  const readIds = getReadIds();
-
-  const totalMessages = submissions.length;
-  const unreadCount   = submissions.filter((s) => !readIds.has(s.id) && !s.read).length;
-  const rdvCount      = submissions.filter((s) => s.type === "rdv").length;
-  const pagesCount    = PAGES.length;
-
-  const recentMessages = (() => {
-    const unread = submissions.filter((s) => !readIds.has(s.id) && !s.read);
-    const source = unread.length > 0 ? unread : submissions;
-    return [...source]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 3);
-  })();
 
   const today = formatDateFR(new Date());
 
@@ -279,24 +277,24 @@ const AdminDashboard = () => {
               icon={Inbox}
               iconBg="rgba(196,144,62,0.14)"
               iconColor="#C4903E"
-              value={totalMessages}
+              value={stats.total}
               label="Messages reçus"
             />
             <StatCard
               index={1}
               icon={MailOpen}
-              iconBg={unreadCount > 0 ? "rgba(220,38,38,0.12)" : "rgba(34,197,94,0.12)"}
-              iconColor={unreadCount > 0 ? "#dc2626" : "#16a34a"}
-              value={unreadCount}
+              iconBg={stats.unread > 0 ? "rgba(220,38,38,0.12)" : "rgba(34,197,94,0.12)"}
+              iconColor={stats.unread > 0 ? "#dc2626" : "#16a34a"}
+              value={stats.unread}
               label="Non lus"
-              valueColor={unreadCount > 0 ? "#dc2626" : "#16a34a"}
+              valueColor={stats.unread > 0 ? "#dc2626" : "#16a34a"}
             />
             <StatCard
               index={2}
               icon={CalendarDays}
               iconBg="rgba(28,58,82,0.1)"
               iconColor="#1C3A52"
-              value={rdvCount}
+              value={stats.rdv}
               label="Demandes RDV"
             />
             <StatCard
@@ -304,7 +302,7 @@ const AdminDashboard = () => {
               icon={FileText}
               iconBg="rgba(100,116,139,0.1)"
               iconColor="#64748b"
-              value={pagesCount}
+              value={PAGES.length}
               label="Pages du site"
             />
           </div>
@@ -333,7 +331,7 @@ const AdminDashboard = () => {
                 style={{ borderColor: "#C4903E", borderTopColor: "transparent" }}
               />
             </div>
-          ) : recentMessages.length === 0 ? (
+          ) : stats.recent.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -349,7 +347,7 @@ const AdminDashboard = () => {
               variants={stagger}
               className="grid grid-cols-1 sm:grid-cols-3 gap-4"
             >
-              {recentMessages.map((sub) => (
+              {stats.recent.map((sub) => (
                 <motion.div key={sub.id} variants={fadeInUp}>
                   <MessageCard sub={sub} onNavigate={() => navigate("/admin/messages")} />
                 </motion.div>

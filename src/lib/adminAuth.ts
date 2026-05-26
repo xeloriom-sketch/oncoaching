@@ -1,39 +1,33 @@
-const AUTH_KEY = "onc_admin_auth";
-const TOKEN_KEY = "onc_github_token";
-const PWD_KEY = "onc_admin_pwd";
+import { supabase } from "@/lib/supabase";
 
-export const DEFAULT_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD ?? "oncoaching2024";
+const TOKEN_KEY = "onc_github_token";
 
 export const auth = {
-  login(pwd: string): boolean {
-    if (pwd === this.getPassword()) {
-      localStorage.setItem(AUTH_KEY, "1");
-      return true;
-    }
-    return false;
+  async login(email: string, password: string): Promise<{ error: string | null }> {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return { error: error?.message ?? null };
   },
 
-  logout(): void {
-    localStorage.removeItem(AUTH_KEY);
+  async logout(): Promise<void> {
+    await supabase.auth.signOut();
   },
 
-  isLoggedIn(): boolean {
-    return localStorage.getItem(AUTH_KEY) === "1";
+  async getSession() {
+    const { data } = await supabase.auth.getSession();
+    return data.session;
   },
 
+  async getUser() {
+    const { data } = await supabase.auth.getUser();
+    return data.user;
+  },
+
+  // GitHub token — still stored in localStorage (used by CMS)
   getToken(): string {
     return localStorage.getItem(TOKEN_KEY) ?? "";
   },
 
   setToken(t: string): void {
     localStorage.setItem(TOKEN_KEY, t);
-  },
-
-  getPassword(): string {
-    return localStorage.getItem(PWD_KEY) ?? DEFAULT_PASSWORD;
-  },
-
-  setPassword(p: string): void {
-    localStorage.setItem(PWD_KEY, p);
   },
 };

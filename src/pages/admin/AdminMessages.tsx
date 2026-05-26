@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { githubApi } from "@/lib/githubApi";
+import { supabase } from "@/lib/supabase";
 import type { Submission } from "@/types/admin";
 import { fadeInUp, staggerFast, pulseDot } from "@/lib/motion";
 
@@ -8,50 +8,35 @@ import { fadeInUp, staggerFast, pulseDot } from "@/lib/motion";
 const NAVY = "#1C3A52";
 const GOLD = "#C4903E";
 
-// ─── LS key ───────────────────────────────────────────────────────────────────
-const LS_KEY = "onc_read_ids";
-
-function loadReadIds(): Set<string> {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (!raw) return new Set();
-    return new Set(JSON.parse(raw) as string[]);
-  } catch {
-    return new Set();
-  }
-}
-
-function saveReadIds(ids: Set<string>) {
-  localStorage.setItem(LS_KEY, JSON.stringify([...ids]));
-}
-
 // ─── Date helpers ──────────────────────────────────────────────────────────────
-/** "2025-01-12 14:30:00"  →  "12 jan. 2025 · 14h30" */
+/** ISO string  →  "12 jan. 2025 · 14h30" */
 function formatListDate(raw: string): string {
-  const [datePart, timePart] = raw.split(" ");
-  if (!datePart) return raw;
-  const [y, m, d] = datePart.split("-").map(Number);
-  const dt = new Date(y, m - 1, d);
-  const dateStr = dt.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" });
-  const time = timePart ? timePart.slice(0, 5).replace(":", "h") : "";
-  return time ? `${dateStr} · ${time}` : dateStr;
+  if (!raw) return raw;
+  const dt = new Date(raw);
+  if (isNaN(dt.getTime())) return raw;
+  const dateStr = dt.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  const time = `${String(dt.getHours()).padStart(2, "0")}h${String(dt.getMinutes()).padStart(2, "0")}`;
+  return `${dateStr} · ${time}`;
 }
 
-/** "2025-01-12 14:30:00"  →  "Dimanche 12 janvier 2025 à 14h30" */
+/** ISO string  →  "Dimanche 12 janvier 2025 à 14h30" */
 function formatDetailDate(raw: string): string {
-  const [datePart, timePart] = raw.split(" ");
-  if (!datePart) return raw;
-  const [y, m, d] = datePart.split("-").map(Number);
-  const dt = new Date(y, m - 1, d);
+  if (!raw) return raw;
+  const dt = new Date(raw);
+  if (isNaN(dt.getTime())) return raw;
   const dateStr = dt.toLocaleDateString("fr-FR", {
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
   });
-  const time = timePart ? timePart.slice(0, 5).replace(":", "h") : "";
+  const time = `${String(dt.getHours()).padStart(2, "0")}h${String(dt.getMinutes()).padStart(2, "0")}`;
   const capitalized = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-  return time ? `${capitalized} à ${time}` : capitalized;
+  return `${capitalized} à ${time}`;
 }
 
 /** "2025-01-12"  →  "Lundi 12 janvier 2025" */
@@ -76,7 +61,7 @@ function buildMailto(s: Submission): string {
     return `mailto:${s.email}?subject=${subject}&body=${body}`;
   } else {
     const subject = encodeURIComponent("Confirmation de votre demande de rendez-vous");
-    const rdvDate = s.preferredDate ? formatRdvDate(s.preferredDate) : "";
+    const rdvDate = s.preferred_date ? formatRdvDate(s.preferred_date) : "";
     const body = encodeURIComponent(
       `Bonjour ${s.name},\n\nNous avons bien reçu votre demande de rendez-vous pour le ${rdvDate}.\n\n`
     );
@@ -169,13 +154,12 @@ const TypeBadge = ({ type, size = "sm" }: { type: "contact" | "rdv"; size?: "sm"
 // ─── Liste item ───────────────────────────────────────────────────────────────
 interface ListItemProps {
   sub: Submission;
-  isRead: boolean;
   isSelected: boolean;
   onClick: () => void;
 }
 
-const ListItem = ({ sub, isRead, isSelected, onClick }: ListItemProps) => {
-  const unread = !isRead;
+const ListItem = ({ sub, isSelected, onClick }: ListItemProps) => {
+  const unread = !sub.read;
   return (
     <motion.button
       variants={fadeInUp}
@@ -199,7 +183,9 @@ const ListItem = ({ sub, isRead, isSelected, onClick }: ListItemProps) => {
           )}
           <TypeBadge type={sub.type} />
         </div>
-        <span className="text-[11px] text-slate-400 flex-shrink-0">{formatListDate(sub.date)}</span>
+        <span className="text-[11px] text-slate-400 flex-shrink-0">
+          {formatListDate(sub.created_at)}
+        </span>
       </div>
 
       {/* Name */}
@@ -255,7 +241,7 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
         {/* Badge + date */}
         <div className="flex items-center gap-3 mb-3">
           <TypeBadge type={sub.type} size="md" />
-          <span className="text-xs text-slate-400">{formatDetailDate(sub.date)}</span>
+          <span className="text-xs text-slate-400">{formatDetailDate(sub.created_at)}</span>
         </div>
 
         {/* Expéditeur */}
@@ -346,7 +332,7 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
               </label>
               <div className="space-y-2">
                 {/* Créneau 1 */}
-                {sub.preferredDate && (
+                {sub.preferred_date && (
                   <div
                     className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 rounded-xl p-3"
                     style={{ backgroundColor: `${GOLD}18` }}
@@ -358,31 +344,31 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
                       1er choix
                     </span>
                     <span className="text-sm font-semibold text-slate-700">
-                      {formatRdvDate(sub.preferredDate)}
+                      {formatRdvDate(sub.preferred_date)}
                     </span>
-                    {sub.preferredTime && (
+                    {sub.preferred_time && (
                       <span
                         className="text-sm font-bold"
                         style={{ color: GOLD }}
                       >
-                        {sub.preferredTime}
+                        {sub.preferred_time}
                       </span>
                     )}
                   </div>
                 )}
 
                 {/* Créneau 2 */}
-                {sub.preferredDate2 && (
+                {sub.preferred_date2 && (
                   <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 bg-slate-100 rounded-xl p-3">
                     <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
                       2e choix
                     </span>
                     <span className="text-sm font-semibold text-slate-600">
-                      {formatRdvDate(sub.preferredDate2)}
+                      {formatRdvDate(sub.preferred_date2)}
                     </span>
-                    {sub.preferredTime2 && (
+                    {sub.preferred_time2 && (
                       <span className="text-sm font-bold text-slate-500">
-                        {sub.preferredTime2}
+                        {sub.preferred_time2}
                       </span>
                     )}
                   </div>
@@ -390,13 +376,13 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
               </div>
             </section>
 
-            {sub.sessionFormat && (
+            {sub.session_format && (
               <section>
                 <label className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2 block">
                   Format
                 </label>
                 <span className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-slate-100 text-slate-700">
-                  {sub.sessionFormat}
+                  {sub.session_format}
                 </span>
               </section>
             )}
@@ -438,10 +424,10 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
 type Filter = "all" | "contact" | "rdv" | "unread";
 
 const FILTERS: { key: Filter; label: string }[] = [
-  { key: "all",     label: "Tous"     },
-  { key: "contact", label: "Contact"  },
-  { key: "rdv",     label: "RDV"      },
-  { key: "unread",  label: "Non lus"  },
+  { key: "all",     label: "Tous"    },
+  { key: "contact", label: "Contact" },
+  { key: "rdv",     label: "RDV"     },
+  { key: "unread",  label: "Non lus" },
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -450,7 +436,6 @@ export default function AdminMessages() {
   const [loading, setLoading]         = useState(true);
   const [filter, setFilter]           = useState<Filter>("all");
   const [selected, setSelected]       = useState<Submission | null>(null);
-  const [readIds, setReadIds]         = useState<Set<string>>(loadReadIds);
   const [mobileView, setMobileView]   = useState<"list" | "detail">("list");
 
   // ── Fetch submissions ──────────────────────────────────────────────────────
@@ -458,43 +443,42 @@ export default function AdminMessages() {
     let cancelled = false;
     setLoading(true);
 
-    githubApi
-      .getRawFile("public/content/submissions.json")
-      .then((data) => {
+    supabase
+      .from("submissions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data, error }) => {
         if (cancelled) return;
-        const arr = (Array.isArray(data) ? data : []) as Submission[];
-        // Sort newest first
-        arr.sort((a, b) => (a.date < b.date ? 1 : -1));
-        setSubmissions(arr);
-      })
-      .catch((err: Error & { status?: number }) => {
-        if (cancelled) return;
-        // 404 → empty inbox
-        if (err.status === 404 || err.message?.includes("404")) {
+        if (error) {
+          console.error("AdminMessages: fetch error", error);
           setSubmissions([]);
         } else {
-          console.error("AdminMessages: fetch error", err);
-          setSubmissions([]);
+          setSubmissions((data ?? []) as Submission[]);
         }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
+        setLoading(false);
       });
 
     return () => { cancelled = true; };
   }, []);
 
+  // ── Mark as read via Supabase ──────────────────────────────────────────────
+  async function markRead(s: Submission) {
+    if (s.read) return;
+
+    await supabase
+      .from("submissions")
+      .update({ read: true })
+      .eq("id", s.id);
+
+    // Update local state
+    setSubmissions((prev) =>
+      prev.map((sub) => (sub.id === s.id ? { ...sub, read: true } : sub))
+    );
+    // Also update selected if it's the same submission
+    setSelected((prev) => (prev?.id === s.id ? { ...prev, read: true } : prev));
+  }
+
   // ── Helpers ────────────────────────────────────────────────────────────────
-  const isRead = (s: Submission) => s.read || readIds.has(s.id);
-
-  const markRead = (s: Submission) => {
-    if (isRead(s)) return;
-    const next = new Set(readIds);
-    next.add(s.id);
-    setReadIds(next);
-    saveReadIds(next);
-  };
-
   const handleSelect = (s: Submission) => {
     markRead(s);
     setSelected(s);
@@ -509,11 +493,11 @@ export default function AdminMessages() {
   const filtered = submissions.filter((s) => {
     if (filter === "contact") return s.type === "contact";
     if (filter === "rdv")     return s.type === "rdv";
-    if (filter === "unread")  return !isRead(s);
+    if (filter === "unread")  return !s.read;
     return true;
   });
 
-  const unreadCount = submissions.filter((s) => !isRead(s)).length;
+  const unreadCount = submissions.filter((s) => !s.read).length;
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
@@ -596,7 +580,6 @@ export default function AdminMessages() {
                 <ListItem
                   key={s.id}
                   sub={s}
-                  isRead={isRead(s)}
                   isSelected={selected?.id === s.id}
                   onClick={() => handleSelect(s)}
                 />

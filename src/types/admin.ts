@@ -1,20 +1,21 @@
 export interface Submission {
   id: string;
   type: "contact" | "rdv";
-  date: string; // "YYYY-MM-DD HH:MM:SS"
+  /** ISO timestamp from Supabase — "2025-01-12T14:30:00.000Z" */
+  created_at: string;
   read: boolean;
   name: string;
   email: string;
-  phone?: string;
-  service?: string;
+  phone?: string | null;
+  service?: string | null;
   // contact:
-  subject?: string;
-  message?: string;
+  subject?: string | null;
+  message?: string | null;
   // rdv:
-  preferredDate?: string;
-  preferredTime?: string;
-  preferredDate2?: string;
-  preferredTime2?: string;
-  sessionFormat?: string;
-  note?: string;
+  preferred_date?: string | null;
+  preferred_time?: string | null;
+  preferred_date2?: string | null;
+  preferred_time2?: string | null;
+  session_format?: string | null;
+  note?: string | null;
 }

@@ -1,19 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Lock,
-  Eye,
-  EyeOff,
-  Key,
+  User,
+  Database,
   Info,
   LogOut,
-  Check,
   ExternalLink,
-  AlertCircle,
+  Check,
+  X,
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import { auth } from "@/lib/adminAuth";
-import { GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH } from "@/lib/githubApi";
+import { PAGES } from "@/lib/contentSchema";
 import { useToast } from "@/hooks/use-toast";
 import { fadeInUp, stagger, VP } from "@/lib/motion";
 
@@ -21,6 +20,7 @@ import { fadeInUp, stagger, VP } from "@/lib/motion";
 
 const NAVY = "#1C3A52";
 const GOLD = "#C4903E";
+const BONE = "#F4F1EC";
 
 // ── Section wrapper ───────────────────────────────────────────────────────────
 
@@ -57,272 +57,236 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Input ─────────────────────────────────────────────────────────────────────
+// ── Compte Section ────────────────────────────────────────────────────────────
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  error?: string;
-  suffix?: React.ReactNode;
-}
+function CompteSection() {
+  const [email, setEmail] = useState<string>("…");
 
-function SettingsInput({ label, error, suffix, id, ...props }: InputProps) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          id={id}
-          {...props}
-          className="w-full border rounded-xl px-4 py-2.5 text-sm outline-none transition-all pr-12"
-          style={{
-            borderColor: error ? "#ef4444" : "#e2e8f0",
-            color: NAVY,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ["--tw-ring-color" as any]: `${GOLD}4d`,
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = GOLD;
-            e.currentTarget.style.boxShadow = `0 0 0 3px ${GOLD}26`;
-            props.onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = error ? "#ef4444" : "#e2e8f0";
-            e.currentTarget.style.boxShadow = "none";
-            props.onBlur?.(e);
-          }}
-        />
-        {suffix && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2">{suffix}</div>
-        )}
-      </div>
-      {error && <p className="text-xs text-red-500">{error}</p>}
-    </div>
-  );
-}
-
-// ── Button ────────────────────────────────────────────────────────────────────
-
-function PrimaryBtn({
-  children,
-  onClick,
-  disabled,
-  type = "button",
-  color = GOLD,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  type?: "button" | "submit";
-  color?: string;
-}) {
-  return (
-    <motion.button
-      type={type}
-      onClick={onClick}
-      disabled={disabled}
-      whileHover={disabled ? {} : { scale: 1.03, transition: { type: "spring", stiffness: 450, damping: 20 } }}
-      whileTap={disabled ? {} : { scale: 0.97 }}
-      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-opacity disabled:opacity-50"
-      style={{ background: color }}
-    >
-      {children}
-    </motion.button>
-  );
-}
-
-// ── Password Section ──────────────────────────────────────────────────────────
-
-function PasswordSection() {
-  const { toast } = useToast();
-  const [current, setCurrent]       = useState("");
-  const [next, setNext]             = useState("");
-  const [confirm, setConfirm]       = useState("");
-  const [errors, setErrors]         = useState<Record<string, string>>({});
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNext, setShowNext]       = useState(false);
-
-  const validate = (): boolean => {
-    const e: Record<string, string> = {};
-    if (current !== auth.getPassword()) e.current = "Mot de passe actuel incorrect";
-    if (next.length < 6) e.next = "Le nouveau mot de passe doit contenir au moins 6 caractères";
-    if (next !== confirm) e.confirm = "Les mots de passe ne correspondent pas";
-    setErrors(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-    auth.setPassword(next);
-    toast({ title: "Mot de passe mis à jour", description: "Votre nouveau mot de passe est actif." });
-    setCurrent(""); setNext(""); setConfirm(""); setErrors({});
-  };
-
-  const eyeToggle = (show: boolean, set: (v: boolean) => void) => (
-    <button
-      type="button"
-      onClick={() => set(!show)}
-      className="text-slate-400 hover:text-slate-600 transition-colors"
-    >
-      {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-    </button>
-  );
+  useEffect(() => {
+    auth.getUser().then((user) => {
+      if (user?.email) setEmail(user.email);
+    });
+  }, []);
 
   return (
     <Section delay={0}>
       <SectionTitle>
         <span className="flex items-center gap-2">
-          <Lock className="w-4 h-4" style={{ color: GOLD }} />
-          Changer le mot de passe
+          <User className="w-4 h-4" style={{ color: GOLD }} />
+          Compte
         </span>
       </SectionTitle>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
-        <SettingsInput
-          id="current-password"
-          label="Mot de passe actuel"
-          type={showCurrent ? "text" : "password"}
-          value={current}
-          onChange={(e) => setCurrent(e.target.value)}
-          autoComplete="current-password"
-          error={errors.current}
-          suffix={eyeToggle(showCurrent, setShowCurrent)}
-        />
-        <SettingsInput
-          id="new-password"
-          label="Nouveau mot de passe"
-          type={showNext ? "text" : "password"}
-          value={next}
-          onChange={(e) => setNext(e.target.value)}
-          autoComplete="new-password"
-          error={errors.next}
-          suffix={eyeToggle(showNext, setShowNext)}
-        />
-        <SettingsInput
-          id="confirm-password"
-          label="Confirmer le mot de passe"
-          type="password"
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value)}
-          autoComplete="new-password"
-          error={errors.confirm}
-        />
-        <div className="pt-1">
-          <PrimaryBtn type="submit" color={NAVY}>
-            <Check className="w-4 h-4" />
-            Mettre à jour le mot de passe
-          </PrimaryBtn>
+      <div className="flex flex-col gap-4 max-w-md">
+        {/* Email */}
+        <div className="rounded-xl px-4 py-3" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Email</p>
+          <p className="text-sm font-medium" style={{ color: NAVY }}>{email}</p>
         </div>
-      </form>
-    </Section>
-  );
-}
 
-// ── GitHub Token Section ──────────────────────────────────────────────────────
-
-function GitHubTokenSection() {
-  const { toast } = useToast();
-  const [token, setToken]       = useState(auth.getToken());
-  const [showToken, setShowToken] = useState(false);
-  const hasToken = token.trim().length > 0;
-
-  const handleSave = () => {
-    auth.setToken(token.trim());
-    toast({ title: "Token GitHub mis à jour", description: "Les modifications seront sauvegardées via ce token." });
-  };
-
-  return (
-    <Section delay={0.06}>
-      <SectionTitle>
-        <span className="flex items-center gap-2">
-          <Key className="w-4 h-4" style={{ color: GOLD }} />
-          GitHub — Personal Access Token
-        </span>
-      </SectionTitle>
-
-      <div className="flex flex-col gap-4 max-w-xl">
-        {/* Description */}
-        <div className="rounded-xl px-4 py-3 text-sm text-slate-600 leading-relaxed" style={{ background: "rgba(196,144,62,0.07)", border: `1px solid ${GOLD}30` }}>
-          <p>Ce token permet de sauvegarder les modifications de contenu directement dans votre repository GitHub.</p>
+        {/* Password hint */}
+        <div
+          className="rounded-xl px-4 py-3 text-sm text-slate-600 leading-relaxed"
+          style={{ background: `rgba(196,144,62,0.07)`, border: `1px solid ${GOLD}30` }}
+        >
+          <p>Pour changer votre mot de passe, utilisez le Dashboard Supabase.</p>
           <a
-            href="https://github.com/settings/tokens/new?scopes=repo&description=ON%20Coaching%20CMS"
+            href="https://supabase.com/dashboard"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 mt-2 font-semibold hover:underline"
             style={{ color: GOLD }}
           >
-            Comment créer un token <ExternalLink className="w-3 h-3" />
+            Ouvrir Supabase Dashboard <ExternalLink className="w-3 h-3" />
           </a>
-        </div>
-
-        {/* Status badge */}
-        <div className="flex items-center gap-2">
-          {hasToken ? (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
-              <Check className="w-3 h-3" />
-              Configuré
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-600 border border-red-200">
-              <AlertCircle className="w-3 h-3" />
-              Non configuré
-            </span>
-          )}
-          {!hasToken && (
-            <p className="text-xs text-slate-400">Sans token, les modifications ne pourront pas être sauvegardées.</p>
-          )}
-        </div>
-
-        {/* Token input */}
-        <SettingsInput
-          id="github-token"
-          label="Personal Access Token"
-          type={showToken ? "text" : "password"}
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
-          placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-          autoComplete="off"
-          suffix={
-            <button
-              type="button"
-              onClick={() => setShowToken(!showToken)}
-              className="text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          }
-        />
-
-        {/* Scopes info */}
-        <div className="text-xs text-slate-400 flex flex-col gap-1">
-          <p className="font-semibold text-slate-500">Permissions requises :</p>
-          <ul className="list-disc list-inside space-y-0.5 ml-1">
-            <li><code className="bg-slate-100 px-1 rounded text-slate-600">repo</code> — lecture et écriture des fichiers</li>
-          </ul>
-        </div>
-
-        <div className="pt-1">
-          <PrimaryBtn onClick={handleSave} color={GOLD}>
-            <Check className="w-4 h-4" />
-            Mettre à jour le token
-          </PrimaryBtn>
         </div>
       </div>
     </Section>
   );
 }
 
-// ── Repository Info ───────────────────────────────────────────────────────────
+// ── Seed result item ──────────────────────────────────────────────────────────
 
-function RepoInfoSection() {
-  const repoUrl = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}`;
+interface SeedResult {
+  page: string;
+  ok: boolean;
+}
 
-  const Row = ({ label, value }: { label: string; value: string }) => (
+// ── Init Content Section ──────────────────────────────────────────────────────
+
+function InitContentSection() {
+  const { toast } = useToast();
+  const [importing, setImporting] = useState(false);
+  const [results, setResults] = useState<SeedResult[]>([]);
+  const [done, setDone] = useState(false);
+
+  const total = PAGES.length;
+  const imported = results.filter((r) => r.ok).length;
+
+  const handleImport = async () => {
+    setImporting(true);
+    setResults([]);
+    setDone(false);
+
+    const newResults = await Promise.all(
+      PAGES.map(async (page) => {
+        try {
+          const json = await fetch(
+            `${import.meta.env.BASE_URL}content/${page.key}.json`
+          ).then((r) => r.json());
+          const { error } = await supabase
+            .from("page_content")
+            .upsert({ page_key: page.key, content: json }, { onConflict: "page_key" });
+          return { page: page.key, ok: !error };
+        } catch {
+          return { page: page.key, ok: false };
+        }
+      })
+    );
+
+    setResults(newResults);
+    setDone(true);
+    setImporting(false);
+
+    const failed = newResults.filter((r) => !r.ok).length;
+    if (failed === 0) {
+      toast({ title: "Import réussi", description: `${total} pages importées dans Supabase.` });
+    } else {
+      toast({
+        title: "Import partiel",
+        description: `${imported} pages réussies, ${failed} erreur(s).`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const progressPct = done || results.length > 0 ? Math.round((imported / total) * 100) : 0;
+
+  // Page label lookup
+  const pageLabelMap = Object.fromEntries(PAGES.map((p) => [p.key, p.label]));
+
+  return (
+    <Section delay={0.06}>
+      <SectionTitle>
+        <span className="flex items-center gap-2">
+          <Database className="w-4 h-4" style={{ color: GOLD }} />
+          Initialiser le contenu
+        </span>
+      </SectionTitle>
+
+      <div className="flex flex-col gap-5 max-w-xl">
+        {/* Description */}
+        <p className="text-sm text-slate-600 leading-relaxed">
+          Charge les textes actuels de chaque page depuis les fichiers JSON et les enregistre dans Supabase.{" "}
+          <span className="font-semibold" style={{ color: NAVY }}>À faire une seule fois au démarrage.</span>
+        </p>
+
+        {/* Import button */}
+        <div>
+          <motion.button
+            type="button"
+            onClick={handleImport}
+            disabled={importing}
+            whileHover={importing ? {} : { scale: 1.03, transition: { type: "spring", stiffness: 450, damping: 20 } }}
+            whileTap={importing ? {} : { scale: 0.97 }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white transition-opacity disabled:opacity-60"
+            style={{ background: GOLD }}
+          >
+            {importing ? (
+              <>
+                <span
+                  className="w-4 h-4 border-2 border-t-transparent rounded-full animate-spin"
+                  style={{ borderColor: "white", borderTopColor: "transparent" }}
+                />
+                Import en cours…
+              </>
+            ) : (
+              <>
+                <Database className="w-4 h-4" />
+                Importer les {total} pages
+              </>
+            )}
+          </motion.button>
+        </div>
+
+        {/* Progress bar */}
+        {(importing || done) && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <span>{imported} / {total} importées</span>
+              <span>{progressPct}%</span>
+            </div>
+            <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${progressPct}%` }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="h-full rounded-full"
+                style={{ background: progressPct === 100 ? "#16a34a" : GOLD }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Results list */}
+        {results.length > 0 && (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.04 } } }}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2"
+          >
+            {results.map((r) => (
+              <motion.div
+                key={r.page}
+                variants={fadeInUp}
+                className="flex items-center gap-2.5 rounded-xl px-3 py-2"
+                style={{
+                  background: r.ok ? "rgba(22,163,74,0.07)" : "rgba(220,38,38,0.07)",
+                  border: `1px solid ${r.ok ? "rgba(22,163,74,0.2)" : "rgba(220,38,38,0.2)"}`,
+                }}
+              >
+                {r.ok ? (
+                  <Check className="w-3.5 h-3.5 flex-shrink-0 text-green-600" />
+                ) : (
+                  <X className="w-3.5 h-3.5 flex-shrink-0 text-red-500" />
+                )}
+                <span
+                  className="text-xs font-medium truncate"
+                  style={{ color: r.ok ? "#15803d" : "#dc2626" }}
+                >
+                  {pageLabelMap[r.page] ?? r.page}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </div>
+    </Section>
+  );
+}
+
+// ── Info Section ──────────────────────────────────────────────────────────────
+
+function InfoSection() {
+  const Row = ({ label, value, href }: { label: string; value: string; href?: string }) => (
     <div className="flex items-start gap-2 py-2.5 border-b border-slate-100 last:border-0">
-      <span className="w-28 text-xs font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0 pt-0.5">{label}</span>
-      <span className="text-sm text-slate-700 font-medium">{value}</span>
+      <span className="w-32 text-xs font-semibold text-slate-400 uppercase tracking-wide flex-shrink-0 pt-0.5">
+        {label}
+      </span>
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-medium hover:underline inline-flex items-center gap-1"
+          style={{ color: NAVY }}
+        >
+          {value} <ExternalLink className="w-3 h-3 opacity-60" />
+        </a>
+      ) : (
+        <span className="text-sm text-slate-700 font-medium">{value}</span>
+      )}
     </div>
   );
 
@@ -331,26 +295,27 @@ function RepoInfoSection() {
       <SectionTitle>
         <span className="flex items-center gap-2">
           <Info className="w-4 h-4" style={{ color: GOLD }} />
-          Informations du repository
+          Informations
         </span>
       </SectionTitle>
 
       <div className="rounded-xl overflow-hidden" style={{ background: "#f8fafc", border: "1px solid #e2e8f0" }}>
         <div className="p-4 flex flex-col">
-          <Row label="Repository" value={`${GITHUB_OWNER}/${GITHUB_REPO}`} />
-          <Row label="Branche" value={GITHUB_BRANCH} />
-          <Row label="URL du site" value="https://www.oncoaching.fr" />
-        </div>
-        <div className="px-4 py-3 border-t border-slate-100 bg-slate-50 flex justify-end">
-          <a
-            href={repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors hover:underline"
-            style={{ color: NAVY }}
-          >
-            Ouvrir sur GitHub <ExternalLink className="w-3 h-3" />
-          </a>
+          <Row
+            label="Supabase URL"
+            value="suikwvrlfyupzpzhqoln.supabase.co"
+            href="https://supabase.com/dashboard/project/suikwvrlfyupzpzhqoln"
+          />
+          <Row
+            label="Site"
+            value="xeloriom-sketch.github.io/oncoaching"
+            href="https://xeloriom-sketch.github.io/oncoaching/"
+          />
+          <Row
+            label="Repo GitHub"
+            value="xeloriom-sketch/oncoaching"
+            href="https://github.com/xeloriom-sketch/oncoaching"
+          />
         </div>
       </div>
     </Section>
@@ -362,8 +327,8 @@ function RepoInfoSection() {
 function DangerSection() {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    auth.logout();
+  const handleLogout = async () => {
+    await auth.logout();
     navigate("/admin/login");
   };
 
@@ -403,7 +368,7 @@ function DangerSection() {
 
 const AdminSettings = () => {
   return (
-    <div className="min-h-screen" style={{ background: "#F4F1EC" }}>
+    <div className="min-h-screen" style={{ background: BONE }}>
       <div className="max-w-3xl mx-auto px-5 md:px-10 py-10 md:py-14 flex flex-col gap-6">
 
         {/* Header */}
@@ -421,14 +386,14 @@ const AdminSettings = () => {
             Paramètres
           </motion.h1>
           <motion.p variants={fadeInUp} className="text-slate-500 text-sm">
-            Sécurité, token GitHub et configuration de l'espace admin.
+            Compte Supabase et configuration de l'espace admin.
           </motion.p>
         </motion.div>
 
         {/* Sections */}
-        <PasswordSection />
-        <GitHubTokenSection />
-        <RepoInfoSection />
+        <CompteSection />
+        <InitContentSection />
+        <InfoSection />
         <DangerSection />
 
       </div>

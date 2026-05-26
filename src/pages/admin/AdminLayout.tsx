@@ -6,11 +6,12 @@ import {
   Inbox,
   Settings,
   LogOut,
+  Loader2,
 } from "lucide-react";
+import type { Session } from "@supabase/supabase-js";
 import { LogoMark } from "@/components/Logo";
 import { auth } from "@/lib/adminAuth";
-import { githubApi } from "@/lib/githubApi";
-import type { Submission } from "@/types/admin";
+import { supabase } from "@/lib/supabase";
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
@@ -20,30 +21,54 @@ const NAV_ITEMS = [
   { icon: Settings,        label: "Paramètres",  path: "/admin/settings"  },
 ];
 
+// ─── FullScreenSpinner ────────────────────────────────────────────────────────
+function FullScreenSpinner() {
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ backgroundColor: "#F4F1EC" }}
+    >
+      <Loader2
+        size={32}
+        className="animate-spin"
+        style={{ color: "#1C3A52" }}
+      />
+    </div>
+  );
+}
+
 // ─── AdminLayout ──────────────────────────────────────────────────────────────
 const AdminLayout = () => {
   const location = useLocation();
+  const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Fetch unread submissions count on mount
+  // ── Session guard ──────────────────────────────────────────────────────────
   useEffect(() => {
-    githubApi
-      .getRawFile("public/content/submissions.json")
-      .then((data) => {
-        const submissions = data as Submission[];
-        if (Array.isArray(submissions)) {
-          setUnreadCount(submissions.filter((s) => !s.read).length);
-        }
-      })
-      .catch(() => {
-        // silently ignore — file may not exist yet
-      });
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  if (!auth.isLoggedIn()) {
-    return <Navigate to="/admin/login" replace />;
-  }
+  // ── Unread count from Supabase ─────────────────────────────────────────────
+  useEffect(() => {
+    if (!session) return;
+    supabase
+      .from("submissions")
+      .select("*", { count: "exact", head: true })
+      .eq("read", false)
+      .then(({ count }) => {
+        if (typeof count === "number") setUnreadCount(count);
+      });
+  }, [session]);
+
+  if (session === undefined) return <FullScreenSpinner />;
+  if (session === null) return <Navigate to="/admin/login" replace />;
 
   const currentLabel =
     NAV_ITEMS.find((item) =>
@@ -51,6 +76,11 @@ const AdminLayout = () => {
         ? location.pathname === "/admin"
         : location.pathname.startsWith(item.path)
     )?.label ?? "Admin";
+
+  const handleLogout = async () => {
+    await auth.logout();
+    window.location.href = "/admin/login";
+  };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#F4F1EC" }}>
@@ -128,10 +158,7 @@ const AdminLayout = () => {
         <div className="px-4 py-5 border-t border-white/10">
           <p className="text-xs text-white/40 mb-3 truncate">ON Coaching</p>
           <button
-            onClick={() => {
-              auth.logout();
-              window.location.href = "/admin/login";
-            }}
+            onClick={handleLogout}
             className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors w-full"
           >
             <LogOut size={16} />
@@ -237,10 +264,7 @@ const AdminLayout = () => {
             </nav>
             <div className="px-4 py-5 border-t border-white/10">
               <button
-                onClick={() => {
-                  auth.logout();
-                  window.location.href = "/admin/login";
-                }}
+                onClick={handleLogout}
                 className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors"
               >
                 <LogOut size={16} />

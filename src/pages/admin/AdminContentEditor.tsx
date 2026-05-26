@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Save, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
-import { auth } from "@/lib/adminAuth";
-import { githubApi } from "@/lib/githubApi";
+import { ArrowLeft, ExternalLink, Save, Loader2, AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import { getPageDef } from "@/lib/contentSchema";
 import type { FieldDef } from "@/lib/contentSchema";
 import { useToast } from "@/hooks/use-toast";
@@ -88,81 +87,6 @@ function FieldSkeleton() {
   );
 }
 
-// ─── TokenPromptDialog ────────────────────────────────────────────────────────
-interface TokenPromptProps {
-  onClose: () => void;
-  onSaved: () => void;
-}
-
-function TokenPromptDialog({ onClose, onSaved }: TokenPromptProps) {
-  const [value, setValue] = useState("");
-
-  function handleSave() {
-    if (!value.trim()) return;
-    (auth as unknown as { setToken: (t: string) => void }).setToken(value.trim());
-    onSaved();
-    onClose();
-  }
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4"
-      >
-        <h2 className="text-lg font-bold text-[#1C3A52]">
-          Configurer le token GitHub
-        </h2>
-        <p className="text-sm text-slate-600 leading-relaxed">
-          Pour sauvegarder, vous avez besoin d'un Personal Access Token GitHub
-          avec les droits{" "}
-          <code className="bg-slate-100 px-1 rounded text-xs">repo</code>.
-          Créez-en un sur{" "}
-          <a
-            href="https://github.com/settings/tokens/new?scopes=repo&description=ON+Coaching+CMS"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#C4903E] underline hover:text-[#b07e34]"
-          >
-            github.com/settings/tokens
-          </a>
-          .
-        </p>
-
-        <input
-          type="password"
-          placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") handleSave(); }}
-          className="w-full h-10 px-3 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] font-mono"
-        />
-
-        <div className="flex justify-end gap-2 pt-1">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 text-sm text-slate-500 hover:text-slate-700 transition-colors"
-          >
-            Annuler
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={!value.trim()}
-            className="px-5 py-2 rounded-full bg-[#C4903E] text-white text-sm font-medium hover:bg-[#b07e34] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            Enregistrer
-          </button>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
-
 // ─── AdminContentEditor ───────────────────────────────────────────────────────
 export default function AdminContentEditor() {
   const { page = "" } = useParams<{ page: string }>();
@@ -175,18 +99,15 @@ export default function AdminContentEditor() {
   const [fields, setFields] = useState<Record<string, string>>({});
   const [originalFields, setOriginalFields] = useState<Record<string, string>>({});
   const [originalJson, setOriginalJson] = useState<unknown>(null);
-  const [originalSha, setOriginalSha] = useState<string>("");
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [tokenPrompt, setTokenPrompt] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [notSeeded, setNotSeeded] = useState(false);
+  const [initializing, setInitializing] = useState(false);
 
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // ── Token ──────────────────────────────────────────────────────────────────
-  const token = auth.isLoggedIn() ? auth.getToken() : "";
 
   // ── Fetch on mount ─────────────────────────────────────────────────────────
   useEffect(() => {
@@ -195,30 +116,74 @@ export default function AdminContentEditor() {
     async function fetchContent() {
       setLoading(true);
       setError(null);
-      try {
-        const { content, sha } = await githubApi.getFile(
-          `public/content/${page}.json`,
-          token
-        );
-        const flat = flattenJson(content);
-        setFields(flat);
-        setOriginalFields(flat);
-        setOriginalJson(content);
-        setOriginalSha(sha);
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? `Impossible de charger le fichier : ${err.message}. Vérifiez votre token GitHub.`
-            : "Erreur inconnue lors du chargement."
-        );
-      } finally {
+      setNotSeeded(false);
+
+      const { data, error: fetchError } = await supabase
+        .from("page_content")
+        .select("content")
+        .eq("page_key", page)
+        .single();
+
+      if (fetchError) {
+        // PGRST116 = no rows found
+        if (fetchError.code === "PGRST116") {
+          setNotSeeded(true);
+        } else {
+          setError(`Impossible de charger la page : ${fetchError.message}`);
+        }
         setLoading(false);
+        return;
       }
+
+      const content = data.content as Record<string, unknown>;
+      const flat = flattenJson(content);
+      setFields(flat);
+      setOriginalFields(flat);
+      setOriginalJson(content);
+      setLoading(false);
     }
 
     fetchContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, pageDef]);
+
+  // ── Initialize page from JSON ──────────────────────────────────────────────
+  async function handleInitialize() {
+    setInitializing(true);
+    setError(null);
+
+    try {
+      const json = await fetch(
+        `${import.meta.env.BASE_URL}content/${page}.json`
+      ).then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json() as Promise<Record<string, unknown>>;
+      });
+
+      const { error: upsertError } = await supabase
+        .from("page_content")
+        .upsert({ page_key: page, content: json });
+
+      if (upsertError) throw new Error(upsertError.message);
+
+      const flat = flattenJson(json);
+      setFields(flat);
+      setOriginalFields(flat);
+      setOriginalJson(json);
+      setNotSeeded(false);
+      toast({
+        title: "Page initialisée",
+        description: `"${pageDef?.label}" a été chargée depuis le JSON public.`,
+      });
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Erreur lors de l'initialisation.";
+      setError(msg);
+      toast({ title: "Erreur", description: msg, variant: "destructive" });
+    } finally {
+      setInitializing(false);
+    }
+  }
 
   // ── Field change ───────────────────────────────────────────────────────────
   function handleChange(key: string, value: string) {
@@ -231,43 +196,35 @@ export default function AdminContentEditor() {
   async function handleSave() {
     if (!dirty || saving) return;
 
-    if (!token) {
-      setTokenPrompt(true);
-      return;
-    }
-
     setSaving(true);
     setError(null);
 
-    try {
-      const updated = unflattenJson(fields, originalJson);
-      const { sha } = await githubApi.updateFile(
-        `public/content/${page}.json`,
-        updated,
-        originalSha,
-        token,
-        `Admin : mise à jour du contenu — ${pageDef?.label ?? page}`
-      );
-      setOriginalSha(sha);
-      setOriginalFields({ ...fields });
-      setDirty(false);
-      setSuccess(true);
-      toast({
-        title: "Contenu sauvegardé",
-        description: `La page "${pageDef?.label}" a été mise à jour.`,
-      });
-      if (successTimer.current) clearTimeout(successTimer.current);
-      successTimer.current = setTimeout(() => setSuccess(false), 3000);
-    } catch (err) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : "Erreur lors de la sauvegarde.";
+    const updated = unflattenJson(fields, originalJson);
+
+    const { error: saveError } = await supabase
+      .from("page_content")
+      .update({ content: updated as Record<string, unknown> })
+      .eq("page_key", page);
+
+    if (saveError) {
+      const msg = `Erreur lors de la sauvegarde : ${saveError.message}`;
       setError(msg);
       toast({ title: "Erreur", description: msg, variant: "destructive" });
-    } finally {
       setSaving(false);
+      return;
     }
+
+    setOriginalJson(updated);
+    setOriginalFields({ ...fields });
+    setDirty(false);
+    setSuccess(true);
+    toast({
+      title: "Contenu sauvegardé",
+      description: `La page "${pageDef?.label}" a été mise à jour.`,
+    });
+    if (successTimer.current) clearTimeout(successTimer.current);
+    successTimer.current = setTimeout(() => setSuccess(false), 3000);
+    setSaving(false);
   }
 
   // ── 404 ────────────────────────────────────────────────────────────────────
@@ -300,70 +257,47 @@ export default function AdminContentEditor() {
   const sectionEntries = Array.from(sections.entries());
 
   return (
-    <>
-      {/* Token prompt dialog */}
-      {tokenPrompt && (
-        <TokenPromptDialog
-          onClose={() => setTokenPrompt(false)}
-          onSaved={() => {
-            // After saving token, retry save
-            setTokenPrompt(false);
-            handleSave();
-          }}
-        />
-      )}
+    <div className="min-h-screen bg-[#F4F1EC]">
+      {/* ── Sticky header ─────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-10 bg-[#F4F1EC] border-b border-slate-200 px-4 sm:px-6 py-3">
+        <div className="max-w-4xl mx-auto flex items-center gap-3 flex-wrap">
+          {/* Back */}
+          <button
+            onClick={() => navigate("/admin/content")}
+            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#1C3A52] transition-colors shrink-0"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Contenu</span>
+          </button>
 
-      <div className="min-h-screen bg-[#F4F1EC]">
-        {/* ── Sticky header ─────────────────────────────────────────────────── */}
-        <header className="sticky top-0 z-10 bg-[#F4F1EC] border-b border-slate-200 px-4 sm:px-6 py-3">
-          <div className="max-w-4xl mx-auto flex items-center gap-3 flex-wrap">
-            {/* Back */}
-            <button
-              onClick={() => navigate("/admin/content")}
-              className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#1C3A52] transition-colors shrink-0"
+          {/* Title */}
+          <h1 className="text-base font-bold text-[#1C3A52] flex-1 min-w-0 truncate">
+            Éditer — {pageDef?.label ?? "…"}
+          </h1>
+
+          {/* External link */}
+          {pageDef && (
+            <a
+              href={pageDef.route}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400 hover:text-[#1C3A52] transition-colors shrink-0"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden sm:inline">Contenu</span>
-            </button>
+              Voir la page
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
 
-            {/* Title */}
-            <h1 className="text-base font-bold text-[#1C3A52] flex-1 min-w-0 truncate">
-              Éditer — {pageDef?.label ?? "…"}
-            </h1>
+          {/* Success indicator */}
+          {success && (
+            <span className="inline-flex items-center gap-1 text-xs text-emerald-600 shrink-0">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Sauvegardé
+            </span>
+          )}
 
-            {/* External link */}
-            {pageDef && (
-              <a
-                href={pageDef.route}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400 hover:text-[#1C3A52] transition-colors shrink-0"
-              >
-                Voir la page
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            )}
-
-            {/* Token warning */}
-            {!token && (
-              <button
-                onClick={() => setTokenPrompt(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-600 text-xs font-medium hover:bg-red-200 transition-colors shrink-0"
-              >
-                <AlertCircle className="w-3 h-3" />
-                Token GitHub requis
-              </button>
-            )}
-
-            {/* Success indicator */}
-            {success && (
-              <span className="inline-flex items-center gap-1 text-xs text-emerald-600 shrink-0">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Sauvegardé
-              </span>
-            )}
-
-            {/* Save button */}
+          {/* Save button */}
+          {!notSeeded && (
             <button
               onClick={handleSave}
               disabled={!dirty || saving}
@@ -376,114 +310,148 @@ export default function AdminContentEditor() {
               )}
               <span className="hidden sm:inline">{saving ? "Sauvegarde…" : "Sauvegarder"}</span>
             </button>
+          )}
+        </div>
+      </header>
+
+      {/* ── Body ──────────────────────────────────────────────────────────── */}
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* Error banner */}
+        {error && (
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+            <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+            <span>{error}</span>
           </div>
-        </header>
+        )}
 
-        {/* ── Body ──────────────────────────────────────────────────────────── */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-          {/* Error banner */}
-          {error && (
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-              <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>{error}</span>
+        {/* Not seeded — initialize prompt */}
+        {notSeeded && !loading && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="bg-white rounded-2xl border border-amber-200 shadow-sm p-8 flex flex-col items-center text-center gap-5"
+          >
+            <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center">
+              <AlertCircle className="w-7 h-7 text-[#C4903E]" />
             </div>
-          )}
-
-          {/* Loading skeletons */}
-          {loading && (
-            <div className="space-y-6">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-                  <div className="h-5 w-40 bg-slate-200 rounded animate-pulse" />
-                  <FieldSkeleton />
-                  <FieldSkeleton />
-                </div>
-              ))}
+            <div className="space-y-1">
+              <p className="text-base font-semibold text-[#1C3A52]">
+                Cette page n'est pas encore seedée dans Supabase
+              </p>
+              <p className="text-sm text-slate-500">
+                Cliquez ci-dessous pour charger le contenu depuis le fichier JSON public.
+              </p>
             </div>
-          )}
-
-          {/* Sections */}
-          {!loading && sectionEntries.map(([sectionName, sectionFields], sIdx) => (
-            <motion.div
-              key={sectionName}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: sIdx * 0.07, ease: "easeOut" }}
-              className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+            <button
+              onClick={handleInitialize}
+              disabled={initializing}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#C4903E] text-white text-sm font-semibold hover:bg-[#b07e34] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {/* Section header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
-                <span className="font-semibold text-[#1C3A52] text-sm">
-                  {sectionName}
-                </span>
-                <span className="text-xs text-slate-400 bg-white border border-slate-200 rounded-full px-2.5 py-0.5">
-                  {sectionFields.length} champ{sectionFields.length > 1 ? "s" : ""}
-                </span>
+              {initializing ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4" />
+              )}
+              {initializing ? "Initialisation…" : "Initialiser depuis le JSON"}
+            </button>
+          </motion.div>
+        )}
+
+        {/* Loading skeletons */}
+        {loading && (
+          <div className="space-y-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+                <div className="h-5 w-40 bg-slate-200 rounded animate-pulse" />
+                <FieldSkeleton />
+                <FieldSkeleton />
               </div>
+            ))}
+          </div>
+        )}
 
-              {/* Fields */}
-              <div className="divide-y divide-slate-100">
-                {sectionFields.map((fieldDef) => {
-                  const value = fields[fieldDef.key] ?? "";
-                  const originalValue = originalFields[fieldDef.key] ?? "";
-                  const isModified = value !== originalValue;
-                  const isReadonly = fieldDef.type === "readonly";
+        {/* Sections */}
+        {!loading && !notSeeded && sectionEntries.map(([sectionName, sectionFields], sIdx) => (
+          <motion.div
+            key={sectionName}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: sIdx * 0.07, ease: "easeOut" }}
+            className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+          >
+            {/* Section header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
+              <span className="font-semibold text-[#1C3A52] text-sm">
+                {sectionName}
+              </span>
+              <span className="text-xs text-slate-400 bg-white border border-slate-200 rounded-full px-2.5 py-0.5">
+                {sectionFields.length} champ{sectionFields.length > 1 ? "s" : ""}
+              </span>
+            </div>
 
-                  return (
-                    <div key={fieldDef.key} className="px-6 py-5 space-y-2">
-                      {/* Label row */}
-                      <div className="flex items-center gap-2">
-                        <label
-                          htmlFor={fieldDef.key}
-                          className="text-sm font-medium text-slate-700"
-                        >
-                          {fieldDef.label}
-                        </label>
-                        {isModified && (
-                          <span
-                            title="Champ modifié"
-                            className="inline-block w-2 h-2 rounded-full bg-[#C4903E]"
-                          />
-                        )}
-                      </div>
+            {/* Fields */}
+            <div className="divide-y divide-slate-100">
+              {sectionFields.map((fieldDef) => {
+                const value = fields[fieldDef.key] ?? "";
+                const originalValue = originalFields[fieldDef.key] ?? "";
+                const isModified = value !== originalValue;
+                const isReadonly = fieldDef.type === "readonly";
 
-                      {/* Hint */}
-                      {fieldDef.hint && (
-                        <p className="text-xs italic text-slate-400">
-                          {fieldDef.hint}
-                        </p>
-                      )}
-
-                      {/* Input */}
-                      {isReadonly ? (
-                        <p className="text-sm text-slate-400 italic bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
-                          {value || "—"}
-                        </p>
-                      ) : fieldDef.type === "long" ? (
-                        <textarea
-                          id={fieldDef.key}
-                          value={value}
-                          onChange={(e) => handleChange(fieldDef.key, e.target.value)}
-                          rows={4}
-                          className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
-                        />
-                      ) : (
-                        <input
-                          id={fieldDef.key}
-                          type={fieldDef.type === "url" ? "url" : "text"}
-                          value={value}
-                          onChange={(e) => handleChange(fieldDef.key, e.target.value)}
-                          className="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+                return (
+                  <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+                    {/* Label row */}
+                    <div className="flex items-center gap-2">
+                      <label
+                        htmlFor={fieldDef.key}
+                        className="text-sm font-medium text-slate-700"
+                      >
+                        {fieldDef.label}
+                      </label>
+                      {isModified && (
+                        <span
+                          title="Champ modifié"
+                          className="inline-block w-2 h-2 rounded-full bg-[#C4903E]"
                         />
                       )}
                     </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          ))}
-        </main>
-      </div>
-    </>
+
+                    {/* Hint */}
+                    {fieldDef.hint && (
+                      <p className="text-xs italic text-slate-400">
+                        {fieldDef.hint}
+                      </p>
+                    )}
+
+                    {/* Input */}
+                    {isReadonly ? (
+                      <p className="text-sm text-slate-400 italic bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
+                        {value || "—"}
+                      </p>
+                    ) : fieldDef.type === "long" ? (
+                      <textarea
+                        id={fieldDef.key}
+                        value={value}
+                        onChange={(e) => handleChange(fieldDef.key, e.target.value)}
+                        rows={4}
+                        className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+                      />
+                    ) : (
+                      <input
+                        id={fieldDef.key}
+                        type={fieldDef.type === "url" ? "url" : "text"}
+                        value={value}
+                        onChange={(e) => handleChange(fieldDef.key, e.target.value)}
+                        className="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        ))}
+      </main>
+    </div>
   );
 }

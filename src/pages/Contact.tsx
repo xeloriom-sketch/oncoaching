@@ -5,6 +5,7 @@ import SEO from "@/components/SEO";
 import SpotlightCard from "@/components/SpotlightCard";
 import { usePageContent } from "@/hooks/usePageContent";
 import { useTilt } from "@/hooks/useTilt";
+import { supabase } from "@/lib/supabase";
 import {
   fadeInUp,
   blurInUp,
@@ -245,15 +246,22 @@ const Contact = () => {
       errorDefault: "Une erreur est survenue.",
     };
     try {
-      const response = await fetch("/contact.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, type: formType }),
+      const { error: insertError } = await supabase.from("submissions").insert({
+        type:            formType,
+        name:            formData.name,
+        email:           formData.email,
+        phone:           formData.phone || null,
+        service:         formData.service || null,
+        subject:         formData.subject || null,
+        message:         formData.message || null,
+        preferred_date:  formData.preferredDate || null,
+        preferred_time:  formData.preferredTime || null,
+        preferred_date2: null,
+        preferred_time2: null,
+        session_format:  null,
+        note:            null,
       });
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.message || msgs.errorDefault);
-      }
+      if (insertError) throw new Error(insertError.message || msgs.errorDefault);
       const successMsg = formType === "rdv"
         ? { title: "Demande envoyée !", description: "Nous confirmerons votre rendez-vous dans les 24h." }
         : { title: msgs.successTitle, description: msgs.successDescription };
