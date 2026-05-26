@@ -447,18 +447,15 @@ const Contact = () => {
               </motion.div>
 
               <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 sm:gap-5">
-                <motion.div
-                  variants={staggerFast} initial="hidden" whileInView="visible" viewport={VP}
-                  className="flex flex-col gap-4 sm:gap-5"
-                >
+                <div className="flex flex-col gap-4 sm:gap-5">
                   {/* Nom / Email */}
-                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <FloatingField id="name" label="Nom complet" name="name" value={formData.name} onChange={handleChange} required autoComplete="name" />
                     <FloatingField id="email" label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required autoComplete="email" />
-                  </motion.div>
+                  </div>
 
                   {/* Téléphone / Service */}
-                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <FloatingField id="phone" label="Téléphone" type="tel" name="phone" value={formData.phone} onChange={handleChange} autoComplete="tel" />
                     <div className="relative">
                       <select
@@ -474,7 +471,7 @@ const Contact = () => {
                       </label>
                       <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" strokeWidth={2} />
                     </div>
-                  </motion.div>
+                  </div>
 
                   <AnimatePresence mode="wait">
                     {isRdv ? (
@@ -501,7 +498,7 @@ const Contact = () => {
                         />
 
                         <FloatingTextarea
-                          id="message" label="Un mot sur votre besoin (optionnel)"
+                          id="rdv-message" label="Un mot sur votre besoin (optionnel)"
                           name="message" value={formData.message} onChange={handleChange}
                         />
                       </motion.div>
@@ -514,55 +511,46 @@ const Contact = () => {
                         transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                         className="flex flex-col gap-4"
                       >
-                        <motion.div variants={springLeft}>
-                          <FloatingField id="subject" label="Sujet" name="subject" value={formData.subject} onChange={handleChange} required />
-                        </motion.div>
-                        <motion.div variants={springLeft}>
-                          <FloatingTextarea id="message" label="Votre message" name="message" value={formData.message} onChange={handleChange} required />
-                        </motion.div>
+                        <FloatingField id="subject" label="Sujet" name="subject" value={formData.subject} onChange={handleChange} required />
+                        <FloatingTextarea id="contact-message" label="Votre message" name="message" value={formData.message} onChange={handleChange} required />
                       </motion.div>
                     )}
                   </AnimatePresence>
 
                   {/* Submit */}
-                  <motion.div variants={springLeft}>
-                    <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      {...btnHoverProps}
-                      className={`w-full sm:w-auto flex items-center justify-center gap-2 text-white font-bold text-[15px] py-4 px-8 rounded-2xl transition-opacity disabled:opacity-50 min-h-[52px] sm:min-h-[56px] ${
-                        isRdv
-                          ? "bg-[#C4903E] shadow-[0_8px_32px_rgba(196,144,62,0.35)]"
-                          : "bg-[#1C3A52] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
-                      }`}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Envoi en cours…
-                        </>
-                      ) : isRdv ? (
-                        <>
-                          <CalendarDays className="w-4 h-4" />
-                          Demander ce rendez-vous
-                        </>
-                      ) : (
-                        <>
-                          Envoyer le message
-                          <ArrowUpRight className="w-4 h-4" />
-                        </>
-                      )}
-                    </motion.button>
-                  </motion.div>
-
-                  <motion.p
-                    variants={fadeInUp}
-                    className="text-gray-400 text-[13px] text-center flex items-center justify-center gap-1.5"
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    {...btnHoverProps}
+                    className={`w-full sm:w-auto flex items-center justify-center gap-2 text-white font-bold text-[15px] py-4 px-8 rounded-2xl transition-opacity disabled:opacity-50 min-h-[52px] sm:min-h-[56px] ${
+                      isRdv
+                        ? "bg-[#C4903E] shadow-[0_8px_32px_rgba(196,144,62,0.35)]"
+                        : "bg-[#1C3A52] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
+                    }`}
                   >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Envoi en cours…
+                      </>
+                    ) : isRdv ? (
+                      <>
+                        <CalendarDays className="w-4 h-4" />
+                        Demander ce rendez-vous
+                      </>
+                    ) : (
+                      <>
+                        Envoyer le message
+                        <ArrowUpRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </motion.button>
+
+                  <p className="text-gray-400 text-[13px] text-center flex items-center justify-center gap-1.5">
                     <Check className="w-3.5 h-3.5 text-[#C4903E]" strokeWidth={3} />
                     {isRdv ? "Confirmation sous 24h · 1er RDV offert" : "Consultation initiale gratuite · Sans engagement"}
-                  </motion.p>
-                </motion.div>
+                  </p>
+                </div>
               </form>
             </motion.div>
 
