@@ -172,7 +172,7 @@ const Footer = () => {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 18 }}
-              className="ml-auto w-full max-w-[430px] overflow-hidden"
+              className="ml-auto w-full max-w-[min(430px,calc(100vw-2rem))] overflow-hidden"
             >
               <div className="main-music-card">
                 <div className="track-info">
@@ -388,7 +388,7 @@ const Footer = () => {
                   <li key={href}>
                     <Link
                       to={href}
-                      className="text-white/50 hover:text-[#C4903E] text-[13px] font-medium transition-colors"
+                      className="text-white/50 hover:text-[#C4903E] text-[12px] sm:text-[13px] font-medium transition-colors"
                     >
                       {label}
                     </Link>
@@ -405,7 +405,7 @@ const Footer = () => {
                   <li key={s.href}>
                     <Link
                       to={s.href}
-                      className="text-white/50 hover:text-[#C4903E] text-[13px] font-medium transition-colors"
+                      className="text-white/50 hover:text-[#C4903E] text-[12px] sm:text-[13px] font-medium transition-colors"
                     >
                       {s.label}
                     </Link>
@@ -420,17 +420,17 @@ const Footer = () => {
               <ul className="space-y-3">
                 <li className="flex items-center gap-2.5">
                   <MapPin className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
-                  <span className="text-white/40 text-[13px]">14 rue des écureuils, 71000 Sancé</span>
+                  <span className="text-white/40 text-[12px] sm:text-[13px]">14 rue des écureuils, 71000 Sancé</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Phone className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
-                  <a href={`tel:${SITE.phone}`} className="text-white/40 hover:text-white text-[13px] transition-colors">
+                  <a href={`tel:${SITE.phone}`} className="text-white/40 hover:text-white text-[12px] sm:text-[13px] transition-colors">
                     +33 06 63 04 18 12
                   </a>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Mail className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
-                  <a href={`mailto:${SITE.email}`} className="text-white/40 hover:text-white text-[13px] transition-colors">
+                  <a href={`mailto:${SITE.email}`} className="text-white/40 hover:text-white text-[12px] sm:text-[13px] transition-colors break-all">
                     {SITE.email}
                   </a>
                 </li>
@@ -440,7 +440,7 @@ const Footer = () => {
 
           {/* Bottom bar */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-3 pt-8 border-t border-white/8">
-            <p className="text-white/25 text-[11px] font-mono">
+            <p className="text-white/25 text-[10px] sm:text-[11px] font-mono text-center md:text-left">
               © {year} ONCoaching · Tous droits réservés.{" "}
               Site par{" "}
               <a
@@ -454,7 +454,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#C4903E] animate-pulse" aria-hidden="true" />
-              <span className="text-white/25 text-[11px] font-mono">Disponible pour de nouveaux accompagnements</span>
+              <span className="text-white/25 text-[10px] sm:text-[11px] font-mono">Disponible pour de nouveaux accompagnements</span>
             </div>
           </div>
         </div>

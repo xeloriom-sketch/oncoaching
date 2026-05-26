@@ -50,7 +50,7 @@ export default function PresseMedias() {
             ]}
         />
 
-        <section className="bg-[#FBFBFB] pt-16 sm:pt-20 md:pt-28 pb-12 md:pb-20 lg:pb-28" aria-labelledby="presse-title">
+        <section className="bg-[#FBFBFB] pt-20 sm:pt-24 md:pt-28 pb-10 md:pb-16 lg:pb-28 overflow-x-hidden" aria-labelledby="presse-title">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
 
             {/* Header */}
@@ -72,7 +72,7 @@ export default function PresseMedias() {
 
             {/* SECTION 1 : Le Social Wall en Direct (Facebook & 2x LinkedIn) */}
             <div className="mb-12 md:mb-20">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-start">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-start">
 
                 {/* Bloc Facebook - Le JSL */}
                 <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp} className="flex flex-col">
@@ -93,13 +93,13 @@ export default function PresseMedias() {
                       Voir <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
-                  <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm">
-                    <div className="w-full max-w-[500px] overflow-hidden rounded-xl">
+                  <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="w-full max-w-full overflow-hidden rounded-xl">
                       <iframe
                           src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FLeJSL71%2Fposts%2Fpfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl&show_text=true&width=500"
                           width="100%"
                           height="720"
-                          style={{ border: 'none', overflow: 'hidden', height: '720px' }}
+                          style={{ border: 'none', overflow: 'hidden', height: '720px', maxWidth: '100%' }}
                           scrolling="no"
                           frameBorder="0"
                           allowFullScreen={true}
@@ -129,13 +129,13 @@ export default function PresseMedias() {
                       Voir <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
-                  <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm">
-                    <div className="w-full max-w-[504px] overflow-hidden rounded-xl">
+                  <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="w-full max-w-full overflow-hidden rounded-xl">
                       <iframe
                           src="https://www.linkedin.com/embed/feed/update/urn:li:share:7386461943089291270?collapsed=1"
                           height="750"
                           width="100%"
-                          style={{ border: 'none', height: '750px' }}
+                          style={{ border: 'none', height: '750px', maxWidth: '100%' }}
                           frameBorder="0"
                           allowFullScreen={true}
                           title="Post LinkedIn integrated 1"
@@ -163,13 +163,13 @@ export default function PresseMedias() {
                       Voir <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
-                  <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm">
-                    <div className="w-full max-w-[504px] overflow-hidden rounded-xl">
+                  <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="w-full max-w-full overflow-hidden rounded-xl">
                       <iframe
                           src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7454573698885459968"
                           height="680"
                           width="100%"
-                          style={{ border: 'none', height: '680px' }}
+                          style={{ border: 'none', height: '680px', maxWidth: '100%' }}
                           frameBorder="0"
                           allowFullScreen={true}
                           title="Post LinkedIn integrated 2"
@@ -182,7 +182,7 @@ export default function PresseMedias() {
             </div>
 
             {/* SECTION 2 : Émissions Multimédias & Profils Praticiens */}
-            <div className="border-t border-gray-100 pt-10 md:pt-16 mb-10 md:mb-16">
+            <div className="border-t border-gray-100 pt-10 md:pt-16 mb-10 md:mb-16 overflow-x-hidden">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
 
                 {/* Colonne Gauche / Centre (2/3) : Les lecteurs multimédias YouTube et Acast */}
@@ -206,8 +206,8 @@ export default function PresseMedias() {
                         Regarder <ExternalLink className="w-3 h-3" />
                       </a>
                     </div>
-                    <div className="w-full bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm">
-                      <div className="w-full aspect-video rounded-xl overflow-hidden bg-black">
+                    <div className="w-full bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
+                      <div className="w-full aspect-video rounded-xl overflow-hidden bg-black max-w-full">
                         <iframe
                             width="100%"
                             height="100%"
@@ -240,8 +240,8 @@ export default function PresseMedias() {
                         Écouter <ExternalLink className="w-3 h-3" />
                       </a>
                     </div>
-                    <div className="w-full bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm">
-                      <div className="w-full rounded-xl overflow-hidden bg-white">
+                    <div className="w-full bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
+                      <div className="w-full rounded-xl overflow-hidden bg-white max-w-full">
                         <iframe
                             title="Embed Player"
                             width="100%"
@@ -272,7 +272,7 @@ export default function PresseMedias() {
                         href="https://www.linkedin.com/in/noureddine-omar-587620346/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group block w-full bg-gray-50 hover:bg-gray-100/70 border border-gray-100 rounded-2xl p-5 sm:p-6 text-center transition-colors shadow-sm"
+                        className="group block w-full bg-gray-50 hover:bg-gray-100/70 border border-gray-100 rounded-[20px] p-4 sm:p-6 text-center transition-colors shadow-sm min-h-[44px]"
                     >
                       <img
                           src={PATRON_IMG}
@@ -302,7 +302,7 @@ export default function PresseMedias() {
                         href="https://www.resalib.fr/praticien/118187-on-coaching-et-neurofeedback-coach-professionnel-certifie-sance"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group block w-full bg-gray-50 hover:bg-gray-100/70 border border-gray-100 rounded-2xl p-5 sm:p-6 text-center transition-colors shadow-sm"
+                        className="group block w-full bg-gray-50 hover:bg-gray-100/70 border border-gray-100 rounded-[20px] p-4 sm:p-6 text-center transition-colors shadow-sm min-h-[44px]"
                     >
                       <img
                           src={PATRON_IMG}
@@ -326,7 +326,7 @@ export default function PresseMedias() {
             </div>
 
             {/* Bloc d'ancrage local final */}
-            <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInScale} className="mt-10 md:mt-16 rounded-2xl bg-[#1C3A52] p-5 sm:p-6 md:p-8">
+            <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInScale} className="mt-10 md:mt-16 rounded-2xl bg-[#1C3A52] p-5 sm:p-6 md:p-8 overflow-hidden">
               <h3 className="text-[#C4903E] font-mono text-[12px] uppercase tracking-widest mb-2">Ancrage régional & Accompagnement</h3>
               <p className="text-white/80 text-[15px] leading-relaxed">
                 Basé à Sancé et actif sur l'ensemble du bassin de Mâcon, Noureddine Omar met à profit son double parcours pour proposer un accompagnement sur-mesure (coaching de vie, scolaire, professionnel et neurofeedback dynamique), validé par des retours concrets du terrain.

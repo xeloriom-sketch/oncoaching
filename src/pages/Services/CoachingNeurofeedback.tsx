@@ -222,13 +222,13 @@ const CoachingNeurofeedback = () => {
 
         <section className="pt-20 md:pt-28 pb-12 md:pb-16">
           <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-center">
 
               <motion.div
                 initial="hidden"
                 animate="visible"
                 variants={staggerContainer}
-                className="space-y-7"
+                className="space-y-5 sm:space-y-7"
                 aria-labelledby="nf-h1"
               >
                 <motion.p
@@ -241,7 +241,7 @@ const CoachingNeurofeedback = () => {
 
                 <h1
                   id="nf-h1"
-                  className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.15]"
+                  className="text-[clamp(2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight"
                 >
                   {HERO_WORDS.map((word, i) => (
                     <motion.span
@@ -264,19 +264,19 @@ const CoachingNeurofeedback = () => {
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">
-                  <motion.div {...btnHoverProps}>
+                  <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                      className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                       aria-label="Réserver une séance découverte neurofeedback"
                     >
                       Séance découverte <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </motion.div>
-                  <motion.div {...btnHoverProps}>
+                  <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
                     <Link
                       to="/nos-tarifs"
-                      className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
+                      className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                     >
                       Voir les tarifs
                     </Link>
@@ -288,7 +288,7 @@ const CoachingNeurofeedback = () => {
                 variants={springRight}
                 initial="hidden"
                 animate="visible"
-                className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden group shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                className="relative h-[220px] sm:h-[300px] md:h-[380px] rounded-[32px] overflow-hidden group shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
               >
                 <motion.img
                   src={SESSION_PHOTO}
@@ -334,13 +334,13 @@ const CoachingNeurofeedback = () => {
                 Comment ça fonctionne
               </motion.h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {STEPS.map((step, i) => (
                   <motion.div
                     key={i}
                     variants={springLeft}
                     transition={{ delay: i * 0.08 }}
-                    className="bg-white rounded-[24px] p-5 sm:p-8 flex flex-col gap-4"
+                    className="bg-white rounded-[24px] p-5 sm:p-6 flex flex-col gap-4"
                   >
                     <span className="font-mono text-[clamp(3rem,5vw,4rem)] font-bold text-[#C4903E]/20 leading-none select-none">
                       {step.num}
@@ -461,10 +461,10 @@ const CoachingNeurofeedback = () => {
                 Le Dynamical Neurofeedback® NeurOptimal® communique avec le système nerveux central en utilisant son propre langage. Il n'introduit aucun courant, fréquence ou signal externe dans le cerveau — toute l'expertise est intégrée dans le logiciel.
               </motion.p>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-start">
 
                 {/* Schéma de la boucle */}
-                <motion.div variants={springLeft} className="bg-[#1C3A52] rounded-[32px] p-5 sm:p-8 flex flex-col gap-6">
+                <motion.div variants={springLeft} className="bg-[#1C3A52] rounded-[32px] p-5 sm:p-7 flex flex-col gap-5 sm:gap-6">
                   <p className="text-[#C4903E] font-mono text-[11px] tracking-widest uppercase">Boucle de feedback</p>
 
                   {[
@@ -572,11 +572,11 @@ const CoachingNeurofeedback = () => {
                 Pour comprendre le neurofeedback et lui faire confiance, voici les ressources qui en font la légitimité : témoignages de professionnels de santé, études scientifiques et vidéos explicatives.
               </motion.p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {MEDIA_SECTIONS.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <motion.div key={i} variants={springUp} className="bg-white rounded-[24px] p-7 flex flex-col gap-4 shadow-sm">
+                    <motion.div key={i} variants={springUp} className="bg-white rounded-[24px] p-5 sm:p-7 flex flex-col gap-4 shadow-sm">
                       <div className="w-11 h-11 rounded-xl bg-[#C4903E] flex items-center justify-center flex-shrink-0">
                         <Icon className="w-5 h-5 text-white" strokeWidth={1.8} aria-hidden="true" />
                       </div>
@@ -606,7 +606,7 @@ const CoachingNeurofeedback = () => {
               whileInView="visible"
               viewport={VP}
               variants={staggerContainer}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center"
             >
               <motion.div
                 variants={springLeft}
@@ -672,10 +672,10 @@ const CoachingNeurofeedback = () => {
                     </motion.li>
                   ))}
                 </ul>
-                <motion.div {...btnHoverProps}>
+                <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                    className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                   >
                     Prendre rendez-vous <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
@@ -724,7 +724,7 @@ const CoachingNeurofeedback = () => {
                 <motion.div {...btnHoverProps}>
                   <Link
                     to={cta.buttonLink}
-                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 rounded-2xl hover:opacity-90 transition-opacity"
+                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 min-h-[44px] rounded-2xl hover:opacity-90 transition-opacity"
                     aria-label="Prendre rendez-vous pour une séance neurofeedback"
                   >
                     {cta.buttonText} <ArrowUpRight className="w-5 h-5" aria-hidden="true" />

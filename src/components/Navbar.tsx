@@ -95,7 +95,7 @@ const Navbar = () => {
       animate={{ y: hidden ? "-110%" : "0%" }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="w-full px-5 md:px-10 py-4 flex items-center justify-between gap-6 relative z-0">
+      <div className="w-full px-5 md:px-10 py-4 flex items-center justify-between gap-6 relative z-0 min-h-[60px]">
 
         {/* Mobile frosted background — s'affiche quand scrollé */}
         <motion.div
@@ -119,7 +119,7 @@ const Navbar = () => {
           transition={{ duration: 0.35, ease: "easeInOut" }}
         >
           <Link to="/" aria-label="ON Coaching — Accueil">
-            <LogoMark size={44} animate />
+            <LogoMark size={36} animate />
           </Link>
         </motion.div>
 
@@ -266,7 +266,7 @@ const Navbar = () => {
             animate={{ opacity: 1, scale: 1,    y: 0  }}
             exit={{    opacity: 0, scale: 0.97, y: -6 }}
             transition={{ type: "spring", stiffness: 340, damping: 28 }}
-            className="mx-3 sm:mx-4 mb-3 border border-white/10 rounded-[20px] p-3 sm:p-4 shadow-2xl overflow-hidden"
+            className="mx-3 sm:mx-4 mb-3 border border-white/10 rounded-[20px] p-3 sm:p-4 shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto"
             style={{ background: NAVY }}
           >
             <div className="flex flex-col gap-0.5 mb-3">

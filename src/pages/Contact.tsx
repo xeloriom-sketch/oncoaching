@@ -62,7 +62,7 @@ function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string
 
   return (
     <div
-      className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden transition-all duration-200 hover:border-gray-300 rdp-wrapper"
+      className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden max-w-full transition-all duration-200 hover:border-gray-300 rdp-wrapper"
       style={{ "--rdp-accent-color": "#C4903E", "--rdp-background-color": "rgba(196,144,62,0.08)" } as React.CSSProperties}
     >
       <DayPicker
@@ -371,7 +371,7 @@ const Contact = () => {
       <div className="w-full bg-[#FBFBFB]">
 
         {/* ── HERO ───────────────────────────────────────────────── */}
-        <section className="pt-8 pb-6 sm:pt-10 sm:pb-8 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 pb-6 sm:pt-24 sm:pb-8 md:pt-28 max-w-7xl mx-auto px-5 md:px-12">
           <motion.div initial="hidden" animate="visible" variants={stagger} className="flex flex-col items-start gap-6">
             <motion.div variants={blurInUp} className="flex items-center gap-2">
               <motion.div
@@ -387,7 +387,7 @@ const Contact = () => {
             <h1
               aria-label="Parlons de votre projet."
               className="leading-[1.1] font-bold tracking-tight text-[#1C3A52]"
-              style={{ fontSize: "clamp(2.8rem,6vw,5rem)" }}
+              style={{ fontSize: "clamp(2rem,8vw,4rem)" }}
             >
               {WORDS.map((word, i) => (
                 <motion.span
@@ -402,15 +402,15 @@ const Contact = () => {
               ))}
             </h1>
 
-            <motion.p variants={blurInUp} className="text-[17px] text-gray-500 leading-relaxed max-w-xl">
+            <motion.p variants={blurInUp} className="text-[15px] sm:text-[17px] text-gray-500 leading-relaxed max-w-xl">
               {coordonnees.subtitle}
             </motion.p>
           </motion.div>
         </section>
 
         {/* ── GRID CONTACT ────────────────────────────────────────── */}
-        <section className="py-0 pb-12 md:pb-20 lg:pb-28 max-w-7xl mx-auto px-5 md:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <section className="py-0 pb-10 md:pb-16 lg:pb-28 max-w-7xl mx-auto px-5 md:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
 
             {/* ── GAUCHE : Formulaire ──────────────────────────── */}
             <motion.div
@@ -461,19 +461,19 @@ const Contact = () => {
                 )}
               </motion.div>
 
-              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 sm:gap-5">
                 <motion.div
                   variants={staggerFast} initial="hidden" whileInView="visible" viewport={VP}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-4 sm:gap-5"
                 >
                   {/* Nom / Email */}
-                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <FloatingField id="name" label="Nom complet" name="name" value={formData.name} onChange={handleChange} required autoComplete="name" />
                     <FloatingField id="email" label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required autoComplete="email" />
                   </motion.div>
 
                   {/* Téléphone / Service */}
-                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <motion.div variants={springLeft} className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <FloatingField id="phone" label="Téléphone" type="tel" name="phone" value={formData.phone} onChange={handleChange} autoComplete="tel" />
                     <div className="relative">
                       <select
@@ -544,7 +544,7 @@ const Contact = () => {
                       type="submit"
                       disabled={isSubmitting}
                       {...btnHoverProps}
-                      className={`w-full flex items-center justify-center gap-2 text-white font-bold text-[15px] py-4 rounded-2xl transition-opacity disabled:opacity-50 min-h-[56px] ${
+                      className={`w-full sm:w-auto flex items-center justify-center gap-2 text-white font-bold text-[15px] py-4 px-8 rounded-2xl transition-opacity disabled:opacity-50 min-h-[52px] sm:min-h-[56px] ${
                         isRdv
                           ? "bg-[#C4903E] shadow-[0_8px_32px_rgba(196,144,62,0.35)]"
                           : "bg-[#1C3A52] shadow-[0_8px_32px_rgba(0,0,0,0.18)]"
@@ -690,7 +690,7 @@ const Contact = () => {
         </section>
 
         {/* ── FAQ ─────────────────────────────────────────────────── */}
-        <section className="py-12 md:py-20 lg:py-28 bg-[#F3F4F6]">
+        <section className="py-10 md:py-16 lg:py-28 bg-[#F3F4F6]">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden" whileInView="visible" viewport={VP} variants={stagger}
@@ -711,7 +711,7 @@ const Contact = () => {
                   <motion.div key={i} variants={fadeInUp} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                     <button
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left group"
+                      className="w-full flex items-center justify-between gap-4 px-4 sm:px-6 py-4 sm:py-5 text-left group min-h-[44px]"
                       aria-expanded={openFaq === i}
                     >
                       <span className="font-semibold text-[15px] text-[#1C3A52] group-hover:text-[#C4903E] transition-colors leading-snug pr-2">
@@ -736,7 +736,7 @@ const Contact = () => {
                           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                           className="overflow-hidden"
                         >
-                          <p className="px-6 pb-5 text-[15px] text-gray-500 leading-relaxed border-t border-gray-50 pt-3">
+                          <p className="px-4 sm:px-6 pb-5 text-[14px] sm:text-[15px] text-gray-500 leading-relaxed border-t border-gray-50 pt-3">
                             {item.a}
                           </p>
                         </motion.div>
@@ -750,7 +750,7 @@ const Contact = () => {
         </section>
 
         {/* ── CTA ─────────────────────────────────────────────────── */}
-        <section className="py-12 md:py-20 lg:py-28">
+        <section className="py-10 md:py-16 lg:py-28">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div initial="hidden" whileInView="visible" viewport={VP} variants={fadeInUp}>
               <SpotlightCard
@@ -788,14 +788,14 @@ const Contact = () => {
                 >
                   <motion.a
                     href="tel:+33663041812" {...btnHoverProps}
-                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[15px] px-8 py-4 rounded-2xl shadow-[0_8px_40px_rgba(196,144,62,0.4)] cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-white font-bold text-[15px] px-8 py-4 rounded-2xl shadow-[0_8px_40px_rgba(196,144,62,0.4)] cursor-pointer min-h-[52px]"
                   >
                     <Phone className="w-4 h-4" />
                     Appeler maintenant
                   </motion.a>
                   <motion.a
                     href={`mailto:${coordonnees.email.value}`} {...liftHoverProps}
-                    className="inline-flex items-center gap-2 text-white/60 hover:text-white font-semibold text-[15px] px-6 py-4 rounded-2xl border border-white/10 hover:border-white/20 transition-colors cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-white/60 hover:text-white font-semibold text-[15px] px-6 py-4 rounded-2xl border border-white/10 hover:border-white/20 transition-colors cursor-pointer min-h-[52px]"
                   >
                     <Mail className="w-4 h-4" />
                     Écrire un email

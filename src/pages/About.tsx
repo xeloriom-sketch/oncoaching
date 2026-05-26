@@ -138,7 +138,7 @@ function TiltValueCard({ val, i }: { val: { key: string; title: string; descript
   return (
     <motion.article
       variants={springUp}
-      className={`rounded-[28px] p-8 flex flex-col border ${c.border} cursor-default shadow-[0_4px_20px_rgba(0,0,0,0.07)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-shadow duration-300`}
+      className={`rounded-[28px] p-5 sm:p-6 md:p-8 flex flex-col border ${c.border} cursor-default shadow-[0_4px_20px_rgba(0,0,0,0.07)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.12)] transition-shadow duration-300`}
       style={{ background: c.bg, willChange: "transform" }}
       ref={tilt.ref}
       onMouseMove={tilt.onMouseMove}
@@ -153,7 +153,7 @@ function TiltValueCard({ val, i }: { val: { key: string; title: string; descript
       >
         <Icon className={`w-6 h-6 ${c.iconColor}`} strokeWidth={1.8} />
       </motion.div>
-      <h3 className={`font-bold text-[1.15rem] tracking-tight mb-3 ${c.text}`}>{val.title}</h3>
+      <h3 className={`font-bold text-[1rem] sm:text-[1.1rem] tracking-tight mb-3 ${c.text}`}>{val.title}</h3>
       <p className={`text-[15px] leading-relaxed flex-1 ${c.sub}`}>{val.description}</p>
     </motion.article>
   );
@@ -269,10 +269,10 @@ const About = () => {
 
         {/* ══ 01 — HERO ══════════════════════════════════════════════════ */}
         <section
-          className="max-w-7xl mx-auto px-5 md:px-12 py-12 md:py-20 lg:py-28"
+          className="max-w-7xl mx-auto px-5 md:px-12 pt-[88px] md:pt-20 lg:pt-28 pb-12 md:pb-20 lg:pb-28"
           aria-labelledby="about-h1"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center overflow-hidden">
 
             <motion.div
               initial="hidden"
@@ -290,7 +290,7 @@ const About = () => {
 
               <h1
                 id="about-h1"
-                className="text-[clamp(2rem,5vw,5rem)] font-bold leading-tight md:leading-[0.95] tracking-tight text-[#1C3A52]"
+                className="text-[clamp(1.8rem,5vw,5rem)] font-bold leading-tight md:leading-[0.95] tracking-tight text-[#1C3A52]"
               >
                 <WordByWord text={hero.title} />
               </h1>
@@ -402,7 +402,7 @@ const About = () => {
                 variants={springUp}
                 className="flex flex-col items-center text-center px-4"
               >
-                <span className="font-mono font-black text-[clamp(2rem,5vw,3.5rem)] text-[#1C3A52] leading-none tracking-tight">
+                <span className="font-mono font-black text-[clamp(1.4rem,4vw,3.5rem)] text-[#1C3A52] leading-none tracking-tight">
                   {stat.value}{stat.suffix}
                 </span>
                 <span className="text-[13px] text-gray-500 mt-2 font-medium">{stat.label}</span>
@@ -528,7 +528,7 @@ const About = () => {
                   key={step.num}
                   variants={springLeft}
                   whileHover={{ y: -4, transition: { type: "spring", stiffness: 350, damping: 22 } }}
-                  className="group relative rounded-[28px] border border-gray-100 bg-white p-5 sm:p-6 md:p-8 overflow-hidden cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
+                  className="group relative rounded-[28px] border border-gray-100 bg-white p-4 sm:p-6 md:p-8 overflow-hidden cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
                 >
                   <div
                     className="absolute inset-0 bg-gradient-to-br from-[#C4903E]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
@@ -536,7 +536,7 @@ const About = () => {
                   />
                   <div className="flex items-start gap-5">
                     <span
-                      className="font-mono font-black text-[clamp(2.8rem,5vw,3.5rem)] leading-none tracking-tighter text-gray-100 select-none flex-shrink-0"
+                      className="font-mono font-black text-[clamp(2rem,4vw,3.5rem)] leading-none tracking-tighter text-gray-100 select-none flex-shrink-0"
                       aria-hidden="true"
                     >
                       {step.num}
@@ -584,7 +584,7 @@ const About = () => {
                 href={`${import.meta.env.BASE_URL}certification.webp`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="self-start inline-flex items-center gap-2 bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center gap-2 bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-6 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto sm:self-start"
                 aria-label="Voir la certification NeurOptimal®"
               >
                 <Award className="w-4 h-4" aria-hidden="true" />
@@ -717,7 +717,7 @@ const About = () => {
                   <motion.div {...btnHoverProps}>
                     <Link
                       to={cta.buttonLink}
-                      className="bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-8 py-4 rounded-full flex items-center gap-2.5 shadow-lg shadow-[#C4903E]/30"
+                      className="bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-8 py-4 min-h-[44px] rounded-full flex items-center justify-center gap-2.5 shadow-lg shadow-[#C4903E]/30 w-full sm:w-auto"
                     >
                       {cta.buttonText}
                       <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
@@ -728,7 +728,7 @@ const About = () => {
                   <motion.div {...btnHoverProps}>
                     <Link
                       to="/nos-tarifs"
-                      className="bg-white/10 border border-white/20 text-white font-bold text-[14px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:bg-white/15 transition-colors"
+                      className="bg-white/10 border border-white/20 text-white font-bold text-[14px] px-8 py-4 min-h-[44px] rounded-full flex items-center justify-center gap-2.5 hover:bg-white/15 transition-colors w-full sm:w-auto"
                     >
                       Voir nos tarifs
                       <Rocket className="w-4 h-4" aria-hidden="true" />

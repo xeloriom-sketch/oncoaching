@@ -271,7 +271,7 @@ export default function Index() {
       {/* ── 01. HERO ─────────────────────────────────────────────────── */}
       <section
           ref={heroRef}
-          className="w-full relative bg-[#FBFBFB] min-h-[calc(100vh-82px)] lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row lg:items-center overflow-x-hidden"
+          className="w-full relative bg-[#FBFBFB] min-h-[calc(100svh-72px)] lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row lg:items-center overflow-x-hidden"
           aria-labelledby="home-h1"
           onMouseMove={handleHeroMove}
           onMouseLeave={handleHeroLeave}
@@ -287,7 +287,7 @@ export default function Index() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               style={{ x: sPhX, y: sPhY }}
-              className="relative w-full h-[52vh] sm:h-[50vh] lg:h-[74vh] order-first lg:order-first"
+              className="relative w-full h-[45vh] sm:h-[50vh] lg:h-[74vh] order-first lg:order-first"
           >
             {/* Masque SVG composite — les 3 ovals d'un coup */}
             <svg width="0" height="0" className="absolute" aria-hidden="true">
@@ -337,7 +337,7 @@ export default function Index() {
             <h1
                 id="home-h1"
                 className="font-bold leading-[1.1] tracking-tight text-[#1C3A52] max-w-full"
-                style={{ fontSize: "clamp(2.2rem, 8vw, 5.6rem)" }}
+                style={{ fontSize: "clamp(1.9rem, 7vw, 5.6rem)" }}
             >
               {[
                 { text: "Développez", delay: 0.18 },
@@ -371,7 +371,7 @@ export default function Index() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
-                className="text-[0.95rem] sm:text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left"
+                className="text-[0.95rem] sm:text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left px-4 sm:px-0"
             >
               {content?.hero?.subtitle ?? "Coach certifié à Mâcon — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines."}
             </motion.p>
@@ -409,7 +409,7 @@ export default function Index() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.84 }}
-                className="text-sm text-[#1C3A52]/50 flex items-center justify-center lg:justify-start gap-2 mt-1"
+                className="text-xs sm:text-sm text-[#1C3A52]/50 flex items-center justify-center lg:justify-start gap-2 mt-1"
             >
               <span className="text-[#C4903E] text-base" aria-hidden="true">☉</span>
               1er rendez-vous offert · Sans engagement
@@ -437,7 +437,7 @@ export default function Index() {
                 className="flex flex-col items-center gap-2"
               >
                 <span
-                  className="text-[clamp(1.5rem,5vw,3rem)] font-bold tracking-tight text-[#1C3A52] leading-none font-mono"
+                  className="text-[clamp(1.3rem,4vw,3rem)] font-bold tracking-tight text-[#1C3A52] leading-none font-mono"
                   aria-label={value}
                 >
                   {value}
@@ -525,7 +525,7 @@ export default function Index() {
 
                   <Link
                     to={href}
-                    className={`flex items-center gap-2 text-[14px] font-bold transition-all hover:gap-3 w-fit ${c.link}`}
+                    className={`flex items-center gap-2 text-[14px] font-bold transition-all hover:gap-3 w-fit min-h-[44px] ${c.link}`}
                     aria-label={`Découvrir ${title}`}
                   >
                     Découvrir <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -572,7 +572,7 @@ export default function Index() {
               </ul>
               <Link
                 to={ROUTES.neurofeedback}
-                className="inline-flex items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-fit mt-2"
+                className="inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-full sm:w-fit mt-2 min-h-[44px]"
               >
                 Découvrir le Neurofeedback <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
@@ -583,7 +583,7 @@ export default function Index() {
                 style={{ background: "rgba(196,144,62,0.15)" }} />
               <div aria-hidden="true" className="absolute -top-4 -right-4 w-[35%] h-[40%] rounded-[24px]"
                 style={{ background: "rgba(28,58,82,0.10)" }} />
-              <div className="relative h-[260px] sm:h-[340px] rounded-[28px] overflow-hidden z-10">
+              <div className="relative h-[220px] sm:h-[300px] md:h-[340px] rounded-[28px] overflow-hidden z-10">
               <img
                 src="https://dbneurofeedback.com/wp-content/uploads/2024/12/NEUROPTIMAL-1.jpg"
                 alt="Séance de neurofeedback NeurOptimal® — capteurs EEG"
@@ -625,7 +625,7 @@ export default function Index() {
               className="absolute -bottom-4 -right-4 w-[55%] h-[45%] rounded-[28px]"
               style={{ background: "rgba(196,144,62,0.18)" }}
             />
-            <div className="h-[340px] sm:h-[420px] rounded-[24px] overflow-hidden relative z-10">
+            <div className="h-[300px] sm:h-[380px] md:h-[420px] rounded-[24px] overflow-hidden relative z-10">
               <img
                 src={COACH_IMG}
                 alt="Noureddine Omar — Coach certifié, ONCoaching Mâcon"
@@ -683,7 +683,7 @@ export default function Index() {
 
             <motion.blockquote
               variants={fadeInUp}
-              className="border-l-2 border-[#C4903E] pl-5 text-[15px] italic text-white/50 leading-relaxed"
+              className="border-l-2 border-[#C4903E] pl-5 text-[14px] sm:text-[15px] italic text-white/50 leading-relaxed"
             >
               "Le changement commence là où la zone de confort s'arrête."
             </motion.blockquote>
@@ -691,7 +691,7 @@ export default function Index() {
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3">
               <Link
                 to={ROUTES.about}
-                className="flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity"
+                className="flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto min-h-[44px]"
                 aria-label="Découvrir l'approche de Noureddine Omar"
               >
                 Découvrir l'approche
@@ -701,7 +701,7 @@ export default function Index() {
                 href={`${import.meta.env.BASE_URL}certification.webp`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 border border-white/20 text-white/70 text-[14px] px-5 py-4 rounded-full hover:bg-white/10 hover:text-white transition-all"
+                className="flex items-center justify-center gap-2 border border-white/20 text-white/70 text-[14px] px-5 py-4 rounded-full hover:bg-white/10 hover:text-white transition-all w-full sm:w-auto min-h-[44px]"
                 aria-label="Voir la certification NeurOptimal®"
               >
                 <Award className="w-4 h-4" aria-hidden="true" />
@@ -752,11 +752,11 @@ export default function Index() {
               <motion.div
                 key={num}
                 variants={springUp}
-                className="flex flex-col gap-5 bg-[#F3F4F6] md:bg-transparent rounded-[24px] md:rounded-none p-6 md:p-0 shadow-[0_4px_20px_rgba(0,0,0,0.06)] md:shadow-none"
+                className="flex flex-col gap-5 bg-[#F3F4F6] md:bg-transparent rounded-[24px] md:rounded-none p-5 sm:p-6 md:p-0 shadow-[0_4px_20px_rgba(0,0,0,0.06)] md:shadow-none"
               >
                 <div className="flex items-center gap-4 md:block md:space-y-5">
                   <span
-                    className="font-mono text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-none text-[#F3F4F6] select-none"
+                    className="font-mono text-[clamp(2rem,5vw,4.5rem)] font-bold leading-none text-[#F3F4F6] select-none"
                     aria-hidden="true"
                   >
                     {num}
@@ -887,7 +887,7 @@ export default function Index() {
                 ))}
             </div>
 
-            <blockquote className="text-[1.25rem] md:text-[1.5rem] font-medium text-[#1C3A52] leading-relaxed italic">
+            <blockquote className="text-[1.1rem] md:text-[1.25rem] lg:text-[1.5rem] font-medium text-[#1C3A52] leading-relaxed italic">
               "L'accompagnement d'ON Coaching m'a permis de structurer ma vision
               et de retrouver une parfaite synergie entre ma vie professionnelle
               et personnelle. Un coach à l'écoute, bienveillant et efficace."
@@ -1017,7 +1017,7 @@ export default function Index() {
             <motion.h2
               id="cta-title"
               variants={fadeInUp}
-              className="text-[clamp(2rem,5vw,3.5rem)] font-semibold tracking-tight text-white leading-[1.05]"
+              className="text-[clamp(1.6rem,5vw,3.5rem)] font-semibold tracking-tight text-white leading-[1.05]"
             >
               {content?.cta?.title ?? "Passez au niveau supérieur."}
             </motion.h2>

@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => (
   <div className="flex flex-col min-h-screen bg-[#FBFBFB]">
     <Navbar />
     {/* pt-[76px]: pill nav (44px) + top padding (16px) + gap (16px) */}
-    <main className="flex-grow pt-[82px]" id="main-content">
+    <main className="flex-grow pt-[82px] overflow-x-hidden" id="main-content">
       {children}
     </main>
     <Footer />

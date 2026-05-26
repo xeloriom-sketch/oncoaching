@@ -104,19 +104,19 @@ const Partenaires = () => {
         ]}
       />
 
-      <div className="w-full bg-[#FBFBFB] min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6">
+      <div className="w-full bg-[#FBFBFB] min-h-screen px-4 py-6 md:px-12 md:py-8 space-y-6 overflow-x-hidden">
 
         {/* ── HERO ────────────────────────────────── */}
         <motion.header
           initial="hidden" animate="visible" variants={staggerContainer}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-16 sm:pt-20 md:pt-24"
           aria-labelledby="partenaires-h1"
         >
           <motion.div variants={fadeInUp} className="lg:col-span-8 space-y-4">
             <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400" aria-hidden="true">
               ↳ Structures &amp; Organisations
             </p>
-            <h1 id="partenaires-h1" className="text-[clamp(2.2rem,6vw,5rem)] font-semibold leading-[0.95] tracking-tight text-[#1C3A52]">
+            <h1 id="partenaires-h1" className="text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[0.95] tracking-tight text-[#1C3A52]">
               {hero.title}
             </h1>
             <p className="text-[1rem] md:text-[1.1rem] text-gray-500 font-medium max-w-lg leading-relaxed">
@@ -165,7 +165,7 @@ const Partenaires = () => {
         <motion.section
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.6 }}
-          className="bg-[#1C3A52] rounded-[32px] p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+          className="bg-[#1C3A52] rounded-[32px] p-5 sm:p-8 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
           aria-labelledby="expertise-title"
         >
           <div className="lg:col-span-5">
@@ -199,7 +199,7 @@ const Partenaires = () => {
           aria-label="Publics et problématiques"
         >
           {/* Publics */}
-          <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-7">
+          <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-5 sm:p-7">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#1C3A52] flex items-center justify-center" aria-hidden="true">
                 <Users className="w-5 h-5 text-[#C4903E]" strokeWidth={1.8} />
@@ -208,7 +208,7 @@ const Partenaires = () => {
             </div>
             <ul className="space-y-3">
               {publics.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[13px] text-gray-600">
+                <li key={i} className="flex items-start gap-3 text-[14px] text-gray-600">
                   <Check className="w-4 h-4 text-[#1C3A52] flex-shrink-0 mt-0.5" strokeWidth={2.5} aria-hidden="true" />
                   {item}
                 </li>
@@ -217,7 +217,7 @@ const Partenaires = () => {
           </motion.div>
 
           {/* Problématiques */}
-          <motion.div variants={fadeInUp} className="bg-[#1C3A52] rounded-[28px] p-7">
+          <motion.div variants={fadeInUp} className="bg-[#1C3A52] rounded-[28px] p-5 sm:p-7">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#C4903E] flex items-center justify-center" aria-hidden="true">
                 <Target className="w-5 h-5 text-[#1C3A52]" strokeWidth={1.8} />
@@ -226,7 +226,7 @@ const Partenaires = () => {
             </div>
             <ul className="space-y-3">
               {problematiques.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[13px] text-white/60">
+                <li key={i} className="flex items-start gap-3 text-[14px] text-white/60">
                   <Check className="w-4 h-4 text-[#C4903E]/70 flex-shrink-0 mt-0.5" strokeWidth={2.5} aria-hidden="true" />
                   {item}
                 </li>
@@ -257,7 +257,7 @@ const Partenaires = () => {
                   variants={fadeInUp}
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.25 }}
-                  className="rounded-[28px] p-7 flex flex-col"
+                  className="rounded-[28px] p-5 sm:p-7 flex flex-col"
                   style={{ background: c.bg }}
                 >
                   <div className={`w-10 h-10 rounded-xl ${c.iconBg} flex items-center justify-center mb-5`} aria-hidden="true">
@@ -266,7 +266,7 @@ const Partenaires = () => {
                   <h3 className={`font-bold text-[1rem] tracking-tight mb-4 ${c.text}`}>{mod.title}</h3>
                   <ul className="space-y-2.5 flex-1">
                     {mod.items.map((item, j) => (
-                      <li key={j} className={`flex items-start gap-2.5 text-[13px] ${c.sub}`}>
+                      <li key={j} className={`flex items-start gap-2.5 text-[14px] ${c.sub}`}>
                         <Check className={`w-3.5 h-3.5 ${c.check} flex-shrink-0 mt-0.5`} strokeWidth={2.5} aria-hidden="true" />
                         {item}
                       </li>
@@ -282,7 +282,7 @@ const Partenaires = () => {
         <motion.section
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.6 }}
-          className="bg-[#1C3A52] rounded-[32px] p-6 md:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10"
+          className="bg-[#1C3A52] rounded-[32px] p-5 sm:p-8 md:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10"
           aria-labelledby="methodo-title"
         >
           {/* Étapes */}
@@ -306,7 +306,7 @@ const Partenaires = () => {
                   >
                     {i + 1}
                   </span>
-                  <span className="text-white/60 text-[13px] leading-relaxed">{step}</span>
+                  <span className="text-white/60 text-[14px] leading-relaxed">{step}</span>
                 </li>
               ))}
             </ol>
@@ -326,7 +326,7 @@ const Partenaires = () => {
             <p className="text-white/40 text-[13px] mb-5">{methodologie.approche.title}</p>
             <ul className="space-y-3">
               {methodologie.approche.items.map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-white/60 text-[13px]">
+                <li key={i} className="flex items-center gap-3 text-white/60 text-[14px]">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#C4903E] flex-shrink-0" aria-hidden="true" />
                   {item}
                 </li>
@@ -342,7 +342,7 @@ const Partenaires = () => {
           aria-label="Formats de collaboration et valeur ajoutée"
         >
           {/* Formats */}
-          <motion.div variants={fadeInUp} className="bg-[#C4903E] rounded-[28px] p-7">
+          <motion.div variants={fadeInUp} className="bg-[#C4903E] rounded-[28px] p-5 sm:p-7">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#1C3A52] flex items-center justify-center" aria-hidden="true">
                 <Layers className="w-5 h-5 text-[#C4903E]" strokeWidth={1.8} />
@@ -351,7 +351,7 @@ const Partenaires = () => {
             </div>
             <ul className="space-y-3">
               {formats.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[13px] text-black/70">
+                <li key={i} className="flex items-start gap-3 text-[14px] text-black/70">
                   <Check className="w-4 h-4 text-[#1C3A52] flex-shrink-0 mt-0.5" strokeWidth={2.5} aria-hidden="true" />
                   {item}
                 </li>
@@ -360,7 +360,7 @@ const Partenaires = () => {
           </motion.div>
 
           {/* Valeur ajoutée */}
-          <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-7">
+          <motion.div variants={fadeInUp} className="bg-[#F3F4F6] rounded-[28px] p-5 sm:p-7">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-[#1C3A52] flex items-center justify-center" aria-hidden="true">
                 <Lightbulb className="w-5 h-5 text-[#C4903E]" strokeWidth={1.8} />
@@ -369,7 +369,7 @@ const Partenaires = () => {
             </div>
             <ul className="space-y-3">
               {valeur.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[13px] text-gray-600">
+                <li key={i} className="flex items-start gap-3 text-[14px] text-gray-600">
                   <CheckCircle2 className="w-4 h-4 text-[#1C3A52] flex-shrink-0 mt-0.5" strokeWidth={2} aria-hidden="true" />
                   {item}
                 </li>
@@ -382,7 +382,7 @@ const Partenaires = () => {
         <motion.section
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.6 }}
-          className="bg-[#F3F4F6] rounded-[32px] p-6 md:p-10"
+          className="bg-[#F3F4F6] rounded-[32px] p-5 sm:p-8 md:p-10"
           aria-labelledby="exemples-title"
         >
           <div className="mb-8">
@@ -400,7 +400,7 @@ const Partenaires = () => {
                 >
                   <span className="text-[#1C3A52] text-[11px] font-mono font-bold">{String(i + 1).padStart(2, "0")}</span>
                 </div>
-                <p className="text-[13px] text-gray-600 leading-relaxed">{item}</p>
+                <p className="text-[14px] text-gray-600 leading-relaxed">{item}</p>
               </div>
             ))}
           </div>
@@ -410,16 +410,16 @@ const Partenaires = () => {
         <motion.section
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={VP} transition={{ duration: 0.6 }}
-          className="text-center py-12 space-y-6"
+          className="text-center py-10 sm:py-14 md:py-20 space-y-6"
         >
-          <h2 className="text-[2rem] md:text-[3rem] font-semibold tracking-tight text-[#1C3A52] leading-tight">
+          <h2 className="text-[clamp(1.8rem,5vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
             {cta.title}
           </h2>
           <p className="text-gray-500 text-[14px] max-w-lg mx-auto leading-relaxed">{cta.subtitle}</p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to={cta.buttonLink}
-              className="bg-[#1C3A52] text-white font-bold text-[13px] px-7 py-3.5 rounded-full flex items-center gap-2 hover:opacity-80 transition-opacity"
+              className="w-full sm:w-auto bg-[#1C3A52] text-white font-bold text-[14px] px-7 py-3.5 rounded-full flex items-center justify-center gap-2 hover:opacity-80 transition-opacity min-h-[44px]"
             >
               {cta.buttonText} <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
             </Link>
@@ -427,7 +427,7 @@ const Partenaires = () => {
               href="https://www.oncoaching.fr"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#F3F4F6] text-[#1C3A52] font-bold text-[13px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
+              className="w-full sm:w-auto bg-[#F3F4F6] text-[#1C3A52] font-bold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center min-h-[44px]"
             >
               oncoaching.fr
             </a>

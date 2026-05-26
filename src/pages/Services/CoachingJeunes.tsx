@@ -158,13 +158,13 @@ const CoachingJeunes = () => {
         {/* 01. HERO */}
         <section className="pt-20 md:pt-28 pb-12 md:pb-16">
           <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-center">
 
               <motion.div
                 initial="hidden"
                 animate="visible"
                 variants={staggerContainer}
-                className="space-y-7"
+                className="space-y-5 sm:space-y-7"
                 aria-labelledby="jeunes-h1"
               >
                 <motion.p
@@ -177,7 +177,7 @@ const CoachingJeunes = () => {
 
                 <h1
                   id="jeunes-h1"
-                  className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.15]"
+                  className="text-[clamp(2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight"
                 >
                   <div>{page.title.split(" ").slice(0, 2).join(" ")}</div>
                   <div className="flex flex-wrap gap-x-3">
@@ -208,19 +208,19 @@ const CoachingJeunes = () => {
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">
-                  <motion.div {...btnHoverProps}>
+                  <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                      className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                       aria-label="Réserver un premier échange gratuit"
                     >
                       1er échange gratuit <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </motion.div>
-                  <motion.div {...btnHoverProps}>
+                  <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
                     <Link
                       to="/nos-tarifs"
-                      className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 rounded-full hover:bg-gray-200 transition-colors"
+                      className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                     >
                       Voir les tarifs
                     </Link>
@@ -232,7 +232,7 @@ const CoachingJeunes = () => {
                 variants={springRight}
                 initial="hidden"
                 animate="visible"
-                className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden group shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                className="relative h-[220px] sm:h-[300px] md:h-[380px] rounded-[32px] overflow-hidden group shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
               >
                 <img
                   src={HERO_IMG}
@@ -372,7 +372,7 @@ const CoachingJeunes = () => {
               whileInView="visible"
               viewport={VP}
               variants={staggerContainer}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center"
             >
               <motion.div
                 variants={springLeft}
@@ -435,10 +435,10 @@ const CoachingJeunes = () => {
                     </motion.li>
                   ))}
                 </ul>
-                <motion.div {...btnHoverProps}>
+                <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                    className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                   >
                     Prendre rendez-vous <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
@@ -492,7 +492,7 @@ const CoachingJeunes = () => {
                 <motion.div {...btnHoverProps}>
                   <Link
                     to={cta.buttonLink}
-                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 rounded-2xl hover:opacity-90 transition-opacity"
+                    className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 min-h-[44px] rounded-2xl hover:opacity-90 transition-opacity"
                     aria-label="Prendre rendez-vous pour un coaching jeunes"
                   >
                     {cta.buttonText} <ArrowUpRight className="w-5 h-5" aria-hidden="true" />
@@ -504,7 +504,7 @@ const CoachingJeunes = () => {
                 <motion.div {...btnHoverProps}>
                   <Link
                     to="/nos-tarifs"
-                    className="w-full inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold text-[14px] px-8 py-4 rounded-2xl hover:bg-white/25 transition-colors backdrop-blur-sm"
+                    className="w-full inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold text-[14px] px-8 py-4 min-h-[44px] rounded-2xl hover:bg-white/25 transition-colors backdrop-blur-sm"
                   >
                     Voir les tarifs
                   </Link>

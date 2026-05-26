@@ -212,7 +212,7 @@ const NosTarifs = () => {
       <div className="w-full bg-[#FBFBFB] overflow-x-hidden">
 
         {/* ── HERO ──────────────────────────────────────────────────────── */}
-        <section className="pt-12 md:pt-20 lg:pt-28 pb-8 md:pb-10 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="pt-20 md:pt-28 lg:pt-32 pb-8 md:pb-10 max-w-7xl mx-auto px-5 md:px-12">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -230,7 +230,7 @@ const NosTarifs = () => {
           <motion.h1
             initial="hidden"
             animate="visible"
-            className="flex flex-wrap gap-x-5 gap-y-1 mb-8"
+            className="flex flex-wrap gap-x-3 sm:gap-x-5 gap-y-1 mb-8"
             aria-label="Des tarifs clairs & justes."
           >
             {WORDS_HERO.map((word, i) => (
@@ -243,7 +243,7 @@ const NosTarifs = () => {
                     ? "text-[#C4903E]"
                     : "text-[#1C3A52]"
                 }`}
-                style={{ fontSize: "clamp(2.5rem,6vw,6rem)" }}
+                style={{ fontSize: "clamp(1.8rem,5vw,6rem)" }}
               >
                 {word}
               </motion.span>
@@ -322,9 +322,9 @@ const NosTarifs = () => {
                   <span className="text-gray-400 text-[14px] mb-2">/séance</span>
                 </div>
                 <p className="text-gray-500 text-[14px] mb-6">Particuliers, étudiants, jeunes adultes.</p>
-                <ul className="space-y-3 flex-1 mb-8">
+                <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
                   {particuliers.cards[0]?.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-3 text-[15px] text-[#1C3A52] font-medium">
+                    <li key={j} className="flex items-start gap-3 text-[14px] sm:text-[15px] text-[#1C3A52] font-medium">
                       <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[#C4903E]/15 flex items-center justify-center">
                         <Check className="w-3 h-3 text-[#C4903E]" strokeWidth={3} />
                       </span>
@@ -334,7 +334,7 @@ const NosTarifs = () => {
                 </ul>
                 <Link
                   to="/contact"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:bg-[#C4903E] transition-colors w-full sm:w-auto"
+                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:bg-[#C4903E] transition-colors w-full min-h-[44px]"
                 >
                   Prendre RDV <ArrowUpRight className="w-4 h-4" />
                 </Link>
@@ -372,9 +372,9 @@ const NosTarifs = () => {
                     <span className="text-white/40 text-[14px] mb-2">/30 min</span>
                   </div>
                   <p className="text-white/50 text-[14px] mb-6">{neurofeedback.subtitle}</p>
-                  <ul className="space-y-3 flex-1 mb-8">
+                  <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
                     {neurofeedback.cards[0]?.items?.map((item, j) => (
-                      <li key={j} className="flex items-start gap-3 text-[15px] text-white/80 font-medium">
+                      <li key={j} className="flex items-start gap-3 text-[14px] sm:text-[15px] text-white/80 font-medium">
                         <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[#C4903E]/20 flex items-center justify-center">
                           <Check className="w-3 h-3 text-[#C4903E]" strokeWidth={3} />
                         </span>
@@ -384,7 +384,7 @@ const NosTarifs = () => {
                   </ul>
                   <Link
                     to="/contact"
-                    className="mt-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-[#1C3A52] font-black text-[14px] px-6 py-3.5 rounded-full hover:brightness-110 transition-all w-full sm:w-auto"
+                    className="mt-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-[#1C3A52] font-black text-[14px] px-6 py-3.5 rounded-full hover:brightness-110 transition-all w-full min-h-[44px]"
                   >
                     Prendre RDV <ArrowUpRight className="w-4 h-4" />
                   </Link>
@@ -408,9 +408,9 @@ const NosTarifs = () => {
                   <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)" }}>Sur devis</span>
                 </div>
                 <p className="text-[#1C3A52]/70 text-[14px] mb-6">{entreprises.subtitle}</p>
-                <ul className="space-y-3 flex-1 mb-8">
+                <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
                   {entreprises.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-3 text-[15px] text-[#1C3A52] font-medium">
+                    <li key={j} className="flex items-start gap-3 text-[14px] sm:text-[15px] text-[#1C3A52] font-medium">
                       <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[#1C3A52]/10 flex items-center justify-center">
                         <Check className="w-3 h-3 text-[#1C3A52]" strokeWidth={3} />
                       </span>
@@ -420,7 +420,7 @@ const NosTarifs = () => {
                 </ul>
                 <Link
                   to="/contact"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity w-full sm:w-auto"
+                  className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity w-full min-h-[44px]"
                 >
                   Demander un devis <ArrowUpRight className="w-4 h-4" />
                 </Link>
@@ -431,7 +431,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── COMMENT ÇA MARCHE ─────────────────────────────────────────── */}
-        <section className="py-12 md:py-20 lg:py-28">
+        <section className="py-10 md:py-16 lg:py-28">
           <div className="max-w-7xl mx-auto px-5 md:px-12">
             <motion.div
               initial="hidden"
@@ -481,7 +481,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── FAQ TARIFS ────────────────────────────────────────────────── */}
-        <section className="py-12 md:py-20 lg:py-28 max-w-7xl mx-auto px-5 md:px-12">
+        <section className="py-10 md:py-16 lg:py-28 max-w-7xl mx-auto px-5 md:px-12">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -522,7 +522,7 @@ const NosTarifs = () => {
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : i)}
-                    className="w-full flex items-center gap-4 px-6 py-5 text-left"
+                    className="w-full flex items-center gap-4 px-4 sm:px-6 py-4 sm:py-5 text-left min-h-[44px]"
                     aria-expanded={isOpen}
                   >
                     <span className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
@@ -550,7 +550,7 @@ const NosTarifs = () => {
                         exit="exit"
                         className="overflow-hidden"
                       >
-                        <p className="px-6 pb-6 pl-[4.25rem] text-gray-500 text-[15px] leading-relaxed">
+                        <p className="px-4 sm:px-6 pb-6 pl-4 sm:pl-[4.25rem] text-gray-500 text-[14px] sm:text-[15px] leading-relaxed">
                           {item.answer}
                         </p>
                       </motion.div>
@@ -563,7 +563,7 @@ const NosTarifs = () => {
         </section>
 
         {/* ── CTA DARK ──────────────────────────────────────────────────── */}
-        <section className="py-12 md:py-20 lg:py-28">
+        <section className="py-10 sm:py-14 md:py-20 lg:py-28">
           <motion.div
             initial={{ opacity: 0, y: 32, scale: 0.98 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -614,12 +614,12 @@ const NosTarifs = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={VP}
                 transition={{ delay: 0.34 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10 w-full sm:w-auto"
+                className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10"
               >
                 <motion.div {...btnHoverProps} className="w-full sm:w-auto">
                   <Link
                     to={cta.buttonLink}
-                    className="inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-black text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition-all w-full sm:w-auto"
+                    className="inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-black text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition-all w-full sm:w-auto min-h-[52px]"
                   >
                     {cta.buttonText} <ArrowUpRight className="w-4 h-4" />
                   </Link>
@@ -627,7 +627,7 @@ const NosTarifs = () => {
                 <motion.div {...btnHoverProps} className="w-full sm:w-auto">
                   <Link
                     to="/about"
-                    className="inline-flex items-center justify-center gap-2.5 bg-transparent border-2 border-white/20 text-white font-bold text-[15px] px-8 py-4 rounded-full hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto"
+                    className="inline-flex items-center justify-center gap-2.5 bg-transparent border-2 border-white/20 text-white font-bold text-[15px] px-8 py-4 rounded-full hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto min-h-[52px]"
                   >
                     Notre approche
                   </Link>

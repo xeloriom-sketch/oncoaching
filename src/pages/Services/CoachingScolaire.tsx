@@ -164,13 +164,13 @@ const CoachingScolaire = () => {
       {/* ── 01. HERO ─────────────────────────────────────────────── */}
       <section className="bg-[#FBFBFB] pt-20 md:pt-28 pb-12 md:pb-16">
         <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-center">
 
             <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="flex flex-col gap-6"
+              className="flex flex-col gap-5 sm:gap-6"
             >
               <motion.p
                 variants={blurInUp}
@@ -181,7 +181,7 @@ const CoachingScolaire = () => {
               </motion.p>
 
               <h1
-                className="text-[clamp(2.2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]"
+                className="text-[clamp(2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight"
               >
                 {H1_WORDS.map((word, i) => (
                   <motion.span
@@ -204,18 +204,18 @@ const CoachingScolaire = () => {
               </motion.p>
 
               <motion.div variants={blurInUp} className="flex flex-wrap gap-3">
-                <motion.span className="inline-block" {...btnHoverProps}>
+                <motion.span className="inline-block w-full sm:w-auto" {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                    className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-6 py-3 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                   >
                     1er RDV offert <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </Link>
                 </motion.span>
-                <motion.span className="inline-block" {...btnHoverProps}>
+                <motion.span className="inline-block w-full sm:w-auto" {...btnHoverProps}>
                   <Link
                     to="/coaching-scolaire#tarif"
-                    className="inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[13px] px-6 py-3 rounded-full hover:bg-gray-200 transition-colors"
+                    className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-6 py-3 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                   >
                     Voir les tarifs
                   </Link>
@@ -229,7 +229,7 @@ const CoachingScolaire = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               className="relative"
             >
-              <div className="relative h-[320px] sm:h-[400px] md:h-[460px] rounded-[32px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+              <div className="relative h-[220px] sm:h-[300px] md:h-[380px] rounded-[32px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
                 <img
                   src={HERO_IMG}
                   alt="Coaching scolaire à Mâcon — ON Coaching"
@@ -328,7 +328,7 @@ const CoachingScolaire = () => {
                       onMouseMove={tilt.onMouseMove}
                       onMouseLeave={tilt.onMouseLeave}
                       onMouseEnter={tilt.onMouseEnter}
-                      className="bg-white/5 border border-white/8 rounded-[24px] p-6 flex flex-col gap-4 cursor-default"
+                      className="bg-white/5 border border-white/8 rounded-[24px] p-5 sm:p-6 flex flex-col gap-4 cursor-default"
                       style={{ willChange: "transform" }}
                     >
                       <div
@@ -338,7 +338,7 @@ const CoachingScolaire = () => {
                         <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
                       </div>
                       <h3 className="text-white font-semibold text-[15px] leading-snug">{b.title}</h3>
-                      <p className="text-white/50 text-[13px] leading-relaxed flex-1">{b.desc}</p>
+                      <p className="text-white/50 text-[14px] leading-relaxed flex-1">{b.desc}</p>
                     </motion.article>
                   );
                 })}
@@ -357,7 +357,7 @@ const CoachingScolaire = () => {
             viewport={VP}
             variants={staggerContainer}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-start">
 
               <motion.div variants={springUp} className="relative">
                 <div className="relative h-[300px] sm:h-[380px] md:h-[440px] rounded-[32px] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.18)]">
@@ -417,10 +417,10 @@ const CoachingScolaire = () => {
                   ))}
                 </ul>
 
-                <motion.span className="inline-block w-fit" {...btnHoverProps}>
+                <motion.span className="inline-block w-full sm:w-auto" {...btnHoverProps}>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[13px] px-6 py-3 rounded-full hover:opacity-90 transition-opacity"
+                    className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-6 py-3 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                   >
                     Prendre contact <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </Link>
@@ -485,7 +485,7 @@ const CoachingScolaire = () => {
                   <motion.span className="inline-block w-fit" {...btnHoverProps}>
                     <Link
                       to={cta.buttonLink}
-                      className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity"
+                      className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity"
                     >
                       Prendre RDV <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
