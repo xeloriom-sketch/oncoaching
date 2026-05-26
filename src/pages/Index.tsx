@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -38,40 +38,19 @@ const HERO_VIDEOS = [
   { webm: `${import.meta.env.BASE_URL}hero-3.webm`, mp4: `${import.meta.env.BASE_URL}5697350-uhd_2160_3840_24fps.mp4` },
 ];
 
-const SERVICES = [
-  {
-    key: "scolaire",
-    Icon: GraduationCap,
-    title: "Coaching scolaire & étudiant",
-    desc: "Soutien, méthodologie et orientation pour réussir sa scolarité ou ses études.",
-    href: ROUTES.scolaire,
-    tag: "Collégiens · Lycéens · Étudiants",
-  },
-  {
-    key: "jeunes",
-    Icon: Zap,
-    title: "Coaching jeunes & jeunes adultes",
-    desc: "Accompagnement lors des choix d'orientation, insertion pro et construction du projet de vie.",
-    href: ROUTES.jeunes,
-    tag: "15 – 30 ans",
-  },
-  {
-    key: "neurofeedback",
-    Icon: Brain,
-    title: "Coaching & Neurofeedback",
-    desc: "Entraînement cérébral NeurOptimal® : réduction du stress, concentration, sommeil, performances cognitives. Non invasif, dès 6 à 10 séances.",
-    href: ROUTES.neurofeedback,
-    tag: "NeurOptimal® · Non invasif",
-  },
-  {
-    key: "equipe",
-    Icon: Users,
-    title: "Coaching d'équipe",
-    desc: "Développez la cohésion, la performance et l'intelligence collective de votre équipe.",
-    href: ROUTES.equipe,
-    tag: "Entreprises · TPE/PME",
-  },
-];
+const SERVICE_ICON_MAP: Record<string, React.ElementType> = {
+  scolaire: GraduationCap,
+  jeunes: Zap,
+  neurofeedback: Brain,
+  equipe: Users,
+};
+
+const SERVICE_HREF_MAP: Record<string, string> = {
+  scolaire: ROUTES.scolaire,
+  jeunes: ROUTES.jeunes,
+  neurofeedback: ROUTES.neurofeedback,
+  equipe: ROUTES.equipe,
+};
 
 const SERVICE_COLORS = [
   {
@@ -108,30 +87,6 @@ const SERVICE_COLORS = [
   },
 ];
 
-const STATS = [
-  { value: "26 ans", label: "Enseignant SES" },
-  { value: "100+", label: "Accompagnements" },
-  { value: "Certifié", label: "Prisme Évolution" },
-  { value: "4", label: "Programmes spécialisés" },
-];
-
-const STEPS = [
-  {
-    num: "01",
-    title: "Consultation",
-    desc: "Premier RDV offert, diagnostic complet",
-  },
-  {
-    num: "02",
-    title: "Plan sur mesure",
-    desc: "Programme aligné avec vos objectifs",
-  },
-  {
-    num: "03",
-    title: "Transformation",
-    desc: "Résultats mesurables et durables",
-  },
-];
 
 /* ── Bouton CTA avec fond coulissant (liquid fill) ───────────────────────── */
 interface LiquidCTAProps {
@@ -217,14 +172,6 @@ export default function Index() {
     rawY.set(0);
   }, [rawX, rawY]);
 
-  const mergedServices = SERVICES.map((s) => {
-    const fromJson = content?.services?.find((j) => j.key === s.key);
-    return {
-      ...s,
-      title: fromJson?.title ?? s.title,
-      desc: fromJson?.description ?? s.desc,
-    };
-  });
 
   return (
     <Layout>
@@ -430,7 +377,7 @@ export default function Index() {
             variants={staggerContainer}
             className="bg-[#F3F4F6] rounded-[28px] px-4 sm:px-6 md:px-10 py-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center"
           >
-            {STATS.map(({ value, label }, i) => (
+            {(content?.stats ?? []).map(({ value, label }, i) => (
               <motion.div
                 key={i}
                 variants={springUp}
@@ -488,11 +435,13 @@ export default function Index() {
             className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"
             aria-label="Nos services de coaching"
           >
-            {mergedServices.map(({ key, Icon, title, desc, href, tag }, i) => {
+            {(content?.servicesCards ?? []).map((card, i) => {
               const c = SERVICE_COLORS[i];
+              const Icon = SERVICE_ICON_MAP[card.key];
+              const href = SERVICE_HREF_MAP[card.key] ?? "/";
               return (
                 <motion.article
-                  key={key}
+                  key={card.key}
                   variants={springUp}
                   {...cardHoverProps}
                   className="rounded-[28px] p-6 sm:p-8 flex flex-col gap-5 cursor-default shadow-[0_4px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.14)] transition-shadow duration-300"
@@ -503,12 +452,12 @@ export default function Index() {
                       className={`w-12 h-12 rounded-xl ${c.icon} flex items-center justify-center flex-shrink-0`}
                       aria-hidden="true"
                     >
-                      <Icon className="w-6 h-6" strokeWidth={1.6} />
+                      {Icon && <Icon className="w-6 h-6" strokeWidth={1.6} />}
                     </div>
                     <span
                       className={`text-[11px] sm:text-[12px] font-mono tracking-wide sm:tracking-widest uppercase px-2 sm:px-3 py-0.5 sm:py-1 rounded-full min-w-0 shrink ${c.tag}`}
                     >
-                      {tag}
+                      {card.tag}
                     </span>
                   </div>
 
@@ -516,17 +465,17 @@ export default function Index() {
                     <h3
                       className={`font-bold text-[18px] tracking-tight ${c.text}`}
                     >
-                      {title}
+                      {card.title}
                     </h3>
                     <p className={`text-[15px] leading-relaxed ${c.sub}`}>
-                      {desc}
+                      {card.desc}
                     </p>
                   </div>
 
                   <Link
                     to={href}
                     className={`flex items-center gap-2 text-[14px] font-bold transition-all hover:gap-3 w-fit min-h-[44px] ${c.link}`}
-                    aria-label={`Découvrir ${title}`}
+                    aria-label={`Découvrir ${card.title}`}
                   >
                     Découvrir <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
@@ -752,7 +701,7 @@ export default function Index() {
             variants={staggerContainer}
             className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 items-start"
           >
-            {STEPS.map(({ num, title, desc }, i) => (
+            {(content?.steps ?? []).map(({ num, title, desc }, i, arr) => (
               <motion.div
                 key={num}
                 variants={springUp}
@@ -780,7 +729,7 @@ export default function Index() {
                     {desc}
                   </p>
                 </div>
-                {i < STEPS.length - 1 && (
+                {i < arr.length - 1 && (
                   <div className="md:hidden flex justify-center">
                     <ArrowRight
                       className="w-5 h-5 text-gray-200 rotate-90"
