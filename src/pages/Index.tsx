@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -187,11 +187,11 @@ export default function Index() {
     void (e.currentTarget as HTMLVideoElement).play().catch(() => {});
   }, []);
 
-  // iOS Safari + <source> children : appel explicite de load() au montage
-  const heroVideoRef = useCallback((node: HTMLVideoElement | null) => {
-    if (!node) return;
-    node.load();
-  }, [videoIdx]); // eslint-disable-line react-hooks/exhaustive-deps
+  // iOS Safari + <source> children : load() explicite sans ref sur motion.video
+  useEffect(() => {
+    const video = document.querySelector<HTMLVideoElement>(`[data-hero="${videoIdx}"]`);
+    if (video) video.load();
+  }, [videoIdx]);
 
   /* ── Parallaxe souris — Hero ───────────────────────────────── */
   const heroRef = useRef<HTMLElement>(null);
@@ -308,7 +308,7 @@ export default function Index() {
               <AnimatePresence mode="sync">
                 <motion.video
                   key={videoIdx}
-                  ref={heroVideoRef}
+                  data-hero={videoIdx}
                   className="absolute inset-0 w-full h-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: videoReady ? 1 : 0 }}
