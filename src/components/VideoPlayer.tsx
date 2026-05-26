@@ -12,14 +12,17 @@ const fmt = (s: number) => {
 };
 
 export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
-  const ref          = useRef<HTMLVideoElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref           = useRef<HTMLVideoElement>(null);
+  const containerRef  = useRef<HTMLDivElement>(null);
+  const userUnmuted   = useRef(false); // true dès que l'utilisateur a activé le son
   const [playing, setPlaying] = useState(false);
   const [time,    setTime]    = useState(0);
   const [dur,     setDur]     = useState(0);
-  const [muted,   setMuted]   = useState(true); // muet par défaut → autoplay mobile
+  const [muted,   setMuted]   = useState(true);
+  const [showSoundHint, setShowSoundHint] = useState(true);
 
-  // Autoplay quand le player entre dans le viewport (≥50% visible)
+  // Autoplay muet quand le player entre dans le viewport (≥50% visible)
+  // Ne re-mute PAS si l'utilisateur a déjà activé le son manuellement
   useEffect(() => {
     const video = ref.current;
     const container = containerRef.current;
@@ -28,8 +31,11 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          video.muted = true;
-          void video.play().then(() => { setPlaying(true); setMuted(true); }).catch(() => {});
+          if (!userUnmuted.current) video.muted = true;
+          void video.play().then(() => {
+            setPlaying(true);
+            if (!userUnmuted.current) setMuted(true);
+          }).catch(() => {});
         } else {
           video.pause();
           setPlaying(false);
@@ -71,6 +77,10 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
     if (!v) return;
     v.muted = !v.muted;
     setMuted(v.muted);
+    if (!v.muted) {
+      userUnmuted.current = true;
+      setShowSoundHint(false);
+    }
   }, []);
 
   const pct = dur > 0 ? (time / dur) * 100 : 0;
@@ -108,6 +118,20 @@ export default function VideoPlayer({ src, webmSrc, facebookUrl }: Props) {
             </svg>
           </div>
         </div>
+      )}
+
+      {/* ── Badge "Activer le son" (visible tant que muet + indice non fermé) ── */}
+      {muted && showSoundHint && playing && (
+        <button
+          onClick={toggleMute}
+          className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/70 backdrop-blur-sm text-white text-[12px] font-semibold px-3 py-1.5 rounded-full hover:bg-[#C4903E] transition-colors z-10"
+          aria-label="Activer le son"
+        >
+          <svg viewBox="0 0 20 20" className="w-4 h-4 fill-current">
+            <path d="M9.344,2.593c-0.253-0.104-0.547-0.045-0.743,0.15L4.486,6.887H1.313c-0.377,0-0.681,0.305-0.681,0.681v4.916c0,0.377,0.304,0.681,0.681,0.681h3.154l4.137,4.142c0.13,0.132,0.304,0.201,0.482,0.201c0.088,0,0.176-0.017,0.261-0.052c0.254-0.105,0.42-0.354,0.42-0.629L9.765,3.224C9.765,2.947,9.599,2.699,9.344,2.593z M5.233,12.003c-0.128-0.127-0.302-0.2-0.483-0.2H1.994V8.249h2.774c0.182,0,0.355-0.072,0.483-0.201l3.151-3.173l0.001,10.305L5.233,12.003z" />
+          </svg>
+          Activer le son
+        </button>
       )}
 
       {/* ── Contrôles ── */}
