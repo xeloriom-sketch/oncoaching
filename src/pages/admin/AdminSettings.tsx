@@ -9,6 +9,8 @@ import {
   ExternalLink,
   Check,
   X,
+  Bell,
+  Loader2,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/lib/adminAuth";
@@ -364,6 +366,109 @@ function DangerSection() {
   );
 }
 
+// ── Push Notifications Section ────────────────────────────────────────────────
+
+function PushSection() {
+  const { toast } = useToast();
+  const [pushSupported, setPushSupported] = useState(false);
+  const [pushEnabled, setPushEnabled]     = useState(false);
+  const [pushLoading, setPushLoading]     = useState(false);
+
+  useEffect(() => {
+    setPushSupported('serviceWorker' in navigator && 'PushManager' in window);
+    // Vérifie si déjà souscrit
+    navigator.serviceWorker?.ready.then(reg => {
+      reg.pushManager.getSubscription().then(sub => {
+        setPushEnabled(!!sub);
+      });
+    });
+  }, []);
+
+  async function handleTogglePush() {
+    setPushLoading(true);
+    try {
+      const reg = await navigator.serviceWorker.register(
+        `${import.meta.env.BASE_URL}sw.js`,
+        { scope: import.meta.env.BASE_URL }
+      );
+      await navigator.serviceWorker.ready;
+
+      const existing = await reg.pushManager.getSubscription();
+
+      if (pushEnabled && existing) {
+        // Désabonner
+        await existing.unsubscribe();
+        await supabase.from('push_subscriptions').delete().eq('endpoint', existing.endpoint);
+        setPushEnabled(false);
+        toast({ title: 'Notifications désactivées' });
+      } else {
+        // Abonner
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          toast({ title: 'Permission refusée', description: 'Autorisez les notifications dans les paramètres du navigateur.', variant: 'destructive' });
+          return;
+        }
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: import.meta.env.VITE_VAPID_PUBLIC_KEY,
+        });
+        const json = sub.toJSON();
+        await supabase.from('push_subscriptions').upsert({
+          endpoint: json.endpoint,
+          p256dh:   (json.keys as Record<string,string>).p256dh,
+          auth:     (json.keys as Record<string,string>).auth,
+        }, { onConflict: 'endpoint' });
+        setPushEnabled(true);
+        toast({ title: '🔔 Notifications activées', description: 'Vous recevrez une notification à chaque nouveau message.' });
+      }
+    } catch (err) {
+      toast({ title: 'Erreur', description: err instanceof Error ? err.message : 'Erreur inconnue', variant: 'destructive' });
+    } finally {
+      setPushLoading(false);
+    }
+  }
+
+  return (
+    <Section delay={0.15}>
+      <SectionTitle>
+        <span className="flex items-center gap-2">
+          <Bell className="w-4 h-4" style={{ color: GOLD }} />
+          Notifications push
+        </span>
+      </SectionTitle>
+
+      {!pushSupported ? (
+        <p className="text-sm text-slate-500">Votre navigateur ne supporte pas les notifications push.</p>
+      ) : (
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-medium text-slate-700">
+              {pushEnabled ? '🔔 Notifications activées' : '🔕 Notifications désactivées'}
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              {pushEnabled
+                ? 'Vous recevrez une notification sur cet appareil à chaque nouveau message.'
+                : "Activez pour être notifié instantanément sur ce téléphone ou PC."}
+            </p>
+          </div>
+          <button
+            onClick={handleTogglePush}
+            disabled={pushLoading}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-colors disabled:opacity-50 ${
+              pushEnabled
+                ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                : 'bg-[#1C3A52] text-white hover:bg-[#16304a]'
+            }`}
+          >
+            {pushLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+            {pushEnabled ? 'Désactiver' : 'Activer'}
+          </button>
+        </div>
+      )}
+    </Section>
+  );
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 
 const AdminSettings = () => {
@@ -394,6 +499,7 @@ const AdminSettings = () => {
         <CompteSection />
         <InitContentSection />
         <InfoSection />
+        <PushSection />
         <DangerSection />
 
       </div>

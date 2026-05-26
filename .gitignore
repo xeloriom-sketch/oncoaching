@@ -27,3 +27,7 @@ dist-ssr
 vite.config.ts.timestamp-*
 .env
 .env.local
+
+# Clés privées — ne jamais commiter
+*.pem
+vapid-private.pem

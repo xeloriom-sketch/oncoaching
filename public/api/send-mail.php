@@ -262,6 +262,37 @@ function buildRdvEmail($firstName, $name, $email, $phone, $serviceLabel, $messag
     return baseLayout($content, "Votre RDV du $dateFormatted est en cours de confirmation.");
 }
 
+// ── Template Notification Admin ────────────────────────────────────────────────
+function buildAdminNotifEmail($type, $name, $email, $phone, $service, $subject, $message, $date, $time) {
+    $navy = BRAND_NAVY; $gold = BRAND_COLOR;
+    $typeLabel = $type === 'rdv' ? '📅 Nouveau RDV' : '💬 Nouveau message';
+    $adminUrl  = BRAND_SITE . '/admin/messages';
+
+    $rows = row('Nom', htmlspecialchars($name))
+          . row('Email', htmlspecialchars($email))
+          . ($phone   ? row('Téléphone', htmlspecialchars($phone))   : '')
+          . ($service ? row('Service',   htmlspecialchars($service)) : '')
+          . ($type === 'rdv'
+              ? row('Date souhaitée', htmlspecialchars($date))
+              . row('Créneau', htmlspecialchars($time))
+              : row('Sujet', htmlspecialchars($subject)))
+          . ($message ? rowLong('Message', $message) : '');
+
+    $content = "
+    <h1 style='margin:0 0 8px;font-size:24px;font-weight:800;color:$navy;'>$typeLabel</h1>
+    <p style='margin:0 0 24px;font-size:14px;color:#6b7280;'>Reçu le " . date('d/m/Y à H:i') . "</p>
+    <table width='100%' cellpadding='0' cellspacing='0' border='0' style='background:#F9F7F4;border-radius:16px;overflow:hidden;margin-bottom:24px;'>
+      <tr><td style='padding:16px 24px 4px;'><table width='100%'>$rows</table></td></tr>
+    </table>
+    <div style='text-align:center;'>
+      <a href='$adminUrl' style='display:inline-block;background:$gold;color:#fff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;'>
+        Voir dans l'admin
+      </a>
+    </div>";
+
+    return baseLayout($content, "$typeLabel de $name");
+}
+
 // ── Construire et envoyer l'email ──────────────────────────────────────────────
 if ($type === 'rdv') {
     $mailSubject = '📅 Demande de RDV confirmée — ' . BRAND_NAME;
@@ -278,6 +309,34 @@ $headers .= "Reply-To: " . BRAND_EMAIL . "\r\n";
 $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
 
 $sent = mail($email, $mailSubject, $htmlBody, $headers);
+
+// Email de notification à l'admin
+$adminSubject = ($type === 'rdv' ? '📅 Nouveau RDV' : '💬 Nouveau message') . ' — ' . $name;
+$adminBody    = buildAdminNotifEmail($type, $name, $email, $phone, $serviceLabel, $subject, $message, $dateFormatted, $timeLabel);
+$adminHeaders = "MIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n"
+              . "From: ON Coaching <no-reply@oncoaching.fr>\r\n";
+mail(BRAND_EMAIL, $adminSubject, $adminBody, $adminHeaders);
+
+// Notification push admin
+$pushPayload = json_encode([
+    'title' => $type === 'rdv' ? '📅 Nouveau RDV — ' . $name : '💬 Nouveau message — ' . $name,
+    'body'  => $type === 'rdv'
+        ? "Date souhaitée : $dateFormatted · $timeLabel"
+        : ($subject ?: ($message ? mb_substr($message, 0, 80) : 'Nouveau contact')),
+    'url'   => '/admin/messages',
+]);
+
+$pushUrl = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/send-push.php';
+$pushCh = curl_init($pushUrl);
+curl_setopt_array($pushCh, [
+    CURLOPT_POST           => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POSTFIELDS     => $pushPayload,
+    CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+    CURLOPT_TIMEOUT        => 10,
+]);
+curl_exec($pushCh);
+curl_close($pushCh);
 
 if ($sent) {
     echo json_encode(['ok' => true, 'message' => 'Email envoyé à ' . $email]);

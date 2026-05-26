@@ -1,0 +1,4 @@
+# Bloquer l'accès direct aux clés privées
+<FilesMatch "\.(pem|key|crt)$">
+    Require all denied
+</FilesMatch>

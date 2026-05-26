@@ -91,6 +91,23 @@ CREATE TRIGGER trg_page_content_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 
+-- ── Table : souscriptions push notifications ──────────────────────────────
+CREATE TABLE IF NOT EXISTS push_subscriptions (
+  id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  endpoint   TEXT UNIQUE NOT NULL,
+  p256dh     TEXT NOT NULL,
+  auth       TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
+
+-- Seul l'admin authentifié peut gérer ses souscriptions
+DROP POLICY IF EXISTS "Push admin seulement" ON push_subscriptions;
+CREATE POLICY "Push admin seulement" ON push_subscriptions
+  FOR ALL USING (auth.role() = 'authenticated');
+
+
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 5. DONNÉES — Contenu des 11 pages
 -- ─────────────────────────────────────────────────────────────────────────────
