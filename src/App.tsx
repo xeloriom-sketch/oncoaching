@@ -23,6 +23,15 @@ const CoachingEquipe      = lazy(() => import("./pages/Services/CoachingEquipe")
 const Partenaires         = lazy(() => import("./pages/Partenaires"));
 const NotFound            = lazy(() => import("./pages/NotFound"));
 
+// ─── Admin pages (lazy) ───────────────────────────────────────────────────────
+const AdminLogin         = lazy(() => import("./pages/admin/AdminLogin"));
+const AdminLayout        = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminDashboard     = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminContent       = lazy(() => import("./pages/admin/AdminContent"));
+const AdminContentEditor = lazy(() => import("./pages/admin/AdminContentEditor"));
+const AdminMessages      = lazy(() => import("./pages/admin/AdminMessages"));
+const AdminSettings      = lazy(() => import("./pages/admin/AdminSettings"));
+
 // ─── Query client (content cached for entire session) ─────────────────────────
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -90,6 +99,15 @@ const App = () => {
               <Route path="/coaching-neurofeedback" element={<CoachingNeurofeedback />} />
               <Route path="/coaching-equipe"        element={<CoachingEquipe />} />
               <Route path="/partenaires"            element={<Partenaires />} />
+              {/* ── Admin routes ──────────────────────────────────── */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="content" element={<AdminContent />} />
+                <Route path="content/:page" element={<AdminContentEditor />} />
+                <Route path="messages" element={<AdminMessages />} />
+                <Route path="settings" element={<AdminSettings />} />
+              </Route>
               <Route path="*"                       element={<NotFound />} />
             </Routes>
           </Suspense>
