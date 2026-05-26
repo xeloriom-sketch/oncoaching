@@ -597,7 +597,7 @@ const About = () => {
               href={`${import.meta.env.BASE_URL}certification.webp`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto md:w-[280px] lg:w-[320px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 block hover:opacity-90 transition-opacity"
+              className="w-full sm:w-auto md:w-[280px] lg:w-[320px] rounded-[20px] overflow-hidden flex-shrink-0 border border-white/10 relative z-10 block hover:opacity-90 transition-opacity bg-white"
               aria-label="Voir la certification NeurOptimal® en grand"
             >
               <img
