@@ -218,9 +218,10 @@
       (function(){
         var p = new URLSearchParams(window.location.search).get('p');
         if (p) {
-          var url = window.location.pathname + decodeURIComponent(p) +
-                    window.location.search.replace(/[?&]p=[^&]*/, '').replace(/^&/, '?') +
-                    window.location.hash;
+          var base = window.location.pathname.replace(/\/$/, '');
+          var url  = base + decodeURIComponent(p) +
+                     window.location.search.replace(/[?&]p=[^&]*/, '').replace(/^&/, '?') +
+                     window.location.hash;
           window.history.replaceState(null, '', url);
         }
       })();

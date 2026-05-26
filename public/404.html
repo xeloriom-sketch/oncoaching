@@ -4,10 +4,15 @@
   <meta charset="utf-8" />
   <title>ON Coaching</title>
   <script>
-    // GitHub Pages SPA redirect — preserves path for React Router
+    // GitHub Pages SPA redirect — project site (keeps base segment /oncoaching)
     var l = window.location;
-    var path = l.pathname || '/';
-    l.replace(l.protocol + '//' + l.host + '/?p=' + encodeURIComponent(path) + (l.search ? '&' + l.search.slice(1) : '') + l.hash);
+    var segs = l.pathname.split('/').filter(function(s){ return s !== ''; });
+    var basePath = segs.length >= 1 ? '/' + segs[0] : '';
+    var subPath  = '/' + segs.slice(1).join('/');
+    l.replace(
+      l.protocol + '//' + l.host + basePath + '/?p=' + encodeURIComponent(subPath) +
+      (l.search ? '&' + l.search.slice(1) : '') + l.hash
+    );
   </script>
 </head>
 </html>
