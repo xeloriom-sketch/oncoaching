@@ -1,0 +1,36 @@
+{
+  "heroTitle": "Ils parlent de nous",
+  "heroSubtitle": "Explorez nos revues de presse, émissions vidéo, interventions audio et profils officiels validés.",
+  "sections": [
+    {
+      "type": "facebook",
+      "title": "Le JSL",
+      "embedUrl": "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FLeJSL71%2Fposts%2Fpfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl&show_text=true&width=500",
+      "externalUrl": "https://www.facebook.com/LeJSL71/posts/pfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl"
+    },
+    {
+      "type": "linkedin",
+      "title": "Partage & Réflexions",
+      "embedUrl": "https://www.linkedin.com/embed/feed/update/urn:li:share:7386461943089291270?collapsed=1",
+      "externalUrl": "https://www.linkedin.com/feed/update/urn:li:share:7386461943089291270"
+    },
+    {
+      "type": "linkedin",
+      "title": "Dernières Actualités",
+      "embedUrl": "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7454573698885459968",
+      "externalUrl": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7454573698885459968"
+    },
+    {
+      "type": "youtube",
+      "title": "Podcast et Compagnie — L'Émission",
+      "embedUrl": "https://www.youtube.com/embed/Yu9CM4-DIXk",
+      "externalUrl": "https://www.youtube.com/watch?v=Yu9CM4-DIXk"
+    },
+    {
+      "type": "acast",
+      "title": "Le Podcast au Format Audio",
+      "embedUrl": "https://embed.acast.com/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c",
+      "externalUrl": "https://play.acast.com/s/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "siteName": "ON Coaching",
+  "tagline": "Coaching certifié à Mâcon. Coaching scolaire, jeunes adultes, neurofeedback et coaching d'équipe.",
+  "phone": "+33663041812",
+  "email": "contact@oncoaching.fr",
+  "address": "14 rue des écureuils, 71000 Sancé",
+  "social": {
+    "facebook": "https://www.facebook.com/profile.php?id=100050783821185",
+    "instagram": "https://www.instagram.com/oncoaching_",
+    "linkedin": "",
+    "youtube": ""
+  },
+  "podcast": {
+    "title": "Podcast et Compagnie - Noureddine Omar",
+    "description": "Écoutez nos épisodes sur le coaching, la performance et le développement personnel.",
+    "coverUrl": "https://assets.pippa.io/shows/64a44bff1355cb0011b8142a/1769533670960-407c032a-8a77-477e-971a-d909a4ba3cb3.jpeg",
+    "acastUrl": "https://play.acast.com/s/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c",
+    "spotifyUrl": "",
+    "applePodcastsUrl": ""
+  }
+}

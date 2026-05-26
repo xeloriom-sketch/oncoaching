@@ -3,12 +3,70 @@ import { Newspaper, Linkedin, Podcast, Users, ExternalLink } from "lucide-react"
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { VP, fadeInScale, fadeInUp, staggerContainer } from "@/lib/motion";
+import { usePageContent } from "@/hooks/usePageContent";
+
+interface MediaSection {
+  type: "facebook" | "linkedin" | "youtube" | "acast";
+  title: string;
+  embedUrl: string;
+  externalUrl: string;
+}
+
+interface PresseMediasContent {
+  heroTitle?: string;
+  heroSubtitle?: string;
+  sections?: MediaSection[];
+}
 
 // URL de la photo de profil officielle de Noureddine Omar
 const PATRON_IMG =
     "https://media.licdn.com/dms/image/v2/D4D03AQEuBIyw3ZLwyQ/profile-displayphoto-scale_400_400/B4DZmQ0z9EHYAg-/0/1759071390070?e=1781136000&v=beta&t=bNUjlCr-_iCl-cugb2NR0_3aPs6Ak2gii0DQHB7ssAI";
 
+// Fallback embed URLs used when Supabase content is not yet loaded
+const FALLBACK_SECTIONS: MediaSection[] = [
+  {
+    type: "facebook",
+    title: "Le JSL",
+    embedUrl: "https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FLeJSL71%2Fposts%2Fpfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl&show_text=true&width=500",
+    externalUrl: "https://www.facebook.com/LeJSL71/posts/pfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl",
+  },
+  {
+    type: "linkedin",
+    title: "Partage & Réflexions",
+    embedUrl: "https://www.linkedin.com/embed/feed/update/urn:li:share:7386461943089291270?collapsed=1",
+    externalUrl: "https://www.linkedin.com/feed/update/urn:li:share:7386461943089291270",
+  },
+  {
+    type: "linkedin",
+    title: "Dernières Actualités",
+    embedUrl: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7454573698885459968",
+    externalUrl: "https://www.linkedin.com/feed/update/urn:li:ugcPost:7454573698885459968",
+  },
+  {
+    type: "youtube",
+    title: "Podcast et Compagnie — L'Émission",
+    embedUrl: "https://www.youtube.com/embed/Yu9CM4-DIXk",
+    externalUrl: "https://www.youtube.com/watch?v=Yu9CM4-DIXk",
+  },
+  {
+    type: "acast",
+    title: "Le Podcast au Format Audio",
+    embedUrl: "https://embed.acast.com/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c",
+    externalUrl: "https://play.acast.com/s/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c",
+  },
+];
+
 export default function PresseMedias() {
+  const { content } = usePageContent<PresseMediasContent>("presse-medias");
+  const sections = content?.sections ?? FALLBACK_SECTIONS;
+  const heroTitle    = content?.heroTitle    ?? "Ils parlent de nous";
+  const heroSubtitle = content?.heroSubtitle ?? "Explorez nos revues de presse, émissions vidéo, interventions audio et profils officiels validés.";
+
+  const facebookSection  = sections.find(s => s.type === "facebook");
+  const linkedinSections = sections.filter(s => s.type === "linkedin");
+  const youtubeSection   = sections.find(s => s.type === "youtube");
+  const acastSection     = sections.find(s => s.type === "acast");
+
   return (
       <Layout>
         <SEO
@@ -63,10 +121,10 @@ export default function PresseMedias() {
                   variants={fadeInUp}
                   className="mt-3 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.02]"
               >
-                Ils parlent de nous
+                {heroTitle}
               </motion.h1>
               <motion.p variants={fadeInUp} className="mt-4 text-[16px] text-gray-500 max-w-2xl leading-relaxed">
-                Explorez nos revues de presse, émissions vidéo, interventions audio et profils officiels validés.
+                {heroSubtitle}
               </motion.p>
             </motion.div>
 
@@ -81,10 +139,10 @@ export default function PresseMedias() {
                     <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Newspaper className="w-3.5 h-3.5" /> Presse Locale
                     </span>
-                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Le JSL</h2>
+                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">{facebookSection?.title ?? "Le JSL"}</h2>
                     </div>
                     <a
-                        href="https://www.facebook.com/LeJSL71/posts/pfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl"
+                        href={facebookSection?.externalUrl ?? "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
@@ -96,7 +154,7 @@ export default function PresseMedias() {
                   <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
                     <div className="w-full max-w-full overflow-hidden rounded-xl">
                       <iframe
-                          src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FLeJSL71%2Fposts%2Fpfbid026cn9growEgiYZ7sjMSMWyJhdENBm3N6szFVMAAwsaYDkgmgSmaVuh5gLFVn4r5opl&show_text=true&width=500"
+                          src={facebookSection?.embedUrl}
                           width="100%"
                           height="720"
                           style={{ border: 'none', overflow: 'hidden', height: '720px', maxWidth: '100%' }}
@@ -117,10 +175,10 @@ export default function PresseMedias() {
                     <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Linkedin className="w-3.5 h-3.5" /> Actualités
                     </span>
-                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Partage & Réflexions</h2>
+                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">{linkedinSections[0]?.title ?? "Partage & Réflexions"}</h2>
                     </div>
                     <a
-                        href="https://www.linkedin.com/feed/update/urn:li:share:7386461943089291270"
+                        href={linkedinSections[0]?.externalUrl ?? "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
@@ -132,7 +190,7 @@ export default function PresseMedias() {
                   <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
                     <div className="w-full max-w-full overflow-hidden rounded-xl">
                       <iframe
-                          src="https://www.linkedin.com/embed/feed/update/urn:li:share:7386461943089291270?collapsed=1"
+                          src={linkedinSections[0]?.embedUrl}
                           height="750"
                           width="100%"
                           style={{ border: 'none', height: '750px', maxWidth: '100%' }}
@@ -151,10 +209,10 @@ export default function PresseMedias() {
                     <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Linkedin className="w-3.5 h-3.5" /> En Direct
                     </span>
-                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Dernières Actualités</h2>
+                      <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">{linkedinSections[1]?.title ?? "Dernières Actualités"}</h2>
                     </div>
                     <a
-                        href="https://www.linkedin.com/feed/update/urn:li:ugcPost:7454573698885459968"
+                        href={linkedinSections[1]?.externalUrl ?? "#"}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
@@ -166,7 +224,7 @@ export default function PresseMedias() {
                   <div className="w-full flex justify-center bg-gray-50 rounded-2xl p-3 sm:p-4 border border-gray-100 shadow-sm overflow-hidden">
                     <div className="w-full max-w-full overflow-hidden rounded-xl">
                       <iframe
-                          src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7454573698885459968"
+                          src={linkedinSections[1]?.embedUrl}
                           height="680"
                           width="100%"
                           style={{ border: 'none', height: '680px', maxWidth: '100%' }}
@@ -195,10 +253,10 @@ export default function PresseMedias() {
                       <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                         <Newspaper className="w-3.5 h-3.5" /> Interview Vidéo
                       </span>
-                        <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Podcast et Compagnie — L'Émission</h2>
+                        <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">{youtubeSection?.title ?? "Podcast et Compagnie — L'Émission"}</h2>
                       </div>
                       <a
-                          href="https://www.youtube.com/watch?v=Yu9CM4-DIXk"
+                          href={youtubeSection?.externalUrl ?? "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
@@ -211,7 +269,7 @@ export default function PresseMedias() {
                         <iframe
                             width="100%"
                             height="100%"
-                            src="https://www.youtube.com/embed/Yu9CM4-DIXk"
+                            src={youtubeSection?.embedUrl}
                             title="Podcast et Compagnie - Noureddine Omar"
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -229,10 +287,10 @@ export default function PresseMedias() {
                       <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                         <Podcast className="w-3.5 h-3.5" /> Écoute Nomade
                       </span>
-                        <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">Le Podcast au Format Audio</h2>
+                        <h2 className="text-xl font-semibold text-[#1C3A52] mt-1">{acastSection?.title ?? "Le Podcast au Format Audio"}</h2>
                       </div>
                       <a
-                          href="https://play.acast.com/s/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c"
+                          href={acastSection?.externalUrl ?? "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-gray-400 hover:text-[#C4903E] transition-colors"
@@ -246,7 +304,7 @@ export default function PresseMedias() {
                             title="Embed Player"
                             width="100%"
                             height="188px"
-                            src="https://embed.acast.com/64a44bff1355cb0011b8142a/6978f315e23c68f310aa204c"
+                            src={acastSection?.embedUrl}
                             scrolling="no"
                             frameBorder="0"
                             style={{ border: 'none', overflow: 'hidden', display: 'block' }}

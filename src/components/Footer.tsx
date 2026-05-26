@@ -3,7 +3,8 @@ import { Facebook, Instagram, Mail, MapPin, Phone, ArrowRight, Play, Pause, Skip
 import { LogoMark } from "@/components/Logo";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { SERVICES, SOCIAL, SITE } from "@/lib/config";
+import { SERVICES, SITE } from "@/lib/config";
+import { usePageContent } from "../hooks/usePageContent";
 
 const NAV_FOOTER = [
   { label: "Accueil",    href: "/" },
@@ -20,8 +21,36 @@ const SOCIAL_ICONS: Record<string, React.ElementType> = {
 
 const PODCAST_STORAGE_KEY = "oncoaching_podcast_state_v1";
 
+interface SiteSettings {
+  siteName?: string;
+  tagline?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  social?: {
+    facebook?: string;
+    instagram?: string;
+    linkedin?: string;
+    youtube?: string;
+  };
+  podcast?: {
+    title?: string;
+    description?: string;
+    coverUrl?: string;
+    acastUrl?: string;
+    spotifyUrl?: string;
+    applePodcastsUrl?: string;
+  };
+}
+
+const SOCIAL_STATIC = [
+  { platform: "Facebook",  href: "https://www.facebook.com/profile.php?id=100050783821185" },
+  { platform: "Instagram", href: "https://www.instagram.com/oncoaching_" },
+] as const;
+
 const Footer = () => {
   const year = new Date().getFullYear();
+  const { content: settings } = usePageContent<SiteSettings>("site-settings");
   const [playerOpen, setPlayerOpen] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -29,7 +58,7 @@ const Footer = () => {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const podcastSrc = `${import.meta.env.BASE_URL}Podcast%20et%20Compagnie%20-%20Noureddine%20Omar.mp3`;
-  const podcastCover = "https://assets.pippa.io/shows/64a44bff1355cb0011b8142a/1769533670960-407c032a-8a77-477e-971a-d909a4ba3cb3.jpeg";
+  const podcastCover = settings?.podcast?.coverUrl ?? "https://assets.pippa.io/shows/64a44bff1355cb0011b8142a/1769533670960-407c032a-8a77-477e-971a-d909a4ba3cb3.jpeg";
 
   const formatTime = (value: number) => {
     if (!Number.isFinite(value) || value < 0) return "0:00";
@@ -362,7 +391,10 @@ const Footer = () => {
                 Coaching certifié. Mâcon, France. Pour les étudiants, les jeunes adultes et les équipes.
               </p>
               <nav aria-label="Réseaux sociaux" className="flex gap-2">
-                {SOCIAL.map(({ platform, href }) => {
+                {[
+                  { platform: "Facebook",  href: settings?.social?.facebook  ?? SOCIAL_STATIC[0].href },
+                  { platform: "Instagram", href: settings?.social?.instagram ?? SOCIAL_STATIC[1].href },
+                ].filter(s => s.href).map(({ platform, href }) => {
                   const Icon = SOCIAL_ICONS[platform] ?? ArrowRight;
                   return (
                     <a
@@ -420,18 +452,18 @@ const Footer = () => {
               <ul className="space-y-3">
                 <li className="flex items-center gap-2.5">
                   <MapPin className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
-                  <span className="text-white/40 text-[12px] sm:text-[13px]">14 rue des écureuils, 71000 Sancé</span>
+                  <span className="text-white/40 text-[12px] sm:text-[13px]">{settings?.address ?? SITE.address}</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Phone className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
-                  <a href={`tel:${SITE.phone}`} className="text-white/40 hover:text-white text-[12px] sm:text-[13px] transition-colors">
-                    +33 06 63 04 18 12
+                  <a href={`tel:${settings?.phone ?? SITE.phone}`} className="text-white/40 hover:text-white text-[12px] sm:text-[13px] transition-colors">
+                    {settings?.phone ?? SITE.phone}
                   </a>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <Mail className="w-3.5 h-3.5 text-[#C4903E]/60 flex-shrink-0" strokeWidth={1.8} aria-hidden="true" />
-                  <a href={`mailto:${SITE.email}`} className="text-white/40 hover:text-white text-[12px] sm:text-[13px] transition-colors break-all">
-                    {SITE.email}
+                  <a href={`mailto:${settings?.email ?? SITE.email}`} className="text-white/40 hover:text-white text-[12px] sm:text-[13px] transition-colors break-all">
+                    {settings?.email ?? SITE.email}
                   </a>
                 </li>
               </ul>

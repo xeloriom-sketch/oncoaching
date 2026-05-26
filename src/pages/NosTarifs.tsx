@@ -15,7 +15,7 @@ import {
   btnHoverProps,
 } from "@/lib/motion";
 import type { TarifsContent } from "@/types";
-import { Check, ArrowUpRight, ChevronDown, Phone, CreditCard, Shield, Gift } from "lucide-react";
+import { Check, ArrowUpRight, ChevronDown } from "lucide-react";
 
 const WORDS_HERO = ["Des", "tarifs", "clairs", "&", "justes."];
 
@@ -33,34 +33,6 @@ const accordionBody = {
   exit:   { height: 0, opacity: 0, transition: { duration: 0.28, ease: [0.7, 0, 0.84, 0] } },
 };
 
-const FAQ_ITEMS = [
-  {
-    icon: Shield,
-    question: "Y a-t-il un engagement ?",
-    answer: "Non, aucun engagement. Chaque séance est indépendante : vous venez quand vous le souhaitez, sans abonnement ni contrat.",
-  },
-  {
-    icon: CreditCard,
-    question: "Comment régler ?",
-    answer: "Par chèque, virement bancaire ou espèces — directement en fin de séance, selon votre préférence.",
-  },
-  {
-    icon: Phone,
-    question: "Les séances sont-elles remboursables ?",
-    answer: "Le coaching n'est pas pris en charge par la Sécurité sociale. En revanche, certaines mutuelles proposent des remboursements partiels ; renseignez-vous auprès de la vôtre.",
-  },
-  {
-    icon: Gift,
-    question: "Le 1er RDV est vraiment gratuit ?",
-    answer: "Oui, la consultation découverte (30 min) est offerte et sans engagement. L'occasion de vous présenter, de comprendre vos besoins et de voir si l'accompagnement vous correspond.",
-  },
-];
-
-const STEPS = [
-  { num: "01", title: "Consultation découverte", desc: "Appel ou RDV offert — 30 min pour comprendre vos besoins et valider l'adéquation." },
-  { num: "02", title: "Parcours sur-mesure", desc: "Nous co-construisons un plan adapté à votre rythme, vos objectifs et votre budget." },
-  { num: "03", title: "Suivi & ajustements", desc: "Chaque séance est évaluée et le programme évolue avec vous au fil des progrès." },
-];
 
 const NosTarifs = () => {
   const { content, loading } = usePageContent<TarifsContent>("nos-tarifs");
@@ -458,7 +430,7 @@ const NosTarifs = () => {
               variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.15 } } }}
               className="bg-[#F3F4F6] rounded-[32px] p-5 sm:p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-6"
             >
-              {STEPS.map((step, i) => (
+              {(content.steps ?? []).map((step, i) => (
                 <motion.div
                   key={step.num}
                   variants={springLeft}
@@ -507,9 +479,8 @@ const NosTarifs = () => {
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
             className="space-y-3 max-w-3xl"
           >
-            {FAQ_ITEMS.map((item, i) => {
+            {(content.faqItems ?? []).map((item, i) => {
               const isOpen = openFaq === i;
-              const Icon = item.icon;
               return (
                 <motion.div
                   key={i}
@@ -525,12 +496,7 @@ const NosTarifs = () => {
                     className="w-full flex items-center gap-4 px-4 sm:px-6 py-4 sm:py-5 text-left min-h-[44px]"
                     aria-expanded={isOpen}
                   >
-                    <span className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
-                      isOpen ? "bg-[#C4903E] text-[#1C3A52]" : "bg-white text-[#C4903E]"
-                    }`}>
-                      <Icon className="w-4 h-4" strokeWidth={2} />
-                    </span>
-                    <span className="flex-1 font-bold text-[16px] text-[#1C3A52]">{item.question}</span>
+                    <span className="flex-1 font-bold text-[16px] text-[#1C3A52]">{item.q}</span>
                     <motion.span
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ type: "spring", stiffness: 300, damping: 22 }}
@@ -550,8 +516,8 @@ const NosTarifs = () => {
                         exit="exit"
                         className="overflow-hidden"
                       >
-                        <p className="px-4 sm:px-6 pb-6 pl-4 sm:pl-[4.25rem] text-gray-500 text-[14px] sm:text-[15px] leading-relaxed">
-                          {item.answer}
+                        <p className="px-4 sm:px-6 pb-6 text-gray-500 text-[14px] sm:text-[15px] leading-relaxed">
+                          {item.a}
                         </p>
                       </motion.div>
                     )}

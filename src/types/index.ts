@@ -114,9 +114,21 @@ export interface Formulaire {
   messages: FormMessages;
 }
 
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+export interface TimeOption {
+  value: string;
+  label: string;
+}
+
 export interface ContactContent {
   coordonnees: Coordonnees;
   formulaire: Formulaire;
+  faq?: FaqItem[];
+  timeOptions?: TimeOption[];
 }
 
 // ─── Tarifs ───────────────────────────────────────────────────────────────────
@@ -147,11 +159,24 @@ export interface NeurofeedbackSection {
   cards: PricingCard[];
 }
 
+export interface TarifsFaqItem {
+  q: string;
+  a: string;
+}
+
+export interface TarifsStep {
+  num: string;
+  title: string;
+  desc: string;
+}
+
 export interface TarifsContent {
   particuliers: ParticuliersSection;
   entreprises: EntreprisesSection;
   neurofeedback: NeurofeedbackSection;
   cta: CTA;
+  faqItems?: TarifsFaqItem[];
+  steps?: TarifsStep[];
 }
 
 // ─── Index / Home ──────────────────────────────────────────────────────────────

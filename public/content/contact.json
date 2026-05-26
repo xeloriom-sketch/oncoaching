@@ -27,6 +27,17 @@
       ]
     }
   },
+  "faq": [
+    { "q": "Comment se déroule le premier rendez-vous ?", "a": "La première consultation est offerte. Elle dure environ 45 minutes et permet de faire un bilan complet de votre situation et de définir ensemble un plan d'accompagnement personnalisé." },
+    { "q": "Quels sont les modes de paiement acceptés ?", "a": "Nous acceptons les paiements par virement bancaire, chèque ou espèces. Des facilités de paiement peuvent être envisagées selon votre situation." },
+    { "q": "Les séances peuvent-elles se faire à distance ?", "a": "Oui, les séances en visioconférence sont possibles et tout aussi efficaces. Nous utilisons Zoom ou Teams selon votre préférence." },
+    { "q": "Combien de séances sont nécessaires ?", "a": "Cela dépend de vos objectifs et de votre situation. En moyenne, un accompagnement comprend entre 6 et 12 séances, espacées d'une à deux semaines." }
+  ],
+  "timeOptions": [
+    { "value": "matin", "label": "Matin (8h–12h)" },
+    { "value": "apres-midi", "label": "Après-midi (14h–18h)" },
+    { "value": "flexible", "label": "Flexible" }
+  ],
   "formulaire": {
     "title": "Formulaire de contact",
     "subtitle": "Envoyez-nous un message et nous vous répondrons dans les plus brefs délais.",

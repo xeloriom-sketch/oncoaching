@@ -18,7 +18,7 @@ import {
   pulseDot,
   VP,
 } from "@/lib/motion";
-import { MapPin, Phone, Mail, ChevronDown, ArrowUpRight, Check, MessageSquare, CalendarDays, ChevronLeft, ChevronRight, Sunrise, Sun, CalendarClock } from "lucide-react";
+import { MapPin, Phone, Mail, ChevronDown, ArrowUpRight, Check, MessageSquare, CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import { fr } from "date-fns/locale";
 import { format, addMonths } from "date-fns";
@@ -27,25 +27,6 @@ import { useToast } from "@/hooks/use-toast";
 import type { ContactContent } from "@/types";
 
 const WORDS = ["Parlons", "de", "votre", "projet."];
-
-const FAQ = [
-  {
-    q: "Est-ce que le 1er rendez-vous est vraiment gratuit ?",
-    a: "Oui, absolument. Le premier rendez-vous est offert, sans engagement de votre part. C'est l'occasion d'échanger sur vos besoins et de voir si nous sommes faits pour travailler ensemble.",
-  },
-  {
-    q: "Comment se déroule une séance de coaching ?",
-    a: "Chaque séance dure entre 45 minutes et 1 heure. Elle peut se tenir en présentiel dans notre cabinet à Sancé ou à distance en visioconférence, selon votre préférence.",
-  },
-  {
-    q: "Combien de séances sont nécessaires ?",
-    a: "Le nombre de séances varie selon vos objectifs et votre rythme d'évolution. En général, 6 à 10 séances permettent d'atteindre des résultats concrets. Nous définissons ensemble le parcours adapté.",
-  },
-  {
-    q: "Proposez-vous des forfaits ou des tarifs spéciaux ?",
-    a: "Oui, nous proposons des forfaits séances qui offrent une réduction par rapport au tarif à l'unité. Consultez notre page Tarifs ou demandez-nous directement lors du 1er RDV.",
-  },
-];
 
 // Available booking days: Mon=1, Tue=2, Fri=5, Sat=6
 const OPEN_DAYS = new Set([1, 2, 5, 6]);
@@ -108,18 +89,20 @@ function MiniCalendar({ value, onChange }: { value: string; onChange: (d: string
   );
 }
 
-const TIME_OPTIONS = [
-  { value: "matin",       label: "Matin",       hours: "9h – 12h",   Icon: Sunrise },
-  { value: "après-midi",  label: "Après-midi",  hours: "14h – 17h",  Icon: Sun },
-  { value: "flexible",    label: "Flexible",    hours: "À convenir",  Icon: CalendarClock },
-];
-
-function TimePicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+function TimePicker({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
   return (
     <div>
       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2 pl-0.5">Créneau préféré</p>
       <div className="grid grid-cols-3 gap-2">
-        {TIME_OPTIONS.map(({ value: v, label, hours, Icon }) => {
+        {options.map(({ value: v, label }) => {
           const active = value === v;
           return (
             <button
@@ -130,15 +113,9 @@ function TimePicker({ value, onChange }: { value: string; onChange: (v: string) 
                   : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-colors ${
-                active ? "bg-[#C4903E] text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
-              }`}>
-                <Icon className="w-4 h-4" strokeWidth={1.8} />
-              </div>
-              <span className={`font-semibold text-[12px] transition-colors ${active ? "text-[#C4903E]" : "text-[#1C3A52]"}`}>
+              <span className={`font-semibold text-[13px] transition-colors ${active ? "text-[#C4903E]" : "text-[#1C3A52]"}`}>
                 {label}
               </span>
-              <span className="text-[10px] text-gray-400 leading-tight">{hours}</span>
             </button>
           );
         })}
@@ -520,6 +497,7 @@ const Contact = () => {
                         <TimePicker
                           value={formData.preferredTime}
                           onChange={(v) => setFormData(prev => ({ ...prev, preferredTime: v }))}
+                          options={content.timeOptions ?? []}
                         />
 
                         <FloatingTextarea
@@ -715,7 +693,7 @@ const Contact = () => {
               </motion.h2>
 
               <motion.div variants={stagger} className="flex flex-col gap-3">
-                {FAQ.map((item, i) => (
+                {(content.faq ?? []).map((item, i) => (
                   <motion.div key={i} variants={fadeInUp} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
                     <button
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}

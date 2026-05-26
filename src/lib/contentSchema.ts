@@ -1,9 +1,9 @@
 export interface FieldDef {
   key: string;
   label: string;
-  section: string;
+  section?: string;
   hint?: string;
-  type: "short" | "long" | "url" | "readonly";
+  type: "short" | "long" | "url" | "readonly" | "text" | "textarea" | "array" | "json";
 }
 
 export interface PageDef {
@@ -57,6 +57,9 @@ export const PAGES: PageDef[] = [
       { key: "cta.title",                         label: "Titre CTA bas de page",              section: "Appel à l'action",          type: "short" },
       { key: "cta.subtitle",                      label: "Sous-titre CTA",                     section: "Appel à l'action",          type: "long"  },
       { key: "cta.buttonText",                    label: "Texte bouton CTA",                   section: "Appel à l'action",          type: "short" },
+      { key: "stats",                             label: "Statistiques",                        section: "Statistiques",              type: "array" },
+      { key: "steps",                             label: "Étapes du processus",                 section: "Étapes",                    type: "array" },
+      { key: "servicesCards",                     label: "Cartes services",                     section: "Section Services",          type: "array" },
     ],
   },
   {
@@ -132,6 +135,8 @@ export const PAGES: PageDef[] = [
       { key: "neurofeedback.subtitle",      label: "Sous-titre Neurofeedback",     section: "Neurofeedback",    type: "long"  },
       { key: "cta.title",                   label: "Titre CTA",                    section: "Appel à l'action", type: "short" },
       { key: "cta.buttonText",              label: "Texte bouton",                 section: "Appel à l'action", type: "short" },
+      { key: "faqItems",                    label: "FAQ tarifs",                   section: "FAQ",              type: "array" },
+      { key: "steps",                       label: "Étapes processus tarifs",      section: "Étapes",           type: "array" },
     ],
   },
   {
@@ -158,6 +163,34 @@ export const PAGES: PageDef[] = [
       { key: "coordonnees.email.value",     label: "Email de contact",        section: "Coordonnées", type: "short" },
       { key: "formulaire.title",            label: "Titre formulaire",        section: "Formulaire",  type: "short" },
       { key: "formulaire.subtitle",         label: "Sous-titre formulaire",   section: "Formulaire",  type: "long"  },
+      { key: "faq",                         label: "FAQ",                     section: "FAQ",         type: "array" },
+      { key: "timeOptions",                 label: "Créneaux horaires",       section: "Formulaire",  type: "array" },
+    ],
+  },
+  {
+    key: "presse-medias",
+    label: "Presse & Médias",
+    route: "/presse-medias",
+    icon: "Newspaper",
+    fields: [
+      { key: "heroTitle",  label: "Titre principal",               section: "Héro",    type: "text" },
+      { key: "heroSubtitle", label: "Sous-titre",                  section: "Héro",    type: "text" },
+      { key: "sections",   label: "Sections médias (embeds)",      section: "Sections", type: "array" },
+    ],
+  },
+  {
+    key: "site-settings",
+    label: "Paramètres du site",
+    route: "/admin/settings",
+    icon: "Settings",
+    fields: [
+      { key: "siteName", label: "Nom du site",          section: "Général",          type: "text" },
+      { key: "tagline",  label: "Accroche",              section: "Général",          type: "text" },
+      { key: "phone",    label: "Téléphone",             section: "Coordonnées",      type: "text" },
+      { key: "email",    label: "Email de contact",      section: "Coordonnées",      type: "text" },
+      { key: "address",  label: "Adresse",               section: "Coordonnées",      type: "text" },
+      { key: "social",   label: "Réseaux sociaux (JSON)", section: "Réseaux sociaux", type: "json" },
+      { key: "podcast",  label: "Podcast (JSON)",         section: "Podcast",         type: "json" },
     ],
   },
 ];
