@@ -47,6 +47,9 @@ function unflattenJson(
   const result: unknown = JSON.parse(JSON.stringify(original ?? {}));
 
   for (const [dotPath, value] of Object.entries(fields)) {
+    // Skip virtual keys used for JSON editing
+    if (dotPath.endsWith(".__json__")) continue;
+
     const parts = dotPath.split(".");
     let cursor: unknown = result;
 
@@ -77,12 +80,205 @@ function unflattenJson(
   return result;
 }
 
+// ─── Sort flat keys by numeric index segments ─────────────────────────────────
+function sortFlatKeys(keys: string[]): string[] {
+  return [...keys].sort((a, b) => {
+    const pa = a.split(".");
+    const pb = b.split(".");
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      if (pa[i] === undefined) return -1;
+      if (pb[i] === undefined) return 1;
+      const na = Number(pa[i]), nb = Number(pb[i]);
+      if (!isNaN(na) && !isNaN(nb)) { if (na !== nb) return na - nb; }
+      else { if (pa[i] < pb[i]) return -1; if (pa[i] > pb[i]) return 1; }
+    }
+    return 0;
+  });
+}
+
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 function FieldSkeleton() {
   return (
     <div className="animate-pulse space-y-2">
       <div className="h-4 w-32 bg-slate-200 rounded" />
       <div className="h-10 w-full bg-slate-100 rounded-lg" />
+    </div>
+  );
+}
+
+// ─── Render a single field def ────────────────────────────────────────────────
+function renderField(
+  fieldDef: FieldDef,
+  fields: Record<string, string>,
+  originalFields: Record<string, string>,
+  handleChange: (key: string, value: string) => void
+): React.ReactNode {
+  const value = fields[fieldDef.key] ?? "";
+  const originalValue = originalFields[fieldDef.key] ?? "";
+  const isModified = value !== originalValue;
+  const isReadonly = fieldDef.type === "readonly";
+
+  // ── Array type ──────────────────────────────────────────────────────────────
+  if (fieldDef.type === "array") {
+    const prefix = fieldDef.key + ".";
+    const subKeys = sortFlatKeys(
+      Object.keys(fields).filter(k => k.startsWith(prefix))
+    );
+
+    if (subKeys.length === 0) {
+      return (
+        <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+          <label className="text-sm font-medium text-slate-700">{fieldDef.label}</label>
+          <p className="text-xs text-slate-400 italic">Aucun élément (page non seedée ?)</p>
+        </div>
+      );
+    }
+
+    // Group sub-keys by their first numeric index
+    const groups = new Map<string, string[]>();
+    for (const k of subKeys) {
+      const rel = k.slice(prefix.length); // e.g. "0.value", "0.label", "1.q"
+      const parts = rel.split(".");
+      const groupKey = parts[0]; // "0", "1", "2"...
+      if (!groups.has(groupKey)) groups.set(groupKey, []);
+      groups.get(groupKey)!.push(k);
+    }
+
+    return (
+      <div key={fieldDef.key} className="px-6 py-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-slate-700">{fieldDef.label}</label>
+          <span className="text-xs text-slate-400 bg-slate-100 rounded-full px-2 py-0.5">
+            {groups.size} élément{groups.size > 1 ? "s" : ""}
+          </span>
+        </div>
+        <div className="space-y-3">
+          {Array.from(groups.entries()).map(([groupIdx, groupKeys]) => (
+            <div key={groupIdx} className="border border-slate-200 rounded-xl overflow-hidden">
+              <div className="bg-slate-50 px-4 py-1.5 border-b border-slate-200">
+                <span className="text-xs font-medium text-slate-500">#{Number(groupIdx) + 1}</span>
+              </div>
+              <div className="divide-y divide-slate-100">
+                {groupKeys.map(subKey => {
+                  const rel = subKey.slice(prefix.length);
+                  const subParts = rel.split(".");
+                  // Label: the last non-numeric segment
+                  const labelPart = subParts.filter(p => isNaN(Number(p))).pop() ?? subParts[subParts.length - 1];
+                  const subLabel = labelPart
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, s => s.toUpperCase())
+                    .replace("Desc", "Description")
+                    .replace("Num", "Numéro")
+                    .replace("Btn", "Bouton");
+                  const val = fields[subKey] ?? "";
+                  const orig = originalFields[subKey] ?? "";
+                  const modified = val !== orig;
+                  const isLong = val.length > 80
+                    || subLabel.toLowerCase().includes("desc")
+                    || subLabel.toLowerCase().includes("message")
+                    || subLabel.toLowerCase().includes("paragraph");
+                  return (
+                    <div key={subKey} className="px-4 py-3 space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs font-medium text-slate-600 capitalize">{subLabel}</label>
+                        {modified && <span className="inline-block w-2 h-2 rounded-full bg-[#C4903E]" />}
+                      </div>
+                      {isLong ? (
+                        <textarea
+                          value={val}
+                          onChange={e => handleChange(subKey, e.target.value)}
+                          rows={3}
+                          className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={val}
+                          onChange={e => handleChange(subKey, e.target.value)}
+                          className="w-full h-9 rounded-lg border border-slate-300 px-3 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── JSON type ───────────────────────────────────────────────────────────────
+  if (fieldDef.type === "json") {
+    const virtualKey = fieldDef.key + ".__json__";
+    const jsonVal = fields[virtualKey] ?? "";
+    const jsonModified = jsonVal !== (originalFields[virtualKey] ?? "");
+    return (
+      <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-slate-700">{fieldDef.label}</label>
+          {jsonModified && <span className="inline-block w-2 h-2 rounded-full bg-[#C4903E]" />}
+        </div>
+        <p className="text-xs text-slate-400 italic">Format JSON — modifiez directement les valeurs</p>
+        <textarea
+          value={jsonVal}
+          onChange={e => handleChange(virtualKey, e.target.value)}
+          rows={8}
+          className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2.5 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+        />
+      </div>
+    );
+  }
+
+  // ── Default types ───────────────────────────────────────────────────────────
+  return (
+    <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+      {/* Label row */}
+      <div className="flex items-center gap-2">
+        <label
+          htmlFor={fieldDef.key}
+          className="text-sm font-medium text-slate-700"
+        >
+          {fieldDef.label}
+        </label>
+        {isModified && (
+          <span
+            title="Champ modifié"
+            className="inline-block w-2 h-2 rounded-full bg-[#C4903E]"
+          />
+        )}
+      </div>
+
+      {/* Hint */}
+      {fieldDef.hint && (
+        <p className="text-xs italic text-slate-400">
+          {fieldDef.hint}
+        </p>
+      )}
+
+      {/* Input */}
+      {isReadonly ? (
+        <p className="text-sm text-slate-400 italic bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
+          {value || "—"}
+        </p>
+      ) : fieldDef.type === "long" || fieldDef.type === "textarea" ? (
+        <textarea
+          id={fieldDef.key}
+          value={value}
+          onChange={(e) => handleChange(fieldDef.key, e.target.value)}
+          rows={4}
+          className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+        />
+      ) : (
+        <input
+          id={fieldDef.key}
+          type={fieldDef.type === "url" ? "url" : "text"}
+          value={value}
+          onChange={(e) => handleChange(fieldDef.key, e.target.value)}
+          className="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
+        />
+      )}
     </div>
   );
 }
@@ -108,6 +304,24 @@ export default function AdminContentEditor() {
   const [initializing, setInitializing] = useState(false);
 
   const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Build flat state including virtual JSON keys ────────────────────────────
+  function buildFlatWithJsonKeys(
+    content: Record<string, unknown>,
+    currentPageDef: NonNullable<ReturnType<typeof getPageDef>>
+  ): Record<string, string> {
+    const flat = flattenJson(content);
+    // Add virtual __json__ keys for json-type fields
+    for (const fieldDef of currentPageDef.fields) {
+      if (fieldDef.type === "json") {
+        const nested = content[fieldDef.key];
+        if (nested !== undefined) {
+          flat[fieldDef.key + ".__json__"] = JSON.stringify(nested, null, 2);
+        }
+      }
+    }
+    return flat;
+  }
 
   // ── Fetch on mount ─────────────────────────────────────────────────────────
   useEffect(() => {
@@ -136,7 +350,7 @@ export default function AdminContentEditor() {
       }
 
       const content = data.content as Record<string, unknown>;
-      const flat = flattenJson(content);
+      const flat = buildFlatWithJsonKeys(content, pageDef!);
       setFields(flat);
       setOriginalFields(flat);
       setOriginalJson(content);
@@ -166,7 +380,7 @@ export default function AdminContentEditor() {
 
       if (upsertError) throw new Error(upsertError.message);
 
-      const flat = flattenJson(json);
+      const flat = buildFlatWithJsonKeys(json, pageDef!);
       setFields(flat);
       setOriginalFields(flat);
       setOriginalJson(json);
@@ -199,7 +413,32 @@ export default function AdminContentEditor() {
     setSaving(true);
     setError(null);
 
-    const updated = unflattenJson(fields, originalJson);
+    // Process fields: handle virtual __json__ keys for json-type fields
+    const processedFields = { ...fields };
+    if (pageDef) {
+      for (const fieldDef of pageDef.fields) {
+        if (fieldDef.type === "json") {
+          const virtualKey = fieldDef.key + ".__json__";
+          if (processedFields[virtualKey] !== undefined) {
+            try {
+              const parsed = JSON.parse(processedFields[virtualKey]);
+              // Remove virtual key, then flatten the parsed JSON back into real keys
+              delete processedFields[virtualKey];
+              const flattened = flattenJson(parsed, fieldDef.key);
+              Object.assign(processedFields, flattened);
+            } catch {
+              const msg = `Le champ "${fieldDef.label}" contient du JSON invalide.`;
+              setError(msg);
+              toast({ title: "JSON invalide", description: msg, variant: "destructive" });
+              setSaving(false);
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    const updated = unflattenJson(processedFields, originalJson);
 
     const { error: saveError } = await supabase
       .from("page_content")
@@ -215,7 +454,12 @@ export default function AdminContentEditor() {
     }
 
     setOriginalJson(updated);
-    setOriginalFields({ ...fields });
+    const newFlat = buildFlatWithJsonKeys(
+      updated as Record<string, unknown>,
+      pageDef!
+    );
+    setOriginalFields(newFlat);
+    setFields(newFlat);
     setDirty(false);
     setSuccess(true);
     toast({
@@ -249,8 +493,9 @@ export default function AdminContentEditor() {
   const sections: Map<string, FieldDef[]> = new Map();
   if (pageDef) {
     for (const field of pageDef.fields) {
-      if (!sections.has(field.section)) sections.set(field.section, []);
-      sections.get(field.section)!.push(field);
+      const sectionKey = field.section ?? "Général";
+      if (!sections.has(sectionKey)) sections.set(sectionKey, []);
+      sections.get(sectionKey)!.push(field);
     }
   }
 
@@ -392,62 +637,9 @@ export default function AdminContentEditor() {
 
             {/* Fields */}
             <div className="divide-y divide-slate-100">
-              {sectionFields.map((fieldDef) => {
-                const value = fields[fieldDef.key] ?? "";
-                const originalValue = originalFields[fieldDef.key] ?? "";
-                const isModified = value !== originalValue;
-                const isReadonly = fieldDef.type === "readonly";
-
-                return (
-                  <div key={fieldDef.key} className="px-6 py-5 space-y-2">
-                    {/* Label row */}
-                    <div className="flex items-center gap-2">
-                      <label
-                        htmlFor={fieldDef.key}
-                        className="text-sm font-medium text-slate-700"
-                      >
-                        {fieldDef.label}
-                      </label>
-                      {isModified && (
-                        <span
-                          title="Champ modifié"
-                          className="inline-block w-2 h-2 rounded-full bg-[#C4903E]"
-                        />
-                      )}
-                    </div>
-
-                    {/* Hint */}
-                    {fieldDef.hint && (
-                      <p className="text-xs italic text-slate-400">
-                        {fieldDef.hint}
-                      </p>
-                    )}
-
-                    {/* Input */}
-                    {isReadonly ? (
-                      <p className="text-sm text-slate-400 italic bg-slate-50 rounded-lg px-3 py-2 border border-slate-100">
-                        {value || "—"}
-                      </p>
-                    ) : fieldDef.type === "long" ? (
-                      <textarea
-                        id={fieldDef.key}
-                        value={value}
-                        onChange={(e) => handleChange(fieldDef.key, e.target.value)}
-                        rows={4}
-                        className="w-full resize-y rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
-                      />
-                    ) : (
-                      <input
-                        id={fieldDef.key}
-                        type={fieldDef.type === "url" ? "url" : "text"}
-                        value={value}
-                        onChange={(e) => handleChange(fieldDef.key, e.target.value)}
-                        className="w-full h-10 rounded-lg border border-slate-300 px-3 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/40 focus:border-[#C4903E] transition-colors"
-                      />
-                    )}
-                  </div>
-                );
-              })}
+              {sectionFields.map((fieldDef) =>
+                renderField(fieldDef, fields, originalFields, handleChange)
+              )}
             </div>
           </motion.div>
         ))}
