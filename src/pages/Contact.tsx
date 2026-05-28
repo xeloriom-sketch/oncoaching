@@ -25,6 +25,7 @@ import { format, addMonths } from "date-fns";
 import "react-day-picker/dist/style.css";
 import { useToast } from "@/hooks/use-toast";
 import type { ContactContent } from "@/types";
+import { E } from "@/components/cms/E";
 
 const WORDS = ["Parlons", "de", "votre", "projet."];
 
@@ -389,7 +390,7 @@ const Contact = () => {
             </h1>
 
             <motion.p variants={blurInUp} className="text-[15px] sm:text-[17px] text-gray-500 leading-relaxed max-w-xl">
-              {coordonnees.subtitle}
+              <E fieldKey="coordonnees.subtitle">{coordonnees.subtitle}</E>
             </motion.p>
           </motion.div>
         </section>
@@ -433,12 +434,12 @@ const Contact = () => {
                 </div>
 
                 <p className="text-[12px] font-mono tracking-widest uppercase text-gray-400 mb-1 mt-4">
-                  {isRdv ? "RÉSERVATION" : formulaire.title}
+                  {isRdv ? "RÉSERVATION" : <E fieldKey="formulaire.title">{formulaire.title}</E>}
                 </p>
                 <h2 className="text-[1.65rem] font-bold text-[#1C3A52] leading-snug tracking-tight">
                   {isRdv
                     ? "Choisissez vos disponibilités"
-                    : formulaire.subtitle}
+                    : <E fieldKey="formulaire.subtitle">{formulaire.subtitle}</E>}
                 </h2>
                 {isRdv && (
                   <p className="text-[14px] text-gray-500 mt-2 leading-relaxed">
@@ -590,7 +591,7 @@ const Contact = () => {
                       <div>
                         <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.adresse.label}</p>
                         <p className="text-white font-semibold text-[15px] leading-snug whitespace-pre-line group-hover:text-[#C4903E] transition-colors">
-                          {coordonnees.adresse.value}
+                          <E fieldKey="coordonnees.adresse.value">{coordonnees.adresse.value}</E>
                         </p>
                       </div>
                     </motion.a>
@@ -608,7 +609,7 @@ const Contact = () => {
                       <div>
                         <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.telephone.label}</p>
                         <p className="text-white font-semibold text-[15px] group-hover:text-[#C4903E] transition-colors">
-                          {coordonnees.telephone.value}
+                          <E fieldKey="coordonnees.telephone.value">{coordonnees.telephone.value}</E>
                         </p>
                       </div>
                     </motion.a>
@@ -626,7 +627,7 @@ const Contact = () => {
                       <div>
                         <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.email.label}</p>
                         <p className="text-white font-semibold text-[15px] break-all group-hover:text-[#C4903E] transition-colors">
-                          {coordonnees.email.value}
+                          <E fieldKey="coordonnees.email.value">{coordonnees.email.value}</E>
                         </p>
                       </div>
                     </motion.a>

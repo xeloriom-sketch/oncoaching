@@ -15,6 +15,7 @@ import {
   btnHoverProps, VP, VP2,
 } from "@/lib/motion";
 import type { ServicePageContent } from "@/types";
+import { E } from "@/components/cms/E";
 
 const HERO_IMG    = "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=85";
 const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.webp`;
@@ -179,7 +180,7 @@ const CoachingJeunes = () => {
                   id="jeunes-h1"
                   className="text-[clamp(2rem,6vw,5rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight"
                 >
-                  <div>{page.title.split(" ").slice(0, 2).join(" ")}</div>
+                  <div><E fieldKey="page.title">{page.title.split(" ").slice(0, 2).join(" ")}</E></div>
                   <div className="flex flex-wrap gap-x-3">
                     {HERO_WORDS.map((word, i) => (
                       <motion.span
@@ -204,7 +205,7 @@ const CoachingJeunes = () => {
                   variants={blurInUp}
                   className="text-gray-500 text-[16px] leading-relaxed max-w-md"
                 >
-                  {page.subtitle} Un espace bienveillant pour traverser les transitions de vie avec clarté, confiance et élan.
+                  <E fieldKey="page.subtitle">{page.subtitle}</E> Un espace bienveillant pour traverser les transitions de vie avec clarté, confiance et élan.
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">
@@ -499,7 +500,7 @@ const CoachingJeunes = () => {
                     className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 min-h-[44px] rounded-2xl hover:opacity-90 transition-opacity"
                     aria-label="Prendre rendez-vous pour un coaching jeunes"
                   >
-                    {cta.buttonText} <ArrowUpRight className="w-5 h-5" aria-hidden="true" />
+                    <E fieldKey="cta.buttonText">{cta.buttonText}</E> <ArrowUpRight className="w-5 h-5" aria-hidden="true" />
                   </Link>
                 </motion.div>
                 <p className="text-center text-white/60 text-[13px] font-mono">

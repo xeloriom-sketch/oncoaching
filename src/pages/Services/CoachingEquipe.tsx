@@ -16,6 +16,7 @@ import {
   VP, VP2,
 } from "@/lib/motion";
 import type { ServicePageContent } from "@/types";
+import { E } from "@/components/cms/E";
 
 const HERO_IMG    = "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=85";
 const COACH_PHOTO = `${import.meta.env.BASE_URL}patron.webp`;
@@ -211,7 +212,7 @@ const CoachingEquipe = () => {
                 variants={blurInUp}
                 className="text-gray-500 text-[16px] leading-relaxed max-w-md"
               >
-                {page.subtitle} Transformer vos groupes de travail en équipes engagées, alignées et performantes pour une cohésion et une performance collective durables.
+                <E fieldKey="page.subtitle">{page.subtitle}</E> Transformer vos groupes de travail en équipes engagées, alignées et performantes pour une cohésion et une performance collective durables.
               </motion.p>
 
               <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">

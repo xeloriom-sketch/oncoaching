@@ -16,6 +16,7 @@ import {
 } from "@/lib/motion";
 import type { TarifsContent } from "@/types";
 import { Check, ArrowUpRight, ChevronDown } from "lucide-react";
+import { E } from "@/components/cms/E";
 
 const WORDS_HERO = ["Des", "tarifs", "clairs", "&", "justes."];
 
@@ -229,7 +230,7 @@ const NosTarifs = () => {
               animate="visible"
               className="text-gray-500 text-[16px] leading-relaxed max-w-md"
             >
-              {particuliers.subtitle}
+              <E fieldKey="particuliers.subtitle">{particuliers.subtitle}</E>
             </motion.p>
 
             <motion.div
@@ -300,7 +301,7 @@ const NosTarifs = () => {
                       <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[#C4903E]/15 flex items-center justify-center">
                         <Check className="w-3 h-3 text-[#C4903E]" strokeWidth={3} />
                       </span>
-                      {item}
+                      <E fieldKey={`particuliers.cards.0.items.${j}`}>{item}</E>
                     </li>
                   ))}
                 </ul>
@@ -343,14 +344,14 @@ const NosTarifs = () => {
                     <span className="font-black text-[#C4903E] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}>60€</span>
                     <span className="text-white/40 text-[14px] mb-2">/30 min</span>
                   </div>
-                  <p className="text-white/50 text-[14px] mb-6">{neurofeedback.subtitle}</p>
+                  <p className="text-white/50 text-[14px] mb-6"><E fieldKey="neurofeedback.subtitle">{neurofeedback.subtitle}</E></p>
                   <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
                     {neurofeedback.cards[0]?.items?.map((item, j) => (
                       <li key={j} className="flex items-start gap-3 text-[14px] sm:text-[15px] text-white/80 font-medium">
                         <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[#C4903E]/20 flex items-center justify-center">
                           <Check className="w-3 h-3 text-[#C4903E]" strokeWidth={3} />
                         </span>
-                        {item}
+                        <E fieldKey={`neurofeedback.cards.0.items.${j}`}>{item}</E>
                       </li>
                     ))}
                   </ul>
@@ -379,14 +380,14 @@ const NosTarifs = () => {
                 <div className="flex items-end gap-1 mt-4 mb-6">
                   <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)" }}>Sur devis</span>
                 </div>
-                <p className="text-[#1C3A52]/70 text-[14px] mb-6">{entreprises.subtitle}</p>
+                <p className="text-[#1C3A52]/70 text-[14px] mb-6"><E fieldKey="entreprises.subtitle">{entreprises.subtitle}</E></p>
                 <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
                   {entreprises.items.map((item, j) => (
                     <li key={j} className="flex items-start gap-3 text-[14px] sm:text-[15px] text-[#1C3A52] font-medium">
                       <span className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-[#1C3A52]/10 flex items-center justify-center">
                         <Check className="w-3 h-3 text-[#1C3A52]" strokeWidth={3} />
                       </span>
-                      {item}
+                      <E fieldKey={`entreprises.items.${j}`}>{item}</E>
                     </li>
                   ))}
                 </ul>
@@ -562,7 +563,7 @@ const NosTarifs = () => {
                 transition={{ delay: 0.18, type: "spring", damping: 20, stiffness: 180 }}
                 className="text-[clamp(2rem,5vw,4rem)] font-black text-white leading-tight tracking-tight mb-5 relative z-10"
               >
-                {cta.title}
+                <E fieldKey="cta.title">{cta.title}</E>
               </motion.h2>
 
               <motion.p
@@ -587,7 +588,7 @@ const NosTarifs = () => {
                     to={cta.buttonLink}
                     className="inline-flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-black text-[15px] px-8 py-4 rounded-full hover:brightness-110 transition-all w-full sm:w-auto min-h-[52px]"
                   >
-                    {cta.buttonText} <ArrowUpRight className="w-4 h-4" />
+                    <E fieldKey="cta.buttonText">{cta.buttonText}</E> <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </motion.div>
                 <motion.div {...btnHoverProps} className="w-full sm:w-auto">

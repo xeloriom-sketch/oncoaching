@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { VP, fadeInScale, fadeInUp, staggerContainer } from "@/lib/motion";
 import { usePageContent } from "@/hooks/usePageContent";
+import { E } from "@/components/cms/E";
 
 interface MediaSection {
   type: "facebook" | "linkedin" | "youtube" | "acast";
@@ -121,10 +122,10 @@ export default function PresseMedias() {
                   variants={fadeInUp}
                   className="mt-3 text-[clamp(2rem,5vw,3.6rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.02]"
               >
-                {heroTitle}
+                <E fieldKey="heroTitle">{heroTitle}</E>
               </motion.h1>
               <motion.p variants={fadeInUp} className="mt-4 text-[16px] text-gray-500 max-w-2xl leading-relaxed">
-                {heroSubtitle}
+                <E fieldKey="heroSubtitle">{heroSubtitle}</E>
               </motion.p>
             </motion.div>
 

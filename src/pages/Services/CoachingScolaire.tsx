@@ -15,6 +15,7 @@ import {
   btnHoverProps, VP,
 } from "@/lib/motion";
 import type { ServicePageContent } from "@/types";
+import { E } from "@/components/cms/E";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=85";
@@ -200,7 +201,7 @@ const CoachingScolaire = () => {
                 variants={blurInUp}
                 className="text-gray-500 text-[16px] leading-relaxed max-w-lg"
               >
-                {page.subtitle ?? "Ton enfant décroche, manque de méthode ou perd confiance ? Un accompagnement personnalisé pour retrouver motivation, organisation et sérénité."}
+                <E fieldKey="page.subtitle">{page.subtitle ?? "Ton enfant décroche, manque de méthode ou perd confiance ? Un accompagnement personnalisé pour retrouver motivation, organisation et sérénité."}</E>
               </motion.p>
 
               <motion.div variants={blurInUp} className="flex flex-wrap gap-3">

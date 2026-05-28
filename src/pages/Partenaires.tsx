@@ -8,6 +8,7 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { usePageContent } from "@/hooks/usePageContent";
 import { fadeInUp, staggerContainer, VP } from "@/lib/motion";
+import { E } from "@/components/cms/E";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface ModaliteItem {
@@ -117,10 +118,10 @@ const Partenaires = () => {
               ↳ Structures &amp; Organisations
             </p>
             <h1 id="partenaires-h1" className="text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[0.95] tracking-tight text-[#1C3A52]">
-              {hero.title}
+              <E fieldKey="page.title">{hero.title}</E>
             </h1>
             <p className="text-[1rem] md:text-[1.1rem] text-gray-500 font-medium max-w-lg leading-relaxed">
-              {hero.subtitle}
+              <E fieldKey="page.subtitle">{hero.subtitle}</E>
             </p>
           </motion.div>
           <motion.div variants={fadeInUp} className="lg:col-span-4 flex flex-col justify-end gap-4">
@@ -413,7 +414,7 @@ const Partenaires = () => {
           className="text-center py-10 sm:py-14 md:py-20 space-y-6"
         >
           <h2 className="text-[clamp(1.8rem,5vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-            {cta.title}
+            <E fieldKey="cta.title">{cta.title}</E>
           </h2>
           <p className="text-gray-500 text-[14px] max-w-lg mx-auto leading-relaxed">{cta.subtitle}</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -421,7 +422,7 @@ const Partenaires = () => {
               to={cta.buttonLink}
               className="w-full sm:w-auto bg-[#1C3A52] text-white font-bold text-[14px] px-7 py-3.5 rounded-full flex items-center justify-center gap-2 hover:opacity-80 transition-opacity min-h-[44px]"
             >
-              {cta.buttonText} <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+              <E fieldKey="cta.buttonText">{cta.buttonText}</E> <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
             </Link>
             <a
               href="https://www.oncoaching.fr"

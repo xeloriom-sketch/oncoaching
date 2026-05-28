@@ -23,6 +23,7 @@ import {
   VP2,
 } from "@/lib/motion";
 import type { AboutContent } from "@/types";
+import { E } from "@/components/cms/E";
 
 const COACH_IMG =
   `${import.meta.env.BASE_URL}patron.webp`;
@@ -131,7 +132,7 @@ function WordByWordInView({ text, className }: { text: string; className?: strin
   );
 }
 
-function TiltValueCard({ val, i }: { val: { key: string; title: string; description: string }; i: number }) {
+function TiltValueCard({ val, i, fieldKeyPrefix }: { val: { key: string; title: string; description: string }; i: number; fieldKeyPrefix: string }) {
   const tilt = useTilt(10);
   const Icon = VALUES_ICONS[val.key] ?? Heart;
   const c = CARD_CONFIGS[i];
@@ -153,8 +154,8 @@ function TiltValueCard({ val, i }: { val: { key: string; title: string; descript
       >
         <Icon className={`w-6 h-6 ${c.iconColor}`} strokeWidth={1.8} />
       </motion.div>
-      <h3 className={`font-bold text-[1rem] sm:text-[1.1rem] tracking-tight mb-3 ${c.text}`}>{val.title}</h3>
-      <p className={`text-[15px] leading-relaxed flex-1 ${c.sub}`}>{val.description}</p>
+      <h3 className={`font-bold text-[1rem] sm:text-[1.1rem] tracking-tight mb-3 ${c.text}`}><E fieldKey={`${fieldKeyPrefix}.title`}>{val.title}</E></h3>
+      <p className={`text-[15px] leading-relaxed flex-1 ${c.sub}`}><E fieldKey={`${fieldKeyPrefix}.description`}>{val.description}</E></p>
     </motion.article>
   );
 }
@@ -292,14 +293,14 @@ const About = () => {
                 id="about-h1"
                 className="text-[clamp(1.8rem,5vw,5rem)] font-bold leading-tight md:leading-[0.95] tracking-tight text-[#1C3A52]"
               >
-                <WordByWord text={hero.title} />
+                <E fieldKey="hero.title"><WordByWord text={hero.title} /></E>
               </h1>
 
               <motion.p
                 variants={blurInUp}
                 className="text-[16px] text-gray-500 leading-relaxed max-w-md"
               >
-                {hero.paragraph1}
+                <E fieldKey="hero.paragraph1">{hero.paragraph1}</E>
               </motion.p>
 
               <motion.div variants={blurInUp} className="flex flex-wrap gap-3 justify-center lg:justify-start">
@@ -435,13 +436,13 @@ const About = () => {
                   className="text-[10px] font-mono tracking-widest uppercase text-[#C4903E]/70 mb-5"
                   aria-hidden="true"
                 >
-                  ONCOACHING ☉ {whoSection.title}
+                  ONCOACHING ☉ <E fieldKey="whoSection.title">{whoSection.title}</E>
                 </motion.p>
                 <h2
                   id="about-who"
                   className="text-[clamp(1.8rem,4vw,3rem)] font-bold tracking-tight text-white leading-[1.1] mb-6"
                 >
-                  <WordByWordInView text={whoSection.subtitle} />
+                  <E fieldKey="whoSection.subtitle"><WordByWordInView text={whoSection.subtitle} /></E>
                 </h2>
                 <motion.div
                   initial="hidden" whileInView="visible" viewport={VP2}
@@ -472,23 +473,23 @@ const About = () => {
                   variants={blurInUp}
                   className="text-[16px] text-white/60 leading-relaxed"
                 >
-                  {whoSection.paragraph1}
+                  <E fieldKey="whoSection.paragraph1">{whoSection.paragraph1}</E>
                 </motion.p>
                 <motion.p
                   initial="hidden" whileInView="visible" viewport={VP2}
                   variants={blurInUp}
                   className="text-[16px] text-white/60 leading-relaxed"
                 >
-                  {whoSection.paragraph2}
+                  <E fieldKey="whoSection.paragraph2">{whoSection.paragraph2}</E>
                 </motion.p>
                 <motion.div
                   initial="hidden" whileInView="visible" viewport={VP2}
                   variants={blurInUp}
                   className="border-t border-white/10 pt-7 mt-3 space-y-4"
                 >
-                  <h3 className="text-[16px] font-bold text-[#C4903E]">{whoSection.differenceTitle}</h3>
-                  <p className="text-[15px] text-white/55 leading-relaxed">{whoSection.paragraph3}</p>
-                  <p className="text-[15px] text-white/55 leading-relaxed">{whoSection.paragraph4}</p>
+                  <h3 className="text-[16px] font-bold text-[#C4903E]"><E fieldKey="whoSection.differenceTitle">{whoSection.differenceTitle}</E></h3>
+                  <p className="text-[15px] text-white/55 leading-relaxed"><E fieldKey="whoSection.paragraph3">{whoSection.paragraph3}</E></p>
+                  <p className="text-[15px] text-white/55 leading-relaxed"><E fieldKey="whoSection.paragraph4">{whoSection.paragraph4}</E></p>
                 </motion.div>
               </div>
             </div>
@@ -633,7 +634,7 @@ const About = () => {
                 className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E] mb-3"
                 aria-hidden="true"
               >
-                ↳ {valuesSection.title}
+                ↳ <E fieldKey="valuesSection.title">{valuesSection.title}</E>
               </motion.p>
               <h2
                 id="about-values"
@@ -646,7 +647,7 @@ const About = () => {
               variants={blurInUp}
               className="text-[15px] text-gray-500 max-w-xs leading-relaxed"
             >
-              Des valeurs qui guident chaque accompagnement, sans compromis.
+              <E fieldKey="valuesSection.subtitle">{valuesSection.subtitle}</E>
             </motion.p>
           </motion.div>
 
@@ -656,7 +657,7 @@ const About = () => {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {valuesSection.values.map((val, i) => (
-              <TiltValueCard key={val.key} val={val} i={i} />
+              <TiltValueCard key={val.key} val={val} i={i} fieldKeyPrefix={`valuesSection.values.${i}`} />
             ))}
           </motion.div>
         </section>
@@ -703,7 +704,7 @@ const About = () => {
                 id="about-cta"
                 className="text-[clamp(2rem,5vw,4rem)] font-bold tracking-tight text-white leading-[1.05]"
               >
-                <WordByWordInView text={cta.title} />
+                <E fieldKey="cta.title"><WordByWordInView text={cta.title} /></E>
               </h2>
 
               <motion.p
@@ -711,7 +712,7 @@ const About = () => {
                 variants={blurInUp}
                 className="text-[16px] text-white/50 max-w-lg leading-relaxed"
               >
-                {cta.subtitle}
+                <E fieldKey="cta.subtitle">{cta.subtitle}</E>
               </motion.p>
 
               <motion.div
@@ -725,7 +726,7 @@ const About = () => {
                       to={cta.buttonLink}
                       className="bg-[#C4903E] text-[#1C3A52] font-bold text-[14px] px-8 py-4 min-h-[44px] rounded-full flex items-center justify-center gap-2.5 shadow-lg shadow-[#C4903E]/30 w-full sm:w-auto"
                     >
-                      {cta.buttonText}
+                      <E fieldKey="cta.buttonText">{cta.buttonText}</E>
                       <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </motion.div>

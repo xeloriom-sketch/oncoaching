@@ -29,6 +29,7 @@ import {
 import { ROUTES } from "@/lib/config";
 import { usePageContent } from "@/hooks/usePageContent";
 import type { IndexContent } from "@/types";
+import { E } from "@/components/cms/E";
 
 const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
 
@@ -320,7 +321,7 @@ export default function Index() {
                 transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
                 className="text-[0.95rem] sm:text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left px-4 sm:px-0"
             >
-              {content?.hero?.subtitle ?? "Coach certifié à Mâcon — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines."}
+              <E fieldKey="hero.subtitle">{content?.hero?.subtitle ?? "Coach certifié à Mâcon — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines."}</E>
             </motion.p>
 
             {/* Boutons d'actions (CTAs) liquides */}
@@ -423,7 +424,7 @@ export default function Index() {
               variants={fadeInUp}
               className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]"
             >
-              {content?.servicesSection?.title ?? "Un accompagnement unique pour des résultats durables"}
+              <E fieldKey="servicesSection.title">{content?.servicesSection?.title ?? "Un accompagnement unique pour des résultats durables"}</E>
             </motion.h2>
           </motion.div>
 
@@ -465,10 +466,10 @@ export default function Index() {
                     <h3
                       className={`font-bold text-[18px] tracking-tight ${c.text}`}
                     >
-                      {card.title}
+                      <E fieldKey={`services.${i}.title`}>{card.title}</E>
                     </h3>
                     <p className={`text-[15px] leading-relaxed ${c.sub}`}>
-                      {card.desc}
+                      <E fieldKey={`services.${i}.description`}>{card.desc}</E>
                     </p>
                   </div>
 
@@ -972,14 +973,14 @@ export default function Index() {
               variants={fadeInUp}
               className="text-[clamp(1.6rem,5vw,3.5rem)] font-semibold tracking-tight text-white leading-[1.05]"
             >
-              {content?.cta?.title ?? "Passez au niveau supérieur."}
+              <E fieldKey="cta.title">{content?.cta?.title ?? "Passez au niveau supérieur."}</E>
             </motion.h2>
 
             <motion.p
               variants={fadeInUp}
               className="text-[1rem] text-white/55 w-full sm:max-w-md leading-relaxed"
             >
-              {content?.cta?.subtitle ?? "Consultation initiale offerte. Sans engagement. Disponible pour de nouveaux accompagnements."}
+              <E fieldKey="cta.subtitle">{content?.cta?.subtitle ?? "Consultation initiale offerte. Sans engagement. Disponible pour de nouveaux accompagnements."}</E>
             </motion.p>
 
             <motion.div
