@@ -224,7 +224,7 @@ const CoachingJeunes = () => {
                   variants={blurInUp}
                   className="text-gray-500 text-[16px] leading-relaxed max-w-md"
                 >
-                  <E fieldKey="page.subtitle">{page.subtitle}</E> Un espace bienveillant pour traverser les transitions de vie avec clarté, confiance et élan.
+                  <E fieldKey="page.subtitle">{page.subtitle ?? "Un espace bienveillant pour traverser les transitions de vie avec clarté, confiance et élan."}</E>
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-3">

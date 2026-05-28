@@ -118,10 +118,10 @@ const Partenaires = () => {
               <E fieldKey="hero.breadcrumb">{content?.hero?.breadcrumb ?? "↳ Structures & Organisations"}</E>
             </p>
             <h1 id="partenaires-h1" className="text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[0.95] tracking-tight text-[#1C3A52]">
-              <E fieldKey="page.title">{hero.title}</E>
+              <E fieldKey="page.title">{hero.title ?? "Partenaires & Institutions"}</E>
             </h1>
             <p className="text-[1rem] md:text-[1.1rem] text-gray-500 font-medium max-w-lg leading-relaxed">
-              <E fieldKey="page.subtitle">{hero.subtitle}</E>
+              <E fieldKey="page.subtitle">{hero.subtitle ?? "Accompagnement des publics en insertion et en transition"}</E>
             </p>
           </motion.div>
           <motion.div variants={fadeInUp} className="lg:col-span-4 flex flex-col justify-end gap-4">
