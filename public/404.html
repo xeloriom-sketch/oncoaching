@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <title>ON Coaching</title>
   <script>
-    // GitHub Pages SPA redirect — project site (keeps base segment /oncoaching)
+    // GitHub Pages SPA redirect — works for both subdirectory (github.io/repo) and custom domain (root)
     var l = window.location;
     var segs = l.pathname.split('/').filter(function(s){ return s !== ''; });
-    var basePath = segs.length >= 1 ? '/' + segs[0] : '';
-    var subPath  = '/' + segs.slice(1).join('/');
+    var isGitHubIo = l.hostname.endsWith('.github.io');
+    var basePath = (isGitHubIo && segs.length >= 1) ? '/' + segs[0] : '';
+    var subPath  = isGitHubIo ? '/' + segs.slice(1).join('/') : '/' + segs.join('/');
     l.replace(
       l.protocol + '//' + l.host + basePath + '/?p=' + encodeURIComponent(subPath) +
       (l.search ? '&' + l.search.slice(1) : '') + l.hash
