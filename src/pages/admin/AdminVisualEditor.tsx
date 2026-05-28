@@ -13,9 +13,17 @@ import {
   ArrowLeft,
   Check,
   ChevronDown,
+  ChevronRight,
   Eye,
+  EyeOff,
   Loader2,
+  Monitor,
   Pencil,
+  Redo2,
+  Save,
+  Search,
+  Smartphone,
+  Undo2,
   X,
 } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
@@ -26,23 +34,18 @@ import { EditModeContext } from "@/contexts/EditModeContext";
 
 // ── Page map ──────────────────────────────────────────────────────────────────
 
-const PAGE_MAP: Record<string, React.LazyExoticComponent<React.ComponentType>> =
-  {
-    index: lazy(() => import("@/pages/Index")),
-    about: lazy(() => import("@/pages/About")),
-    contact: lazy(() => import("@/pages/Contact")),
-    "nos-tarifs": lazy(() => import("@/pages/NosTarifs")),
-    partenaires: lazy(() => import("@/pages/Partenaires")),
-    "presse-medias": lazy(() => import("@/pages/PresseMedias")),
-    "coaching-scolaire": lazy(
-      () => import("@/pages/Services/CoachingScolaire")
-    ),
-    "coaching-jeunes": lazy(() => import("@/pages/Services/CoachingJeunes")),
-    "coaching-neurofeedback": lazy(
-      () => import("@/pages/Services/CoachingNeurofeedback")
-    ),
-    "coaching-equipe": lazy(() => import("@/pages/Services/CoachingEquipe")),
-  };
+const PAGE_MAP: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
+  index:                   lazy(() => import("@/pages/Index")),
+  about:                   lazy(() => import("@/pages/About")),
+  contact:                 lazy(() => import("@/pages/Contact")),
+  "nos-tarifs":            lazy(() => import("@/pages/NosTarifs")),
+  partenaires:             lazy(() => import("@/pages/Partenaires")),
+  "presse-medias":         lazy(() => import("@/pages/PresseMedias")),
+  "coaching-scolaire":     lazy(() => import("@/pages/Services/CoachingScolaire")),
+  "coaching-jeunes":       lazy(() => import("@/pages/Services/CoachingJeunes")),
+  "coaching-neurofeedback":lazy(() => import("@/pages/Services/CoachingNeurofeedback")),
+  "coaching-equipe":       lazy(() => import("@/pages/Services/CoachingEquipe")),
+};
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -61,25 +64,22 @@ function setNestedValue(
   value: unknown
 ): Record<string, unknown> {
   const result: unknown = JSON.parse(JSON.stringify(obj));
-
   function set(current: unknown, depth: number): void {
-    const key = path.split(".")[depth];
-    const isLast = depth === path.split(".").length - 1;
+    const parts = path.split(".");
+    const key = parts[depth];
+    const isLast = depth === parts.length - 1;
     const idx = parseInt(key, 10);
     const isArr = !isNaN(idx) && Array.isArray(current);
-
     if (isLast) {
       if (isArr) (current as unknown[])[idx] = value;
       else (current as Record<string, unknown>)[key] = value;
       return;
     }
-
-    const nextKey = path.split(".")[depth + 1];
+    const nextKey = parts[depth + 1];
     const nextIsArr = !isNaN(parseInt(nextKey, 10));
     const child = isArr
       ? (current as unknown[])[idx]
       : (current as Record<string, unknown>)[key];
-
     if (child == null || typeof child !== "object") {
       const next = nextIsArr ? [] : {};
       if (isArr) (current as unknown[])[idx] = next;
@@ -89,12 +89,11 @@ function setNestedValue(
       set(child, depth + 1);
     }
   }
-
   set(result, 0);
   return result as Record<string, unknown>;
 }
 
-// ── Spinner ───────────────────────────────────────────────────────────────────
+// ── Sub-components ────────────────────────────────────────────────────────────
 
 function Spinner() {
   return (
@@ -104,54 +103,77 @@ function Spinner() {
   );
 }
 
-// ── Sidebar field input ───────────────────────────────────────────────────────
+function Sep() {
+  return (
+    <div style={{ width: 1, height: 22, background: "rgba(255,255,255,0.15)", flexShrink: 0 }} />
+  );
+}
 
 function FieldInput({
   field,
   value,
   onChange,
   isActive,
-  elRef,
+  divRef,
 }: {
   field: FieldDef;
   value: string;
   onChange: (v: string) => void;
   isActive: boolean;
-  elRef: (el: HTMLDivElement | null) => void;
+  divRef?: (el: HTMLDivElement | null) => void;
 }) {
+  const inputRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
   const isLong = field.type === "long" || field.type === "textarea";
-  const base =
-    "w-full border rounded-xl px-3 py-2 text-sm focus:outline-none transition-colors bg-white resize-none";
-  const ring = isActive
-    ? "border-[#C4903E] ring-2 ring-[#C4903E]/20"
-    : "border-slate-200 focus:border-[#C4903E] focus:ring-2 focus:ring-[#C4903E]/20";
+
+  useEffect(() => {
+    if (isActive && inputRef.current) {
+      inputRef.current.focus();
+      const len = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(len, len);
+    }
+  }, [isActive]);
 
   return (
     <div
-      ref={elRef}
-      className={`rounded-xl p-3 transition-colors scroll-mt-4 ${
-        isActive ? "bg-[#FDF6EC] ring-1 ring-[#C4903E]/30" : "bg-white"
-      }`}
+      ref={divRef}
+      className="scroll-mt-3 rounded-xl transition-all"
+      style={{
+        padding: "10px 12px",
+        background: isActive ? "#FDF6EC" : "white",
+        border: `1.5px solid ${isActive ? "#C4903E" : "transparent"}`,
+        boxShadow: isActive ? "0 0 0 3px rgba(196,144,62,0.12)" : "0 1px 3px rgba(0,0,0,0.06)",
+      }}
     >
-      <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">
+      <label
+        className="block text-[10px] font-black uppercase tracking-widest mb-1.5 select-none"
+        style={{ color: isActive ? "#C4903E" : "#94a3b8" }}
+      >
         {field.label}
       </label>
       {field.hint && (
-        <p className="text-xs text-slate-400 mb-1.5">{field.hint}</p>
+        <p className="text-[11px] leading-snug mb-1.5" style={{ color: "#94a3b8" }}>
+          {field.hint}
+        </p>
       )}
       {isLong ? (
         <textarea
-          rows={3}
-          className={`${base} ${ring}`}
+          ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+          rows={isActive ? 4 : 2}
+          className="w-full text-[13px] bg-transparent border-none outline-none resize-none leading-relaxed"
+          style={{ color: "#1C3A52" }}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={e => onChange(e.target.value)}
+          placeholder="—"
         />
       ) : (
         <input
+          ref={inputRef as React.RefObject<HTMLInputElement>}
           type={field.type === "url" ? "url" : "text"}
-          className={`${base} ${ring}`}
+          className="w-full text-[13px] bg-transparent border-none outline-none"
+          style={{ color: "#1C3A52" }}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={e => onChange(e.target.value)}
+          placeholder="—"
         />
       )}
     </div>
@@ -160,9 +182,10 @@ function FieldInput({
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const BAR_H = 54;
+const TOOLBAR_H = 54;
+const SIDEBAR_W = 340;
 
-// ── Main Component ────────────────────────────────────────────────────────────
+// ── AdminVisualEditor ─────────────────────────────────────────────────────────
 
 export default function AdminVisualEditor() {
   const { pageKey = "index" } = useParams<{ pageKey: string }>();
@@ -175,24 +198,27 @@ export default function AdminVisualEditor() {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
   }, []);
 
-  // ── Active page ─────────────────────────────────────────────────────────────
+  // ── Active page — toujours synchronisé avec l'URL ───────────────────────────
   const [activePage, setActivePage] = useState(pageKey);
+  useEffect(() => {
+    if (pageKey !== activePage) {
+      setActivePage(pageKey);
+      setActiveFieldKey(null);
+      setSearch("");
+    }
+  }, [pageKey]);
   const [pageDropdown, setPageDropdown] = useState(false);
 
-  // ── Content (loads via React Query — same cache as page component) ──────────
+  // ── Content & fields ─────────────────────────────────────────────────────────
   const { content } = usePageContent<Record<string, unknown>>(activePage);
-
-  // ── Field values (flat state — source of truth for <E> popover) ────────────
   const pageDef = getPageDef(activePage);
   const editableFields = (pageDef?.fields ?? []).filter(
-    (f) => f.type !== "array" && f.type !== "json" && f.type !== "readonly"
+    f => f.type !== "array" && f.type !== "json" && f.type !== "readonly"
   );
 
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
   const fieldValuesRef = useRef<Record<string, string>>({});
-  useEffect(() => {
-    fieldValuesRef.current = fieldValues;
-  }, [fieldValues]);
+  useEffect(() => { fieldValuesRef.current = fieldValues; }, [fieldValues]);
 
   useEffect(() => {
     if (!content) return;
@@ -201,24 +227,57 @@ export default function AdminVisualEditor() {
       flat[f.key] = (getNestedValue(content, f.key) as string) ?? "";
     }
     setFieldValues(flat);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Initialize first history checkpoint when content loads
+    historyRef.current = [{ ...flat }];
+    historyIndexRef.current = 0;
+    setHistoryVersion(v => v + 1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content, activePage]);
+
+  // ── Active field (bidirectionnel : E ↔ sidebar) ──────────────────────────────
+  const [activeFieldKey, setActiveFieldKey] = useState<string | null>(null);
+  const fieldRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // Scroll sidebar to the active field when changed from <E> click
+  useEffect(() => {
+    if (activeFieldKey) {
+      const el = fieldRefs.current.get(activeFieldKey);
+      el?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      if (!sidebarOpenRef.current) setSidebarOpen(true);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeFieldKey]);
+
+  // Track sidebar open state via ref (avoid stale closure in effect above)
+  const sidebarOpenRef = useRef(true);
+
+  // ── Undo / Redo ──────────────────────────────────────────────────────────────
+  const historyRef = useRef<Array<Record<string, string>>>([]);
+  const historyIndexRef = useRef(-1);
+  const [historyVersion, setHistoryVersion] = useState(0);
+
+  const canUndo = historyVersion >= 0 && historyIndexRef.current > 0;
+  const canRedo = historyVersion >= 0 && historyIndexRef.current < historyRef.current.length - 1;
+
+  const pushHistory = useCallback((values: Record<string, string>) => {
+    const sliced = historyRef.current.slice(0, historyIndexRef.current + 1);
+    sliced.push({ ...values });
+    if (sliced.length > 30) sliced.shift();
+    historyRef.current = sliced;
+    historyIndexRef.current = sliced.length - 1;
+    setHistoryVersion(v => v + 1);
+  }, []);
 
   // ── Save ────────────────────────────────────────────────────────────────────
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved" | "error">("idle");
   const saveTimer = useRef<ReturnType<typeof setTimeout>>();
 
-  const performSave = useCallback(async () => {
-    const currentContent = queryClient.getQueryData<Record<string, unknown>>([
-      "page-content",
-      activePage,
-    ]);
+  const performSave = useCallback(async (skipHistory = false) => {
+    const currentContent = queryClient.getQueryData<Record<string, unknown>>(["page-content", activePage]);
     if (!currentContent) return;
     setSaving(true);
-    let newContent: Record<string, unknown> = JSON.parse(
-      JSON.stringify(currentContent)
-    );
+    let newContent: Record<string, unknown> = JSON.parse(JSON.stringify(currentContent));
     for (const [key, value] of Object.entries(fieldValuesRef.current)) {
       newContent = setNestedValue(newContent, key, value);
     }
@@ -230,338 +289,519 @@ export default function AdminVisualEditor() {
       queryClient.setQueryData(["page-content", activePage], newContent);
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2500);
+      if (!skipHistory) pushHistory(fieldValuesRef.current);
     } else {
       setSaveStatus("error");
     }
     setSaving(false);
-  }, [activePage, queryClient]);
+  }, [activePage, queryClient, pushHistory]);
 
-  // Called by <E> on each keystroke — updates local state + React Query cache instantly
-  const updateField = useCallback(
-    (fieldKey: string, value: string) => {
-      setFieldValues((prev) => ({ ...prev, [fieldKey]: value }));
+  const updateField = useCallback((fKey: string, value: string) => {
+    setFieldValues(prev => ({ ...prev, [fKey]: value }));
+    const currentContent = queryClient.getQueryData<Record<string, unknown>>(["page-content", activePage]);
+    if (currentContent) {
+      queryClient.setQueryData(["page-content", activePage], setNestedValue(currentContent, fKey, value));
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => performSave(), 1500);
+  }, [activePage, queryClient, performSave]);
 
-      // Optimistic update → page re-renders live while typing
-      const currentContent = queryClient.getQueryData<Record<string, unknown>>([
-        "page-content",
-        activePage,
-      ]);
-      if (currentContent) {
-        const newContent = setNestedValue(currentContent, fieldKey, value);
-        queryClient.setQueryData(["page-content", activePage], newContent);
+  const getFieldValue = useCallback((fKey: string) => fieldValuesRef.current[fKey] ?? "", []);
+
+  // ── Apply history snapshot ────────────────────────────────────────────────────
+  const applySnapshot = useCallback((values: Record<string, string>) => {
+    fieldValuesRef.current = values;
+    setFieldValues({ ...values });
+    const currentContent = queryClient.getQueryData<Record<string, unknown>>(["page-content", activePage]);
+    if (currentContent) {
+      let newContent = JSON.parse(JSON.stringify(currentContent));
+      for (const [k, v] of Object.entries(values)) {
+        newContent = setNestedValue(newContent, k, v);
       }
+      queryClient.setQueryData(["page-content", activePage], newContent);
+    }
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => performSave(true), 600);
+  }, [activePage, queryClient, performSave]);
 
-      // Debounced Supabase save
-      if (saveTimer.current) clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(performSave, 1500);
-    },
-    [activePage, queryClient, performSave]
-  );
+  const undo = useCallback(() => {
+    if (historyIndexRef.current <= 0) return;
+    historyIndexRef.current--;
+    setHistoryVersion(v => v + 1);
+    applySnapshot(historyRef.current[historyIndexRef.current]);
+  }, [applySnapshot]);
 
-  const getFieldValue = useCallback(
-    (fieldKey: string) => fieldValuesRef.current[fieldKey] ?? "",
-    []
-  );
+  const redo = useCallback(() => {
+    if (historyIndexRef.current >= historyRef.current.length - 1) return;
+    historyIndexRef.current++;
+    setHistoryVersion(v => v + 1);
+    applySnapshot(historyRef.current[historyIndexRef.current]);
+  }, [applySnapshot]);
 
-  // ── Sidebar (for array/json fields not covered by <E>) ─────────────────────
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeFieldKey, setActiveFieldKey] = useState<string | null>(null);
-  const drawerRef = useRef<HTMLDivElement>(null);
-  const toolbarRef = useRef<HTMLDivElement>(null);
-  const fieldRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  // ── Keyboard shortcuts ───────────────────────────────────────────────────────
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const meta = e.metaKey || e.ctrlKey;
+      if (meta && e.key === "s") { e.preventDefault(); performSave(); }
+      if (meta && !e.shiftKey && e.key === "z") { e.preventDefault(); undo(); }
+      if (meta && (e.key === "y" || (e.shiftKey && e.key === "z"))) { e.preventDefault(); redo(); }
+      if (e.key === "Escape") { setActiveFieldKey(null); setPageDropdown(false); }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [performSave, undo, redo]);
 
-  const sections = editableFields.reduce<Record<string, FieldDef[]>>(
-    (acc, f) => {
+  // ── UI state ─────────────────────────────────────────────────────────────────
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  useEffect(() => { sidebarOpenRef.current = sidebarOpen; }, [sidebarOpen]);
+  const [previewMode, setPreviewMode] = useState(false);
+  const [viewport, setViewport] = useState<"desktop" | "mobile">("desktop");
+  const [search, setSearch] = useState("");
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+
+  const toggleSection = (s: string) =>
+    setCollapsedSections(prev => {
+      const next = new Set(prev);
+      next.has(s) ? next.delete(s) : next.add(s);
+      return next;
+    });
+
+  // ── Sections (sidebar) ────────────────────────────────────────────────────────
+  const sections = editableFields
+    .filter(f =>
+      !search ||
+      f.label.toLowerCase().includes(search.toLowerCase()) ||
+      f.key.toLowerCase().includes(search.toLowerCase())
+    )
+    .reduce<Record<string, FieldDef[]>>((acc, f) => {
       const s = f.section ?? "Général";
       if (!acc[s]) acc[s] = [];
       acc[s].push(f);
       return acc;
-    },
-    {}
-  );
+    }, {});
+
+  // ── Context value ─────────────────────────────────────────────────────────────
+  const handleSetActiveFieldKey = useCallback((key: string | null) => {
+    setActiveFieldKey(key);
+    if (key && !sidebarOpenRef.current) setSidebarOpen(true);
+  }, []);
 
   // ── Auth guard ───────────────────────────────────────────────────────────────
   if (session === undefined) return <Spinner />;
   if (session === null) return <Navigate to="/admin/login" replace />;
 
   const PageComponent = PAGE_MAP[activePage];
-  const currentPageDef = PAGES.find((p) => p.key === activePage);
+  const currentPageDef = PAGES.find(p => p.key === activePage);
+  const activeField = editableFields.find(f => f.key === activeFieldKey);
 
-  // Context value provided to all <E> components inside the page
   const ctxValue = {
     isEditMode: true,
     pageKey: activePage,
+    activeFieldKey,
+    setActiveFieldKey: handleSetActiveFieldKey,
     getFieldValue,
     updateField,
+    previewMode,
   };
 
+  // ── Render ───────────────────────────────────────────────────────────────────
   return (
     <EditModeContext.Provider value={ctxValue}>
-      <div style={{ position: "relative", minHeight: "100vh", paddingBottom: BAR_H }}>
+      <div style={{ minHeight: "100vh", paddingTop: TOOLBAR_H }}>
 
-        {/* ── Page (with live <E> wrappers) ─────────────────────────── */}
-        {PageComponent ? (
-          <Suspense fallback={<Spinner />}>
-            <PageComponent />
-          </Suspense>
-        ) : (
-          <div className="flex items-center justify-center min-h-screen">
-            <p className="text-slate-400">Page inconnue : {activePage}</p>
-          </div>
-        )}
-
-        {/* ── Side panel (all text fields) ───────────────────────────── */}
-        <AnimatePresence>
-          {drawerOpen && (
-            <>
-              <motion.div
-                key="backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setDrawerOpen(false)}
-                style={{
-                  position: "fixed",
-                  inset: 0,
-                  zIndex: 8500,
-                  background: "rgba(0,0,0,0.18)",
-                }}
-              />
-              <motion.div
-                key="drawer"
-                ref={drawerRef}
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "100%" }}
-                transition={{ type: "spring", stiffness: 420, damping: 42 }}
-                style={{
-                  position: "fixed",
-                  top: 0,
-                  right: 0,
-                  bottom: BAR_H,
-                  width: 360,
-                  background: "#F8F9FA",
-                  zIndex: 8600,
-                  boxShadow: "-6px 0 32px rgba(0,0,0,0.14)",
-                  display: "flex",
-                  flexDirection: "column",
-                  overflow: "hidden",
-                }}
-              >
-                <div
-                  style={{ background: "#1C3A52", padding: "14px 18px", flexShrink: 0 }}
-                  className="flex items-center justify-between gap-3"
-                >
-                  <div className="min-w-0">
-                    <p className="text-white font-semibold text-sm truncate">
-                      {currentPageDef?.label ?? activePage}
-                    </p>
-                    <p className="text-white/50 text-xs mt-0.5">
-                      Tous les champs — ou cliquez sur la page
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => setDrawerOpen(false)}
-                    className="text-white/50 hover:text-white transition-colors p-1.5 rounded-lg hover:bg-white/10 flex-shrink-0"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-
-                <div
-                  className="flex-1 overflow-y-auto"
-                  style={{ padding: "12px 14px", paddingBottom: 24 }}
-                >
-                  {!content ? (
-                    <div className="flex items-center justify-center py-16">
-                      <Loader2
-                        size={24}
-                        className="animate-spin"
-                        style={{ color: "#C4903E" }}
-                      />
-                    </div>
-                  ) : Object.keys(sections).length === 0 ? (
-                    <p className="text-slate-400 text-sm text-center py-12">
-                      Aucun champ texte.
-                    </p>
-                  ) : (
-                    Object.entries(sections).map(([sectionName, sectionFields]) => (
-                      <div key={sectionName} className="mb-5">
-                        <p
-                          className="text-[10px] font-black uppercase tracking-widest mb-2 px-1"
-                          style={{ color: "#C4903E" }}
-                        >
-                          {sectionName}
-                        </p>
-                        <div className="flex flex-col gap-2">
-                          {sectionFields.map((field) => (
-                            <FieldInput
-                              key={field.key}
-                              field={field}
-                              value={fieldValues[field.key] ?? ""}
-                              onChange={(v) => updateField(field.key, v)}
-                              isActive={activeFieldKey === field.key}
-                              elRef={(el) => {
-                                if (el) fieldRefs.current.set(field.key, el);
-                                else fieldRefs.current.delete(field.key);
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-
-        {/* ── Bottom toolbar ─────────────────────────────────────────── */}
+        {/* ══ TOOLBAR ══════════════════════════════════════════════════════════ */}
         <div
-          ref={toolbarRef}
           style={{
-            position: "fixed",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: BAR_H,
-            background: "#1C3A52",
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "0 16px",
+            position: "fixed", top: 0, left: 0, right: 0,
+            height: TOOLBAR_H, background: "#1C3A52", zIndex: 9999,
+            display: "flex", alignItems: "center", gap: 6, padding: "0 10px",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
           }}
         >
           {/* Back */}
           <button
-            onClick={() => navigate("/admin/content")}
-            className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors flex-shrink-0 text-sm font-semibold"
+            onClick={() => navigate("/admin")}
+            className="flex items-center gap-1.5 text-white/70 hover:text-white transition-colors px-2.5 py-1.5 rounded-lg hover:bg-white/10 text-sm font-medium flex-shrink-0"
           >
             <ArrowLeft size={15} />
-            Admin
+            <span className="hidden sm:block">Admin</span>
           </button>
 
-          <div
-            style={{
-              width: 1,
-              background: "rgba(255,255,255,0.2)",
-              height: 22,
-              flexShrink: 0,
-            }}
-          />
+          <Sep />
 
           {/* Page selector */}
           <div style={{ position: "relative" }}>
             <button
-              onClick={() => setPageDropdown((v) => !v)}
-              className="flex items-center gap-1.5 text-white text-sm font-semibold hover:text-[#C4903E] transition-colors"
+              onClick={() => setPageDropdown(v => !v)}
+              className="flex items-center gap-1.5 text-white text-sm font-semibold hover:text-[#C4903E] transition-colors px-2 py-1.5 rounded-lg hover:bg-white/10"
             >
-              <span className="max-w-[140px] truncate">
+              <span className="max-w-[130px] truncate hidden sm:block">
                 {currentPageDef?.label ?? activePage}
               </span>
-              <ChevronDown size={13} />
+              <ChevronDown size={12} />
             </button>
-
             <AnimatePresence>
               {pageDropdown && (
-                <motion.div
-                  key="pdrop"
-                  initial={{ opacity: 0, y: 6, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
-                  transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    position: "absolute",
-                    bottom: "calc(100% + 10px)",
-                    left: 0,
-                    background: "white",
-                    borderRadius: 14,
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-                    overflow: "hidden",
-                    minWidth: 210,
-                    zIndex: 10000,
-                  }}
-                >
-                  {PAGES.filter((p) => p.key !== "site-settings").map((p) => (
-                    <button
-                      key={p.key}
-                      onClick={() => {
-                        setActivePage(p.key);
-                        setActiveFieldKey(null);
-                        setDrawerOpen(false);
-                        setPageDropdown(false);
-                        navigate(`/admin/visual/${p.key}`, { replace: true });
-                      }}
-                      className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#FDF6EC] transition-colors"
-                      style={{
-                        color: p.key === activePage ? "#C4903E" : "#1C3A52",
-                        fontWeight: p.key === activePage ? 700 : 400,
-                        borderBottom: "1px solid #f1f5f9",
-                      }}
-                    >
-                      {p.label}
-                    </button>
-                  ))}
-                </motion.div>
+                <>
+                  <div
+                    style={{ position: "fixed", inset: 0, zIndex: 9998 }}
+                    onClick={() => setPageDropdown(false)}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                    transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+                    style={{
+                      position: "absolute", top: "calc(100% + 8px)", left: 0,
+                      background: "white", borderRadius: 16,
+                      boxShadow: "0 12px 40px rgba(0,0,0,0.22)",
+                      minWidth: 230, zIndex: 9999, overflow: "hidden",
+                    }}
+                  >
+                    {PAGES.filter(p => p.key !== "site-settings").map(p => (
+                      <button
+                        key={p.key}
+                        onClick={() => {
+                          navigate(`/admin/visual/${p.key}`, { replace: true });
+                          setPageDropdown(false);
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#FDF6EC] transition-colors flex items-center justify-between"
+                        style={{
+                          color: p.key === activePage ? "#C4903E" : "#1C3A52",
+                          fontWeight: p.key === activePage ? 700 : 400,
+                          borderBottom: "1px solid #f1f5f9",
+                        }}
+                      >
+                        {p.label}
+                        {p.key === activePage && <Check size={13} style={{ color: "#C4903E" }} />}
+                      </button>
+                    ))}
+                  </motion.div>
+                </>
               )}
             </AnimatePresence>
+          </div>
+
+          <Sep />
+
+          {/* Undo / Redo */}
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={undo} disabled={!canUndo} title="Annuler (⌘Z)"
+              className="p-2 rounded-lg transition-colors disabled:opacity-25 hover:bg-white/10 text-white"
+            >
+              <Undo2 size={15} />
+            </button>
+            <button
+              onClick={redo} disabled={!canRedo} title="Rétablir (⌘⇧Z)"
+              className="p-2 rounded-lg transition-colors disabled:opacity-25 hover:bg-white/10 text-white"
+            >
+              <Redo2 size={15} />
+            </button>
+          </div>
+
+          <Sep />
+
+          {/* Preview */}
+          <button
+            onClick={() => setPreviewMode(v => !v)}
+            title={previewMode ? "Retour en mode édition" : "Aperçu sans indicateurs"}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-xs font-semibold"
+            style={{
+              background: previewMode ? "rgba(196,144,62,0.25)" : "transparent",
+              color: previewMode ? "#C4903E" : "rgba(255,255,255,0.7)",
+            }}
+          >
+            {previewMode ? <EyeOff size={14} /> : <Eye size={14} />}
+            <span className="hidden md:block">{previewMode ? "Édition" : "Aperçu"}</span>
+          </button>
+
+          {/* Viewport */}
+          <div
+            className="flex items-center rounded-lg overflow-hidden"
+            style={{ border: "1px solid rgba(255,255,255,0.15)" }}
+          >
+            {(["desktop", "mobile"] as const).map(v => (
+              <button
+                key={v}
+                onClick={() => setViewport(v)}
+                title={v === "desktop" ? "Bureau" : "Mobile (390px)"}
+                className="p-1.5 transition-colors"
+                style={{
+                  background: viewport === v ? "rgba(255,255,255,0.18)" : "transparent",
+                  color: "white",
+                }}
+              >
+                {v === "desktop" ? <Monitor size={14} /> : <Smartphone size={14} />}
+              </button>
+            ))}
           </div>
 
           <div style={{ flex: 1 }} />
 
           {/* Save status */}
-          {saving ? (
-            <div className="flex items-center gap-1.5 flex-shrink-0">
-              <Loader2 size={13} className="animate-spin text-white/50" />
-              <span className="text-white/50 text-xs font-semibold">
-                Sauvegarde…
-              </span>
-            </div>
-          ) : saveStatus === "saved" ? (
-            <div className="flex items-center gap-1.5 flex-shrink-0">
-              <Check size={13} className="text-green-400" />
-              <span className="text-green-400 text-xs font-semibold">
-                Sauvegardé
-              </span>
-            </div>
-          ) : saveStatus === "error" ? (
-            <span className="text-red-400 text-xs font-semibold flex-shrink-0">
-              Erreur
-            </span>
-          ) : null}
+          <AnimatePresence mode="wait">
+            {saving ? (
+              <motion.div key="saving" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="flex items-center gap-1.5 text-white/50 text-xs font-semibold flex-shrink-0">
+                <Loader2 size={13} className="animate-spin" />
+                <span className="hidden sm:block">Sauvegarde…</span>
+              </motion.div>
+            ) : saveStatus === "saved" ? (
+              <motion.div key="saved" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+                className="flex items-center gap-1.5 text-xs font-semibold flex-shrink-0" style={{ color: "#4ade80" }}>
+                <Check size={13} />
+                <span className="hidden sm:block">Sauvegardé</span>
+              </motion.div>
+            ) : saveStatus === "error" ? (
+              <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="text-red-400 text-xs font-semibold flex-shrink-0">Erreur</motion.div>
+            ) : null}
+          </AnimatePresence>
 
-          <div
-            style={{
-              width: 1,
-              background: "rgba(255,255,255,0.2)",
-              height: 22,
-              flexShrink: 0,
-            }}
-          />
+          <Sep />
 
-          {/* Edit mode badge */}
+          {/* Mode badge */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
-            <Eye size={13} className="text-[#C4903E]" />
-            <span
-              className="text-[10px] font-black uppercase tracking-widest hidden sm:block"
-              style={{ color: "#C4903E" }}
-            >
-              Mode Édition
+            <Pencil size={13} style={{ color: "#C4903E" }} />
+            <span className="text-[10px] font-black uppercase tracking-widest hidden lg:block" style={{ color: "#C4903E" }}>
+              Éditeur
             </span>
           </div>
 
-          {/* All fields button */}
+          <Sep />
+
+          {/* Sidebar toggle */}
           <button
-            onClick={() => setDrawerOpen((v) => !v)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-opacity hover:opacity-90 flex-shrink-0"
-            style={{ background: "#C4903E", color: "white" }}
+            onClick={() => setSidebarOpen(v => !v)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex-shrink-0"
+            style={{ background: sidebarOpen ? "#C4903E" : "rgba(255,255,255,0.12)", color: "white" }}
           >
             <Pencil size={13} />
-            Tous les champs
+            <span className="hidden sm:block">Champs</span>
           </button>
         </div>
+
+        {/* ══ PAGE PREVIEW ════════════════════════════════════════════════════ */}
+        {viewport === "mobile" ? (
+          <div
+            style={{
+              display: "flex", justifyContent: "center", alignItems: "flex-start",
+              minHeight: `calc(100vh - ${TOOLBAR_H}px)`,
+              background: "#CBD5E1",
+              padding: "28px 16px 28px",
+              paddingRight: sidebarOpen ? SIDEBAR_W + 28 : 28,
+              transition: "padding-right 0.35s ease",
+            }}
+          >
+            <div
+              style={{
+                width: 393,
+                minHeight: 852,
+                background: "white",
+                borderRadius: 50,
+                boxShadow: "0 0 0 10px #0f172a, 0 0 0 12px #334155, 0 24px 80px rgba(0,0,0,0.4)",
+                overflow: "hidden",
+                position: "relative",
+                flexShrink: 0,
+              }}
+            >
+              {/* Dynamic island */}
+              <div style={{
+                position: "absolute", top: 13, left: "50%",
+                transform: "translateX(-50%)",
+                width: 120, height: 34,
+                background: "#0f172a",
+                borderRadius: 20, zIndex: 100,
+              }} />
+              <div style={{ paddingTop: 0 }}>
+                {PageComponent ? (
+                  <Suspense fallback={<Spinner />}>
+                    <PageComponent key={`${activePage}-mobile`} />
+                  </Suspense>
+                ) : (
+                  <div className="flex items-center justify-center min-h-screen">
+                    <p className="text-slate-400 text-sm">Page inconnue : {activePage}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ paddingRight: sidebarOpen ? SIDEBAR_W : 0, transition: "padding-right 0.35s ease" }}>
+            {PageComponent ? (
+              <Suspense fallback={<Spinner />}>
+                <PageComponent key={activePage} />
+              </Suspense>
+            ) : (
+              <div className="flex items-center justify-center min-h-screen">
+                <p className="text-slate-400 text-sm">Page inconnue : {activePage}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ══ SIDEBAR ═════════════════════════════════════════════════════════ */}
+        <AnimatePresence>
+          {sidebarOpen && (
+            <motion.aside
+              key="sidebar"
+              initial={{ x: SIDEBAR_W }}
+              animate={{ x: 0 }}
+              exit={{ x: SIDEBAR_W }}
+              transition={{ type: "spring", stiffness: 380, damping: 40 }}
+              style={{
+                position: "fixed", top: TOOLBAR_H, right: 0, bottom: 0,
+                width: SIDEBAR_W, background: "#F8FAFC", zIndex: 8000,
+                boxShadow: "-4px 0 28px rgba(0,0,0,0.1)",
+                display: "flex", flexDirection: "column", overflow: "hidden",
+              }}
+            >
+              {/* Header */}
+              <div style={{ padding: "14px 14px 10px", background: "#F0F4F8", borderBottom: "1px solid #E2E8F0", flexShrink: 0 }}>
+                <div className="flex items-center justify-between mb-2.5">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest" style={{ color: "#C4903E" }}>
+                      {currentPageDef?.label ?? activePage}
+                    </p>
+                    <p className="text-[11px] mt-0.5" style={{ color: "#94a3b8" }}>
+                      {editableFields.length} champs éditables
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    className="text-slate-400 hover:text-slate-600 transition-colors p-1.5 rounded-lg hover:bg-white"
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
+
+                {/* Search */}
+                <div className="relative">
+                  <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "#94a3b8" }} />
+                  <input
+                    type="text"
+                    placeholder="Rechercher un champ…"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    className="w-full pl-8 pr-3 py-2 text-xs bg-white rounded-lg border border-slate-200 focus:outline-none focus:border-[#C4903E] transition-colors"
+                    style={{ color: "#1C3A52" }}
+                  />
+                  {search && (
+                    <button
+                      onClick={() => setSearch("")}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500"
+                    >
+                      <X size={11} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto" style={{ padding: "12px 12px 24px" }}>
+
+                {/* Active field — pinned at top */}
+                {activeField && !search && (
+                  <div className="mb-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#C4903E" }} />
+                      <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: "#C4903E" }}>
+                        Champ sélectionné
+                      </span>
+                      <button
+                        onClick={() => setActiveFieldKey(null)}
+                        className="ml-auto text-slate-300 hover:text-slate-500 transition-colors"
+                      >
+                        <X size={11} />
+                      </button>
+                    </div>
+                    <FieldInput
+                      field={activeField}
+                      value={fieldValues[activeFieldKey!] ?? ""}
+                      onChange={v => updateField(activeFieldKey!, v)}
+                      isActive
+                    />
+                  </div>
+                )}
+
+                {/* Loading */}
+                {!content && (
+                  <div className="flex items-center justify-center py-16">
+                    <Loader2 size={22} className="animate-spin" style={{ color: "#C4903E" }} />
+                  </div>
+                )}
+
+                {/* Sections */}
+                {content && Object.entries(sections).map(([sectionName, sectionFields]) => {
+                  const isCollapsed = collapsedSections.has(sectionName);
+                  return (
+                    <div key={sectionName} className="mb-4">
+                      <button
+                        onClick={() => toggleSection(sectionName)}
+                        className="flex items-center gap-2 w-full mb-2 px-1 group"
+                      >
+                        <ChevronRight
+                          size={12}
+                          className="transition-transform"
+                          style={{ color: "#C4903E", transform: isCollapsed ? "rotate(0deg)" : "rotate(90deg)" }}
+                        />
+                        <span className="text-[10px] font-black uppercase tracking-widest flex-1 text-left" style={{ color: "#C4903E" }}>
+                          {sectionName}
+                        </span>
+                        <span className="text-[10px] text-slate-400">{sectionFields.length}</span>
+                      </button>
+
+                      {!isCollapsed && (
+                        <div className="flex flex-col gap-1.5 pl-1">
+                          {sectionFields.map(field => (
+                            <div
+                              key={field.key}
+                              onClick={() => setActiveFieldKey(field.key === activeFieldKey ? null : field.key)}
+                              style={{ cursor: "pointer" }}
+                              ref={el => {
+                                if (el) fieldRefs.current.set(field.key, el);
+                                else fieldRefs.current.delete(field.key);
+                              }}
+                            >
+                              <FieldInput
+                                field={field}
+                                value={fieldValues[field.key] ?? ""}
+                                onChange={v => updateField(field.key, v)}
+                                isActive={activeFieldKey === field.key}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* No results */}
+                {content && Object.keys(sections).length === 0 && (
+                  <p className="text-slate-400 text-sm text-center py-12">
+                    {search ? `Aucun champ pour "${search}"` : "Aucun champ texte."}
+                  </p>
+                )}
+              </div>
+
+              {/* Footer — Save button */}
+              <div style={{ padding: "10px 12px", borderTop: "1px solid #E2E8F0", background: "#F0F4F8", flexShrink: 0 }}>
+                <button
+                  onClick={() => performSave()}
+                  disabled={saving}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all"
+                  style={{ background: "#1C3A52", color: "white", opacity: saving ? 0.6 : 1 }}
+                >
+                  {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                  {saving ? "Sauvegarde…" : "Sauvegarder — ⌘S"}
+                </button>
+              </div>
+            </motion.aside>
+          )}
+        </AnimatePresence>
       </div>
     </EditModeContext.Provider>
   );
