@@ -30,6 +30,7 @@ import { ROUTES } from "@/lib/config";
 import { usePageContent } from "@/hooks/usePageContent";
 import type { IndexContent } from "@/types";
 import { E } from "@/components/cms/E";
+import { useEditMode } from "@/contexts/EditModeContext";
 
 const COACH_IMG = `${import.meta.env.BASE_URL}patron.webp`;
 
@@ -128,6 +129,7 @@ function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", child
 
 export default function Index() {
   const { content } = usePageContent<IndexContent>("index");
+  const { isEditMode } = useEditMode();
 
   /* ── Carousel vidéo hero ───────────────────────────────────── */
   const [videoIdx,   setVideoIdx]   = useState(0);
@@ -287,31 +289,39 @@ export default function Index() {
                 className="font-bold leading-[1.1] tracking-tight text-[#1C3A52] max-w-full"
                 style={{ fontSize: "clamp(1.9rem, 7vw, 5.6rem)" }}
             >
-              {[
-                { text: "Développez", delay: 0.18 },
-                { text: "votre potentiel", delay: 0.30 },
-              ].map(({ text, delay }) => (
-                <span key={text} className="word-mask block overflow-hidden">
-                  <motion.span
-                    className="inline-block whitespace-nowrap"
-                    initial={{ y: "105%" }}
-                    animate={{ y: "0%" }}
-                    transition={{ type: "spring", stiffness: 160, damping: 22, delay }}
-                  >
-                    {text}
-                  </motion.span>
-                </span>
-              ))}
-              <span className="word-mask block overflow-hidden">
-                <motion.span
-                  className="inline-block whitespace-nowrap"
-                  initial={{ y: "105%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.42 }}
-                >
-                  <span className="infini-word">infini.</span>
-                </motion.span>
-              </span>
+              {isEditMode ? (
+                <E fieldKey="hero.title">
+                  {content?.hero?.title ?? "Développez votre potentiel infini."}
+                </E>
+              ) : (
+                <>
+                  {[
+                    { text: "Développez", delay: 0.18 },
+                    { text: "votre potentiel", delay: 0.30 },
+                  ].map(({ text, delay }) => (
+                    <span key={text} className="word-mask block overflow-hidden">
+                      <motion.span
+                        className="inline-block whitespace-nowrap"
+                        initial={{ y: "105%" }}
+                        animate={{ y: "0%" }}
+                        transition={{ type: "spring", stiffness: 160, damping: 22, delay }}
+                      >
+                        {text}
+                      </motion.span>
+                    </span>
+                  ))}
+                  <span className="word-mask block overflow-hidden">
+                    <motion.span
+                      className="inline-block whitespace-nowrap"
+                      initial={{ y: "105%" }}
+                      animate={{ y: "0%" }}
+                      transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.42 }}
+                    >
+                      <span className="infini-word">infini.</span>
+                    </motion.span>
+                  </span>
+                </>
+              )}
             </h1>
 
             {/* Sous-titre descriptif */}
@@ -337,7 +347,7 @@ export default function Index() {
                   baseClass="bg-[#1C3A52] text-white shadow-[0_8px_24px_rgba(28,58,82,0.15)] rounded-full px-6 py-3.5 flex items-center justify-center gap-2 font-medium w-full sm:w-auto"
                   fillClass="bg-[#C4903E]"
               >
-                Prendre RDV
+                <E fieldKey="hero.buttonPrimary">{content?.hero?.buttonPrimary ?? "Prendre RDV"}</E>
                 <ArrowUpRight className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               </LiquidCTA>
 
@@ -348,7 +358,7 @@ export default function Index() {
                   fillClass="bg-[#1C3A52]"
                   hoverTextClass="text-white"
               >
-                Notre approche
+                <E fieldKey="hero.buttonSecondary">{content?.hero?.buttonSecondary ?? "Notre approche"}</E>
               </LiquidCTA>
             </motion.div>
 
@@ -426,6 +436,12 @@ export default function Index() {
             >
               <E fieldKey="servicesSection.title">{content?.servicesSection?.title ?? "Un accompagnement unique pour des résultats durables"}</E>
             </motion.h2>
+            <motion.p
+              variants={fadeInUp}
+              className="text-[0.95rem] sm:text-[1.05rem] text-[#1C3A52]/60 leading-relaxed max-w-2xl mx-auto"
+            >
+              <E fieldKey="servicesSection.subtitle">{content?.servicesSection?.subtitle ?? "Coaching certifié à Mâcon et à distance — scolaire, jeunes adultes, neurofeedback et équipe en Saône-et-Loire (71)."}</E>
+            </motion.p>
           </motion.div>
 
           <motion.div

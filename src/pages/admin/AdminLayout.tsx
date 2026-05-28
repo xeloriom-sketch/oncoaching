@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Navigate, Outlet, NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
-  FileText,
   Inbox,
   Settings,
   LogOut,
@@ -18,7 +17,6 @@ import { supabase } from "@/lib/supabase";
 const NAV_ITEMS = [
   { icon: LayoutDashboard, label: "Dashboard",       path: "/admin"                },
   { icon: Eye,             label: "Éditeur visuel",  path: "/admin/visual"         },
-  { icon: FileText,        label: "Contenu",         path: "/admin/content"        },
   { icon: Inbox,           label: "Messages",        path: "/admin/messages"       },
   { icon: Settings,        label: "Paramètres",      path: "/admin/settings"       },
 ];
