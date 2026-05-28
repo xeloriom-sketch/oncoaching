@@ -367,7 +367,7 @@ const Contact = () => {
                 transition={pulseDot.transition}
               />
               <span className="text-[13px] font-semibold tracking-widest uppercase text-[#C4903E]">
-                Réponse sous 24h
+                <E fieldKey="hero.responseLabel">{content?.hero?.responseLabel ?? "Réponse sous 24h"}</E>
               </span>
             </motion.div>
 
@@ -417,7 +417,7 @@ const Contact = () => {
                     }`}
                   >
                     <MessageSquare className="w-4 h-4" strokeWidth={2} />
-                    Envoyer un message
+                    <E fieldKey="formulaire.contactTabLabel">{content?.formulaire?.contactTabLabel ?? "Envoyer un message"}</E>
                   </button>
                   <button
                     type="button"
@@ -429,7 +429,7 @@ const Contact = () => {
                     }`}
                   >
                     <CalendarDays className="w-4 h-4" strokeWidth={2} />
-                    Prendre rendez-vous
+                    <E fieldKey="formulaire.rdvTabLabel">{content?.formulaire?.rdvTabLabel ?? "Prendre rendez-vous"}</E>
                   </button>
                 </div>
 
@@ -438,12 +438,12 @@ const Contact = () => {
                 </p>
                 <h2 className="text-[1.65rem] font-bold text-[#1C3A52] leading-snug tracking-tight">
                   {isRdv
-                    ? "Choisissez vos disponibilités"
+                    ? <E fieldKey="formulaire.rdvSubtitle">{content?.formulaire?.rdvSubtitle ?? "Choisissez vos disponibilités"}</E>
                     : <E fieldKey="formulaire.subtitle">{formulaire.subtitle}</E>}
                 </h2>
                 {isRdv && (
                   <p className="text-[14px] text-gray-500 mt-2 leading-relaxed">
-                    Indiquez vos créneaux préférés — nous vous confirmons le rendez-vous sous 24h.
+                    <E fieldKey="formulaire.rdvDescription">{content?.formulaire?.rdvDescription ?? "Indiquez vos créneaux préférés — nous vous confirmons le rendez-vous sous 24h."}</E>
                   </p>
                 )}
               </motion.div>
@@ -538,11 +538,11 @@ const Contact = () => {
                     ) : isRdv ? (
                       <>
                         <CalendarDays className="w-4 h-4" />
-                        Demander ce rendez-vous
+                        <E fieldKey="formulaire.buttons.submitRdv">{content?.formulaire?.buttons?.submitRdv ?? "Demander ce rendez-vous"}</E>
                       </>
                     ) : (
                       <>
-                        Envoyer le message
+                        <E fieldKey="formulaire.buttons.submitContact">{content?.formulaire?.buttons?.submitContact ?? "Envoyer le message"}</E>
                         <ArrowUpRight className="w-4 h-4" />
                       </>
                     )}
@@ -550,7 +550,10 @@ const Contact = () => {
 
                   <p className="text-gray-400 text-[13px] text-center flex items-center justify-center gap-1.5">
                     <Check className="w-3.5 h-3.5 text-[#C4903E]" strokeWidth={3} />
-                    {isRdv ? "Confirmation sous 24h · 1er RDV offert" : "Consultation initiale gratuite · Sans engagement"}
+                    {isRdv
+                      ? <E fieldKey="formulaire.footerRdv">{content?.formulaire?.footerRdv ?? "Confirmation sous 24h · 1er RDV offert"}</E>
+                      : <E fieldKey="formulaire.footerContact">{content?.formulaire?.footerContact ?? "Consultation initiale gratuite · Sans engagement"}</E>
+                    }
                   </p>
                 </div>
               </form>
@@ -574,8 +577,8 @@ const Contact = () => {
                   style={{ willChange: "transform" }}
                 >
                   <div>
-                    <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-1">Retrouvez-nous</p>
-                    <h3 className="text-white font-bold text-[1.4rem] leading-snug">Nos coordonnées</h3>
+                    <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-1"><E fieldKey="coordonnees.sectionLabel">{content?.coordonnees?.sectionLabel ?? "Retrouvez-nous"}</E></p>
+                    <h3 className="text-white font-bold text-[1.4rem] leading-snug"><E fieldKey="coordonnees.sectionTitle">{content?.coordonnees?.sectionTitle ?? "Nos coordonnées"}</E></h3>
                   </div>
 
                   <div className="flex flex-col gap-4">
@@ -636,7 +639,7 @@ const Contact = () => {
                   {/* Horaires */}
                   {coordonnees.horaires?.lines?.length > 0 && (
                     <div className="pt-4 border-t border-white/5">
-                      <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-3">Horaires</p>
+                      <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-3"><E fieldKey="coordonnees.horairesLabel">{content?.coordonnees?.horairesLabel ?? "Horaires"}</E></p>
                       <div className="flex flex-col gap-1.5">
                         {coordonnees.horaires.lines.map((line: string, i: number) => (
                           <p key={i} className="text-white/60 text-[13px]">{line}</p>
@@ -673,13 +676,13 @@ const Contact = () => {
               className="max-w-3xl mx-auto"
             >
               <motion.p variants={blurInUp} className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E] mb-3 text-center">
-                Questions fréquentes
+                <E fieldKey="faq.sectionLabel">{content?.faq?.sectionLabel ?? "Questions fréquentes"}</E>
               </motion.p>
               <motion.h2
                 variants={blurInUp}
                 className="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-[#1C3A52] text-center mb-8 md:mb-12 leading-tight tracking-tight"
               >
-                Vous avez des questions ?
+                <E fieldKey="faq.sectionTitle">{content?.faq?.sectionTitle ?? "Vous avez des questions ?"}</E>
               </motion.h2>
 
               <motion.div variants={stagger} className="flex flex-col gap-3">
@@ -736,7 +739,7 @@ const Contact = () => {
                 <motion.p variants={blurInUp} initial="hidden" whileInView="visible" viewport={VP}
                   className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E] mb-4"
                 >
-                  Prêt à commencer ?
+                  <E fieldKey="cta.sectionLabel">{content?.cta?.sectionLabel ?? "Prêt à commencer ?"}</E>
                 </motion.p>
 
                 <motion.h2
@@ -754,7 +757,7 @@ const Contact = () => {
                   transition={{ duration: 0.6, delay: 0.2 }}
                   className="text-white/50 text-[16px] max-w-md mx-auto mb-10 leading-relaxed"
                 >
-                  Réservez votre premier rendez-vous offert et découvrez comment le coaching peut transformer votre quotidien.
+                  <E fieldKey="cta.description">{content?.cta?.description ?? "Réservez votre premier rendez-vous offert et découvrez comment le coaching peut transformer votre quotidien."}</E>
                 </motion.p>
 
                 <motion.div
@@ -767,14 +770,14 @@ const Contact = () => {
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-white font-bold text-[15px] px-8 py-4 rounded-2xl shadow-[0_8px_40px_rgba(196,144,62,0.4)] cursor-pointer min-h-[52px]"
                   >
                     <Phone className="w-4 h-4" />
-                    Appeler maintenant
+                    <E fieldKey="cta.callButtonText">{content?.cta?.callButtonText ?? "Appeler maintenant"}</E>
                   </motion.a>
                   <motion.a
                     href={`mailto:${coordonnees.email.value}`} {...liftHoverProps}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-white/60 hover:text-white font-semibold text-[15px] px-6 py-4 rounded-2xl border border-white/10 hover:border-white/20 transition-colors cursor-pointer min-h-[52px]"
                   >
                     <Mail className="w-4 h-4" />
-                    Écrire un email
+                    <E fieldKey="cta.emailButtonText">{content?.cta?.emailButtonText ?? "Écrire un email"}</E>
                   </motion.a>
                 </motion.div>
               </SpotlightCard>

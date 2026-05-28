@@ -197,7 +197,7 @@ const NosTarifs = () => {
               transition={{ duration: 2, repeat: Infinity }}
               className="inline-block w-2 h-2 rounded-full bg-[#C4903E]"
             />
-            Tarifs transparents
+            <E fieldKey="hero.badge">{content?.hero?.badge ?? "Tarifs transparents"}</E>
           </motion.p>
 
           <motion.h1
@@ -259,14 +259,14 @@ const NosTarifs = () => {
             className="mb-12"
           >
             <motion.p variants={springUp} className="text-[11px] font-mono tracking-[0.22em] uppercase text-gray-400 mb-3">
-              Formules
+              <E fieldKey="tarifs.sectionLabel">{content?.tarifs?.sectionLabel ?? "Formules"}</E>
             </motion.p>
             <motion.h2
               variants={springUp}
               id="section-tarifs"
               className="text-[clamp(2rem,4vw,3.5rem)] font-bold tracking-tight text-[#1C3A52] leading-tight"
             >
-              Choisissez votre formule
+              <E fieldKey="tarifs.sectionTitle">{content?.tarifs?.sectionTitle ?? "Choisissez votre formule"}</E>
             </motion.h2>
           </motion.div>
 
@@ -288,13 +288,13 @@ const NosTarifs = () => {
                 className="rounded-[28px] p-5 sm:p-8 flex flex-col h-full bg-[#F3F4F6] cursor-default"
                 style={{ willChange: "transform" }}
               >
-                <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400 mb-3">Particuliers</p>
+                <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400 mb-3"><E fieldKey="particuliers.badge">{content?.particuliers?.badge ?? "Particuliers"}</E></p>
                 <h3 className="text-[1.6rem] font-bold text-[#1C3A52] leading-tight mb-1">Coaching<br />Individuel</h3>
                 <div className="flex items-end gap-1 mt-4 mb-6">
-                  <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}>60€</span>
-                  <span className="text-gray-400 text-[14px] mb-2">/séance</span>
+                  <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}><E fieldKey="particuliers.cards.0.price">{content?.particuliers?.cards?.[0]?.price ?? "60€"}</E></span>
+                  <span className="text-gray-400 text-[14px] mb-2"><E fieldKey="particuliers.cards.0.unit">{content?.particuliers?.cards?.[0]?.unit ?? "/séance"}</E></span>
                 </div>
-                <p className="text-gray-500 text-[14px] mb-6">Particuliers, étudiants, jeunes adultes.</p>
+                <p className="text-gray-500 text-[14px] mb-6"><E fieldKey="particuliers.cards.0.description">{content?.particuliers?.cards?.[0]?.description ?? "Particuliers, étudiants, jeunes adultes."}</E></p>
                 <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
                   {particuliers.cards[0]?.items.map((item, j) => (
                     <li key={j} className="flex items-start gap-3 text-[14px] sm:text-[15px] text-[#1C3A52] font-medium">
@@ -309,7 +309,7 @@ const NosTarifs = () => {
                   to="/contact"
                   className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:bg-[#C4903E] transition-colors w-full min-h-[44px]"
                 >
-                  Prendre RDV <ArrowUpRight className="w-4 h-4" />
+                  <E fieldKey="particuliers.cards.0.buttonText">{content?.particuliers?.cards?.[0]?.buttonText ?? "Prendre RDV"}</E> <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>
             </motion.div>
@@ -330,19 +330,19 @@ const NosTarifs = () => {
               >
                 <SpotlightCard className="bg-[#1C3A52] p-5 sm:p-8 flex flex-col" spotlightColor="rgba(196,144,62,0.15)">
                   <div className="flex items-center justify-between mb-6">
-                    <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]/60">Spécialité</p>
+                    <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]/60"><E fieldKey="neurofeedback.badge">{content?.neurofeedback?.badge ?? "Spécialité"}</E></p>
                     <motion.span
                       animate={{ scale: [1, 1.06, 1] }}
                       transition={{ duration: 2.5, repeat: Infinity }}
                       className="text-[11px] font-black tracking-wide uppercase bg-[#C4903E] text-[#1C3A52] px-3 py-1 rounded-full"
                     >
-                      Populaire
+                      <E fieldKey="neurofeedback.popularBadge">{content?.neurofeedback?.popularBadge ?? "Populaire"}</E>
                     </motion.span>
                   </div>
                   <h3 className="text-[1.6rem] font-bold text-white leading-tight mb-1">Neuro-<br />feedback</h3>
                   <div className="flex items-end gap-1 mt-4 mb-6">
-                    <span className="font-black text-[#C4903E] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}>60€</span>
-                    <span className="text-white/40 text-[14px] mb-2">/30 min</span>
+                    <span className="font-black text-[#C4903E] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}><E fieldKey="neurofeedback.cards.0.price">{content?.neurofeedback?.cards?.[0]?.price ?? "60€"}</E></span>
+                    <span className="text-white/40 text-[14px] mb-2"><E fieldKey="neurofeedback.cards.0.unit">{content?.neurofeedback?.cards?.[0]?.unit ?? "/30 min"}</E></span>
                   </div>
                   <p className="text-white/50 text-[14px] mb-6"><E fieldKey="neurofeedback.subtitle">{neurofeedback.subtitle}</E></p>
                   <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
@@ -359,7 +359,7 @@ const NosTarifs = () => {
                     to="/contact"
                     className="mt-auto inline-flex items-center justify-center gap-2 bg-[#C4903E] text-[#1C3A52] font-black text-[14px] px-6 py-3.5 rounded-full hover:brightness-110 transition-all w-full min-h-[44px]"
                   >
-                    Prendre RDV <ArrowUpRight className="w-4 h-4" />
+                    <E fieldKey="neurofeedback.cards.0.buttonText">{content?.neurofeedback?.cards?.[0]?.buttonText ?? "Prendre RDV"}</E> <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 </SpotlightCard>
               </div>
@@ -375,10 +375,10 @@ const NosTarifs = () => {
                 className="rounded-[28px] p-5 sm:p-8 flex flex-col h-full bg-[#C4903E] cursor-default"
                 style={{ willChange: "transform" }}
               >
-                <p className="text-[11px] font-mono tracking-widest uppercase text-[#1C3A52]/50 mb-3">Entreprises</p>
-                <h3 className="text-[1.6rem] font-bold text-[#1C3A52] leading-tight mb-1">Coaching<br />Équipe</h3>
+                <p className="text-[11px] font-mono tracking-widest uppercase text-[#1C3A52]/50 mb-3"><E fieldKey="entreprises.badge">{content?.entreprises?.badge ?? "Entreprises"}</E></p>
+                <h3 className="text-[1.6rem] font-bold text-[#1C3A52] leading-tight mb-1"><E fieldKey="entreprises.cards.0.title">{content?.entreprises?.cards?.[0]?.title ?? "Coaching Équipe"}</E></h3>
                 <div className="flex items-end gap-1 mt-4 mb-6">
-                  <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)" }}>Sur devis</span>
+                  <span className="font-black text-[#1C3A52] leading-none" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)" }}><E fieldKey="entreprises.cards.0.price">{content?.entreprises?.cards?.[0]?.price ?? "Sur devis"}</E></span>
                 </div>
                 <p className="text-[#1C3A52]/70 text-[14px] mb-6"><E fieldKey="entreprises.subtitle">{entreprises.subtitle}</E></p>
                 <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
@@ -395,7 +395,7 @@ const NosTarifs = () => {
                   to="/contact"
                   className="mt-auto inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity w-full min-h-[44px]"
                 >
-                  Demander un devis <ArrowUpRight className="w-4 h-4" />
+                  <E fieldKey="entreprises.cards.0.buttonText">{content?.entreprises?.cards?.[0]?.buttonText ?? "Demander un devis"}</E> <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>
             </motion.div>
@@ -414,13 +414,13 @@ const NosTarifs = () => {
               className="mb-12"
             >
               <motion.p variants={springUp} className="text-[11px] font-mono tracking-[0.22em] uppercase text-gray-400 mb-3">
-                Processus
+                <E fieldKey="process.sectionLabel">{content?.process?.sectionLabel ?? "Processus"}</E>
               </motion.p>
               <motion.h2
                 variants={springUp}
                 className="text-[clamp(2rem,4vw,3.5rem)] font-bold tracking-tight text-[#1C3A52] leading-tight"
               >
-                Comment ça marche ?
+                <E fieldKey="process.sectionTitle">{content?.process?.sectionTitle ?? "Comment ça marche ?"}</E>
               </motion.h2>
             </motion.div>
 
@@ -463,13 +463,13 @@ const NosTarifs = () => {
             className="mb-12"
           >
             <motion.p variants={springUp} className="text-[11px] font-mono tracking-[0.22em] uppercase text-gray-400 mb-3">
-              FAQ
+              <E fieldKey="faq.sectionLabel">{content?.faq?.sectionLabel ?? "FAQ"}</E>
             </motion.p>
             <motion.h2
               variants={springUp}
               className="text-[clamp(2rem,4vw,3.5rem)] font-bold tracking-tight text-[#1C3A52] leading-tight"
             >
-              Questions fréquentes
+              <E fieldKey="faq.sectionTitle">{content?.faq?.sectionTitle ?? "Questions fréquentes"}</E>
             </motion.h2>
           </motion.div>
 
@@ -553,7 +553,7 @@ const NosTarifs = () => {
                 transition={{ delay: 0.1 }}
                 className="text-[11px] font-mono tracking-[0.22em] uppercase text-[#C4903E] mb-6 relative z-10"
               >
-                Passez à l'action
+                <E fieldKey="cta.sectionLabel">{content?.cta?.sectionLabel ?? "Passez à l'action"}</E>
               </motion.p>
 
               <motion.h2
@@ -596,7 +596,7 @@ const NosTarifs = () => {
                     to="/about"
                     className="inline-flex items-center justify-center gap-2.5 bg-transparent border-2 border-white/20 text-white font-bold text-[15px] px-8 py-4 rounded-full hover:border-white/50 hover:bg-white/5 transition-all w-full sm:w-auto min-h-[52px]"
                   >
-                    Notre approche
+                    <E fieldKey="cta.secondaryButtonText">{content?.cta?.secondaryButtonText ?? "Notre approche"}</E>
                   </Link>
                 </motion.div>
               </motion.div>

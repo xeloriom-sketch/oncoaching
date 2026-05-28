@@ -314,14 +314,14 @@ const About = () => {
                     {...pulseDot}
                     aria-hidden="true"
                   />
-                  <span className="text-[12px] font-bold text-white tracking-wide">Certifié</span>
+                  <span className="text-[12px] font-bold text-white tracking-wide"><E fieldKey="hero.badgeCertified">{content?.hero?.badgeCertified ?? "Certifié"}</E></span>
                 </motion.div>
                 <motion.div
                   className="flex items-center gap-2 bg-[#F3F4F6] rounded-full px-5 py-2.5"
                   whileHover={{ scale: 1.04 }}
                   transition={{ type: "spring", stiffness: 400, damping: 22 }}
                 >
-                  <span className="text-[12px] font-bold text-[#1C3A52]">26 ans d'expérience</span>
+                  <span className="text-[12px] font-bold text-[#1C3A52]"><E fieldKey="hero.badgeExperience">{content?.hero?.badgeExperience ?? "26 ans d'expérience"}</E></span>
                 </motion.div>
                 <motion.div
                   className="flex items-center gap-2 bg-[#F3F4F6] rounded-full px-5 py-2.5"
@@ -329,7 +329,7 @@ const About = () => {
                   transition={{ type: "spring", stiffness: 400, damping: 22 }}
                 >
                   <MapPin className="w-3 h-3 text-[#C4903E]" aria-hidden="true" />
-                  <span className="text-[12px] font-bold text-[#1C3A52]">Mâcon & à distance</span>
+                  <span className="text-[12px] font-bold text-[#1C3A52]"><E fieldKey="hero.badgeLocation">{content?.hero?.badgeLocation ?? "Mâcon & à distance"}</E></span>
                 </motion.div>
               </motion.div>
             </motion.div>
@@ -368,7 +368,7 @@ const About = () => {
                   transition={{ delay: 1.1, type: "spring", damping: 20, stiffness: 200 }}
                 >
                   <motion.div className="w-2 h-2 rounded-full bg-[#C4903E]" {...pulseDot} aria-hidden="true" />
-                  <span className="text-white text-[11px] font-semibold">Disponible</span>
+                  <span className="text-white text-[11px] font-semibold"><E fieldKey="hero.availableStatus">{content?.hero?.availableStatus ?? "Disponible"}</E></span>
                 </motion.div>
               </div>
 
@@ -511,13 +511,15 @@ const About = () => {
               className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E] mb-3"
               aria-hidden="true"
             >
-              ↳ Mon parcours
+              <E fieldKey="timelineSection.labelSmall">{content?.timelineSection?.labelSmall ?? "↳ Mon parcours"}</E>
             </motion.p>
             <h2
               id="about-timeline"
               className="text-[clamp(2rem,4.5vw,3.5rem)] font-bold tracking-tight text-[#1C3A52] leading-tight"
             >
-              <WordByWordInView text="Une trajectoire construite sur l'humain" />
+              <E fieldKey="timelineSection.title">
+                <WordByWordInView text={content?.timelineSection?.title ?? "Une trajectoire construite sur l'humain"} />
+              </E>
             </h2>
           </motion.div>
 
@@ -526,8 +528,9 @@ const About = () => {
             variants={staggerSlow}
             className="grid grid-cols-1 md:grid-cols-2 gap-5"
           >
-            {TIMELINE_STEPS.map((step) => {
+            {TIMELINE_STEPS.map((step, idx) => {
               const StepIcon = step.icon;
+              const cmsItem = content?.timeline?.items?.[idx];
               return (
                 <motion.div
                   key={step.num}
@@ -551,10 +554,16 @@ const About = () => {
                         <div className="w-8 h-8 rounded-xl bg-[#1C3A52] flex items-center justify-center flex-shrink-0" aria-hidden="true">
                           <StepIcon className="w-4 h-4 text-[#C4903E]" strokeWidth={1.8} />
                         </div>
-                        <span className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">{step.period}</span>
+                        <span className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
+                          <E fieldKey={`timeline.items.${idx}.period`}>{cmsItem?.period ?? step.period}</E>
+                        </span>
                       </div>
-                      <h3 className="text-[1.1rem] font-bold text-[#1C3A52] tracking-tight">{step.title}</h3>
-                      <p className="text-[15px] text-gray-500 leading-relaxed">{step.text}</p>
+                      <h3 className="text-[1.1rem] font-bold text-[#1C3A52] tracking-tight">
+                        <E fieldKey={`timeline.items.${idx}.title`}>{cmsItem?.title ?? step.title}</E>
+                      </h3>
+                      <p className="text-[15px] text-gray-500 leading-relaxed">
+                        <E fieldKey={`timeline.items.${idx}.description`}>{cmsItem?.description ?? step.text}</E>
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -576,14 +585,16 @@ const About = () => {
             {/* Texte */}
             <div className="flex flex-col gap-5 flex-1 relative z-10">
               <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]/80" aria-hidden="true">
-                ↳ Certification officielle
+                <E fieldKey="certificationSection.labelSmall">{content?.certificationSection?.labelSmall ?? "↳ Certification officielle"}</E>
               </p>
               <h2 className="text-[clamp(1.6rem,3vw,2.2rem)] font-bold text-white leading-tight tracking-tight">
-                Certification NeurOptimal®
-                <span className="block text-white/45 text-[0.85rem] font-medium mt-1">Praticien Neurofeedback — Zengar Institute</span>
+                <E fieldKey="certificationSection.title">{content?.certificationSection?.title ?? "Certification NeurOptimal®"}</E>
+                <span className="block text-white/45 text-[0.85rem] font-medium mt-1">
+                  <E fieldKey="certificationSection.subtitle">{content?.certificationSection?.subtitle ?? "Praticien Neurofeedback — Zengar Institute"}</E>
+                </span>
               </h2>
               <p className="text-white/50 text-[15px] leading-relaxed max-w-md">
-                Certification reconnue internationalement attestant d'une maîtrise complète du protocole NeurOptimal® et de son application clinique — non invasif, approuvé par le Zengar Institute.
+                <E fieldKey="certificationSection.description">{content?.certificationSection?.description ?? "Certification reconnue internationalement attestant d'une maîtrise complète du protocole NeurOptimal® et de son application clinique — non invasif, approuvé par le Zengar Institute."}</E>
               </p>
               <a
                 href={`${import.meta.env.BASE_URL}certification.webp`}
@@ -593,7 +604,7 @@ const About = () => {
                 aria-label="Voir la certification NeurOptimal®"
               >
                 <Award className="w-4 h-4" aria-hidden="true" />
-                Voir la certification
+                <E fieldKey="certificationSection.ctaText">{content?.certificationSection?.ctaText ?? "Voir la certification"}</E>
               </a>
             </div>
 
@@ -737,7 +748,7 @@ const About = () => {
                       to="/nos-tarifs"
                       className="bg-white/10 border border-white/20 text-white font-bold text-[14px] px-8 py-4 min-h-[44px] rounded-full flex items-center justify-center gap-2.5 hover:bg-white/15 transition-colors w-full sm:w-auto"
                     >
-                      Voir nos tarifs
+                      <E fieldKey="cta.pricesLink">{content?.cta?.pricesLink ?? "Voir nos tarifs"}</E>
                       <Rocket className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </motion.div>

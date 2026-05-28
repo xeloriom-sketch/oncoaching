@@ -237,7 +237,7 @@ const CoachingNeurofeedback = () => {
                   className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]"
                   aria-hidden="true"
                 >
-                  ↳ Neurofeedback
+                  <E fieldKey="heroLabel">{ content?.heroLabel ?? "↳ Neurofeedback" }</E>
                 </motion.p>
 
                 <h1
@@ -271,7 +271,7 @@ const CoachingNeurofeedback = () => {
                       className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                       aria-label="Réserver une séance découverte neurofeedback"
                     >
-                      Séance découverte <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                      <E fieldKey="hero.ctaBtnPrimary">{ content?.hero?.ctaBtnPrimary ?? "Séance découverte" }</E> <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </motion.div>
                   <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
@@ -279,7 +279,7 @@ const CoachingNeurofeedback = () => {
                       to="/nos-tarifs"
                       className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                     >
-                      Voir les tarifs
+                      <E fieldKey="hero.ctaBtnSecondary">{ content?.hero?.ctaBtnSecondary ?? "Voir les tarifs" }</E>
                     </Link>
                   </motion.div>
                 </motion.div>
@@ -307,7 +307,7 @@ const CoachingNeurofeedback = () => {
                   transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute bottom-5 left-5 bg-[#C4903E] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold shadow-md"
                 >
-                  Non invasif · Scientifique
+                  <E fieldKey="hero.tagline">{ content?.hero?.tagline ?? "Non invasif · Scientifique" }</E>
                 </motion.div>
               </motion.div>
 
@@ -328,13 +328,13 @@ const CoachingNeurofeedback = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-3"
                 aria-hidden="true"
               >
-                Protocole
+                <E fieldKey="stepsLabel">{ content?.stepsLabel ?? "Protocole" }</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight mb-12"
               >
-                Comment ça fonctionne
+                <E fieldKey="stepsTitle">{ content?.stepsTitle ?? "Comment ça fonctionne" }</E>
               </motion.h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -349,10 +349,10 @@ const CoachingNeurofeedback = () => {
                       {step.num}
                     </span>
                     <h3 className="text-[#1C3A52] font-bold text-[18px] leading-snug">
-                      {step.title}
+                      <E fieldKey={`steps.${i}.title`}>{ (content?.steps as any)?.[i]?.title ?? step.title }</E>
                     </h3>
                     <p className="text-gray-500 text-[14px] leading-relaxed">
-                      {step.desc}
+                      <E fieldKey={`steps.${i}.desc`}>{ (content?.steps as any)?.[i]?.desc ?? step.desc }</E>
                     </p>
                   </motion.div>
                 ))}
@@ -374,23 +374,25 @@ const CoachingNeurofeedback = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]/70 mb-3"
                 aria-hidden="true"
               >
-                Résultats
+                <E fieldKey="benefitsLabel">{ content?.benefitsLabel ?? "Résultats" }</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight mb-6"
               >
-                Les bénéfices du Neurofeedback NeurOptimal®
+                <E fieldKey="benefitsTitle">{ content?.benefitsTitle ?? "Les bénéfices du Neurofeedback NeurOptimal®" }</E>
               </motion.h2>
 
               {/* Texte bienfaits */}
               <motion.div variants={fadeInUp} className="mb-12 max-w-3xl">
-                <p className="text-white/70 text-[16px] leading-relaxed mb-4">
-                  Les sensations décrites par les clients incluent souvent une clarté mentale, un sentiment de légèreté et une profonde sérénité, perceptibles rapidement. Avec le temps, cet état de mieux-être devient naturel, comme un nouvel équilibre intérieur.
-                </p>
-                <p className="text-white/70 text-[16px] leading-relaxed">
-                  Même si un événement difficile peut perturber temporairement cet état, son impact émotionnel sera généralement moins marqué, et la capacité à retrouver son équilibre plus rapide.
-                </p>
+                <E fieldKey="benefits.intro">
+                  <p className="text-white/70 text-[16px] leading-relaxed mb-4">
+                    { (content?.benefits as any)?.intro ?? "Les sensations décrites par les clients incluent souvent une clarté mentale, un sentiment de légèreté et une profonde sérénité, perceptibles rapidement. Avec le temps, cet état de mieux-être devient naturel, comme un nouvel équilibre intérieur." }
+                  </p>
+                  <p className="text-white/70 text-[16px] leading-relaxed">
+                    Même si un événement difficile peut perturber temporairement cet état, son impact émotionnel sera généralement moins marqué, et la capacité à retrouver son équilibre plus rapide.
+                  </p>
+                </E>
               </motion.div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -418,8 +420,12 @@ const CoachingNeurofeedback = () => {
                           >
                             <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
                           </motion.div>
-                          <h3 className="text-white font-bold text-[17px] leading-snug">{b.title}</h3>
-                          <p className="text-white/60 text-[14px] leading-relaxed flex-1">{b.desc}</p>
+                          <h3 className="text-white font-bold text-[17px] leading-snug">
+                            <E fieldKey={`benefits.${i}.title`}>{ (content?.benefits as any)?.[i]?.title ?? b.title }</E>
+                          </h3>
+                          <p className="text-white/60 text-[14px] leading-relaxed flex-1">
+                            <E fieldKey={`benefits.${i}.desc`}>{ (content?.benefits as any)?.[i]?.desc ?? b.desc }</E>
+                          </p>
                         </div>
                       </SpotlightCard>
                     </motion.div>
@@ -449,19 +455,21 @@ const CoachingNeurofeedback = () => {
                 />
                 <div>
                   <p className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]">
-                    Technologie certifiée · Zengar Institute
+                    <E fieldKey="technologyLabel">{ content?.technologyLabel ?? "Technologie certifiée · Zengar Institute" }</E>
                   </p>
-                  <p className="text-[#1C3A52] font-semibold text-[15px]">NeurOptimal® Dynamical Neurofeedback®</p>
+                  <p className="text-[#1C3A52] font-semibold text-[15px]">
+                    <E fieldKey="technologyName">{ content?.technologyName ?? "NeurOptimal® Dynamical Neurofeedback®" }</E>
+                  </p>
                 </div>
               </motion.div>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight mb-4"
               >
-                La boucle du Neurofeedback
+                <E fieldKey="loopTitle">{ content?.loopTitle ?? "La boucle du Neurofeedback" }</E>
               </motion.h2>
               <motion.p variants={fadeInUp} className="text-gray-500 text-[16px] leading-relaxed max-w-2xl mb-12">
-                Le Dynamical Neurofeedback® NeurOptimal® communique avec le système nerveux central en utilisant son propre langage. Il n'introduit aucun courant, fréquence ou signal externe dans le cerveau — toute l'expertise est intégrée dans le logiciel.
+                <E fieldKey="loopDescription">{ content?.loopDescription ?? "Le Dynamical Neurofeedback® NeurOptimal® communique avec le système nerveux central en utilisant son propre langage. Il n'introduit aucun courant, fréquence ou signal externe dans le cerveau — toute l'expertise est intégrée dans le logiciel." }</E>
               </motion.p>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-start">
@@ -500,7 +508,7 @@ const CoachingNeurofeedback = () => {
                   </div>
                 </motion.div>
 
-                {/* Texte descriptif */}
+                {/* Texte descriptif Q&A */}
                 <motion.div variants={springRight} className="flex flex-col gap-6">
                   {[
                     {
@@ -517,8 +525,12 @@ const CoachingNeurofeedback = () => {
                     },
                   ].map((block, i) => (
                     <div key={i} className="bg-[#F3F4F6] rounded-[24px] p-6">
-                      <h3 className="text-[#1C3A52] font-bold text-[16px] mb-3">{block.title}</h3>
-                      <p className="text-gray-500 text-[14px] leading-relaxed">{block.text}</p>
+                      <h3 className="text-[#1C3A52] font-bold text-[16px] mb-3">
+                        <E fieldKey={`qa.${i}.title`}>{ (content?.qa as any)?.[i]?.title ?? block.title }</E>
+                      </h3>
+                      <p className="text-gray-500 text-[14px] leading-relaxed">
+                        <E fieldKey={`qa.${i}.text`}>{ (content?.qa as any)?.[i]?.text ?? block.text }</E>
+                      </p>
                     </div>
                   ))}
                 </motion.div>
@@ -527,7 +539,7 @@ const CoachingNeurofeedback = () => {
               {/* Vidéo explicative NeurOptimal® — dans la section boucle */}
               <motion.div variants={fadeInUp} className="mt-12">
                 <p className="text-[#1C3A52] font-bold text-[17px] mb-4">
-                  Découvrir NeurOptimal® en vidéo
+                  <E fieldKey="videoTitle">{ content?.videoTitle ?? "Découvrir NeurOptimal® en vidéo" }</E>
                 </p>
                 <div className="w-full bg-[#F3F4F6] rounded-[24px] p-4">
                   <div className="w-full aspect-video rounded-xl overflow-hidden bg-black">
@@ -563,16 +575,16 @@ const CoachingNeurofeedback = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-3"
                 aria-hidden="true"
               >
-                Références
+                <E fieldKey="resourcesLabel">{ content?.resourcesLabel ?? "Références" }</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight mb-4"
               >
-                Médias & Ressources
+                <E fieldKey="resourcesTitle">{ content?.resourcesTitle ?? "Médias & Ressources" }</E>
               </motion.h2>
               <motion.p variants={fadeInUp} className="text-gray-500 text-[16px] leading-relaxed max-w-2xl mb-12">
-                Pour comprendre le neurofeedback et lui faire confiance, voici les ressources qui en font la légitimité : témoignages de professionnels de santé, études scientifiques et vidéos explicatives.
+                <E fieldKey="resourcesIntro">{ content?.resourcesIntro ?? "Pour comprendre le neurofeedback et lui faire confiance, voici les ressources qui en font la légitimité : témoignages de professionnels de santé, études scientifiques et vidéos explicatives." }</E>
               </motion.p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -583,15 +595,19 @@ const CoachingNeurofeedback = () => {
                       <div className="w-11 h-11 rounded-xl bg-[#C4903E] flex items-center justify-center flex-shrink-0">
                         <Icon className="w-5 h-5 text-white" strokeWidth={1.8} aria-hidden="true" />
                       </div>
-                      <h3 className="text-[#1C3A52] font-bold text-[17px] leading-snug">{item.title}</h3>
-                      <p className="text-gray-500 text-[14px] leading-relaxed flex-1">{item.desc}</p>
+                      <h3 className="text-[#1C3A52] font-bold text-[17px] leading-snug">
+                        <E fieldKey={`mediaSection.${i}.title`}>{ (content?.mediaSection as any)?.[i]?.title ?? item.title }</E>
+                      </h3>
+                      <p className="text-gray-500 text-[14px] leading-relaxed flex-1">
+                        <E fieldKey={`mediaSection.${i}.desc`}>{ (content?.mediaSection as any)?.[i]?.desc ?? item.desc }</E>
+                      </p>
                       <a
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 text-[#C4903E] font-semibold text-[13px] hover:opacity-70 transition-opacity mt-auto"
                       >
-                        {item.linkLabel} <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
+                        <E fieldKey={`mediaSection.${i}.linkLabel`}>{ (content?.mediaSection as any)?.[i]?.linkLabel ?? item.linkLabel }</E> <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                       </a>
                     </motion.div>
                   );
@@ -641,16 +657,14 @@ const CoachingNeurofeedback = () => {
                     className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E] mb-3"
                     aria-hidden="true"
                   >
-                    Le praticien
+                    <E fieldKey="practitionerLabel">{ content?.practitionerLabel ?? "Le praticien" }</E>
                   </p>
                   <h2 className="text-[clamp(1.6rem,3.5vw,2.4rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-                    Expertise neuroscientifique &amp; coaching
+                    <E fieldKey="practitionerTitle">{ content?.practitionerTitle ?? "Expertise neuroscientifique & coaching" }</E>
                   </h2>
                 </div>
                 <p className="text-gray-500 text-[15px] leading-relaxed">
-                  Certifié en neurofeedback et coach certifié, je combine la compréhension fine du fonctionnement cérébral
-                  avec des outils de coaching puissants. Cette double approche permet d'agir à la fois sur les
-                  mécanismes neurologiques et sur les comportements pour des résultats durables.
+                  <E fieldKey="practitionerBio">{ content?.practitionerBio ?? "Certifié en neurofeedback et coach certifié, je combine la compréhension fine du fonctionnement cérébral avec des outils de coaching puissants. Cette double approche permet d'agir à la fois sur les mécanismes neurologiques et sur les comportements pour des résultats durables." }</E>
                 </p>
                 <ul className="space-y-3">
                   {[
@@ -704,11 +718,15 @@ const CoachingNeurofeedback = () => {
                   className="font-mono tracking-widest uppercase text-[10px] text-white/60"
                   aria-hidden="true"
                 >
-                  Tarif
+                  <E fieldKey="pricingLabel">{ content?.pricingLabel ?? "Tarif" }</E>
                 </p>
                 <div className="text-center sm:text-left">
-                  <span className="text-[clamp(3rem,6vw,4.5rem)] font-bold text-white leading-none">80€</span>
-                  <span className="text-white/70 text-[18px] ml-2 font-medium">/ séance</span>
+                  <span className="text-[clamp(3rem,6vw,4.5rem)] font-bold text-white leading-none">
+                    <E fieldKey="pricing.amount">{ (content?.pricing as any)?.amount ?? "80€" }</E>
+                  </span>
+                  <span className="text-white/70 text-[18px] ml-2 font-medium">
+                    <E fieldKey="pricing.unit">{ (content?.pricing as any)?.unit ?? "/ séance" }</E>
+                  </span>
                 </div>
                 <ul className="space-y-3">
                   {[
@@ -719,7 +737,7 @@ const CoachingNeurofeedback = () => {
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-white text-[15px]">
                       <Check className="w-4 h-4 text-white/80 flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />
-                      {item}
+                      <E fieldKey={`pricing.features.${i}`}>{ (content?.pricing as any)?.features?.[i] ?? item }</E>
                     </li>
                   ))}
                 </ul>
@@ -736,7 +754,7 @@ const CoachingNeurofeedback = () => {
                   </Link>
                 </motion.div>
                 <p className="text-center text-white/70 text-[13px] font-mono">
-                  1er RDV offert · Confidentiel · Sans engagement
+                  <E fieldKey="cta.footnote">{ content?.cta?.footnote ?? "1er RDV offert · Confidentiel · Sans engagement" }</E>
                 </p>
               </motion.div>
             </motion.div>

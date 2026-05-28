@@ -87,6 +87,25 @@ const CoachingJeunes = () => {
 
   const { page, cta } = content;
 
+  // Résolution des items depuis le CMS avec fallback sur les constantes locales
+  const problemItems = PROBLEMS.map((item, i) => ({
+    ...item,
+    text: (content as any)?.problems?.[i]?.text ?? item.text,
+  }));
+
+  const benefitItems = BENEFITS.map((b, i) => ({
+    ...b,
+    title: (content as any)?.benefits?.[i]?.title ?? b.title,
+    desc:  (content as any)?.benefits?.[i]?.desc  ?? b.desc,
+  }));
+
+  const pricingFeatureDefaults = [
+    "Bilan de départ offert — sans engagement",
+    "À mon cabinet, chez vous ou à distance",
+    "Outils personnalisés selon ton profil",
+    "Accompagnement sur mesure, à ton rythme",
+  ];
+
   return (
     <Layout>
       <SEO
@@ -173,7 +192,7 @@ const CoachingJeunes = () => {
                   className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]"
                   aria-hidden="true"
                 >
-                  ↳ Coaching Jeunes
+                  <E fieldKey="heroLabel">{(content as any)?.heroLabel ?? "↳ Coaching Jeunes"}</E>
                 </motion.p>
 
                 <h1
@@ -215,7 +234,7 @@ const CoachingJeunes = () => {
                       className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                       aria-label="Réserver un premier échange gratuit"
                     >
-                      1er échange gratuit <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                      <E fieldKey="hero.ctaBtnPrimary">{(content as any)?.hero?.ctaBtnPrimary ?? "1er échange gratuit"}</E> <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                     </Link>
                   </motion.div>
                   <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
@@ -223,7 +242,7 @@ const CoachingJeunes = () => {
                       to="/nos-tarifs"
                       className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                     >
-                      Voir les tarifs
+                      <E fieldKey="hero.ctaBtnSecondary">{(content as any)?.hero?.ctaBtnSecondary ?? "Voir les tarifs"}</E>
                     </Link>
                   </motion.div>
                 </motion.div>
@@ -251,7 +270,7 @@ const CoachingJeunes = () => {
                   transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute bottom-5 left-5 bg-[#C4903E] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold shadow-md"
                 >
-                  Coaching Jeunes &amp; Jeunes Adultes
+                  <E fieldKey="hero.targetAudience">{(content as any)?.hero?.targetAudience ?? "Coaching Jeunes & Jeunes Adultes"}</E>
                 </motion.div>
               </motion.div>
             </div>
@@ -272,17 +291,17 @@ const CoachingJeunes = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-3"
                 aria-hidden="true"
               >
-                Tu te reconnais ?
+                <E fieldKey="problemsLabel">{(content as any)?.problemsLabel ?? "Tu te reconnais ?"}</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight mb-10"
               >
-                Ces défis te parlent&nbsp;?
+                <E fieldKey="problemsTitle">{(content as any)?.problemsTitle ?? "Ces défis te parlent ?"}</E>
               </motion.h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-10 gap-y-5 sm:gap-y-7">
-                {PROBLEMS.map((item, i) => {
+                {problemItems.map((item, i) => {
                   const Icon = item.icon;
                   return (
                     <motion.div
@@ -297,7 +316,7 @@ const CoachingJeunes = () => {
                         <Icon className="w-4 h-4 text-[#C4903E]" strokeWidth={1.8} />
                       </div>
                       <p className="text-[#1C3A52] text-[15px] leading-snug font-medium pt-1.5">
-                        {item.text}
+                        <E fieldKey={`problems.${i}.text`}>{item.text}</E>
                       </p>
                     </motion.div>
                   );
@@ -321,13 +340,13 @@ const CoachingJeunes = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]/70 mb-3"
                 aria-hidden="true"
               >
-                Bénéfices
+                <E fieldKey="benefitsLabel">{(content as any)?.benefitsLabel ?? "Bénéfices"}</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight mb-10"
               >
-                Ce que tu vas gagner
+                <E fieldKey="benefitsTitle">{(content as any)?.benefitsTitle ?? "Ce que tu vas gagner"}</E>
               </motion.h2>
 
               <SpotlightCard
@@ -335,7 +354,7 @@ const CoachingJeunes = () => {
                 spotlightColor="rgba(196,144,62,0.12)"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8 rounded-[32px] overflow-hidden">
-                  {BENEFITS.map((b, i) => {
+                  {benefitItems.map((b, i) => {
                     const Icon = b.icon;
                     const tilt = tiltRefs[i];
                     return (
@@ -355,8 +374,12 @@ const CoachingJeunes = () => {
                           >
                             <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
                           </motion.div>
-                          <h3 className="text-white font-bold text-[17px] leading-snug">{b.title}</h3>
-                          <p className="text-white/60 text-[15px] leading-relaxed flex-1">{b.desc}</p>
+                          <h3 className="text-white font-bold text-[17px] leading-snug">
+                            <E fieldKey={`benefits.${i}.title`}>{b.title}</E>
+                          </h3>
+                          <p className="text-white/60 text-[15px] leading-relaxed flex-1">
+                            <E fieldKey={`benefits.${i}.desc`}>{b.desc}</E>
+                          </p>
                         </div>
                       </motion.div>
                     );
@@ -404,16 +427,14 @@ const CoachingJeunes = () => {
               <motion.div variants={springRight} className="space-y-6">
                 <div>
                   <p className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E] mb-3" aria-hidden="true">
-                    Le coach
+                    <E fieldKey="coachLabel">{(content as any)?.coachLabel ?? "Le coach"}</E>
                   </p>
                   <h2 className="text-[clamp(1.6rem,3.5vw,2rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-                    Un accompagnateur qui te comprend
+                    <E fieldKey="coachTitle">{(content as any)?.coachTitle ?? "Un accompagnateur qui te comprend"}</E>
                   </h2>
                 </div>
                 <p className="text-gray-500 text-[16px] leading-relaxed">
-                  Pendant plus de 26 ans, j'ai accompagné des jeunes au cœur des enjeux éducatifs et personnels.
-                  Coach certifié et ancien enseignant en SES, je comprends les défis uniques que traversent les jeunes
-                  et jeunes adultes d'aujourd'hui.
+                  <E fieldKey="coachBio">{(content as any)?.coachBio ?? "Pendant plus de 26 ans, j'ai accompagné des jeunes au cœur des enjeux éducatifs et personnels. Coach certifié et ancien enseignant en SES, je comprends les défis uniques que traversent les jeunes et jeunes adultes d'aujourd'hui."}</E>
                 </p>
                 <ul className="space-y-3">
                   {[
@@ -465,24 +486,21 @@ const CoachingJeunes = () => {
             >
               <motion.div variants={springLeft} className="space-y-6">
                 <p className="font-mono tracking-widest uppercase text-[10px] text-white/60" aria-hidden="true">
-                  Tarif
+                  <E fieldKey="pricingLabel">{(content as any)?.pricingLabel ?? "Tarif"}</E>
                 </p>
                 <div className="text-center sm:text-left">
                   <span className="text-[clamp(2.8rem,5vw,4.5rem)] font-bold text-white leading-none">
-                    À partir de 60€
+                    <E fieldKey="pricing.amount">{(content as any)?.pricing?.amount ?? "À partir de 60€"}</E>
                   </span>
-                  <span className="text-white/60 text-[16px] ml-2">/ séance</span>
+                  <span className="text-white/60 text-[16px] ml-2">
+                    <E fieldKey="pricing.unit">{(content as any)?.pricing?.unit ?? "/ séance"}</E>
+                  </span>
                 </div>
                 <ul className="space-y-3">
-                  {[
-                    "Bilan de départ offert — sans engagement",
-                    "À mon cabinet, chez vous ou à distance",
-                    "Outils personnalisés selon ton profil",
-                    "Accompagnement sur mesure, à ton rythme",
-                  ].map((item, i) => (
+                  {pricingFeatureDefaults.map((defaultText, i) => (
                     <li key={i} className="flex items-center gap-3 text-white text-[15px]">
                       <Check className="w-4 h-4 text-white/70 flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />
-                      {item}
+                      <E fieldKey={`pricing.features.${i}`}>{(content as any)?.pricing?.features?.[i] ?? defaultText}</E>
                     </li>
                   ))}
                 </ul>
@@ -504,7 +522,7 @@ const CoachingJeunes = () => {
                   </Link>
                 </motion.div>
                 <p className="text-center text-white/60 text-[13px] font-mono">
-                  Confidentiel · Sans engagement
+                  <E fieldKey="cta.footnote">{(content as any)?.cta?.footnote ?? "Confidentiel · Sans engagement"}</E>
                 </p>
                 <motion.div {...btnHoverProps}>
                   <Link

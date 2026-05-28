@@ -115,7 +115,7 @@ const Partenaires = () => {
         >
           <motion.div variants={fadeInUp} className="lg:col-span-8 space-y-4">
             <p className="text-[11px] font-mono tracking-widest uppercase text-gray-400" aria-hidden="true">
-              ↳ Structures &amp; Organisations
+              <E fieldKey="hero.breadcrumb">{content?.hero?.breadcrumb ?? "↳ Structures & Organisations"}</E>
             </p>
             <h1 id="partenaires-h1" className="text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[0.95] tracking-tight text-[#1C3A52]">
               <E fieldKey="page.title">{hero.title}</E>
@@ -174,7 +174,7 @@ const Partenaires = () => {
               <Building2 className="w-6 h-6 text-[#1C3A52]" strokeWidth={1.8} />
             </div>
             <p className="text-[10px] font-mono tracking-widest uppercase text-white/30 mb-3" aria-hidden="true">
-              Double expertise
+              <E fieldKey="expertise.sectionLabel">{content?.expertise?.sectionLabel ?? "Double expertise"}</E>
             </p>
             <h2 id="expertise-title" className="text-[1.8rem] md:text-[2.2rem] font-semibold tracking-tight text-white leading-[1.05]">
               {expertise.title}
@@ -387,7 +387,7 @@ const Partenaires = () => {
           aria-labelledby="exemples-title"
         >
           <div className="mb-8">
-            <p className="text-[10px] font-mono tracking-widest uppercase text-gray-400 mb-2" aria-hidden="true">Cas concrets</p>
+            <p className="text-[10px] font-mono tracking-widest uppercase text-gray-400 mb-2" aria-hidden="true"><E fieldKey="exemples.sectionLabel">{content?.exemples?.sectionLabel ?? "Cas concrets"}</E></p>
             <h2 id="exemples-title" className="text-[2rem] md:text-[2.4rem] font-semibold tracking-tight text-[#1C3A52] leading-tight">
               {exemples.title}
             </h2>

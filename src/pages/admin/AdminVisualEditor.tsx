@@ -185,6 +185,19 @@ function FieldInput({
 const TOOLBAR_H = 54;
 const SIDEBAR_W = 340;
 
+const PAGE_ROUTES: Record<string, string> = {
+  "index":                   "/",
+  "about":                   "/about",
+  "contact":                 "/contact",
+  "nos-tarifs":              "/nos-tarifs",
+  "partenaires":             "/partenaires",
+  "presse-medias":           "/presse-medias",
+  "coaching-scolaire":       "/coaching-scolaire",
+  "coaching-jeunes":         "/coaching-jeunes",
+  "coaching-neurofeedback":  "/coaching-neurofeedback",
+  "coaching-equipe":         "/coaching-equipe",
+};
+
 // ── AdminVisualEditor ─────────────────────────────────────────────────────────
 
 export default function AdminVisualEditor() {
@@ -356,6 +369,7 @@ export default function AdminVisualEditor() {
   useEffect(() => { sidebarOpenRef.current = sidebarOpen; }, [sidebarOpen]);
   const [previewMode, setPreviewMode] = useState(false);
   const [viewport, setViewport] = useState<"desktop" | "mobile">("desktop");
+  const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
@@ -522,20 +536,22 @@ export default function AdminVisualEditor() {
             className="flex items-center rounded-lg overflow-hidden"
             style={{ border: "1px solid rgba(255,255,255,0.15)" }}
           >
-            {(["desktop", "mobile"] as const).map(v => (
-              <button
-                key={v}
-                onClick={() => setViewport(v)}
-                title={v === "desktop" ? "Bureau" : "Mobile (390px)"}
-                className="p-1.5 transition-colors"
-                style={{
-                  background: viewport === v ? "rgba(255,255,255,0.18)" : "transparent",
-                  color: "white",
-                }}
-              >
-                {v === "desktop" ? <Monitor size={14} /> : <Smartphone size={14} />}
-              </button>
-            ))}
+            <button
+              onClick={() => { setViewport("desktop"); setMobilePreviewOpen(false); }}
+              title="Bureau"
+              className="p-1.5 transition-colors"
+              style={{ background: viewport === "desktop" ? "rgba(255,255,255,0.18)" : "transparent", color: "white" }}
+            >
+              <Monitor size={14} />
+            </button>
+            <button
+              onClick={() => { setViewport("mobile"); setMobilePreviewOpen(true); }}
+              title="Aperçu mobile (390px)"
+              className="p-1.5 transition-colors"
+              style={{ background: viewport === "mobile" ? "rgba(255,255,255,0.18)" : "transparent", color: "white" }}
+            >
+              <Smartphone size={14} />
+            </button>
           </div>
 
           <div style={{ flex: 1 }} />
@@ -584,63 +600,86 @@ export default function AdminVisualEditor() {
         </div>
 
         {/* ══ PAGE PREVIEW ════════════════════════════════════════════════════ */}
-        {viewport === "mobile" ? (
-          <div
-            style={{
-              display: "flex", justifyContent: "center", alignItems: "flex-start",
-              minHeight: `calc(100vh - ${TOOLBAR_H}px)`,
-              background: "#CBD5E1",
-              padding: "28px 16px 28px",
-              paddingRight: sidebarOpen ? SIDEBAR_W + 28 : 28,
-              transition: "padding-right 0.35s ease",
-            }}
-          >
-            <div
-              style={{
-                width: 393,
-                minHeight: 852,
-                background: "white",
-                borderRadius: 50,
-                boxShadow: "0 0 0 10px #0f172a, 0 0 0 12px #334155, 0 24px 80px rgba(0,0,0,0.4)",
-                overflow: "hidden",
-                position: "relative",
-                flexShrink: 0,
-              }}
-            >
-              {/* Dynamic island */}
-              <div style={{
-                position: "absolute", top: 13, left: "50%",
-                transform: "translateX(-50%)",
-                width: 120, height: 34,
-                background: "#0f172a",
-                borderRadius: 20, zIndex: 100,
-              }} />
-              <div style={{ paddingTop: 0 }}>
-                {PageComponent ? (
-                  <Suspense fallback={<Spinner />}>
-                    <PageComponent key={`${activePage}-mobile`} />
-                  </Suspense>
-                ) : (
-                  <div className="flex items-center justify-center min-h-screen">
-                    <p className="text-slate-400 text-sm">Page inconnue : {activePage}</p>
-                  </div>
-                )}
-              </div>
+        <div style={{ paddingRight: sidebarOpen ? SIDEBAR_W : 0, transition: "padding-right 0.35s ease" }}>
+          {PageComponent ? (
+            <Suspense fallback={<Spinner />}>
+              <PageComponent key={activePage} />
+            </Suspense>
+          ) : (
+            <div className="flex items-center justify-center min-h-screen">
+              <p className="text-slate-400 text-sm">Page inconnue : {activePage}</p>
             </div>
-          </div>
-        ) : (
-          <div style={{ paddingRight: sidebarOpen ? SIDEBAR_W : 0, transition: "padding-right 0.35s ease" }}>
-            {PageComponent ? (
-              <Suspense fallback={<Spinner />}>
-                <PageComponent key={activePage} />
-              </Suspense>
-            ) : (
-              <div className="flex items-center justify-center min-h-screen">
-                <p className="text-slate-400 text-sm">Page inconnue : {activePage}</p>
+          )}
+        </div>
+
+        {/* ══ MOBILE PREVIEW MODAL ════════════════════════════════════════════ */}
+        <AnimatePresence>
+          {mobilePreviewOpen && (
+            <motion.div
+              key="mobile-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: "fixed", inset: 0, zIndex: 10000,
+                background: "rgba(10,20,35,0.88)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                backdropFilter: "blur(6px)",
+              }}
+              onClick={e => { if (e.target === e.currentTarget) { setMobilePreviewOpen(false); setViewport("desktop"); } }}
+            >
+              {/* Phone frame */}
+              <motion.div
+                initial={{ scale: 0.88, y: 24 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.88, y: 24 }}
+                transition={{ type: "spring", stiffness: 340, damping: 36 }}
+                style={{
+                  width: 393, height: 780,
+                  background: "#111",
+                  borderRadius: 52,
+                  boxShadow: "0 40px 120px rgba(0,0,0,0.8), 0 0 0 1.5px rgba(255,255,255,0.12)",
+                  position: "relative",
+                  overflow: "hidden",
+                  border: "8px solid #1a1a1a",
+                }}
+              >
+                {/* Dynamic island */}
+                <div style={{
+                  position: "absolute", top: 10, left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 120, height: 32,
+                  background: "#000", borderRadius: 20,
+                  zIndex: 10,
+                }} />
+                {/* Side buttons */}
+                <div style={{ position: "absolute", right: -10, top: 120, width: 4, height: 64, background: "#333", borderRadius: 2 }} />
+                <div style={{ position: "absolute", left: -10, top: 110, width: 4, height: 36, background: "#333", borderRadius: 2 }} />
+                <div style={{ position: "absolute", left: -10, top: 158, width: 4, height: 36, background: "#333", borderRadius: 2 }} />
+                {/* Iframe */}
+                <iframe
+                  src={`${window.location.origin}${import.meta.env.BASE_URL || "/"}${PAGE_ROUTES[activePage]?.replace(/^\//, "") ?? ""}`}
+                  style={{ width: "100%", height: "100%", border: "none", borderRadius: 44, paddingTop: 50 }}
+                  title={`Aperçu mobile — ${currentPageDef?.label ?? activePage}`}
+                />
+              </motion.div>
+
+              {/* Close + label */}
+              <div style={{ position: "absolute", top: 16, right: 16, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+                <button
+                  onClick={() => { setMobilePreviewOpen(false); setViewport("desktop"); }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all hover:scale-105"
+                  style={{ background: "rgba(255,255,255,0.12)", color: "white", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.2)" }}
+                >
+                  <X size={14} />
+                  Fermer
+                </button>
+                <p className="text-[11px] text-white/40">Affiche la version sauvegardée</p>
               </div>
-            )}
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ══ SIDEBAR ═════════════════════════════════════════════════════════ */}
         <AnimatePresence>

@@ -188,7 +188,7 @@ const CoachingEquipe = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]"
                 aria-hidden="true"
               >
-                ↳ Coaching d'équipe
+                <E fieldKey="heroLabel">{ content?.heroLabel ?? "↳ Coaching d'équipe" }</E>
               </motion.p>
 
               <h1
@@ -222,7 +222,7 @@ const CoachingEquipe = () => {
                     className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                     aria-label="Réserver un diagnostic équipe gratuit"
                   >
-                    Diagnostic équipe gratuit <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+                    <E fieldKey="hero.ctaBtnPrimary">{ content?.hero?.ctaBtnPrimary ?? "Diagnostic équipe gratuit" }</E> <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
                 </motion.div>
                 <motion.div className="w-full sm:w-auto" {...btnHoverProps}>
@@ -230,7 +230,7 @@ const CoachingEquipe = () => {
                     to="/nos-tarifs"
                     className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-7 py-3.5 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                   >
-                    Voir les tarifs
+                    <E fieldKey="hero.ctaBtnSecondary">{ content?.hero?.ctaBtnSecondary ?? "Voir les tarifs" }</E>
                   </Link>
                 </motion.div>
               </motion.div>
@@ -258,7 +258,7 @@ const CoachingEquipe = () => {
                 transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="absolute bottom-5 left-5 bg-[#C4903E] text-white px-4 py-2 rounded-full text-[11px] font-mono tracking-widest uppercase font-semibold shadow-md"
               >
-                Entreprises · TPE/PME
+                <E fieldKey="hero.targetAudience">{ content?.hero?.targetAudience ?? "Entreprises · TPE/PME" }</E>
               </motion.div>
             </motion.div>
 
@@ -278,13 +278,13 @@ const CoachingEquipe = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-gray-400 mb-3"
                 aria-hidden="true"
               >
-                Pour qui
+                <E fieldKey="profilesLabel">{ content?.profilesLabel ?? "Pour qui" }</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight mb-10"
               >
-                Quel type d'équipe accompagnons-nous&nbsp;?
+                <E fieldKey="profilesTitle">{ content?.profilesTitle ?? "Quel type d'équipe accompagnons-nous ?" }</E>
               </motion.h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -307,8 +307,12 @@ const CoachingEquipe = () => {
                         >
                           <Icon className="w-5 h-5 text-[#C4903E]" strokeWidth={1.8} />
                         </div>
-                        <h3 className="text-[#1C3A52] font-bold text-[17px] leading-snug">{item.title}</h3>
-                        <p className="text-gray-500 text-[15px] leading-relaxed">{item.desc}</p>
+                        <h3 className="text-[#1C3A52] font-bold text-[17px] leading-snug">
+                          <E fieldKey={`profiles.${i}.title`}>{ (content?.profiles as any)?.[i]?.title ?? item.title }</E>
+                        </h3>
+                        <p className="text-gray-500 text-[15px] leading-relaxed">
+                          <E fieldKey={`profiles.${i}.desc`}>{ (content?.profiles as any)?.[i]?.desc ?? item.desc }</E>
+                        </p>
                       </div>
                     </motion.div>
                   );
@@ -331,13 +335,13 @@ const CoachingEquipe = () => {
                 className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E]/70 mb-3"
                 aria-hidden="true"
               >
-                Bénéfices
+                <E fieldKey="benefitsLabel">{ content?.benefitsLabel ?? "Bénéfices" }</E>
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-white leading-tight mb-10"
               >
-                Ce que votre équipe va gagner
+                <E fieldKey="benefitsTitle">{ content?.benefitsTitle ?? "Ce que votre équipe va gagner" }</E>
               </motion.h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -365,8 +369,12 @@ const CoachingEquipe = () => {
                           >
                             <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
                           </motion.div>
-                          <h3 className="text-white font-bold text-[17px] leading-snug">{b.title}</h3>
-                          <p className="text-white/60 text-[14px] leading-relaxed flex-1">{b.desc}</p>
+                          <h3 className="text-white font-bold text-[17px] leading-snug">
+                            <E fieldKey={`benefits.${i}.title`}>{ (content?.benefits as any)?.[i]?.title ?? b.title }</E>
+                          </h3>
+                          <p className="text-white/60 text-[14px] leading-relaxed flex-1">
+                            <E fieldKey={`benefits.${i}.desc`}>{ (content?.benefits as any)?.[i]?.desc ?? b.desc }</E>
+                          </p>
                         </div>
                       </SpotlightCard>
                     </motion.div>
@@ -412,17 +420,14 @@ const CoachingEquipe = () => {
                     className="font-mono tracking-widest uppercase text-[10px] text-[#C4903E] mb-3"
                     aria-hidden="true"
                   >
-                    Le coach d'équipe
+                    <E fieldKey="coachLabel">{ content?.coachLabel ?? "Le coach d'équipe" }</E>
                   </p>
                   <h2 className="text-[clamp(1.6rem,3.5vw,2.4rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-                    Pédagogue, sociologue &amp; coach certifié
+                    <E fieldKey="coachTitle">{ content?.coachTitle ?? "Pédagogue, sociologue & coach certifié" }</E>
                   </h2>
                 </div>
                 <p className="text-gray-500 text-[15px] leading-relaxed">
-                  Fort de 26 ans d'enseignement en sciences économiques et sociales, j'ai développé
-                  une expertise unique sur les dynamiques collectives et les organisations humaines.
-                  Coach certifié spécialisé en coaching d'équipe, j'allie analyse sociologique et
-                  outils de coaching pour transformer vos équipes de l'intérieur.
+                  <E fieldKey="coachBio">{ content?.coachBio ?? "Fort de 26 ans d'enseignement en sciences économiques et sociales, j'ai développé une expertise unique sur les dynamiques collectives et les organisations humaines. Coach certifié spécialisé en coaching d'équipe, j'allie analyse sociologique et outils de coaching pour transformer vos équipes de l'intérieur." }</E>
                 </p>
                 <ul className="space-y-3">
                   {[
@@ -479,11 +484,15 @@ const CoachingEquipe = () => {
                   className="font-mono tracking-widest uppercase text-[10px] text-white/60"
                   aria-hidden="true"
                 >
-                  Tarif
+                  <E fieldKey="pricingLabel">{ content?.pricingLabel ?? "Tarif" }</E>
                 </p>
                 <div className="text-center sm:text-left">
-                  <span className="text-[clamp(2.8rem,5vw,3.5rem)] font-bold text-white leading-none">Sur devis</span>
-                  <p className="text-white/70 text-[15px] mt-2">Adapté à la taille de votre équipe et à vos objectifs</p>
+                  <span className="text-[clamp(2.8rem,5vw,3.5rem)] font-bold text-white leading-none">
+                    <E fieldKey="pricing.text">{ (content?.pricing as any)?.text ?? "Sur devis" }</E>
+                  </span>
+                  <p className="text-white/70 text-[15px] mt-2">
+                    <E fieldKey="pricing.subtitle">{ (content?.pricing as any)?.subtitle ?? "Adapté à la taille de votre équipe et à vos objectifs" }</E>
+                  </p>
                 </div>
                 <ul className="space-y-3">
                   {[
@@ -494,7 +503,7 @@ const CoachingEquipe = () => {
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-white text-[15px]">
                       <Check className="w-4 h-4 text-white/70 flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />
-                      {item}
+                      <E fieldKey={`pricing.features.${i}`}>{ (content?.pricing as any)?.features?.[i] ?? item }</E>
                     </li>
                   ))}
                 </ul>
@@ -507,18 +516,18 @@ const CoachingEquipe = () => {
                     className="flex sm:inline-flex justify-center w-full sm:w-auto items-center gap-2 bg-[#1C3A52] text-white font-bold text-[16px] px-8 py-5 min-h-[44px] rounded-2xl hover:opacity-90 transition-opacity"
                     aria-label="Demander un devis pour coaching d'équipe"
                   >
-                    Demander un devis <ArrowUpRight className="w-5 h-5" aria-hidden="true" />
+                    <E fieldKey="cta.primaryBtn">{ content?.cta?.primaryBtn ?? "Demander un devis" }</E> <ArrowUpRight className="w-5 h-5" aria-hidden="true" />
                   </Link>
                 </motion.div>
                 <p className="text-center text-white/60 text-[13px] font-mono">
-                  Diagnostic offert · Confidentiel · Sans engagement
+                  <E fieldKey="cta.footnote">{ content?.cta?.footnote ?? "Diagnostic offert · Confidentiel · Sans engagement" }</E>
                 </p>
                 <motion.div {...btnHoverProps}>
                   <Link
                     to="/nos-tarifs"
                     className="w-full inline-flex items-center justify-center gap-2 bg-white/15 text-white font-semibold text-[14px] px-8 py-4 min-h-[44px] rounded-2xl hover:bg-white/25 transition-colors backdrop-blur-sm"
                   >
-                    Voir tous les tarifs
+                    <E fieldKey="cta.secondaryBtn">{ content?.cta?.secondaryBtn ?? "Voir tous les tarifs" }</E>
                   </Link>
                 </motion.div>
               </motion.div>

@@ -90,6 +90,25 @@ const CoachingScolaire = () => {
 
   const { page, cta } = content;
 
+  // Résolution des items depuis le CMS avec fallback sur les constantes locales
+  const forWhoItems = FOR_WHO.map((item, i) => ({
+    ...item,
+    text: (content as any)?.forWho?.[i]?.text ?? item.text,
+  }));
+
+  const benefitItems = BENEFITS.map((b, i) => ({
+    ...b,
+    title: (content as any)?.benefits?.[i]?.title ?? b.title,
+    desc:  (content as any)?.benefits?.[i]?.desc  ?? b.desc,
+  }));
+
+  const pricingFeatureDefaults = [
+    "Méthodes de travail personnalisées",
+    "Gestion du stress et des examens",
+    "Soutien à l'orientation scolaire",
+    "Suivi régulier adapté à ton rythme",
+  ];
+
   return (
     <Layout>
       <SEO
@@ -178,7 +197,7 @@ const CoachingScolaire = () => {
                 className="font-mono tracking-widest uppercase text-[11px] text-[#C4903E] font-semibold"
                 aria-hidden="true"
               >
-                ↳ Coaching Scolaire
+                <E fieldKey="heroLabel">{(content as any)?.heroLabel ?? "↳ Coaching Scolaire"}</E>
               </motion.p>
 
               <h1
@@ -210,7 +229,7 @@ const CoachingScolaire = () => {
                     to="/contact"
                     className="flex justify-center sm:inline-flex items-center gap-2 bg-[#C4903E] text-white font-bold text-[14px] px-6 py-3 min-h-[44px] rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto"
                   >
-                    1er RDV offert <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                    <E fieldKey="hero.ctaBtnPrimary">{(content as any)?.hero?.ctaBtnPrimary ?? "1er RDV offert"}</E> <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
                   </Link>
                 </motion.span>
                 <motion.span className="inline-block w-full sm:w-auto" {...btnHoverProps}>
@@ -218,7 +237,7 @@ const CoachingScolaire = () => {
                     to="/coaching-scolaire#tarif"
                     className="flex justify-center sm:inline-flex items-center gap-2 bg-[#F3F4F6] text-[#1C3A52] font-semibold text-[14px] px-6 py-3 min-h-[44px] rounded-full hover:bg-gray-200 transition-colors w-full sm:w-auto"
                   >
-                    Voir les tarifs
+                    <E fieldKey="hero.ctaBtnSecondary">{(content as any)?.hero?.ctaBtnSecondary ?? "Voir les tarifs"}</E>
                   </Link>
                 </motion.span>
               </motion.div>
@@ -248,7 +267,7 @@ const CoachingScolaire = () => {
                 transition={{ delay: 0.55, duration: 0.5 }}
                 className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm text-[#1C3A52] px-4 py-2 rounded-full text-[12px] font-semibold shadow-md"
               >
-                Collégiens · Lycéens · Étudiants
+                <E fieldKey="hero.targetAudience">{(content as any)?.hero?.targetAudience ?? "Collégiens · Lycéens · Étudiants"}</E>
               </motion.div>
             </motion.div>
 
@@ -268,15 +287,15 @@ const CoachingScolaire = () => {
           >
             <motion.div variants={blurInUp} className="flex flex-col gap-2">
               <p className="font-mono tracking-widest uppercase text-[11px] text-gray-400" aria-hidden="true">
-                Pour toi si…
+                <E fieldKey="forWhoLabel">{(content as any)?.forWhoLabel ?? "Pour toi si…"}</E>
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-                Ce coaching est fait pour toi si…
+                <E fieldKey="forWhoTitle">{(content as any)?.forWhoTitle ?? "Ce coaching est fait pour toi si…"}</E>
               </h2>
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {FOR_WHO.map((item, i) => {
+              {forWhoItems.map((item, i) => {
                 const Icon = item.icon;
                 return (
                   <motion.div
@@ -287,7 +306,9 @@ const CoachingScolaire = () => {
                     <div className="w-9 h-9 rounded-xl bg-[#C4903E]/10 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                       <Icon className="w-4.5 h-4.5 text-[#C4903E]" strokeWidth={1.8} />
                     </div>
-                    <p className="text-[#1C3A52] text-[15px] font-semibold leading-snug">{item.text}</p>
+                    <p className="text-[#1C3A52] text-[15px] font-semibold leading-snug">
+                      <E fieldKey={`forWho.${i}.text`}>{item.text}</E>
+                    </p>
                   </motion.div>
                 );
               })}
@@ -308,10 +329,10 @@ const CoachingScolaire = () => {
           >
             <motion.div variants={blurInUp} className="flex flex-col gap-2">
               <p className="font-mono tracking-widest uppercase text-[11px] text-white/30" aria-hidden="true">
-                Résultats
+                <E fieldKey="benefitsLabel">{(content as any)?.benefitsLabel ?? "Résultats"}</E>
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-white leading-tight">
-                Ce que tu vas gagner
+                <E fieldKey="benefitsTitle">{(content as any)?.benefitsTitle ?? "Ce que tu vas gagner"}</E>
               </h2>
             </motion.div>
 
@@ -320,7 +341,7 @@ const CoachingScolaire = () => {
               spotlightColor="rgba(196,144,62,0.08)"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {BENEFITS.map((b, i) => {
+                {benefitItems.map((b, i) => {
                   const Icon = b.icon;
                   const tilt = tilts[i];
                   return (
@@ -340,8 +361,12 @@ const CoachingScolaire = () => {
                       >
                         <Icon className="w-5 h-5 text-white" strokeWidth={1.8} />
                       </div>
-                      <h3 className="text-white font-semibold text-[15px] leading-snug">{b.title}</h3>
-                      <p className="text-white/50 text-[14px] leading-relaxed flex-1">{b.desc}</p>
+                      <h3 className="text-white font-semibold text-[15px] leading-snug">
+                        <E fieldKey={`benefits.${i}.title`}>{b.title}</E>
+                      </h3>
+                      <p className="text-white/50 text-[14px] leading-relaxed flex-1">
+                        <E fieldKey={`benefits.${i}.desc`}>{b.desc}</E>
+                      </p>
                     </motion.article>
                   );
                 })}
@@ -388,15 +413,15 @@ const CoachingScolaire = () => {
               <motion.div variants={blurInUp} className="flex flex-col gap-7 pt-2">
                 <div className="flex flex-col gap-2">
                   <p className="font-mono tracking-widest uppercase text-[11px] text-gray-400" aria-hidden="true">
-                    Notre coach
+                    <E fieldKey="coachLabel">{(content as any)?.coachLabel ?? "Notre coach"}</E>
                   </p>
                   <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-                    26 ans auprès des jeunes
+                    <E fieldKey="coachTitle">{(content as any)?.coachTitle ?? "26 ans auprès des jeunes"}</E>
                   </h2>
                 </div>
 
                 <p className="text-gray-500 text-[16px] leading-relaxed">
-                  Enseignant en SES pendant 26 ans, j'ai accompagné des centaines de jeunes dans leurs parcours scolaires. Formé comme coach certifié chez Prisme Évolution, j'associe pédagogie de terrain et outils de coaching pour agir en profondeur sur la motivation, la méthode et la confiance.
+                  <E fieldKey="coachBio">{(content as any)?.coachBio ?? "Enseignant en SES pendant 26 ans, j'ai accompagné des centaines de jeunes dans leurs parcours scolaires. Formé comme coach certifié chez Prisme Évolution, j'associe pédagogie de terrain et outils de coaching pour agir en profondeur sur la motivation, la méthode et la confiance."}</E>
                 </p>
 
                 <ul className="flex flex-col gap-3">
@@ -451,29 +476,28 @@ const CoachingScolaire = () => {
               <motion.div variants={blurInUp} className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
                   <p className="font-mono tracking-widest uppercase text-[11px] text-white/60" aria-hidden="true">
-                    Tarif
+                    <E fieldKey="pricingLabel">{(content as any)?.pricingLabel ?? "Tarif"}</E>
                   </p>
                   <div className="flex items-baseline gap-2 text-center sm:text-left">
                     <span className="text-[clamp(2.8rem,7vw,5.5rem)] font-bold text-white leading-none tracking-tight">
-                      60€
+                      <E fieldKey="pricing.amount">{(content as any)?.pricing?.amount ?? "60€"}</E>
                     </span>
-                    <span className="text-white/70 text-[18px] font-medium">/ séance</span>
+                    <span className="text-white/70 text-[18px] font-medium">
+                      <E fieldKey="pricing.unit">{(content as any)?.pricing?.unit ?? "/ séance"}</E>
+                    </span>
                   </div>
                   <p className="text-white/80 text-[16px] leading-relaxed">
-                    Séance individuelle de 60 min — à mon cabinet, chez vous ou à distance.
+                    <E fieldKey="pricing.description">{(content as any)?.pricing?.description ?? "Séance individuelle de 60 min — à mon cabinet, chez vous ou à distance."}</E>
                   </p>
                 </div>
 
                 <ul className="flex flex-col gap-3">
-                  {[
-                    "Méthodes de travail personnalisées",
-                    "Gestion du stress et des examens",
-                    "Soutien à l'orientation scolaire",
-                    "Suivi régulier adapté à ton rythme",
-                  ].map((item, i) => (
+                  {pricingFeatureDefaults.map((defaultText, i) => (
                     <li key={i} className="flex items-center gap-3">
                       <Check className="w-4 h-4 text-white flex-shrink-0" strokeWidth={2.5} aria-hidden="true" />
-                      <span className="text-white text-[14px] font-medium">{item}</span>
+                      <span className="text-white text-[14px] font-medium">
+                        <E fieldKey={`pricing.features.${i}`}>{(content as any)?.pricing?.features?.[i] ?? defaultText}</E>
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -496,7 +520,7 @@ const CoachingScolaire = () => {
                     </Link>
                   </motion.span>
                   <p className="text-white/50 text-[12px] font-mono">
-                    1er RDV offert · Sans engagement · Confidentiel
+                    <E fieldKey="cta.footnote">{(content as any)?.cta?.footnote ?? "1er RDV offert · Sans engagement · Confidentiel"}</E>
                   </p>
                 </div>
               </motion.div>

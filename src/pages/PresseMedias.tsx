@@ -115,7 +115,7 @@ export default function PresseMedias() {
             {/* Header */}
             <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="mb-12 md:mb-16">
               <motion.p variants={fadeInUp} className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E]">
-                Références publiques
+                <E fieldKey="hero.sectionLabel">{content?.hero?.sectionLabel ?? "Références publiques"}</E>
               </motion.p>
               <motion.h1
                   id="presse-title"
@@ -325,7 +325,7 @@ export default function PresseMedias() {
                     <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Linkedin className="w-3.5 h-3.5" /> Réseau
                     </span>
-                      <h2 className="text-lg font-semibold text-[#1C3A52] mt-1">Profil Professionnel</h2>
+                      <h2 className="text-lg font-semibold text-[#1C3A52] mt-1"><E fieldKey="profiles.linkedin.title">{content?.profiles?.linkedin?.title ?? "Profil Professionnel"}</E></h2>
                     </div>
                     <a
                         href="https://www.linkedin.com/in/noureddine-omar-587620346/"
@@ -340,11 +340,11 @@ export default function PresseMedias() {
                           loading="lazy"
                       />
                       <h3 className="mt-4 text-base font-semibold text-[#1C3A52] group-hover:text-[#C4903E] transition-colors inline-flex items-center gap-1.5 justify-center">
-                        Noureddine Omar <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <E fieldKey="profiles.linkedin.name">{content?.profiles?.linkedin?.name ?? "Noureddine Omar"}</E> <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
                       </h3>
                       <p className="text-gray-400 font-mono text-[10px] uppercase tracking-wider mt-1">LinkedIn</p>
                       <p className="mt-3 text-[13px] text-gray-500 leading-relaxed">
-                        Parcours académique, partages et réseau professionnel en Saône-et-Loire.
+                        <E fieldKey="profiles.linkedin.description">{content?.profiles?.linkedin?.description ?? "Parcours académique, partages et réseau professionnel en Saône-et-Loire."}</E>
                       </p>
                     </a>
                   </motion.div>
@@ -355,7 +355,7 @@ export default function PresseMedias() {
                     <span className="inline-flex items-center gap-2 text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
                       <Users className="w-3.5 h-3.5" /> Annuaire Praticiens
                     </span>
-                      <h2 className="text-lg font-semibold text-[#1C3A52] mt-1">Praticien Certifié</h2>
+                      <h2 className="text-lg font-semibold text-[#1C3A52] mt-1"><E fieldKey="profiles.resalib.title">{content?.profiles?.resalib?.title ?? "Praticien Certifié"}</E></h2>
                     </div>
                     <a
                         href="https://www.resalib.fr/praticien/118187-on-coaching-et-neurofeedback-coach-professionnel-certifie-sance"
@@ -370,11 +370,11 @@ export default function PresseMedias() {
                           loading="lazy"
                       />
                       <h3 className="mt-4 text-base font-semibold text-[#1C3A52] group-hover:text-[#C4903E] transition-colors inline-flex items-center gap-1.5 justify-center">
-                        Fiche Officielle Resalib <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <E fieldKey="profiles.resalib.name">{content?.profiles?.resalib?.name ?? "Fiche Officielle Resalib"}</E> <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
                       </h3>
-                      <p className="text-gray-400 font-mono text-[10px] uppercase tracking-wider mt-1">Avis & Spécialités</p>
+                      <p className="text-gray-400 font-mono text-[10px] uppercase tracking-wider mt-1"><E fieldKey="profiles.resalib.platform">{content?.profiles?.resalib?.platform ?? "Avis & Spécialités"}</E></p>
                       <p className="mt-3 text-[13px] text-gray-500 leading-relaxed">
-                        Retrouvez ses spécialités à Sancé : coaching de vie, coaching scolaire, neurofeedback dynamique, ainsi que les avis publics des clients accompagnés.
+                        <E fieldKey="profiles.resalib.description">{content?.profiles?.resalib?.description ?? "Retrouvez ses spécialités à Sancé : coaching de vie, coaching scolaire, neurofeedback dynamique, ainsi que les avis publics des clients accompagnés."}</E>
                       </p>
                     </a>
                   </motion.div>

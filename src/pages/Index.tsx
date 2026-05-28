@@ -370,7 +370,7 @@ export default function Index() {
                 className="text-xs sm:text-sm text-[#1C3A52]/50 flex items-center justify-center lg:justify-start gap-2 mt-1"
             >
               <span className="text-[#C4903E] text-base" aria-hidden="true">☉</span>
-              1er rendez-vous offert · Sans engagement
+              <E fieldKey="hero.trustSignal">{content?.hero?.trustSignal ?? "1er rendez-vous offert · Sans engagement"}</E>
             </motion.p>
 
           </div>
@@ -427,7 +427,7 @@ export default function Index() {
               className="text-[13px] font-mono tracking-widest uppercase text-gray-400"
               aria-hidden="true"
             >
-              Nos services
+              <E fieldKey="servicesSection.labelSmall">{content?.servicesSection?.labelSmall ?? "Nos services"}</E>
             </motion.p>
             <motion.h2
               id="services-title"
@@ -494,7 +494,7 @@ export default function Index() {
                     className={`flex items-center gap-2 text-[14px] font-bold transition-all hover:gap-3 w-fit min-h-[44px] ${c.link}`}
                     aria-label={`Découvrir ${card.title}`}
                   >
-                    Découvrir <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    <E fieldKey="services.discoverText">{content?.services?.discoverText ?? "Découvrir"}</E> <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
                 </motion.article>
               );
@@ -515,24 +515,24 @@ export default function Index() {
           >
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
               <p className="text-[11px] font-mono tracking-widest uppercase text-[#C4903E]">
-                Technologie · Zengar Institute
+                <E fieldKey="neurofeedback.labelSmall">{content?.neurofeedback?.labelSmall ?? "Technologie · Zengar Institute"}</E>
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-tight">
-                Neurofeedback NeurOptimal®
+                <E fieldKey="neurofeedback.title">{content?.neurofeedback?.title ?? "Neurofeedback NeurOptimal®"}</E>
               </h2>
               <p className="text-gray-500 text-[15px] sm:text-[16px] leading-relaxed max-w-lg">
-                Une technologie d'entraînement cérébral non invasive qui permet au système nerveux de développer flexibilité et résilience. Dès 6 à 10 séances, les clients rapportent un sommeil plus réparateur, une clarté mentale accrue, un calme intérieur et des performances renforcées.
+                <E fieldKey="neurofeedback.longDescription">{content?.neurofeedback?.longDescription ?? "Une technologie d'entraînement cérébral non invasive qui permet au système nerveux de développer flexibilité et résilience. Dès 6 à 10 séances, les clients rapportent un sommeil plus réparateur, une clarté mentale accrue, un calme intérieur et des performances renforcées."}</E>
               </p>
               <ul className="flex flex-col gap-2">
                 {[
-                  "Stress, anxiété, burn-out",
-                  "Concentration, mémoire, TDA/H",
-                  "Sommeil, fatigue chronique",
-                  "Performance cognitive et sportive",
+                  content?.neurofeedback?.useCases?.[0] ?? "Stress, anxiété, burn-out",
+                  content?.neurofeedback?.useCases?.[1] ?? "Concentration, mémoire, TDA/H",
+                  content?.neurofeedback?.useCases?.[2] ?? "Sommeil, fatigue chronique",
+                  content?.neurofeedback?.useCases?.[3] ?? "Performance cognitive et sportive",
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-2.5 text-gray-500 text-[14px]">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#C4903E] flex-shrink-0" />
-                    {item}
+                    <E fieldKey={`neurofeedback.useCases.${i}`}>{item}</E>
                   </li>
                 ))}
               </ul>
@@ -540,7 +540,7 @@ export default function Index() {
                 to={ROUTES.neurofeedback}
                 className="inline-flex items-center justify-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-90 transition-opacity w-full sm:w-fit mt-2 min-h-[44px]"
               >
-                Découvrir le Neurofeedback <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                <E fieldKey="neurofeedback.ctaText">{content?.neurofeedback?.ctaText ?? "Découvrir le Neurofeedback"}</E> <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             </motion.div>
 
@@ -618,14 +618,14 @@ export default function Index() {
               className="text-[13px] font-mono tracking-widest uppercase text-white/40"
               aria-hidden="true"
             >
-              Notre coach
+              <E fieldKey="coachSection.labelSmall">{content?.coachSection?.labelSmall ?? "Notre coach"}</E>
             </motion.p>
             <motion.h2
               id="coach-title"
               variants={fadeInUp}
               className="text-[clamp(2rem,5vw,3.2rem)] font-semibold tracking-tight text-white leading-[1.05]"
             >
-              Noureddine Omar
+              <E fieldKey="coachSection.coachName">{content?.coachSection?.coachName ?? "Noureddine Omar"}</E>
             </motion.h2>
 
             <motion.div
@@ -646,16 +646,14 @@ export default function Index() {
               variants={fadeInUp}
               className="text-[15px] text-white/65 leading-relaxed max-w-md"
             >
-              Coach certifié, formé par Prisme Évolution, 26 ans enseignant SES.
-              Praticien en neurofeedback NeurOptimal® — une double expertise pour agir à la fois
-              sur le cerveau et sur les comportements, au service de votre évolution.
+              <E fieldKey="coachSection.bioParagraph">{content?.coachSection?.bioParagraph ?? "Coach certifié, formé par Prisme Évolution, 26 ans enseignant SES. Praticien en neurofeedback NeurOptimal® — une double expertise pour agir à la fois sur le cerveau et sur les comportements, au service de votre évolution."}</E>
             </motion.p>
 
             <motion.blockquote
               variants={fadeInUp}
               className="border-l-2 border-[#C4903E] pl-5 text-[14px] sm:text-[15px] italic text-white/50 leading-relaxed"
             >
-              "Le changement commence là où la zone de confort s'arrête."
+              <E fieldKey="coachSection.quote">{content?.coachSection?.quote ?? "\"Le changement commence là où la zone de confort s'arrête.\""}</E>
             </motion.blockquote>
 
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3">
@@ -664,7 +662,7 @@ export default function Index() {
                 className="flex items-center justify-center gap-2.5 bg-[#C4903E] text-[#1C3A52] font-bold text-[15px] px-6 py-4 rounded-full hover:opacity-90 transition-opacity w-full sm:w-auto min-h-[44px]"
                 aria-label="Découvrir l'approche de Noureddine Omar"
               >
-                Découvrir l'approche
+                <E fieldKey="coachSection.discoverLinkText">{content?.coachSection?.discoverLinkText ?? "Découvrir l'approche"}</E>
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
               <a
@@ -675,7 +673,7 @@ export default function Index() {
                 aria-label="Voir la certification NeurOptimal®"
               >
                 <Award className="w-4 h-4" aria-hidden="true" />
-                Voir la certification
+                <E fieldKey="coachSection.certificationLinkText">{content?.coachSection?.certificationLinkText ?? "Voir la certification"}</E>
               </a>
             </motion.div>
           </motion.div>
@@ -700,14 +698,14 @@ export default function Index() {
               className="text-[13px] font-mono tracking-widest uppercase text-gray-400"
               aria-hidden="true"
             >
-              Comment ça marche
+              <E fieldKey="stepsSection.labelSmall">{content?.stepsSection?.labelSmall ?? "Comment ça marche"}</E>
             </motion.p>
             <motion.h2
               id="processus-title"
               variants={fadeInUp}
               className="text-[clamp(1.8rem,4.5vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]"
             >
-              Trois étapes vers votre transformation
+              <E fieldKey="stepsSection.title">{content?.stepsSection?.title ?? "Trois étapes vers votre transformation"}</E>
             </motion.h2>
           </motion.div>
 
@@ -770,7 +768,7 @@ export default function Index() {
               className="w-full sm:w-auto justify-center bg-[#1C3A52] text-white font-bold text-[15px] px-8 py-4 rounded-full flex items-center gap-2.5 hover:opacity-85 transition-opacity shadow-[0_8px_32px_rgba(28,58,82,0.25)]"
               aria-label="Commencer la consultation gratuite"
             >
-              Démarrer gratuitement
+              <E fieldKey="stepsSection.ctaText">{content?.stepsSection?.ctaText ?? "Démarrer gratuitement"}</E>
               <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </motion.div>
@@ -790,7 +788,7 @@ export default function Index() {
             {/* Texte */}
             <motion.div variants={fadeInLeft} className="flex flex-col gap-5">
               <p className="text-[12px] font-mono tracking-widest uppercase text-[#C4903E]" aria-hidden="true">
-                ONCoaching · En action
+                <E fieldKey="videoSection.labelSmall">{content?.videoSection?.labelSmall ?? "ONCoaching · En action"}</E>
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]">
                 Découvrez<br />
@@ -798,7 +796,7 @@ export default function Index() {
                 en vidéo.
               </h2>
               <p className="text-[15px] text-gray-500 leading-relaxed max-w-md">
-                Une séance, une transformation. Voyez comment le coaching ON change concrètement la trajectoire de nos clients.
+                <E fieldKey="videoSection.description">{content?.videoSection?.description ?? "Une séance, une transformation. Voyez comment le coaching ON change concrètement la trajectoire de nos clients."}</E>
               </p>
               <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} className="self-start">
                 <a
@@ -808,7 +806,7 @@ export default function Index() {
                   className="inline-flex items-center gap-2 bg-[#1C3A52] text-white font-bold text-[14px] px-6 py-3.5 rounded-full hover:opacity-85 transition-opacity"
                   aria-label="Voir la vidéo ON Coaching sur Facebook"
                 >
-                  Voir sur Facebook
+                  <E fieldKey="videoSection.linkText">{content?.videoSection?.linkText ?? "Voir sur Facebook"}</E>
                   <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
                 </a>
               </motion.div>
@@ -858,9 +856,7 @@ export default function Index() {
             </div>
 
             <blockquote className="text-[1.1rem] md:text-[1.25rem] lg:text-[1.5rem] font-medium text-[#1C3A52] leading-relaxed italic">
-              "L'accompagnement d'ON Coaching m'a permis de structurer ma vision
-              et de retrouver une parfaite synergie entre ma vie professionnelle
-              et personnelle. Un coach à l'écoute, bienveillant et efficace."
+              <E fieldKey="testimonial.quote">{content?.testimonial?.quote ?? "\"L'accompagnement d'ON Coaching m'a permis de structurer ma vision et de retrouver une parfaite synergie entre ma vie professionnelle et personnelle. Un coach à l'écoute, bienveillant et efficace.\""}</E>
             </blockquote>
 
             <div className="flex items-center gap-3">
@@ -873,8 +869,8 @@ export default function Index() {
                 </span>
               </div>
               <div className="text-left">
-                <p className="text-[15px] font-bold text-[#1C3A52]">Marc A.</p>
-                <p className="text-[14px] text-gray-500">Directeur Associé</p>
+                <p className="text-[15px] font-bold text-[#1C3A52]"><E fieldKey="testimonial.authorName">{content?.testimonial?.authorName ?? "Marc A."}</E></p>
+                <p className="text-[14px] text-gray-500"><E fieldKey="testimonial.authorTitle">{content?.testimonial?.authorTitle ?? "Directeur Associé"}</E></p>
               </div>
             </div>
           </motion.div>
@@ -892,10 +888,10 @@ export default function Index() {
             className="text-center flex flex-col gap-4"
           >
             <motion.p variants={fadeInUp} className="text-[13px] font-mono tracking-widest uppercase text-[#C4903E]" aria-hidden="true">
-              Ils parlent de nous
+              <E fieldKey="pressSection.labelSmall">{content?.pressSection?.labelSmall ?? "Ils parlent de nous"}</E>
             </motion.p>
             <motion.h2 id="presse-title" variants={fadeInUp} className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]">
-              Presse & Médias
+              <E fieldKey="pressSection.title">{content?.pressSection?.title ?? "Presse & Médias"}</E>
             </motion.h2>
           </motion.div>
 
@@ -964,7 +960,7 @@ export default function Index() {
               to={ROUTES.media}
               className="inline-flex items-center gap-2.5 border-2 border-[#1C3A52] text-[#1C3A52] font-bold text-[15px] px-7 py-3.5 rounded-full hover:bg-[#1C3A52] hover:text-white transition-all duration-300"
             >
-              En savoir plus
+              <E fieldKey="pressSection.moreLink">{content?.pressSection?.moreLink ?? "En savoir plus"}</E>
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </Link>
           </motion.div>
@@ -1024,7 +1020,7 @@ export default function Index() {
                   to={ROUTES.tarifs}
                   className="border border-white/25 text-white font-bold text-[15px] px-7 py-4 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors w-full sm:w-auto"
                 >
-                  Voir les tarifs
+                  <E fieldKey="finalCta.pricesLink">{content?.finalCta?.pricesLink ?? "Voir les tarifs"}</E>
                 </Link>
               </motion.div>
             </motion.div>
