@@ -353,14 +353,49 @@ function adminEmailHtml(s: Sub): string {
   return baseLayout(content, `${label} de ${s.name}`);
 }
 
+// ── Email réponse admin ───────────────────────────────────────────────────────
+
+function adminReplyHtml(recipientName: string, replyText: string): string {
+  const firstName = recipientName.split(" ")[0];
+  const content = `
+    <p style="margin:0 0 24px;font-size:15px;color:#374151;line-height:1.7;white-space:pre-wrap;">${esc(replyText)}</p>
+    <hr style="border:none;border-top:1px solid #f0ece6;margin:24px 0;"/>
+    <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;">
+      Pour répondre à ce message, répondez simplement à cet email.<br/>
+      Votre réponse arrivera directement dans notre boîte mail.
+    </p>`;
+  return baseLayout(content, `Réponse de ON Coaching pour ${firstName}`);
+}
+
 // ── Handler principal ─────────────────────────────────────────────────────────
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
   if (req.method !== "POST")    return new Response("Method Not Allowed", { status: 405 });
 
-  let body: { record?: Sub };
+  let body: { record?: Sub; adminReply?: boolean; to?: string; recipientName?: string; subject?: string; replyText?: string };
   try { body = await req.json(); } catch { return new Response("Invalid JSON", { status: 400 }); }
+
+  // ── Réponse admin → client ────────────────────────────────────────────────
+  if (body.adminReply) {
+    const { to, recipientName = "", subject = "Réponse de ON Coaching", replyText = "" } = body;
+    if (!to) return new Response("Missing 'to'", { status: 400 });
+
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from:      `ON Coaching <contact@oncoaching.fr>`,
+        to:        [to],
+        reply_to:  "contact@oncoaching.fr",
+        subject,
+        html: adminReplyHtml(recipientName, replyText),
+      }),
+    });
+
+    if (!res.ok) return new Response(await res.text(), { status: 500 });
+    return new Response(JSON.stringify({ ok: true }), { headers: { ...CORS, "Content-Type": "application/json" } });
+  }
 
   const s = body.record ?? (body as unknown as Sub);
   if (!s?.email || !s?.name) return new Response("Missing fields", { status: 400 });

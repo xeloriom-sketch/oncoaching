@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import type { Submission } from "@/types/admin";
@@ -51,22 +51,6 @@ function formatRdvDate(raw: string): string {
     year: "numeric",
   });
   return dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-}
-
-// ─── Mailto builder ────────────────────────────────────────────────────────────
-function buildMailto(s: Submission): string {
-  if (s.type === "contact") {
-    const subject = encodeURIComponent(`Re: ${s.subject ?? "Votre message"}`);
-    const body = encodeURIComponent(`Bonjour ${s.name},\n\n`);
-    return `mailto:${s.email}?subject=${subject}&body=${body}`;
-  } else {
-    const subject = encodeURIComponent("Confirmation de votre demande de rendez-vous");
-    const rdvDate = s.preferred_date ? formatRdvDate(s.preferred_date) : "";
-    const body = encodeURIComponent(
-      `Bonjour ${s.name},\n\nNous avons bien reçu votre demande de rendez-vous pour le ${rdvDate}.\n\n`
-    );
-    return `mailto:${s.email}?subject=${subject}&body=${body}`;
-  }
 }
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
@@ -212,9 +196,76 @@ const ListItem = ({ sub, isSelected, onClick }: ListItemProps) => {
 interface DetailProps {
   sub: Submission;
   onBack?: () => void;
+  onArchived?: (id: string) => void;
 }
 
-const MessageDetail = ({ sub, onBack }: DetailProps) => {
+const MessageDetail = ({ sub, onBack, onArchived }: DetailProps) => {
+  const [replyOpen, setReplyOpen]     = useState(false);
+  const [replySubject, setReplySubject] = useState("");
+  const [replyText, setReplyText]     = useState("");
+  const [replying, setReplying]       = useState(false);
+  const [replyDone, setReplyDone]     = useState(false);
+  const [replyError, setReplyError]   = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Reset reply state when the selected submission changes
+  useEffect(() => {
+    setReplyOpen(false);
+    setReplyDone(false);
+    setReplyText("");
+    setReplyError(null);
+  }, [sub.id]);
+
+  // Pre-fill subject + greeting when the reply panel opens
+  function openReply() {
+    const subject =
+      sub.type === "contact"
+        ? `Re: ${sub.subject ?? "Votre message"}`
+        : "Confirmation de votre rendez-vous";
+    const greeting = `Bonjour ${sub.name.split(" ")[0]},\n\n`;
+    setReplySubject(subject);
+    setReplyText(greeting);
+    setReplyError(null);
+    setReplyOpen(true);
+    // Focus textarea on next tick
+    setTimeout(() => textareaRef.current?.focus(), 80);
+  }
+
+  async function handleSend() {
+    if (!replyText.trim()) return;
+    setReplying(true);
+    setReplyError(null);
+    try {
+      const { error } = await supabase.functions.invoke("send-confirmation", {
+        body: {
+          adminReply: true,
+          to: sub.email,
+          recipientName: sub.name,
+          subject: replySubject,
+          replyText,
+        },
+      });
+      if (error) throw error;
+      setReplyDone(true);
+      setReplyOpen(false);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Erreur lors de l'envoi.";
+      setReplyError(msg);
+    } finally {
+      setReplying(false);
+    }
+  }
+
+  async function handleArchive() {
+    if (!window.confirm("Supprimer ce message définitivement ?")) return;
+    const { error } = await supabase.from("submissions").delete().eq("id", sub.id);
+    if (error) {
+      alert("Erreur lors de la suppression : " + error.message);
+      return;
+    }
+    onArchived?.(sub.id);
+  }
+
   return (
     <motion.div
       key={sub.id}
@@ -245,11 +296,11 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
         </div>
 
         {/* Expéditeur */}
-        <h2 className="text-xl font-bold text-slate-800 mb-1">{sub.name}</h2>
+        <h2 className="text-xl font-bold text-slate-800 mb-1 truncate">{sub.name}</h2>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
           <a
             href={`mailto:${sub.email}`}
-            className="hover:underline"
+            className="hover:underline truncate"
             style={{ color: GOLD }}
           >
             {sub.email}
@@ -259,8 +310,8 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
 
         {/* Actions */}
         <div className="flex flex-wrap gap-3 mt-4">
-          <a
-            href={buildMailto(sub)}
+          <button
+            onClick={openReply}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: GOLD }}
           >
@@ -268,11 +319,11 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 10l9-7 9 7v11a1 1 0 01-1 1H4a1 1 0 01-1-1V10z" />
               <polyline stroke="currentColor" strokeWidth={2} points="9,22 9,12 15,12 15,22" />
             </svg>
-            Répondre par email
-          </a>
+            Répondre
+          </button>
           <button
+            onClick={handleArchive}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors"
-            disabled
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8" />
@@ -280,6 +331,103 @@ const MessageDetail = ({ sub, onBack }: DetailProps) => {
             Archiver
           </button>
         </div>
+
+        {/* Reply success banner */}
+        <AnimatePresence>
+          {replyDone && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              className="mt-4 flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-4 py-2"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Email envoyé ✓
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Inline reply panel */}
+        <AnimatePresence>
+          {replyOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                {/* Subject */}
+                <div>
+                  <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 mb-1 block">
+                    Objet
+                  </label>
+                  <input
+                    type="text"
+                    value={replySubject}
+                    onChange={(e) => setReplySubject(e.target.value)}
+                    className="w-full text-sm rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-0"
+                    style={{ "--tw-ring-color": GOLD } as React.CSSProperties}
+                  />
+                </div>
+
+                {/* Body */}
+                <div>
+                  <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 mb-1 block">
+                    Message
+                  </label>
+                  <textarea
+                    ref={textareaRef}
+                    rows={6}
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    className="w-full text-sm rounded-lg border border-slate-200 bg-white px-3 py-2 text-slate-700 resize-y focus:outline-none focus:ring-2 focus:ring-offset-0"
+                    style={{ "--tw-ring-color": GOLD } as React.CSSProperties}
+                  />
+                </div>
+
+                {/* Error */}
+                {replyError && (
+                  <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                    {replyError}
+                  </p>
+                )}
+
+                {/* Buttons */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleSend}
+                    disabled={replying || !replyText.trim()}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: GOLD }}
+                  >
+                    {replying ? (
+                      <>
+                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                        </svg>
+                        Envoi…
+                      </>
+                    ) : (
+                      "Envoyer"
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setReplyOpen(false)}
+                    disabled={replying}
+                    className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 text-slate-500 hover:bg-slate-100 transition-colors disabled:opacity-50"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Body */}
@@ -478,6 +626,13 @@ export default function AdminMessages() {
     setSelected((prev) => (prev?.id === s.id ? { ...prev, read: true } : prev));
   }
 
+  // ── Remove archived submission from local state ────────────────────────────
+  function handleArchived(id: string) {
+    setSubmissions((prev) => prev.filter((s) => s.id !== id));
+    setSelected(null);
+    setMobileView("list");
+  }
+
   // ── Helpers ────────────────────────────────────────────────────────────────
   const handleSelect = (s: Submission) => {
     markRead(s);
@@ -501,40 +656,40 @@ export default function AdminMessages() {
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col h-screen bg-white font-sans">
+    <div className="flex flex-col bg-white font-sans h-full min-h-[calc(100svh-3.5rem-5rem)] lg:min-h-0 lg:h-screen">
       {/* ── Header ─────────────────────────────────────────────────────────── */}
       <header
         className="flex-shrink-0 px-6 pt-8 pb-4 border-b border-slate-100"
         style={{ backgroundColor: "#FAFAFA" }}
       >
         <div className="flex flex-wrap items-center gap-3 mb-4">
-          <h1 className="text-2xl font-bold" style={{ color: NAVY }}>
+          <h1 className="text-2xl font-bold truncate" style={{ color: NAVY }}>
             Messages
           </h1>
           {!loading && submissions.length > 0 && (
             <span
-              className="text-xs font-semibold px-2.5 py-1 rounded-full text-white"
+              className="text-xs font-semibold px-2.5 py-1 rounded-full text-white flex-shrink-0"
               style={{ backgroundColor: GOLD }}
             >
               {submissions.length} message{submissions.length > 1 ? "s" : ""}
             </span>
           )}
           {!loading && unreadCount > 0 && (
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-500 text-white">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-500 text-white flex-shrink-0">
               {unreadCount} non lu{unreadCount > 1 ? "s" : ""}
             </span>
           )}
         </div>
 
-        {/* Filter pills */}
-        <div className="flex gap-2 flex-wrap">
+        {/* Filter pills — horizontal scroll on mobile */}
+        <div className="flex gap-2 overflow-x-auto pb-1 -mb-1 scrollbar-none">
           {FILTERS.map((f) => {
             const active = filter === f.key;
             return (
               <button
                 key={f.key}
                 onClick={() => setFilter(f.key)}
-                className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all flex-shrink-0"
                 style={
                   active
                     ? { backgroundColor: NAVY, color: "#fff" }
@@ -602,6 +757,7 @@ export default function AdminMessages() {
                 key={selected.id}
                 sub={selected}
                 onBack={handleBack}
+                onArchived={handleArchived}
               />
             ) : (
               <motion.div
