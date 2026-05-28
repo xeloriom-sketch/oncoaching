@@ -12,6 +12,15 @@ header('Access-Control-Allow-Headers: Content-Type');
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit; }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST')    { http_response_code(405); echo json_encode(['error' => 'Method not allowed']); exit; }
 
+// ── Resend config ──────────────────────────────────────────────────────────────
+$configFile = __DIR__ . '/resend-config.php';
+if (file_exists($configFile)) {
+    require_once $configFile;
+} else {
+    define('RESEND_API_KEY', '');
+    define('RESEND_FROM',    'ON Coaching <noreply@oncoaching.fr>');
+}
+
 // ── Lecture du body JSON ───────────────────────────────────────────────────────
 $body = json_decode(file_get_contents('php://input'), true);
 if (!$body) { http_response_code(400); echo json_encode(['error' => 'Invalid JSON']); exit; }
@@ -69,6 +78,32 @@ if ($date) {
             $dateFormatted = date('d/m/Y', $ts);
         }
     }
+}
+
+// ── Resend API helper ──────────────────────────────────────────────────────────
+function resend_send($to, $subject, $html) {
+    if (!defined('RESEND_API_KEY') || !RESEND_API_KEY) return false;
+    $payload = json_encode([
+        'from'    => RESEND_FROM,
+        'to'      => is_array($to) ? $to : [$to],
+        'subject' => $subject,
+        'html'    => $html,
+    ]);
+    $ch = curl_init('https://api.resend.com/emails');
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS     => $payload,
+        CURLOPT_HTTPHEADER     => [
+            'Authorization: Bearer ' . RESEND_API_KEY,
+            'Content-Type: application/json',
+        ],
+        CURLOPT_TIMEOUT        => 15,
+    ]);
+    $resp     = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return $httpCode >= 200 && $httpCode < 300;
 }
 
 // ── Helpers HTML ───────────────────────────────────────────────────────────────
@@ -302,20 +337,13 @@ if ($type === 'rdv') {
     $htmlBody    = buildContactEmail($firstName, $name, $email, $phone, $serviceLabel, $subject, $message);
 }
 
-$headers  = "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-$headers .= "From: " . BRAND_NAME . " <" . BRAND_EMAIL . ">\r\n";
-$headers .= "Reply-To: " . BRAND_EMAIL . "\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-
-$sent = mail($email, $mailSubject, $htmlBody, $headers);
+// Email de confirmation au client
+$sent = resend_send($email, $mailSubject, $htmlBody);
 
 // Email de notification à l'admin
 $adminSubject = ($type === 'rdv' ? '📅 Nouveau RDV' : '💬 Nouveau message') . ' — ' . $name;
 $adminBody    = buildAdminNotifEmail($type, $name, $email, $phone, $serviceLabel, $subject, $message, $dateFormatted, $timeLabel);
-$adminHeaders = "MIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n"
-              . "From: ON Coaching <no-reply@oncoaching.fr>\r\n";
-mail(BRAND_EMAIL, $adminSubject, $adminBody, $adminHeaders);
+resend_send(BRAND_EMAIL, $adminSubject, $adminBody);
 
 // Notification push admin
 $pushPayload = json_encode([

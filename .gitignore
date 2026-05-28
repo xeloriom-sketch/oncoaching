@@ -28,6 +28,7 @@ vite.config.ts.timestamp-*
 .env
 .env.local
 
-# Clés privées — ne jamais commiter
+# Clés privées et config sensible — ne jamais commiter
 *.pem
 vapid-private.pem
+public/api/resend-config.php

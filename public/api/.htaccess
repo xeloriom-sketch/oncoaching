@@ -1,4 +1,7 @@
-# Bloquer l'accès direct aux clés privées
+# Bloquer l'accès direct aux fichiers sensibles
 <FilesMatch "\.(pem|key|crt)$">
+    Require all denied
+</FilesMatch>
+<FilesMatch "^resend-config\.php$">
     Require all denied
 </FilesMatch>
