@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 import { Toaster }                    from "@/components/ui/toaster";
 import { Toaster as Sonner }          from "@/components/ui/sonner";
@@ -31,6 +31,7 @@ const AdminContent       = lazy(() => import("./pages/admin/AdminContent"));
 const AdminContentEditor = lazy(() => import("./pages/admin/AdminContentEditor"));
 const AdminMessages      = lazy(() => import("./pages/admin/AdminMessages"));
 const AdminSettings      = lazy(() => import("./pages/admin/AdminSettings"));
+const AdminVisualEditor  = lazy(() => import("./pages/admin/AdminVisualEditor"));
 
 // ─── Query client (content cached for entire session) ─────────────────────────
 const queryClient = new QueryClient({
@@ -101,6 +102,8 @@ const App = () => {
               <Route path="/partenaires"            element={<Partenaires />} />
               {/* ── Admin routes ──────────────────────────────────── */}
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/visual" element={<Navigate to="/admin/visual/index" replace />} />
+              <Route path="/admin/visual/:pageKey" element={<AdminVisualEditor />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="content" element={<AdminContent />} />

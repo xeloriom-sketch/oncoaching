@@ -7,6 +7,7 @@ import {
   Settings,
   LogOut,
   Loader2,
+  Eye,
 } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { LogoMark } from "@/components/Logo";
@@ -15,10 +16,11 @@ import { supabase } from "@/lib/supabase";
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { icon: LayoutDashboard, label: "Dashboard",   path: "/admin"           },
-  { icon: FileText,        label: "Contenu",     path: "/admin/content"   },
-  { icon: Inbox,           label: "Messages",    path: "/admin/messages"  },
-  { icon: Settings,        label: "Paramètres",  path: "/admin/settings"  },
+  { icon: LayoutDashboard, label: "Dashboard",       path: "/admin"                },
+  { icon: Eye,             label: "Éditeur visuel",  path: "/admin/visual"         },
+  { icon: FileText,        label: "Contenu",         path: "/admin/content"        },
+  { icon: Inbox,           label: "Messages",        path: "/admin/messages"       },
+  { icon: Settings,        label: "Paramètres",      path: "/admin/settings"       },
 ];
 
 // ─── FullScreenSpinner ────────────────────────────────────────────────────────
