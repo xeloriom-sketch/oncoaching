@@ -11,6 +11,7 @@ import {
   X,
   Bell,
   Loader2,
+  Lock,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/lib/adminAuth";
@@ -469,6 +470,110 @@ function PushSection() {
   );
 }
 
+// ── Change Password Section ───────────────────────────────────────────────────
+
+function ChangePasswordSection() {
+  const { toast } = useToast();
+  const [pwForm, setPwForm] = useState({ newPw: '', confirmPw: '' });
+  const [pwLoading, setPwLoading] = useState(false);
+  const [pwError, setPwError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwError('');
+
+    if (pwForm.newPw.length < 8) {
+      setPwError('Le mot de passe doit contenir au moins 8 caractères.');
+      return;
+    }
+    if (pwForm.newPw !== pwForm.confirmPw) {
+      setPwError('Les mots de passe ne correspondent pas.');
+      return;
+    }
+
+    setPwLoading(true);
+    const { error } = await supabase.auth.updateUser({ password: pwForm.newPw });
+    setPwLoading(false);
+
+    if (error) {
+      setPwError(error.message);
+    } else {
+      setPwForm({ newPw: '', confirmPw: '' });
+      toast({ title: 'Mot de passe mis à jour', description: 'Votre mot de passe a été modifié avec succès.' });
+    }
+  };
+
+  return (
+    <Section delay={0.09}>
+      <SectionTitle>
+        <span className="flex items-center gap-2">
+          <Lock className="w-4 h-4" style={{ color: GOLD }} />
+          Changer le mot de passe
+        </span>
+      </SectionTitle>
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
+        {/* Nouveau mot de passe */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            Nouveau mot de passe
+          </label>
+          <input
+            type="password"
+            value={pwForm.newPw}
+            onChange={(e) => setPwForm((f) => ({ ...f, newPw: e.target.value }))}
+            placeholder="••••••••"
+            autoComplete="new-password"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4903E]/30 focus:border-[#C4903E]"
+          />
+        </div>
+
+        {/* Confirmer le mot de passe */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            Confirmer le mot de passe
+          </label>
+          <input
+            type="password"
+            value={pwForm.confirmPw}
+            onChange={(e) => setPwForm((f) => ({ ...f, confirmPw: e.target.value }))}
+            placeholder="••••••••"
+            autoComplete="new-password"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4903E]/30 focus:border-[#C4903E]"
+          />
+        </div>
+
+        {/* Inline error */}
+        {pwError && (
+          <p className="text-sm text-red-600 font-medium">{pwError}</p>
+        )}
+
+        {/* Submit */}
+        <motion.button
+          type="submit"
+          disabled={pwLoading}
+          whileHover={pwLoading ? {} : { scale: 1.02, transition: { type: 'spring', stiffness: 450, damping: 20 } }}
+          whileTap={pwLoading ? {} : { scale: 0.97 }}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-opacity disabled:opacity-60"
+          style={{ background: GOLD }}
+        >
+          {pwLoading ? (
+            <>
+              <span
+                className="w-4 h-4 border-2 rounded-full animate-spin"
+                style={{ borderColor: 'white', borderTopColor: 'transparent' }}
+              />
+              Mise à jour…
+            </>
+          ) : (
+            'Mettre à jour'
+          )}
+        </motion.button>
+      </form>
+    </Section>
+  );
+}
+
 // ── Main Component ────────────────────────────────────────────────────────────
 
 const AdminSettings = () => {
@@ -497,6 +602,7 @@ const AdminSettings = () => {
 
         {/* Sections */}
         <CompteSection />
+        <ChangePasswordSection />
         <InitContentSection />
         <InfoSection />
         <PushSection />

@@ -1,11 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Save, Loader2, AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Save,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+  RefreshCw,
+  Search,
+  X,
+} from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { getPageDef } from "@/lib/contentSchema";
 import type { FieldDef } from "@/lib/contentSchema";
 import { useToast } from "@/hooks/use-toast";
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+interface Props {
+  /** When used inline (desktop two-panel), pass pageKey directly. Falls back to URL param. */
+  pageKey?: string;
+}
 
 // ─── Flatten helpers ──────────────────────────────────────────────────────────
 function flattenJson(obj: unknown, prefix = ""): Record<string, string> {
@@ -43,11 +59,9 @@ function unflattenJson(
   fields: Record<string, string>,
   original: unknown
 ): unknown {
-  // Deep clone the original so we don't mutate it
   const result: unknown = JSON.parse(JSON.stringify(original ?? {}));
 
   for (const [dotPath, value] of Object.entries(fields)) {
-    // Skip virtual keys used for JSON editing
     if (dotPath.endsWith(".__json__")) continue;
 
     const parts = dotPath.split(".");
@@ -111,7 +125,8 @@ function renderField(
   fieldDef: FieldDef,
   fields: Record<string, string>,
   originalFields: Record<string, string>,
-  handleChange: (key: string, value: string) => void
+  handleChange: (key: string, value: string) => void,
+  isShortField: boolean
 ): React.ReactNode {
   const value = fields[fieldDef.key] ?? "";
   const originalValue = originalFields[fieldDef.key] ?? "";
@@ -127,25 +142,24 @@ function renderField(
 
     if (subKeys.length === 0) {
       return (
-        <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+        <div key={fieldDef.key} className="col-span-full px-6 py-5 space-y-2">
           <label className="text-sm font-medium text-slate-700">{fieldDef.label}</label>
           <p className="text-xs text-slate-400 italic">Aucun élément (page non seedée ?)</p>
         </div>
       );
     }
 
-    // Group sub-keys by their first numeric index
     const groups = new Map<string, string[]>();
     for (const k of subKeys) {
-      const rel = k.slice(prefix.length); // e.g. "0.value", "0.label", "1.q"
+      const rel = k.slice(prefix.length);
       const parts = rel.split(".");
-      const groupKey = parts[0]; // "0", "1", "2"...
+      const groupKey = parts[0];
       if (!groups.has(groupKey)) groups.set(groupKey, []);
       groups.get(groupKey)!.push(k);
     }
 
     return (
-      <div key={fieldDef.key} className="px-6 py-5 space-y-4">
+      <div key={fieldDef.key} className="col-span-full px-6 py-5 space-y-4">
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-slate-700">{fieldDef.label}</label>
           <span className="text-xs text-slate-400 bg-slate-100 rounded-full px-2 py-0.5">
@@ -162,7 +176,6 @@ function renderField(
                 {groupKeys.map(subKey => {
                   const rel = subKey.slice(prefix.length);
                   const subParts = rel.split(".");
-                  // Label: the last non-numeric segment
                   const labelPart = subParts.filter(p => isNaN(Number(p))).pop() ?? subParts[subParts.length - 1];
                   const subLabel = labelPart
                     .replace(/([A-Z])/g, " $1")
@@ -215,7 +228,7 @@ function renderField(
     const jsonVal = fields[virtualKey] ?? "";
     const jsonModified = jsonVal !== (originalFields[virtualKey] ?? "");
     return (
-      <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+      <div key={fieldDef.key} className="col-span-full px-6 py-5 space-y-2">
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium text-slate-700">{fieldDef.label}</label>
           {jsonModified && <span className="inline-block w-2 h-2 rounded-full bg-[#C4903E]" />}
@@ -232,8 +245,12 @@ function renderField(
   }
 
   // ── Default types ───────────────────────────────────────────────────────────
+  // Short text fields participate in the 2-column grid; textarea/long are full-width
+  const isFullWidth = fieldDef.type === "long" || fieldDef.type === "textarea" || isReadonly;
+  const wrapperClass = isFullWidth ? "col-span-full px-6 py-5 space-y-2" : "px-6 py-5 space-y-2";
+
   return (
-    <div key={fieldDef.key} className="px-6 py-5 space-y-2">
+    <div key={fieldDef.key} className={wrapperClass}>
       {/* Label row */}
       <div className="flex items-center gap-2">
         <label
@@ -283,13 +300,21 @@ function renderField(
   );
 }
 
+// ─── Auto-save status type ─────────────────────────────────────────────────────
+type AutoSaveStatus = "idle" | "pending" | "saved";
+
 // ─── AdminContentEditor ───────────────────────────────────────────────────────
-export default function AdminContentEditor() {
-  const { page = "" } = useParams<{ page: string }>();
+export default function AdminContentEditor({ pageKey: propKey }: Props = {}) {
+  const { page: paramKey } = useParams<{ page: string }>();
+  const pageKey = propKey ?? paramKey ?? "";
+
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const pageDef = getPageDef(page);
+  // Whether this component is used inline (no back navigation needed)
+  const isInline = propKey !== undefined;
+
+  const pageDef = getPageDef(pageKey);
 
   // ── State ──────────────────────────────────────────────────────────────────
   const [fields, setFields] = useState<Record<string, string>>({});
@@ -298,12 +323,14 @@ export default function AdminContentEditor() {
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const [autoSaveStatus, setAutoSaveStatus] = useState<AutoSaveStatus>("idle");
   const [loading, setLoading] = useState(true);
   const [notSeeded, setNotSeeded] = useState(false);
   const [initializing, setInitializing] = useState(false);
+  const [search, setSearch] = useState("");
 
-  const successTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoSaveFadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── Build flat state including virtual JSON keys ────────────────────────────
   function buildFlatWithJsonKeys(
@@ -311,7 +338,6 @@ export default function AdminContentEditor() {
     currentPageDef: NonNullable<ReturnType<typeof getPageDef>>
   ): Record<string, string> {
     const flat = flattenJson(content);
-    // Add virtual __json__ keys for json-type fields
     for (const fieldDef of currentPageDef.fields) {
       if (fieldDef.type === "json") {
         const nested = content[fieldDef.key];
@@ -323,9 +349,71 @@ export default function AdminContentEditor() {
     return flat;
   }
 
-  // ── Fetch on mount ─────────────────────────────────────────────────────────
+  // ── Core save logic (shared by manual + auto-save) ─────────────────────────
+  const performSave = useCallback(
+    async (
+      currentFields: Record<string, string>,
+      currentOriginalJson: unknown,
+      currentPageDef: NonNullable<ReturnType<typeof getPageDef>>,
+      currentPageKey: string
+    ): Promise<boolean> => {
+      const processedFields = { ...currentFields };
+      for (const fieldDef of currentPageDef.fields) {
+        if (fieldDef.type === "json") {
+          const virtualKey = fieldDef.key + ".__json__";
+          if (processedFields[virtualKey] !== undefined) {
+            try {
+              const parsed = JSON.parse(processedFields[virtualKey]);
+              delete processedFields[virtualKey];
+              const flattened = flattenJson(parsed, fieldDef.key);
+              Object.assign(processedFields, flattened);
+            } catch {
+              const msg = `Le champ "${fieldDef.label}" contient du JSON invalide.`;
+              setError(msg);
+              toast({ title: "JSON invalide", description: msg, variant: "destructive" });
+              return false;
+            }
+          }
+        }
+      }
+
+      const updated = unflattenJson(processedFields, currentOriginalJson);
+
+      const { error: saveError } = await supabase
+        .from("page_content")
+        .update({ content: updated as Record<string, unknown> })
+        .eq("page_key", currentPageKey);
+
+      if (saveError) {
+        const msg = `Erreur lors de la sauvegarde : ${saveError.message}`;
+        setError(msg);
+        toast({ title: "Erreur", description: msg, variant: "destructive" });
+        return false;
+      }
+
+      setOriginalJson(updated);
+      const newFlat = buildFlatWithJsonKeys(
+        updated as Record<string, unknown>,
+        currentPageDef
+      );
+      setOriginalFields(newFlat);
+      setFields(newFlat);
+      setDirty(false);
+      return true;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [toast]
+  );
+
+  // ── Fetch on pageKey change ────────────────────────────────────────────────
   useEffect(() => {
     if (!pageDef) { setLoading(false); return; }
+
+    // Reset search when switching pages
+    setSearch("");
+    setAutoSaveStatus("idle");
+    setDirty(false);
+    setError(null);
 
     async function fetchContent() {
       setLoading(true);
@@ -335,11 +423,10 @@ export default function AdminContentEditor() {
       const { data, error: fetchError } = await supabase
         .from("page_content")
         .select("content")
-        .eq("page_key", page)
+        .eq("page_key", pageKey)
         .single();
 
       if (fetchError) {
-        // PGRST116 = no rows found
         if (fetchError.code === "PGRST116") {
           setNotSeeded(true);
         } else {
@@ -359,7 +446,7 @@ export default function AdminContentEditor() {
 
     fetchContent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, pageDef]);
+  }, [pageKey]);
 
   // ── Initialize page from JSON ──────────────────────────────────────────────
   async function handleInitialize() {
@@ -368,7 +455,7 @@ export default function AdminContentEditor() {
 
     try {
       const json = await fetch(
-        `${import.meta.env.BASE_URL}content/${page}.json`
+        `${import.meta.env.BASE_URL}content/${pageKey}.json`
       ).then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json() as Promise<Record<string, unknown>>;
@@ -376,7 +463,7 @@ export default function AdminContentEditor() {
 
       const { error: upsertError } = await supabase
         .from("page_content")
-        .upsert({ page_key: page, content: json });
+        .upsert({ page_key: pageKey, content: json });
 
       if (upsertError) throw new Error(upsertError.message);
 
@@ -399,85 +486,79 @@ export default function AdminContentEditor() {
     }
   }
 
-  // ── Field change ───────────────────────────────────────────────────────────
+  // ── Field change + auto-save debounce ─────────────────────────────────────
   function handleChange(key: string, value: string) {
     setFields((prev) => ({ ...prev, [key]: value }));
     setDirty(true);
-    setSuccess(false);
+    setAutoSaveStatus("pending");
+
+    // Clear previous timers
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    if (autoSaveFadeTimer.current) clearTimeout(autoSaveFadeTimer.current);
+
+    // Debounce auto-save at 1.5 s
+    autoSaveTimer.current = setTimeout(async () => {
+      if (!pageDef) return;
+      // Read fresh state via functional updater pattern — capture snapshot
+      setFields((latestFields) => {
+        // Fire async save without blocking state update
+        (async () => {
+          const ok = await performSave(latestFields, originalJson, pageDef, pageKey);
+          if (ok) {
+            setAutoSaveStatus("saved");
+            autoSaveFadeTimer.current = setTimeout(
+              () => setAutoSaveStatus("idle"),
+              2500
+            );
+          } else {
+            setAutoSaveStatus("idle");
+          }
+        })();
+        return latestFields; // no-op state change
+      });
+    }, 1500);
   }
 
-  // ── Save ───────────────────────────────────────────────────────────────────
+  // ── Manual save ───────────────────────────────────────────────────────────
   async function handleSave() {
-    if (!dirty || saving) return;
+    if (!dirty || saving || !pageDef) return;
+
+    // Cancel pending auto-save
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    if (autoSaveFadeTimer.current) clearTimeout(autoSaveFadeTimer.current);
 
     setSaving(true);
     setError(null);
 
-    // Process fields: handle virtual __json__ keys for json-type fields
-    const processedFields = { ...fields };
-    if (pageDef) {
-      for (const fieldDef of pageDef.fields) {
-        if (fieldDef.type === "json") {
-          const virtualKey = fieldDef.key + ".__json__";
-          if (processedFields[virtualKey] !== undefined) {
-            try {
-              const parsed = JSON.parse(processedFields[virtualKey]);
-              // Remove virtual key, then flatten the parsed JSON back into real keys
-              delete processedFields[virtualKey];
-              const flattened = flattenJson(parsed, fieldDef.key);
-              Object.assign(processedFields, flattened);
-            } catch {
-              const msg = `Le champ "${fieldDef.label}" contient du JSON invalide.`;
-              setError(msg);
-              toast({ title: "JSON invalide", description: msg, variant: "destructive" });
-              setSaving(false);
-              return;
-            }
-          }
-        }
-      }
+    const ok = await performSave(fields, originalJson, pageDef, pageKey);
+    if (ok) {
+      setAutoSaveStatus("saved");
+      toast({
+        title: "Contenu sauvegardé",
+        description: `La page "${pageDef?.label}" a été mise à jour.`,
+      });
+      autoSaveFadeTimer.current = setTimeout(
+        () => setAutoSaveStatus("idle"),
+        3000
+      );
     }
-
-    const updated = unflattenJson(processedFields, originalJson);
-
-    const { error: saveError } = await supabase
-      .from("page_content")
-      .update({ content: updated as Record<string, unknown> })
-      .eq("page_key", page);
-
-    if (saveError) {
-      const msg = `Erreur lors de la sauvegarde : ${saveError.message}`;
-      setError(msg);
-      toast({ title: "Erreur", description: msg, variant: "destructive" });
-      setSaving(false);
-      return;
-    }
-
-    setOriginalJson(updated);
-    const newFlat = buildFlatWithJsonKeys(
-      updated as Record<string, unknown>,
-      pageDef!
-    );
-    setOriginalFields(newFlat);
-    setFields(newFlat);
-    setDirty(false);
-    setSuccess(true);
-    toast({
-      title: "Contenu sauvegardé",
-      description: `La page "${pageDef?.label}" a été mise à jour.`,
-    });
-    if (successTimer.current) clearTimeout(successTimer.current);
-    successTimer.current = setTimeout(() => setSuccess(false), 3000);
     setSaving(false);
   }
 
   // ── 404 ────────────────────────────────────────────────────────────────────
   if (!pageDef && !loading) {
+    if (isInline) {
+      return (
+        <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
+          Page introuvable : « {pageKey} »
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen bg-[#F4F1EC] flex items-center justify-center">
         <div className="text-center space-y-3">
           <p className="text-[#1C3A52] font-semibold text-lg">Page introuvable</p>
-          <p className="text-slate-500 text-sm">La clé « {page} » n'existe pas dans le schéma.</p>
+          <p className="text-slate-500 text-sm">La clé « {pageKey} » n'existe pas dans le schéma.</p>
           <button
             onClick={() => navigate("/admin/content")}
             className="mt-2 px-5 py-2 rounded-full bg-[#1C3A52] text-white text-sm hover:bg-[#16304a] transition-colors"
@@ -489,10 +570,15 @@ export default function AdminContentEditor() {
     );
   }
 
-  // ── Group fields by section ────────────────────────────────────────────────
+  // ── Group fields by section + apply search filter ─────────────────────────
   const sections: Map<string, FieldDef[]> = new Map();
   if (pageDef) {
+    const q = search.trim().toLowerCase();
     for (const field of pageDef.fields) {
+      // Filter by search query (key or label)
+      if (q && !field.key.toLowerCase().includes(q) && !field.label.toLowerCase().includes(q)) {
+        continue;
+      }
       const sectionKey = field.section ?? "Général";
       if (!sections.has(sectionKey)) sections.set(sectionKey, []);
       sections.get(sectionKey)!.push(field);
@@ -501,26 +587,38 @@ export default function AdminContentEditor() {
 
   const sectionEntries = Array.from(sections.entries());
 
+  // ── Determine if section has short fields only → enable 2-col grid ─────────
+  function isSectionGridable(sectionFields: FieldDef[]): boolean {
+    return sectionFields.some(
+      (f) =>
+        f.type !== "long" &&
+        f.type !== "textarea" &&
+        f.type !== "json" &&
+        f.type !== "array" &&
+        f.type !== "readonly"
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
-      {/* ── Sticky header ─────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-10 bg-[#F4F1EC] border-b border-slate-200 px-4 sm:px-6 py-3">
-        <div className="max-w-4xl mx-auto flex items-center gap-3 flex-wrap">
-          {/* Back */}
-          <button
-            onClick={() => navigate("/admin/content")}
-            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#1C3A52] transition-colors shrink-0"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline">Contenu</span>
-          </button>
+    <div className={isInline ? "flex flex-col" : "min-h-screen bg-[#F4F1EC]"}>
+      {/* ── Sticky save bar ────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-slate-100 px-6 py-3 flex items-center justify-between gap-3">
+        {/* Left: back button (standalone only) + title */}
+        <div className="flex items-center gap-3 min-w-0">
+          {!isInline && (
+            <button
+              onClick={() => navigate("/admin/content")}
+              className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#1C3A52] transition-colors shrink-0"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Contenu</span>
+            </button>
+          )}
 
-          {/* Title */}
-          <h1 className="text-base font-bold text-[#1C3A52] flex-1 min-w-0 truncate">
-            Éditer — {pageDef?.label ?? "…"}
-          </h1>
+          <h2 className="text-sm font-bold text-[#1C3A52] truncate">
+            {pageDef?.label ?? "…"}
+          </h2>
 
-          {/* External link */}
           {pageDef && (
             <a
               href={pageDef.route}
@@ -528,39 +626,69 @@ export default function AdminContentEditor() {
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center gap-1 text-xs text-slate-400 hover:text-[#1C3A52] transition-colors shrink-0"
             >
-              Voir la page
               <ExternalLink className="w-3 h-3" />
             </a>
           )}
+        </div>
 
-          {/* Success indicator */}
-          {success && (
-            <span className="inline-flex items-center gap-1 text-xs text-emerald-600 shrink-0">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              Sauvegardé
-            </span>
-          )}
+        {/* Right: auto-save indicator + save button */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Auto-save status */}
+          <AnimatePresence mode="wait">
+            {autoSaveStatus === "pending" && (
+              <motion.span
+                key="pending"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-xs text-slate-400 hidden sm:inline"
+              >
+                Modification en cours…
+              </motion.span>
+            )}
+            {autoSaveStatus === "saved" && (
+              <motion.span
+                key="saved"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="inline-flex items-center gap-1 text-xs text-emerald-600"
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Sauvegardé ✓
+              </motion.span>
+            )}
+          </AnimatePresence>
 
-          {/* Save button */}
+          {/* Save button — only shown when not auto-saved */}
           {!notSeeded && (
             <button
               onClick={handleSave}
               disabled={!dirty || saving}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#C4903E] text-white text-sm font-medium hover:bg-[#b07e34] disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+              className="relative inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#C4903E] text-white text-sm font-medium hover:bg-[#b07e34] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
+              {/* Unsaved yellow dot */}
+              {dirty && !saving && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-yellow-400 border-2 border-white" />
+              )}
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <Save className="w-4 h-4" />
               )}
-              <span className="hidden sm:inline">{saving ? "Sauvegarde…" : "Sauvegarder"}</span>
+              <span>
+                {saving ? "Sauvegarde…" : dirty ? "Sauvegarder*" : "Sauvegarder"}
+              </span>
             </button>
           )}
         </div>
       </header>
 
       {/* ── Body ──────────────────────────────────────────────────────────── */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+      <main className={[
+        "px-4 sm:px-6 py-6 space-y-6",
+        !isInline && "max-w-4xl mx-auto",
+      ].filter(Boolean).join(" ")}>
         {/* Error banner */}
         {error && (
           <div className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
@@ -603,6 +731,28 @@ export default function AdminContentEditor() {
           </motion.div>
         )}
 
+        {/* ── Field search ──────────────────────────────────────────────────── */}
+        {!loading && !notSeeded && pageDef && (
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher un champ…"
+              className="w-full h-10 rounded-xl border border-slate-200 bg-white pl-9 pr-9 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C4903E]/30 focus:border-[#C4903E] transition-colors"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Loading skeletons */}
         {loading && (
           <div className="space-y-6">
@@ -616,33 +766,52 @@ export default function AdminContentEditor() {
           </div>
         )}
 
-        {/* Sections */}
-        {!loading && !notSeeded && sectionEntries.map(([sectionName, sectionFields], sIdx) => (
-          <motion.div
-            key={sectionName}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: sIdx * 0.07, ease: "easeOut" }}
-            className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
-          >
-            {/* Section header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
-              <span className="font-semibold text-[#1C3A52] text-sm">
-                {sectionName}
-              </span>
-              <span className="text-xs text-slate-400 bg-white border border-slate-200 rounded-full px-2.5 py-0.5">
-                {sectionFields.length} champ{sectionFields.length > 1 ? "s" : ""}
-              </span>
-            </div>
+        {/* No results from search */}
+        {!loading && !notSeeded && search && sectionEntries.length === 0 && (
+          <div className="text-center py-12 text-slate-400 text-sm">
+            Aucun champ ne correspond à « {search} »
+          </div>
+        )}
 
-            {/* Fields */}
-            <div className="divide-y divide-slate-100">
-              {sectionFields.map((fieldDef) =>
-                renderField(fieldDef, fields, originalFields, handleChange)
-              )}
-            </div>
-          </motion.div>
-        ))}
+        {/* Sections */}
+        {!loading && !notSeeded && sectionEntries.map(([sectionName, sectionFields], sIdx) => {
+          const gridable = isSectionGridable(sectionFields);
+          return (
+            <motion.div
+              key={sectionName}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: sIdx * 0.07, ease: "easeOut" }}
+              className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
+            >
+              {/* Section header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
+                <span className="font-semibold text-[#1C3A52] text-sm">
+                  {sectionName}
+                </span>
+                <span className="text-xs text-slate-400 bg-white border border-slate-200 rounded-full px-2.5 py-0.5">
+                  {sectionFields.length} champ{sectionFields.length > 1 ? "s" : ""}
+                </span>
+              </div>
+
+              {/* Fields — 2-col grid for short fields on desktop */}
+              <div className={[
+                gridable ? "grid grid-cols-1 md:grid-cols-2" : "flex flex-col",
+                "divide-y divide-slate-100",
+              ].join(" ")}>
+                {sectionFields.map((fieldDef) => {
+                  const isShort =
+                    fieldDef.type !== "long" &&
+                    fieldDef.type !== "textarea" &&
+                    fieldDef.type !== "json" &&
+                    fieldDef.type !== "array" &&
+                    fieldDef.type !== "readonly";
+                  return renderField(fieldDef, fields, originalFields, handleChange, isShort);
+                })}
+              </div>
+            </motion.div>
+          );
+        })}
       </main>
     </div>
   );
