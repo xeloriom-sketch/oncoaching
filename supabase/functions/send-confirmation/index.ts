@@ -1,331 +1,417 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// ON Coaching — Edge Function : envoi email de confirmation
-// Déclenchée par un Database Webhook sur INSERT dans submissions
-// Variables d'environnement requises :
-//   RESEND_API_KEY  — clé API Resend (https://resend.com)
-//   FROM_EMAIL      — ex: "ON Coaching <noreply@oncoaching.fr>"
+// ON Coaching — Edge Function : email + push après soumission formulaire
+// Déclenchée par Database Webhook (INSERT sur submissions)
+//
+// Secrets Supabase requis :
+//   RESEND_API_KEY      — clé API Resend
+//   VAPID_PRIVATE_KEY   — clé privée VAPID base64url (32 bytes)
+//   VAPID_PUBLIC_KEY    — clé publique VAPID base64url (65 bytes, point non compressé)
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface Submission {
-  id: string;
-  type: "contact" | "rdv";
-  name: string;
-  email: string;
-  phone?: string;
-  service?: string;
-  subject?: string;
-  message?: string;
-  preferred_date?: string;
-  preferred_time?: string;
-  created_at: string;
-}
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// ── Config ────────────────────────────────────────────────────────────────────
 
 const BRAND = {
   name:    "ON Coaching",
-  color:   "#C4903E",
+  gold:    "#C4903E",
   navy:    "#1C3A52",
   site:    "https://www.oncoaching.fr",
   phone:   "+33 06 63 04 18 12",
   email:   "contact@oncoaching.fr",
   address: "14 rue des écureuils, 71000 Sancé",
-  logo:    "https://xeloriom-sketch.github.io/oncoaching/faviconNoText.png",
+  logo:    "https://www.oncoaching.fr/faviconNoText.png",
 };
 
 const SERVICE_LABELS: Record<string, string> = {
-  "coaching-de-vie":      "Coaching scolaire & étudiant",
-  "coaching-de-carriere": "Coaching jeunes & jeunes adultes",
-  "coaching-d-equipe":    "Coaching & Neurofeedback",
+  "coaching-de-vie":        "Coaching scolaire & étudiant",
+  "coaching-de-carriere":   "Coaching jeunes & jeunes adultes",
+  "coaching-d-equipe":      "Coaching & Neurofeedback",
   "coaching-de-dirigeants": "Coaching d'équipe",
-  "autre":                "Autre",
+  "autre":                  "Autre",
 };
 
 const TIME_LABELS: Record<string, string> = {
-  matin:       "Matin (8h–12h)",
-  "apres-midi": "Après-midi (14h–18h)",
-  flexible:    "Flexible",
+  "matin":       "Matin (8h–12h)",
+  "apres-midi":  "Après-midi (14h–18h)",
+  "flexible":    "Flexible",
 };
 
-// ── Templates HTML ─────────────────────────────────────────────────────────────
+const CORS = {
+  "Access-Control-Allow-Origin":  "*",
+  "Access-Control-Allow-Headers": "Authorization, Content-Type",
+};
+
+// ── Base64url helpers ─────────────────────────────────────────────────────────
+
+const toB64u = (b: Uint8Array) =>
+  btoa(String.fromCharCode(...b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+
+const fromB64u = (s: string) =>
+  Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+
+const concat = (...arrays: Uint8Array[]) => {
+  const out = new Uint8Array(arrays.reduce((n, a) => n + a.length, 0));
+  let offset = 0;
+  for (const a of arrays) { out.set(a, offset); offset += a.length; }
+  return out;
+};
+
+// ── HKDF (SHA-256) ────────────────────────────────────────────────────────────
+
+async function hmacSha256(key: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
+  const k = await crypto.subtle.importKey("raw", key, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return new Uint8Array(await crypto.subtle.sign("HMAC", k, data));
+}
+
+// HKDF-Expand — renvoie les `len` premiers octets (len ≤ 32)
+async function hkdfExpand(prk: Uint8Array, info: Uint8Array, len: number): Promise<Uint8Array> {
+  return (await hmacSha256(prk, concat(info, new Uint8Array([1])))).slice(0, len);
+}
+
+// ── VAPID JWT (ES256) ─────────────────────────────────────────────────────────
+
+async function vapidJwt(endpoint: string): Promise<string> {
+  const enc = new TextEncoder();
+  const VAPID_PRIV = Deno.env.get("VAPID_PRIVATE_KEY")!;
+  const VAPID_PUB  = Deno.env.get("VAPID_PUBLIC_KEY")!;
+  const pub = fromB64u(VAPID_PUB);
+
+  const privKey = await crypto.subtle.importKey(
+    "jwk",
+    { kty: "EC", crv: "P-256", x: toB64u(pub.slice(1, 33)), y: toB64u(pub.slice(33, 65)), d: VAPID_PRIV, ext: true },
+    { name: "ECDSA", namedCurve: "P-256" },
+    false,
+    ["sign"],
+  );
+
+  const { protocol, host } = new URL(endpoint);
+  const hdr = toB64u(enc.encode(JSON.stringify({ typ: "JWT", alg: "ES256" })));
+  const pay = toB64u(enc.encode(JSON.stringify({
+    aud: `${protocol}//${host}`,
+    exp: Math.floor(Date.now() / 1000) + 43200,
+    sub: `mailto:${BRAND.email}`,
+  })));
+
+  const sig = new Uint8Array(
+    await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, privKey, enc.encode(`${hdr}.${pay}`)),
+  );
+
+  return `${hdr}.${pay}.${toB64u(sig)}`;
+}
+
+// ── Web Push — chiffrement aes128gcm (RFC 8291) ───────────────────────────────
+
+async function encryptPush(plain: string, p256dhB64u: string, authB64u: string): Promise<Uint8Array> {
+  const enc        = new TextEncoder();
+  const recvPub    = fromB64u(p256dhB64u);  // 65 bytes — clé publique du navigateur
+  const authSecret = fromB64u(authB64u);     // 16 bytes
+
+  // Paire de clés éphémère pour ECDH
+  const senderKP  = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+  const senderPub = new Uint8Array(await crypto.subtle.exportKey("raw", senderKP.publicKey)); // 65 bytes
+
+  // ECDH shared secret
+  const recvKey     = await crypto.subtle.importKey("raw", recvPub, { name: "ECDH", namedCurve: "P-256" }, false, []);
+  const sharedSecret = new Uint8Array(await crypto.subtle.deriveBits({ name: "ECDH", public: recvKey }, senderKP.privateKey, 256));
+
+  // Salt aléatoire (16 bytes)
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+
+  // Étape 1 — key material
+  // PRK  = HMAC-SHA256(key=auth_secret, data=shared_secret)
+  // info = "WebPush: info\x00" || recv_pub || sender_pub
+  // IKM  = HKDF-Expand(PRK, info, 32)
+  const prk1 = await hmacSha256(authSecret, sharedSecret);
+  const ikm  = await hkdfExpand(prk1, concat(enc.encode("WebPush: info\x00"), recvPub, senderPub), 32);
+
+  // Étape 2 — CEK + NONCE
+  // PRK2  = HMAC-SHA256(key=salt, data=IKM)
+  const prk2  = await hmacSha256(salt, ikm);
+  const cek   = await hkdfExpand(prk2, enc.encode("Content-Encoding: aes128gcm\x00"), 16);
+  const nonce = await hkdfExpand(prk2, enc.encode("Content-Encoding: nonce\x00"), 12);
+
+  // AES-128-GCM : payload || 0x02 (délimiteur RFC 8188)
+  const aesKey      = await crypto.subtle.importKey("raw", cek, { name: "AES-GCM", length: 128 }, false, ["encrypt"]);
+  const paddedPlain = concat(enc.encode(plain), new Uint8Array([2]));
+  const ciphertext  = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: nonce }, aesKey, paddedPlain));
+
+  // En-tête aes128gcm : salt(16) + rs(4) + idlen(1) + sender_pub(65)
+  const header = new Uint8Array(86);
+  header.set(salt);
+  new DataView(header.buffer).setUint32(16, paddedPlain.length + 16, false);
+  header[20] = 65;
+  header.set(senderPub, 21);
+
+  return concat(header, ciphertext);
+}
+
+// ── Envoyer une notification push à un abonné ─────────────────────────────────
+
+async function sendPushToOne(
+  endpoint: string,
+  p256dh: string,
+  auth: string,
+  payload: Record<string, string>,
+): Promise<number> {
+  const VAPID_PUB = Deno.env.get("VAPID_PUBLIC_KEY")!;
+  const body = await encryptPush(JSON.stringify(payload), p256dh, auth);
+  const jwt  = await vapidJwt(endpoint);
+
+  const resp = await fetch(endpoint, {
+    method:  "POST",
+    headers: {
+      "Authorization":    `vapid t=${jwt},k=${VAPID_PUB}`,
+      "Content-Type":     "application/octet-stream",
+      "Content-Encoding": "aes128gcm",
+      "TTL":              "60",
+    },
+    body,
+  });
+  return resp.status;
+}
+
+// ── Resend API ────────────────────────────────────────────────────────────────
+
+async function sendEmail(to: string, subject: string, html: string): Promise<void> {
+  const key = Deno.env.get("RESEND_API_KEY");
+  if (!key) return;
+  await fetch("https://api.resend.com/emails", {
+    method:  "POST",
+    headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
+    body:    JSON.stringify({ from: `ON Coaching <noreply@oncoaching.fr>`, to: [to], subject, html }),
+  });
+}
+
+// ── HTML helpers ──────────────────────────────────────────────────────────────
+
+function esc(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function row(label: string, value?: string): string {
+  if (!value) return "";
+  return `<tr>
+    <td style="padding:5px 0;font-size:12px;font-weight:600;color:#9ca3af;width:120px;vertical-align:top;">${label}</td>
+    <td style="padding:5px 0;font-size:13px;color:#1C3A52;font-weight:500;">${esc(value)}</td>
+  </tr>`;
+}
+
+function rowLong(label: string, value?: string): string {
+  if (!value) return "";
+  return `<tr><td colspan="2" style="padding:10px 0 4px;font-size:12px;font-weight:600;color:#9ca3af;">${label}</td></tr>
+  <tr><td colspan="2" style="padding:0 0 6px;font-size:13px;color:#374151;line-height:1.6;">${esc(value).replace(/\n/g, "<br>")}</td></tr>`;
+}
+
+function stepHtml(num: number, title: string, desc: string): string {
+  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+  <tr>
+    <td width="36" valign="top" style="padding-top:2px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#C4903E;text-align:center;line-height:28px;font-size:12px;font-weight:800;color:#fff;">${num}</div>
+    </td>
+    <td style="padding-left:12px;">
+      <p style="margin:0 0 2px;font-size:13px;font-weight:700;color:#1C3A52;">${title}</p>
+      <p style="margin:0;font-size:12px;color:#6b7280;line-height:1.5;">${desc}</p>
+    </td>
+  </tr></table>`;
+}
 
 function baseLayout(content: string, preheader: string): string {
+  const { name, gold, navy, site, phone, email, address, logo } = BRAND;
   return `<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${BRAND.name}</title>
-  <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
-</head>
+<html lang="fr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>${name}</title></head>
 <body style="margin:0;padding:0;background:#F4F1EC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-
-  <!-- Preheader invisible -->
-  <span style="display:none;font-size:1px;color:#F4F1EC;max-height:0;max-width:0;opacity:0;overflow:hidden;">${preheader}</span>
-
-  <!-- Wrapper -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F4F1EC;min-height:100vh;">
-    <tr><td align="center" style="padding:40px 16px;">
-
-      <!-- Card -->
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
-
-        <!-- Header Navy -->
-        <tr>
-          <td style="background:${BRAND.navy};border-radius:24px 24px 0 0;padding:36px 40px 28px;text-align:center;">
-            <img src="${BRAND.logo}" width="48" height="48" alt="${BRAND.name}" style="margin-bottom:16px;border-radius:12px;" />
-            <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${BRAND.color};">ON COACHING</p>
-            <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:1px;">MÂCON · SAÔNE-ET-LOIRE</p>
-          </td>
-        </tr>
-
-        <!-- Body White -->
-        <tr>
-          <td style="background:#ffffff;padding:40px 40px 32px;">
-            ${content}
-          </td>
-        </tr>
-
-        <!-- Footer -->
-        <tr>
-          <td style="background:#F4F1EC;border-radius:0 0 24px 24px;padding:24px 40px;text-align:center;border-top:1px solid #e8e4de;">
-            <p style="margin:0 0 8px;font-size:13px;color:#9ca3af;">
-              <a href="tel:${BRAND.phone.replace(/\s/g,'')}" style="color:${BRAND.navy};text-decoration:none;font-weight:600;">${BRAND.phone}</a>
-              &nbsp;·&nbsp;
-              <a href="mailto:${BRAND.email}" style="color:${BRAND.navy};text-decoration:none;font-weight:600;">${BRAND.email}</a>
-            </p>
-            <p style="margin:0;font-size:12px;color:#c4c4c4;">${BRAND.address}</p>
-            <p style="margin:12px 0 0;font-size:11px;color:#d1d5db;">
-              <a href="${BRAND.site}" style="color:${BRAND.color};text-decoration:none;">${BRAND.site}</a>
-            </p>
-          </td>
-        </tr>
-
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`;
+<span style="display:none;font-size:1px;color:#F4F1EC;max-height:0;overflow:hidden;">${preheader}</span>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F4F1EC;">
+  <tr><td align="center" style="padding:40px 16px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
+      <tr><td style="background:${navy};border-radius:24px 24px 0 0;padding:36px 40px 28px;text-align:center;">
+        <img src="${logo}" width="48" height="48" alt="${name}" style="margin-bottom:16px;border-radius:12px;"/>
+        <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${gold};">ON COACHING</p>
+        <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:1px;">MÂCON · SAÔNE-ET-LOIRE</p>
+      </td></tr>
+      <tr><td style="background:#fff;padding:40px 40px 32px;">${content}</td></tr>
+      <tr><td style="background:#F4F1EC;border-radius:0 0 24px 24px;padding:24px 40px;text-align:center;border-top:1px solid #e8e4de;">
+        <p style="margin:0 0 8px;font-size:13px;color:#9ca3af;">
+          <a href="tel:${phone.replace(/\s/g,"")}" style="color:${navy};text-decoration:none;font-weight:600;">${phone}</a>
+          &nbsp;·&nbsp;<a href="mailto:${email}" style="color:${navy};text-decoration:none;font-weight:600;">${email}</a>
+        </p>
+        <p style="margin:0;font-size:12px;color:#c4c4c4;">${address}</p>
+        <p style="margin:12px 0 0;font-size:11px;"><a href="${site}" style="color:${gold};text-decoration:none;">${site}</a></p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table></body></html>`;
 }
 
-function formatDate(dateStr?: string): string {
-  if (!dateStr) return "À définir";
+// ── Email templates ───────────────────────────────────────────────────────────
+
+interface Sub {
+  type: string; name: string; email: string; phone?: string; service?: string;
+  subject?: string; message?: string; preferred_date?: string; preferred_time?: string;
+}
+
+function formatDate(d?: string): string {
+  if (!d) return "À définir";
   try {
-    return new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(dateStr + "T12:00:00"));
-  } catch {
-    return dateStr;
-  }
+    const s = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(d + "T12:00:00"));
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  } catch { return d; }
 }
 
-// ── Email contact ──────────────────────────────────────────────────────────────
-function contactEmail(s: Submission): { subject: string; html: string } {
-  const service = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
-
+function contactEmailHtml(s: Sub): string {
+  const svc = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
+  const firstName = s.name.split(" ")[0];
   const content = `
     <h1 style="margin:0 0 8px;font-size:26px;font-weight:800;color:${BRAND.navy};line-height:1.2;">
-      Message bien reçu,<br/><span style="color:${BRAND.color};">${s.name.split(" ")[0]} !</span>
+      Message bien reçu,<br/><span style="color:${BRAND.gold};">${esc(firstName)} !</span>
     </h1>
     <p style="margin:0 0 28px;font-size:15px;color:#6b7280;line-height:1.6;">
       Merci pour votre message. Nous vous répondrons dans les <strong style="color:${BRAND.navy};">24 heures</strong>.
     </p>
-
-    <!-- Récap -->
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F9F7F4;border-radius:16px;overflow:hidden;margin-bottom:28px;">
       <tr><td style="padding:20px 24px;border-bottom:1px solid #f0ece6;">
-        <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.color};">Récapitulatif</p>
+        <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.gold};">Récapitulatif</p>
       </td></tr>
-      <tr><td style="padding:16px 24px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-          ${row("Nom", s.name)}
-          ${row("Email", s.email)}
-          ${s.phone ? row("Téléphone", s.phone) : ""}
-          ${service ? row("Service", service) : ""}
-          ${s.subject ? row("Sujet", s.subject) : ""}
-          ${s.message ? rowLong("Message", s.message) : ""}
-        </table>
-      </td></tr>
+      <tr><td style="padding:16px 24px;"><table width="100%" cellpadding="0" cellspacing="0" border="0">
+        ${row("Nom", s.name)}${row("Email", s.email)}${row("Téléphone", s.phone)}${row("Service", svc)}${row("Sujet", s.subject)}${rowLong("Message", s.message)}
+      </table></td></tr>
     </table>
-
-    <!-- CTA -->
     <div style="text-align:center;margin-bottom:28px;">
-      <a href="${BRAND.site}/contact" style="display:inline-block;background:${BRAND.navy};color:#ffffff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;letter-spacing:0.3px;">
-        Visiter notre site
-      </a>
+      <a href="${BRAND.site}/contact" style="display:inline-block;background:${BRAND.navy};color:#fff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;">Visiter notre site</a>
     </div>
-
-    <!-- Badge RDV gratuit -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#1C3A52,#2a4f6e);border-radius:16px;overflow:hidden;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#1C3A52,#2a4f6e);border-radius:16px;">
       <tr><td style="padding:20px 24px;">
-        <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.color};">Le saviez-vous ?</p>
+        <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.gold};">Le saviez-vous ?</p>
         <p style="margin:0;font-size:14px;color:rgba(255,255,255,0.85);line-height:1.5;">
-          Votre <strong style="color:#ffffff;">1er rendez-vous est offert</strong>, sans engagement. C'est l'occasion de faire connaissance et de définir ensemble votre programme.
+          Votre <strong style="color:#fff;">1er rendez-vous est offert</strong>, sans engagement.
         </p>
       </td></tr>
-    </table>
-  `;
-
-  return {
-    subject: `✅ Votre message a bien été reçu — ${BRAND.name}`,
-    html: baseLayout(content, `Merci ${s.name.split(" ")[0]}, nous vous répondrons dans les 24h.`),
-  };
+    </table>`;
+  return baseLayout(content, `Merci ${firstName}, nous vous répondrons dans les 24h.`);
 }
 
-// ── Email RDV ──────────────────────────────────────────────────────────────────
-function rdvEmail(s: Submission): { subject: string; html: string } {
-  const service  = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
-  const timeSlot = TIME_LABELS[s.preferred_time ?? ""] ?? s.preferred_time ?? "Flexible";
-  const dateStr  = formatDate(s.preferred_date);
-
+function rdvEmailHtml(s: Sub): string {
+  const svc   = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
+  const time  = TIME_LABELS[s.preferred_time ?? ""] ?? "Flexible";
+  const date  = formatDate(s.preferred_date);
+  const firstName = s.name.split(" ")[0];
   const content = `
     <h1 style="margin:0 0 8px;font-size:26px;font-weight:800;color:${BRAND.navy};line-height:1.2;">
-      Demande reçue,<br/><span style="color:${BRAND.color};">${s.name.split(" ")[0]} !</span>
+      Demande reçue,<br/><span style="color:${BRAND.gold};">${esc(firstName)} !</span>
     </h1>
     <p style="margin:0 0 28px;font-size:15px;color:#6b7280;line-height:1.6;">
-      Votre demande de rendez-vous a bien été enregistrée. Nous vous confirmons le créneau dans les <strong style="color:${BRAND.navy};">24 heures</strong>.
+      Votre demande de rendez-vous a bien été enregistrée. Nous vous confirmons dans les <strong style="color:${BRAND.navy};">24 heures</strong>.
     </p>
-
-    <!-- Créneau mis en avant -->
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${BRAND.navy};border-radius:16px;overflow:hidden;margin-bottom:24px;">
       <tr><td style="padding:24px 28px;">
-        <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.color};">Créneau souhaité</p>
-        <p style="margin:0;font-size:20px;font-weight:800;color:#ffffff;line-height:1.3;text-transform:capitalize;">${dateStr}</p>
-        <p style="margin:4px 0 0;font-size:14px;color:rgba(255,255,255,0.6);">${timeSlot}</p>
+        <p style="margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.gold};">Créneau souhaité</p>
+        <p style="margin:0;font-size:20px;font-weight:800;color:#fff;line-height:1.3;">${date}</p>
+        <p style="margin:4px 0 0;font-size:14px;color:rgba(255,255,255,0.6);">${time}</p>
       </td></tr>
     </table>
-
-    <!-- Récap -->
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F9F7F4;border-radius:16px;overflow:hidden;margin-bottom:28px;">
       <tr><td style="padding:20px 24px;border-bottom:1px solid #f0ece6;">
-        <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.color};">Vos coordonnées</p>
+        <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${BRAND.gold};">Vos coordonnées</p>
       </td></tr>
-      <tr><td style="padding:16px 24px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0">
-          ${row("Nom", s.name)}
-          ${row("Email", s.email)}
-          ${s.phone ? row("Téléphone", s.phone) : ""}
-          ${service ? row("Programme", service) : ""}
-          ${s.message ? rowLong("Note", s.message) : ""}
-        </table>
-      </td></tr>
+      <tr><td style="padding:16px 24px;"><table width="100%" cellpadding="0" cellspacing="0" border="0">
+        ${row("Nom", s.name)}${row("Email", s.email)}${row("Téléphone", s.phone)}${row("Programme", svc)}${rowLong("Note", s.message)}
+      </table></td></tr>
     </table>
-
-    <!-- Étapes suivantes -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
-      <tr><td>
-        <p style="margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:${BRAND.navy};">Prochaines étapes</p>
-      </td></tr>
-      <tr><td>
-        ${step("1", "Confirmation sous 24h", "Nous vérifions nos disponibilités et vous confirmons le rendez-vous par email ou téléphone.")}
-        ${step("2", "Consultation gratuite", "Votre 1er rendez-vous de 45 min est entièrement offert, sans engagement de votre part.")}
-        ${step("3", "Programme sur mesure", "Ensemble, nous définissons un accompagnement adapté à vos besoins et objectifs.")}
-      </td></tr>
-    </table>
-
-    <!-- CTA appel direct -->
-    <div style="text-align:center;margin-bottom:8px;">
-      <a href="tel:${BRAND.phone.replace(/\s/g,'')}" style="display:inline-block;background:${BRAND.color};color:#ffffff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;letter-spacing:0.3px;">
-        📞 Appeler directement
-      </a>
+    <p style="margin:0 0 14px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:${BRAND.navy};">Prochaines étapes</p>
+    ${stepHtml(1, "Confirmation sous 24h", "Nous vérifions nos disponibilités et vous confirmons le rendez-vous par email ou téléphone.")}
+    ${stepHtml(2, "Consultation gratuite", "Votre 1er rendez-vous de 45 min est entièrement offert, sans engagement de votre part.")}
+    ${stepHtml(3, "Programme sur mesure", "Ensemble, nous définissons un accompagnement adapté à vos besoins et objectifs.")}
+    <div style="text-align:center;margin:24px 0 8px;">
+      <a href="tel:${BRAND.phone.replace(/\s/g,"")}" style="display:inline-block;background:${BRAND.gold};color:#fff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;">📞 Appeler directement</a>
     </div>
-    <p style="text-align:center;font-size:12px;color:#9ca3af;margin:8px 0 0;">Ou répondez simplement à cet email</p>
-  `;
-
-  return {
-    subject: `📅 Demande de RDV confirmée — ${BRAND.name}`,
-    html: baseLayout(content, `Votre rendez-vous du ${dateStr} est en cours de confirmation.`),
-  };
+    <p style="text-align:center;font-size:12px;color:#9ca3af;margin:8px 0 0;">Ou répondez simplement à cet email</p>`;
+  return baseLayout(content, `Votre RDV du ${date} est en cours de confirmation.`);
 }
 
-// ── Helpers layout ─────────────────────────────────────────────────────────────
-function row(label: string, value: string): string {
-  return `
-    <tr>
-      <td style="padding:5px 0;font-size:12px;font-weight:600;color:#9ca3af;width:110px;vertical-align:top;">${label}</td>
-      <td style="padding:5px 0;font-size:13px;color:#1C3A52;font-weight:500;">${value}</td>
-    </tr>`;
+function adminEmailHtml(s: Sub): string {
+  const svc      = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
+  const time     = TIME_LABELS[s.preferred_time ?? ""] ?? "Flexible";
+  const date     = formatDate(s.preferred_date);
+  const label    = s.type === "rdv" ? "📅 Nouveau RDV" : "💬 Nouveau message";
+  const now      = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date());
+  const adminUrl = `${BRAND.site}/admin/messages`;
+
+  const rows = row("Nom", s.name) + row("Email", s.email) + row("Téléphone", s.phone) + row("Service", svc)
+    + (s.type === "rdv" ? row("Date souhaitée", date) + row("Créneau", time) : row("Sujet", s.subject))
+    + rowLong("Message", s.message);
+
+  const content = `
+    <h1 style="margin:0 0 8px;font-size:24px;font-weight:800;color:${BRAND.navy};">${label}</h1>
+    <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">Reçu le ${now}</p>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F9F7F4;border-radius:16px;overflow:hidden;margin-bottom:24px;">
+      <tr><td style="padding:16px 24px 4px;"><table width="100%" cellpadding="0" cellspacing="0" border="0">${rows}</table></td></tr>
+    </table>
+    <div style="text-align:center;">
+      <a href="${adminUrl}" style="display:inline-block;background:${BRAND.gold};color:#fff;font-size:14px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;">Voir dans l'admin</a>
+    </div>`;
+  return baseLayout(content, `${label} de ${s.name}`);
 }
 
-function rowLong(label: string, value: string): string {
-  return `
-    <tr>
-      <td colspan="2" style="padding:10px 0 4px;font-size:12px;font-weight:600;color:#9ca3af;">${label}</td>
-    </tr>
-    <tr>
-      <td colspan="2" style="padding:0 0 6px;font-size:13px;color:#374151;line-height:1.6;white-space:pre-wrap;">${value}</td>
-    </tr>`;
-}
+// ── Handler principal ─────────────────────────────────────────────────────────
 
-function step(num: string, title: string, desc: string): string {
-  return `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;">
-      <tr>
-        <td width="36" valign="top" style="padding-top:2px;">
-          <div style="width:28px;height:28px;border-radius:50%;background:#C4903E;text-align:center;line-height:28px;font-size:12px;font-weight:800;color:#fff;">${num}</div>
-        </td>
-        <td style="padding-left:12px;">
-          <p style="margin:0 0 2px;font-size:13px;font-weight:700;color:#1C3A52;">${title}</p>
-          <p style="margin:0;font-size:12px;color:#6b7280;line-height:1.5;">${desc}</p>
-        </td>
-      </tr>
-    </table>`;
-}
-
-// ── Handler principal ──────────────────────────────────────────────────────────
 Deno.serve(async (req) => {
-  // Supabase DB Webhook envoie un POST avec { type, table, record, ... }
-  if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405 });
+  if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
+  if (req.method !== "POST")    return new Response("Method Not Allowed", { status: 405 });
+
+  let body: { record?: Sub };
+  try { body = await req.json(); } catch { return new Response("Invalid JSON", { status: 400 }); }
+
+  const s = body.record ?? (body as unknown as Sub);
+  if (!s?.email || !s?.name) return new Response("Missing fields", { status: 400 });
+
+  const svc  = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
+  const time = TIME_LABELS[s.preferred_time ?? ""] ?? "Flexible";
+  const date = formatDate(s.preferred_date);
+
+  // 1 — Email de confirmation au client
+  const clientSubject = s.type === "rdv"
+    ? `📅 Demande de RDV confirmée — ${BRAND.name}`
+    : `✅ Votre message a bien été reçu — ${BRAND.name}`;
+  const clientHtml = s.type === "rdv" ? rdvEmailHtml(s) : contactEmailHtml(s);
+  await sendEmail(s.email, clientSubject, clientHtml);
+
+  // 2 — Email de notification à l'admin
+  const adminSubject = (s.type === "rdv" ? "📅 Nouveau RDV" : "💬 Nouveau message") + ` — ${s.name}`;
+  await sendEmail(BRAND.email, adminSubject, adminEmailHtml(s));
+
+  // 3 — Notifications push admin
+  const VAPID_PRIV = Deno.env.get("VAPID_PRIVATE_KEY");
+  if (VAPID_PRIV) {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+    const { data: subs } = await supabase.from("push_subscriptions").select("endpoint,p256dh,auth");
+
+    const pushPayload = {
+      title: s.type === "rdv" ? `📅 Nouveau RDV — ${s.name}` : `💬 Nouveau message — ${s.name}`,
+      body:  s.type === "rdv"
+        ? `${date} · ${time}`
+        : (s.subject || (s.message ?? "").slice(0, 80) || "Nouveau contact"),
+      url: "/admin/messages",
+    };
+
+    await Promise.all(
+      (subs ?? []).map(async (sub: { endpoint: string; p256dh: string; auth: string }) => {
+        try {
+          const status = await sendPushToOne(sub.endpoint, sub.p256dh, sub.auth, pushPayload);
+          if (status === 410 || status === 404) {
+            await supabase.from("push_subscriptions").delete().eq("endpoint", sub.endpoint);
+          }
+        } catch (e) {
+          console.error("Push error:", e);
+        }
+      }),
+    );
   }
 
-  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-  const FROM_EMAIL    = Deno.env.get("FROM_EMAIL") ?? `${BRAND.name} <noreply@${BRAND.email.split("@")[1]}>`;
-
-  if (!RESEND_API_KEY) {
-    console.error("RESEND_API_KEY manquant");
-    return new Response("RESEND_API_KEY not set", { status: 500 });
-  }
-
-  let body: { record?: Submission };
-  try {
-    body = await req.json();
-  } catch {
-    return new Response("Invalid JSON", { status: 400 });
-  }
-
-  const submission = body.record;
-  if (!submission?.email || !submission?.name) {
-    return new Response("Missing fields", { status: 400 });
-  }
-
-  const { subject, html } =
-    submission.type === "rdv"
-      ? rdvEmail(submission)
-      : contactEmail(submission);
-
-  // Envoyer via Resend
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from:    FROM_EMAIL,
-      to:      [submission.email],
-      reply_to: BRAND.email,
-      subject,
-      html,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("Resend error:", err);
-    return new Response(`Resend error: ${err}`, { status: 500 });
-  }
-
-  const data = await res.json();
-  console.log("Email envoyé:", data.id, "→", submission.email);
-
-  return new Response(JSON.stringify({ ok: true, id: data.id }), {
-    headers: { "Content-Type": "application/json" },
+  return new Response(JSON.stringify({ ok: true }), {
+    headers: { ...CORS, "Content-Type": "application/json" },
   });
 });
