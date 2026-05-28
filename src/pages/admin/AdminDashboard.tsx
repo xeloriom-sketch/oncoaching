@@ -17,6 +17,9 @@ import {
   Brain,
   ExternalLink,
   ArrowRight,
+  AlertTriangle,
+  Trash2,
+  Database,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PAGES } from "@/lib/contentSchema";
@@ -185,12 +188,86 @@ function PageCard({
   );
 }
 
+// ── Storage Banner ────────────────────────────────────────────────────────────
+
+const WARN_THRESHOLD = 200;   // orange
+const DANGER_THRESHOLD = 400; // rouge
+
+interface StorageBannerProps {
+  total: number;
+  readCount: number;
+  onClean: () => void;
+  cleaning: boolean;
+}
+
+function StorageBanner({ total, readCount, onClean, cleaning }: StorageBannerProps) {
+  if (total < 50) return null; // pas de bruit en dessous de 50 messages
+
+  const isDanger = total >= DANGER_THRESHOLD;
+  const isWarn   = total >= WARN_THRESHOLD;
+
+  const bg      = isDanger ? "rgba(220,38,38,0.08)"   : "rgba(234,179,8,0.10)";
+  const border  = isDanger ? "#fca5a5"                : "#fde68a";
+  const iconCol = isDanger ? "#dc2626"                : "#b45309";
+  const title   = isDanger
+    ? `Attention — ${total} messages stockés`
+    : `${total} messages dans la base de données`;
+  const desc = isDanger
+    ? "La base de données commence à s'alourdir. Supprimez les messages déjà lus pour libérer de l'espace."
+    : "Pensez à faire un peu de ménage de temps en temps en supprimant les messages lus.";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      className="rounded-2xl border p-4 flex flex-col sm:flex-row sm:items-center gap-4"
+      style={{ background: bg, borderColor: border }}
+    >
+      <div className="flex items-start gap-3 flex-1">
+        <div className="mt-0.5">
+          {isDanger
+            ? <AlertTriangle className="w-5 h-5 flex-shrink-0" style={{ color: iconCol }} strokeWidth={2} />
+            : <Database className="w-5 h-5 flex-shrink-0" style={{ color: iconCol }} strokeWidth={1.8} />
+          }
+        </div>
+        <div>
+          <p className="text-sm font-semibold leading-snug" style={{ color: isDanger ? "#991b1b" : "#78350f" }}>
+            {title}
+          </p>
+          <p className="text-xs mt-0.5 leading-relaxed" style={{ color: isDanger ? "#b91c1c" : "#92400e" }}>
+            {desc}
+          </p>
+        </div>
+      </div>
+
+      {readCount > 0 && (
+        <button
+          type="button"
+          onClick={onClean}
+          disabled={cleaning}
+          className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          style={{ background: isDanger ? "#dc2626" : "#b45309" }}
+        >
+          {cleaning ? (
+            <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+          ) : (
+            <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+          )}
+          Supprimer {readCount} message{readCount > 1 ? "s" : ""} lu{readCount > 1 ? "s" : ""}
+        </button>
+      )}
+    </motion.div>
+  );
+}
+
 // ── Stats state ───────────────────────────────────────────────────────────────
 
 interface DashboardStats {
   total: number;
   unread: number;
   rdv: number;
+  readCount: number;
   recent: Submission[];
 }
 
@@ -199,41 +276,52 @@ interface DashboardStats {
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
-  const [stats, setStats] = useState<DashboardStats>({ total: 0, unread: 0, rdv: 0, recent: [] });
+  const [stats, setStats] = useState<DashboardStats>({ total: 0, unread: 0, rdv: 0, readCount: 0, recent: [] });
   const [loading, setLoading] = useState(true);
+  const [cleaning, setCleaning] = useState(false);
 
-  // Fetch stats from Supabase
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const [
-          { count: total },
-          { count: unread },
-          { count: rdv },
-          { data: recent },
-        ] = await Promise.all([
-          supabase.from("submissions").select("*", { count: "exact", head: true }),
-          supabase.from("submissions").select("*", { count: "exact", head: true }).eq("read", false),
-          supabase.from("submissions").select("*", { count: "exact", head: true }).eq("type", "rdv"),
-          supabase.from("submissions").select("*").order("created_at", { ascending: false }).limit(3),
-        ]);
-        if (!cancelled) {
-          setStats({
-            total: total ?? 0,
-            unread: unread ?? 0,
-            rdv: rdv ?? 0,
-            recent: (recent as Submission[]) ?? [],
-          });
-        }
-      } catch {
-        if (!cancelled) setStats({ total: 0, unread: 0, rdv: 0, recent: [] });
-      } finally {
-        if (!cancelled) setLoading(false);
+  const fetchStats = async (cancelled?: { current: boolean }) => {
+    try {
+      const [
+        { count: total },
+        { count: unread },
+        { count: rdv },
+        { count: readCount },
+        { data: recent },
+      ] = await Promise.all([
+        supabase.from("submissions").select("*", { count: "exact", head: true }),
+        supabase.from("submissions").select("*", { count: "exact", head: true }).eq("read", false),
+        supabase.from("submissions").select("*", { count: "exact", head: true }).eq("type", "rdv"),
+        supabase.from("submissions").select("*", { count: "exact", head: true }).eq("read", true),
+        supabase.from("submissions").select("*").order("created_at", { ascending: false }).limit(3),
+      ]);
+      if (!cancelled?.current) {
+        setStats({
+          total: total ?? 0,
+          unread: unread ?? 0,
+          rdv: rdv ?? 0,
+          readCount: readCount ?? 0,
+          recent: (recent as Submission[]) ?? [],
+        });
       }
-    })();
-    return () => { cancelled = true; };
+    } catch {
+      if (!cancelled?.current) setStats({ total: 0, unread: 0, rdv: 0, readCount: 0, recent: [] });
+    }
+  };
+
+  useEffect(() => {
+    const ref = { current: false };
+    fetchStats(ref).finally(() => { if (!ref.current) setLoading(false); });
+    return () => { ref.current = true; };
   }, []);
+
+  const handleClean = async () => {
+    if (!window.confirm(`Supprimer définitivement les ${stats.readCount} messages déjà lus ?`)) return;
+    setCleaning(true);
+    await supabase.from("submissions").delete().eq("read", true);
+    await fetchStats();
+    setCleaning(false);
+  };
 
   const today = formatDateFR(new Date());
 
@@ -307,6 +395,16 @@ const AdminDashboard = () => {
             />
           </div>
         </section>
+
+        {/* ── Storage banner ──────────────────────────────────────────── */}
+        {!loading && (
+          <StorageBanner
+            total={stats.total}
+            readCount={stats.readCount}
+            onClean={handleClean}
+            cleaning={cleaning}
+          />
+        )}
 
         {/* ── Recent messages ─────────────────────────────────────────── */}
         <section>
