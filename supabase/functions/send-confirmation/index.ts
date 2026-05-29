@@ -1,11 +1,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // ON Coaching — Edge Function : email + push après soumission formulaire
-// Déclenchée par Database Webhook (INSERT sur submissions)
 //
 // Secrets Supabase requis :
-//   RESEND_API_KEY      — clé API Resend
-//   VAPID_PRIVATE_KEY   — clé privée VAPID base64url (32 bytes)
-//   VAPID_PUBLIC_KEY    — clé publique VAPID base64url (65 bytes, point non compressé)
+//   RESEND_API_KEY      — clé API Resend (domaine oncoaching.fr vérifié requis)
+//   BREVO_API_KEY       — alt : clé API Brevo (prioritaire si définie)
+//   SENDER_EMAIL        — adresse expéditeur vérifiée (ex: contact@oncoaching.fr)
+//   VAPID_PRIVATE_KEY   — clé privée VAPID base64url
+//   VAPID_PUBLIC_KEY    — clé publique VAPID base64url
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -64,7 +65,6 @@ async function hmacSha256(key: Uint8Array, data: Uint8Array): Promise<Uint8Array
   return new Uint8Array(await crypto.subtle.sign("HMAC", k, data));
 }
 
-// HKDF-Expand — renvoie les `len` premiers octets (len ≤ 32)
 async function hkdfExpand(prk: Uint8Array, info: Uint8Array, len: number): Promise<Uint8Array> {
   return (await hmacSha256(prk, concat(info, new Uint8Array([1])))).slice(0, len);
 }
@@ -100,43 +100,30 @@ async function vapidJwt(endpoint: string): Promise<string> {
   return `${hdr}.${pay}.${toB64u(sig)}`;
 }
 
-// ── Web Push — chiffrement aes128gcm (RFC 8291) ───────────────────────────────
+// ── Web Push ──────────────────────────────────────────────────────────────────
 
 async function encryptPush(plain: string, p256dhB64u: string, authB64u: string): Promise<Uint8Array> {
   const enc        = new TextEncoder();
-  const recvPub    = fromB64u(p256dhB64u);  // 65 bytes — clé publique du navigateur
-  const authSecret = fromB64u(authB64u);     // 16 bytes
+  const recvPub    = fromB64u(p256dhB64u);
+  const authSecret = fromB64u(authB64u);
 
-  // Paire de clés éphémère pour ECDH
   const senderKP  = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
-  const senderPub = new Uint8Array(await crypto.subtle.exportKey("raw", senderKP.publicKey)); // 65 bytes
+  const senderPub = new Uint8Array(await crypto.subtle.exportKey("raw", senderKP.publicKey));
 
-  // ECDH shared secret
-  const recvKey     = await crypto.subtle.importKey("raw", recvPub, { name: "ECDH", namedCurve: "P-256" }, false, []);
+  const recvKey      = await crypto.subtle.importKey("raw", recvPub, { name: "ECDH", namedCurve: "P-256" }, false, []);
   const sharedSecret = new Uint8Array(await crypto.subtle.deriveBits({ name: "ECDH", public: recvKey }, senderKP.privateKey, 256));
 
-  // Salt aléatoire (16 bytes)
   const salt = crypto.getRandomValues(new Uint8Array(16));
-
-  // Étape 1 — key material
-  // PRK  = HMAC-SHA256(key=auth_secret, data=shared_secret)
-  // info = "WebPush: info\x00" || recv_pub || sender_pub
-  // IKM  = HKDF-Expand(PRK, info, 32)
   const prk1 = await hmacSha256(authSecret, sharedSecret);
   const ikm  = await hkdfExpand(prk1, concat(enc.encode("WebPush: info\x00"), recvPub, senderPub), 32);
-
-  // Étape 2 — CEK + NONCE
-  // PRK2  = HMAC-SHA256(key=salt, data=IKM)
   const prk2  = await hmacSha256(salt, ikm);
   const cek   = await hkdfExpand(prk2, enc.encode("Content-Encoding: aes128gcm\x00"), 16);
   const nonce = await hkdfExpand(prk2, enc.encode("Content-Encoding: nonce\x00"), 12);
 
-  // AES-128-GCM : payload || 0x02 (délimiteur RFC 8188)
   const aesKey      = await crypto.subtle.importKey("raw", cek, { name: "AES-GCM", length: 128 }, false, ["encrypt"]);
   const paddedPlain = concat(enc.encode(plain), new Uint8Array([2]));
   const ciphertext  = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv: nonce }, aesKey, paddedPlain));
 
-  // En-tête aes128gcm : salt(16) + rs(4) + idlen(1) + sender_pub(65)
   const header = new Uint8Array(86);
   header.set(salt);
   new DataView(header.buffer).setUint32(16, paddedPlain.length + 16, false);
@@ -146,18 +133,12 @@ async function encryptPush(plain: string, p256dhB64u: string, authB64u: string):
   return concat(header, ciphertext);
 }
 
-// ── Envoyer une notification push à un abonné ─────────────────────────────────
-
 async function sendPushToOne(
-  endpoint: string,
-  p256dh: string,
-  auth: string,
-  payload: Record<string, string>,
+  endpoint: string, p256dh: string, auth: string, payload: Record<string, string>,
 ): Promise<number> {
   const VAPID_PUB = Deno.env.get("VAPID_PUBLIC_KEY")!;
   const body = await encryptPush(JSON.stringify(payload), p256dh, auth);
   const jwt  = await vapidJwt(endpoint);
-
   const resp = await fetch(endpoint, {
     method:  "POST",
     headers: {
@@ -171,18 +152,40 @@ async function sendPushToOne(
   return resp.status;
 }
 
-// ── Resend API ────────────────────────────────────────────────────────────────
+// ── Email (Brevo prioritaire, Resend fallback) ────────────────────────────────
 
-async function sendEmail(to: string, subject: string, html: string): Promise<void> {
-  const key = Deno.env.get("RESEND_API_KEY");
-  if (!key) return;
-  // SENDER_EMAIL = adresse expéditeur vérifiée dans Resend (ex: onboarding@resend.dev en attendant la vérification de oncoaching.fr)
-  const from = Deno.env.get("SENDER_EMAIL") ?? "onboarding@resend.dev";
-  await fetch("https://api.resend.com/emails", {
-    method:  "POST",
-    headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-    body:    JSON.stringify({ from: `ON Coaching <${from}>`, to: [to], reply_to: BRAND.email, subject, html }),
-  });
+async function sendEmail(to: string, subject: string, html: string): Promise<{ ok: boolean; error?: string }> {
+  const brevoKey  = Deno.env.get("BREVO_API_KEY");
+  const resendKey = Deno.env.get("RESEND_API_KEY");
+  const sender    = Deno.env.get("SENDER_EMAIL") ?? BRAND.email;
+
+  if (brevoKey) {
+    const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method:  "POST",
+      headers: { "api-key": brevoKey, "Content-Type": "application/json" },
+      body:    JSON.stringify({
+        sender:      { name: BRAND.name, email: sender },
+        to:          [{ email: to }],
+        replyTo:     { email: BRAND.email },
+        subject,
+        htmlContent: html,
+      }),
+    });
+    if (!res.ok) return { ok: false, error: `Brevo error ${res.status}: ${await res.text()}` };
+    return { ok: true };
+  }
+
+  if (resendKey) {
+    const res = await fetch("https://api.resend.com/emails", {
+      method:  "POST",
+      headers: { "Authorization": `Bearer ${resendKey}`, "Content-Type": "application/json" },
+      body:    JSON.stringify({ from: `${BRAND.name} <${sender}>`, to: [to], reply_to: BRAND.email, subject, html }),
+    });
+    if (!res.ok) return { ok: false, error: `Resend error ${res.status}: ${await res.text()}` };
+    return { ok: true };
+  }
+
+  return { ok: false, error: "No email provider configured (set BREVO_API_KEY or RESEND_API_KEY)" };
 }
 
 // ── HTML helpers ──────────────────────────────────────────────────────────────
@@ -355,8 +358,6 @@ function adminEmailHtml(s: Sub): string {
   return baseLayout(content, `${label} de ${s.name}`);
 }
 
-// ── Email réponse admin ───────────────────────────────────────────────────────
-
 function adminReplyHtml(recipientName: string, replyText: string): string {
   const firstName = recipientName.split(" ")[0];
   const content = `
@@ -369,7 +370,7 @@ function adminReplyHtml(recipientName: string, replyText: string): string {
   return baseLayout(content, `Réponse de ON Coaching pour ${firstName}`);
 }
 
-// ── Helper : réponse JSON avec CORS (toujours) ───────────────────────────────
+// ── Helper : réponse JSON avec CORS ──────────────────────────────────────────
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -386,7 +387,6 @@ function err(msg: string, status = 500): Response {
 // ── Handler principal ─────────────────────────────────────────────────────────
 
 Deno.serve(async (req) => {
-  // Preflight CORS
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
   if (req.method !== "POST")    return err("Method Not Allowed", 405);
 
@@ -395,37 +395,20 @@ Deno.serve(async (req) => {
 
   try {
 
-    // ── Réponse admin → client ──────────────────────────────────────────────
+    // ── Réponse admin → client ────────────────────────────────────────────────
     if (body.adminReply) {
       const { to, recipientName = "", subject = "Réponse de ON Coaching", replyText = "" } = body;
       if (!to) return err("Missing 'to'", 400);
 
-      const RESEND_KEY = Deno.env.get("RESEND_API_KEY");
-      if (!RESEND_KEY) return err("RESEND_API_KEY secret not configured", 500);
-
-      const from = Deno.env.get("SENDER_EMAIL") ?? "onboarding@resend.dev";
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          from:      `ON Coaching <${from}>`,
-          to:        [to],
-          reply_to:  BRAND.email,
-          subject,
-          html:      adminReplyHtml(recipientName, replyText),
-        }),
-      });
-
-      const resBody = await res.text();
-      if (!res.ok) return err(`Resend error ${res.status}: ${resBody}`, 500);
+      const result = await sendEmail(to, subject, adminReplyHtml(recipientName, replyText));
+      if (!result.ok) return err(result.error ?? "Email send failed", 500);
       return json({ ok: true });
     }
 
-    // ── Nouvelle soumission formulaire ──────────────────────────────────────
+    // ── Nouvelle soumission formulaire ────────────────────────────────────────
     const s = body.record ?? (body as unknown as Sub);
     if (!s?.email || !s?.name) return err("Missing fields: email or name", 400);
 
-    const svc  = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
     const time = TIME_LABELS[s.preferred_time ?? ""] ?? "Flexible";
     const date = formatDate(s.preferred_date);
 
@@ -433,10 +416,16 @@ Deno.serve(async (req) => {
     const clientSubject = s.type === "rdv"
       ? `📅 Demande de RDV confirmée — ${BRAND.name}`
       : `✅ Votre message a bien été reçu — ${BRAND.name}`;
-    await sendEmail(s.email, clientSubject, s.type === "rdv" ? rdvEmailHtml(s) : contactEmailHtml(s));
+    const clientResult = await sendEmail(s.email, clientSubject, s.type === "rdv" ? rdvEmailHtml(s) : contactEmailHtml(s));
+    if (!clientResult.ok) console.error("Client email failed:", clientResult.error);
 
     // 2 — Email de notification à l'admin
-    await sendEmail(BRAND.email, (s.type === "rdv" ? "📅 Nouveau RDV" : "💬 Nouveau message") + ` — ${s.name}`, adminEmailHtml(s));
+    const adminResult = await sendEmail(
+      BRAND.email,
+      (s.type === "rdv" ? "📅 Nouveau RDV" : "💬 Nouveau message") + ` — ${s.name}`,
+      adminEmailHtml(s),
+    );
+    if (!adminResult.ok) console.error("Admin email failed:", adminResult.error);
 
     // 3 — Notifications push admin
     const VAPID_PRIV = Deno.env.get("VAPID_PRIVATE_KEY");
