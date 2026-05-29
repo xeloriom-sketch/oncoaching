@@ -176,10 +176,12 @@ async function sendPushToOne(
 async function sendEmail(to: string, subject: string, html: string): Promise<void> {
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key) return;
+  // SENDER_EMAIL = adresse expéditeur vérifiée dans Resend (ex: onboarding@resend.dev en attendant la vérification de oncoaching.fr)
+  const from = Deno.env.get("SENDER_EMAIL") ?? "onboarding@resend.dev";
   await fetch("https://api.resend.com/emails", {
     method:  "POST",
     headers: { "Authorization": `Bearer ${key}`, "Content-Type": "application/json" },
-    body:    JSON.stringify({ from: `ON Coaching <noreply@oncoaching.fr>`, to: [to], subject, html }),
+    body:    JSON.stringify({ from: `ON Coaching <${from}>`, to: [to], reply_to: BRAND.email, subject, html }),
   });
 }
 
@@ -401,13 +403,14 @@ Deno.serve(async (req) => {
       const RESEND_KEY = Deno.env.get("RESEND_API_KEY");
       if (!RESEND_KEY) return err("RESEND_API_KEY secret not configured", 500);
 
+      const from = Deno.env.get("SENDER_EMAIL") ?? "onboarding@resend.dev";
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { "Authorization": `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from:      `ON Coaching <contact@oncoaching.fr>`,
+          from:      `ON Coaching <${from}>`,
           to:        [to],
-          reply_to:  "contact@oncoaching.fr",
+          reply_to:  BRAND.email,
           subject,
           html:      adminReplyHtml(recipientName, replyText),
         }),
