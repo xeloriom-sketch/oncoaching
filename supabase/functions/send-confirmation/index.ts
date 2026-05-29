@@ -367,86 +367,104 @@ function adminReplyHtml(recipientName: string, replyText: string): string {
   return baseLayout(content, `Réponse de ON Coaching pour ${firstName}`);
 }
 
+// ── Helper : réponse JSON avec CORS (toujours) ───────────────────────────────
+
+function json(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...CORS, "Content-Type": "application/json" },
+  });
+}
+
+function err(msg: string, status = 500): Response {
+  console.error(`[send-confirmation] ${status} — ${msg}`);
+  return json({ error: msg }, status);
+}
+
 // ── Handler principal ─────────────────────────────────────────────────────────
 
 Deno.serve(async (req) => {
+  // Preflight CORS
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
-  if (req.method !== "POST")    return new Response("Method Not Allowed", { status: 405 });
+  if (req.method !== "POST")    return err("Method Not Allowed", 405);
 
   let body: { record?: Sub; adminReply?: boolean; to?: string; recipientName?: string; subject?: string; replyText?: string };
-  try { body = await req.json(); } catch { return new Response("Invalid JSON", { status: 400 }); }
+  try { body = await req.json(); } catch { return err("Invalid JSON", 400); }
 
-  // ── Réponse admin → client ────────────────────────────────────────────────
-  if (body.adminReply) {
-    const { to, recipientName = "", subject = "Réponse de ON Coaching", replyText = "" } = body;
-    if (!to) return new Response("Missing 'to'", { status: 400 });
+  try {
 
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${Deno.env.get("RESEND_API_KEY")}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from:      `ON Coaching <contact@oncoaching.fr>`,
-        to:        [to],
-        reply_to:  "contact@oncoaching.fr",
-        subject,
-        html: adminReplyHtml(recipientName, replyText),
-      }),
-    });
+    // ── Réponse admin → client ──────────────────────────────────────────────
+    if (body.adminReply) {
+      const { to, recipientName = "", subject = "Réponse de ON Coaching", replyText = "" } = body;
+      if (!to) return err("Missing 'to'", 400);
 
-    if (!res.ok) return new Response(await res.text(), { status: 500 });
-    return new Response(JSON.stringify({ ok: true }), { headers: { ...CORS, "Content-Type": "application/json" } });
-  }
+      const RESEND_KEY = Deno.env.get("RESEND_API_KEY");
+      if (!RESEND_KEY) return err("RESEND_API_KEY secret not configured", 500);
 
-  const s = body.record ?? (body as unknown as Sub);
-  if (!s?.email || !s?.name) return new Response("Missing fields", { status: 400 });
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from:      `ON Coaching <contact@oncoaching.fr>`,
+          to:        [to],
+          reply_to:  "contact@oncoaching.fr",
+          subject,
+          html:      adminReplyHtml(recipientName, replyText),
+        }),
+      });
 
-  const svc  = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
-  const time = TIME_LABELS[s.preferred_time ?? ""] ?? "Flexible";
-  const date = formatDate(s.preferred_date);
+      const resBody = await res.text();
+      if (!res.ok) return err(`Resend error ${res.status}: ${resBody}`, 500);
+      return json({ ok: true });
+    }
 
-  // 1 — Email de confirmation au client
-  const clientSubject = s.type === "rdv"
-    ? `📅 Demande de RDV confirmée — ${BRAND.name}`
-    : `✅ Votre message a bien été reçu — ${BRAND.name}`;
-  const clientHtml = s.type === "rdv" ? rdvEmailHtml(s) : contactEmailHtml(s);
-  await sendEmail(s.email, clientSubject, clientHtml);
+    // ── Nouvelle soumission formulaire ──────────────────────────────────────
+    const s = body.record ?? (body as unknown as Sub);
+    if (!s?.email || !s?.name) return err("Missing fields: email or name", 400);
 
-  // 2 — Email de notification à l'admin
-  const adminSubject = (s.type === "rdv" ? "📅 Nouveau RDV" : "💬 Nouveau message") + ` — ${s.name}`;
-  await sendEmail(BRAND.email, adminSubject, adminEmailHtml(s));
+    const svc  = SERVICE_LABELS[s.service ?? ""] ?? s.service ?? "";
+    const time = TIME_LABELS[s.preferred_time ?? ""] ?? "Flexible";
+    const date = formatDate(s.preferred_date);
 
-  // 3 — Notifications push admin
-  const VAPID_PRIV = Deno.env.get("VAPID_PRIVATE_KEY");
-  if (VAPID_PRIV) {
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-    const { data: subs } = await supabase.from("push_subscriptions").select("endpoint,p256dh,auth");
+    // 1 — Email de confirmation au client
+    const clientSubject = s.type === "rdv"
+      ? `📅 Demande de RDV confirmée — ${BRAND.name}`
+      : `✅ Votre message a bien été reçu — ${BRAND.name}`;
+    await sendEmail(s.email, clientSubject, s.type === "rdv" ? rdvEmailHtml(s) : contactEmailHtml(s));
 
-    const pushPayload = {
-      title: s.type === "rdv" ? `📅 Nouveau RDV — ${s.name}` : `💬 Nouveau message — ${s.name}`,
-      body:  s.type === "rdv"
-        ? `${date} · ${time}`
-        : (s.subject || (s.message ?? "").slice(0, 80) || "Nouveau contact"),
-      url: "/admin/messages",
-    };
+    // 2 — Email de notification à l'admin
+    await sendEmail(BRAND.email, (s.type === "rdv" ? "📅 Nouveau RDV" : "💬 Nouveau message") + ` — ${s.name}`, adminEmailHtml(s));
 
-    await Promise.all(
-      (subs ?? []).map(async (sub: { endpoint: string; p256dh: string; auth: string }) => {
-        try {
-          const status = await sendPushToOne(sub.endpoint, sub.p256dh, sub.auth, pushPayload);
-          if (status === 410 || status === 404) {
-            await supabase.from("push_subscriptions").delete().eq("endpoint", sub.endpoint);
+    // 3 — Notifications push admin
+    const VAPID_PRIV = Deno.env.get("VAPID_PRIVATE_KEY");
+    if (VAPID_PRIV) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+      const { data: subs } = await supabase.from("push_subscriptions").select("endpoint,p256dh,auth");
+
+      await Promise.all(
+        (subs ?? []).map(async (sub: { endpoint: string; p256dh: string; auth: string }) => {
+          try {
+            const status = await sendPushToOne(sub.endpoint, sub.p256dh, sub.auth, {
+              title: s.type === "rdv" ? `📅 Nouveau RDV — ${s.name}` : `💬 Nouveau message — ${s.name}`,
+              body:  s.type === "rdv" ? `${date} · ${time}` : (s.subject || (s.message ?? "").slice(0, 80) || "Nouveau contact"),
+              url:   "/admin/messages",
+            });
+            if (status === 410 || status === 404) {
+              await supabase.from("push_subscriptions").delete().eq("endpoint", sub.endpoint);
+            }
+          } catch (e) {
+            console.error("Push error:", e);
           }
-        } catch (e) {
-          console.error("Push error:", e);
-        }
-      }),
-    );
-  }
+        }),
+      );
+    }
 
-  return new Response(JSON.stringify({ ok: true }), {
-    headers: { ...CORS, "Content-Type": "application/json" },
-  });
+    return json({ ok: true });
+
+  } catch (e: unknown) {
+    return err(e instanceof Error ? e.message : String(e), 500);
+  }
 });
