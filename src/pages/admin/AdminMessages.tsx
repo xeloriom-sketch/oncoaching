@@ -207,8 +207,17 @@ const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread }: DetailProps) =>
     setReplying(true);
     setReplyError(null);
     try {
+      const originalMessage = sub.type === "contact"
+        ? sub.message ?? ""
+        : [
+            sub.preferred_date ? `Date souhaitée : ${formatRdvDate(sub.preferred_date)}` : "",
+            sub.preferred_time ? `Horaire : ${sub.preferred_time}` : "",
+            sub.service ? `Service : ${sub.service}` : "",
+            sub.note ? `Note : ${sub.note}` : "",
+          ].filter(Boolean).join("\n");
+
       const { error } = await supabase.functions.invoke("send-confirmation", {
-        body: { adminReply: true, to: sub.email, recipientName: sub.name, subject: replySubject, replyText },
+        body: { adminReply: true, to: sub.email, recipientName: sub.name, subject: replySubject, replyText, originalMessage },
       });
       if (error) {
         let detail = error.message;

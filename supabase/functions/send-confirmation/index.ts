@@ -358,16 +358,37 @@ function adminEmailHtml(s: Sub): string {
   return baseLayout(content, `${label} de ${s.name}`);
 }
 
-function adminReplyHtml(recipientName: string, replyText: string): string {
+function adminReplyHtml(recipientName: string, replyText: string, originalMessage?: string): string {
+  const { navy, gold } = BRAND;
   const firstName = recipientName.split(" ")[0];
+
+  const quotedBlock = originalMessage ? `
+    <div style="margin-top:28px;border-left:3px solid ${gold};padding:16px 20px;background:#F9F7F4;border-radius:0 12px 12px 0;">
+      <p style="margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${gold};">Votre message</p>
+      <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.7;white-space:pre-wrap;">${esc(originalMessage)}</p>
+    </div>` : "";
+
   const content = `
-    <p style="margin:0 0 24px;font-size:15px;color:#374151;line-height:1.7;white-space:pre-wrap;">${esc(replyText)}</p>
-    <hr style="border:none;border-top:1px solid #f0ece6;margin:24px 0;"/>
-    <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;">
-      Pour répondre à ce message, répondez simplement à cet email.<br/>
-      Votre réponse arrivera directement dans notre boîte mail.
+    <h1 style="margin:0 0 6px;font-size:24px;font-weight:800;color:${navy};line-height:1.2;">
+      Bonjour <span style="color:${gold};">${esc(firstName)}</span>&nbsp;!
+    </h1>
+    <p style="margin:0 0 24px;font-size:14px;color:#9ca3af;">ON Coaching vous répond</p>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"
+      style="background:#F9F7F4;border-radius:16px;overflow:hidden;margin-bottom:8px;">
+      <tr><td style="padding:4px 24px 4px;border-left:4px solid ${gold};">
+        <p style="margin:16px 0;font-size:15px;color:#374151;line-height:1.75;white-space:pre-wrap;">${esc(replyText)}</p>
+      </td></tr>
+    </table>
+
+    ${quotedBlock}
+
+    <hr style="border:none;border-top:1px solid #f0ece6;margin:28px 0;"/>
+    <p style="margin:0;font-size:13px;color:#9ca3af;line-height:1.6;text-align:center;">
+      Vous pouvez répondre directement à cet email —<br/>
+      votre réponse arrivera dans notre boîte mail.
     </p>`;
-  return baseLayout(content, `Réponse de ON Coaching pour ${firstName}`);
+  return baseLayout(content, `ON Coaching vous répond, ${firstName}`);
 }
 
 // ── Helper : réponse JSON avec CORS ──────────────────────────────────────────
@@ -390,17 +411,17 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
   if (req.method !== "POST")    return err("Method Not Allowed", 405);
 
-  let body: { record?: Sub; adminReply?: boolean; to?: string; recipientName?: string; subject?: string; replyText?: string };
+  let body: { record?: Sub; adminReply?: boolean; to?: string; recipientName?: string; subject?: string; replyText?: string; originalMessage?: string };
   try { body = await req.json(); } catch { return err("Invalid JSON", 400); }
 
   try {
 
     // ── Réponse admin → client ────────────────────────────────────────────────
     if (body.adminReply) {
-      const { to, recipientName = "", subject = "Réponse de ON Coaching", replyText = "" } = body;
+      const { to, recipientName = "", subject = "Réponse de ON Coaching", replyText = "", originalMessage } = body;
       if (!to) return err("Missing 'to'", 400);
 
-      const result = await sendEmail(to, subject, adminReplyHtml(recipientName, replyText));
+      const result = await sendEmail(to, subject, adminReplyHtml(recipientName, replyText, originalMessage));
       if (!result.ok) return err(result.error ?? "Email send failed", 500);
       return json({ ok: true });
     }
