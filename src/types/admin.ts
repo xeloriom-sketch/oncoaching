@@ -18,4 +18,7 @@ export interface Submission {
   preferred_time2?: string | null;
   session_format?: string | null;
   note?: string | null;
+  // réponse admin
+  reply_text?: string | null;
+  replied_at?: string | null;
 }

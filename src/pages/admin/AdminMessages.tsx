@@ -172,9 +172,10 @@ interface DetailProps {
   onBack?: () => void;
   onDeleted?: (id: string) => void;
   onMarkUnread?: (id: string) => void;
+  onReplied?: (id: string, replyText: string, repliedAt: string) => void;
 }
 
-const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread }: DetailProps) => {
+const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread, onReplied }: DetailProps) => {
   const [replyOpen, setReplyOpen]       = useState(false);
   const [replySubject, setReplySubject] = useState("");
   const [replyText, setReplyText]       = useState("");
@@ -227,6 +228,11 @@ const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread }: DetailProps) =>
         } catch { /* ignore */ }
         throw new Error(detail);
       }
+      // Sauvegarder la réponse dans la DB
+      const now = new Date().toISOString();
+      await supabase.from("submissions").update({ reply_text: replyText, replied_at: now }).eq("id", sub.id);
+      onReplied?.(sub.id, replyText, now);
+
       setReplyDone(true);
       setReplyOpen(false);
     } catch (err: unknown) {
@@ -456,6 +462,20 @@ const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread }: DetailProps) =>
             )}
           </>
         )}
+        {/* Réponse envoyée */}
+        {sub.reply_text && (
+          <section>
+            <div className="flex items-center gap-2 mb-3">
+              <label className="text-xs font-semibold uppercase tracking-widest text-slate-400">Votre réponse</label>
+              {sub.replied_at && (
+                <span className="text-[11px] text-slate-300">{formatDetailDate(sub.replied_at)}</span>
+              )}
+            </div>
+            <div className="rounded-xl p-4 border-l-4" style={{ backgroundColor: `${GOLD}10`, borderColor: GOLD }}>
+              <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{sub.reply_text}</p>
+            </div>
+          </section>
+        )}
       </div>
     </motion.div>
   );
@@ -519,6 +539,11 @@ export default function AdminMessages() {
   function handleMarkUnread(id: string) {
     setSubmissions(prev => prev.map(s => s.id === id ? { ...s, read: false } : s));
     setSelected(prev => prev?.id === id ? { ...prev, read: false } : prev);
+  }
+
+  function handleReplied(id: string, replyText: string, repliedAt: string) {
+    setSubmissions(prev => prev.map(s => s.id === id ? { ...s, reply_text: replyText, replied_at: repliedAt } : s));
+    setSelected(prev => prev?.id === id ? { ...prev, reply_text: replyText, replied_at: repliedAt } : prev);
   }
 
   const handleSelect = (s: Submission) => { markRead(s); setSelected(s); setMobileView("detail"); };
@@ -591,7 +616,7 @@ export default function AdminMessages() {
           <AnimatePresence mode="wait">
             {selected ? (
               <MessageDetail key={selected.id} sub={selected} onBack={() => setMobileView("list")}
-                onDeleted={handleDeleted} onMarkUnread={handleMarkUnread} />
+                onDeleted={handleDeleted} onMarkUnread={handleMarkUnread} onReplied={handleReplied} />
             ) : (
               <motion.div key="placeholder" className="flex h-full items-center justify-center"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
