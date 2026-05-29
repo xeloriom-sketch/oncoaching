@@ -245,7 +245,18 @@ const MessageDetail = ({ sub, onBack, onArchived }: DetailProps) => {
           replyText,
         },
       });
-      if (error) throw error;
+      if (error) {
+        // Lire le corps JSON de la réponse d'erreur pour afficher le vrai message
+        let detail = error.message;
+        try {
+          const ctx = (error as { context?: Response }).context;
+          if (ctx) {
+            const body = await ctx.json();
+            if (body?.error) detail = body.error;
+          }
+        } catch { /* ignore */ }
+        throw new Error(detail);
+      }
       setReplyDone(true);
       setReplyOpen(false);
     } catch (err: unknown) {
