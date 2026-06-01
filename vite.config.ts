@@ -35,7 +35,6 @@ export default defineConfig(({ mode }) => ({
           "vendor-react":      ["react", "react-dom", "react-router-dom"],
           "vendor-motion":     ["framer-motion"],
           "vendor-query":      ["@tanstack/react-query"],
-          "vendor-icons":      ["lucide-react"],
           "vendor-scroll":     ["lenis"],
           "vendor-datepicker": ["react-day-picker", "date-fns"],
         },

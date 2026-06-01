@@ -182,10 +182,10 @@ const About = () => {
   return (
     <Layout>
       <SEO
-        title="À Propos — Noureddine Omar, Coach certifié Certifié à Mâcon (71) | ON Coaching"
-        description="Noureddine Omar, coach certifié par Prisme Évolution. Ex-enseignant SES 26 ans. Coaching à Sancé (Mâcon, Saône-et-Loire 71) et à distance. Prenez RDV."
+        title="Noureddine Omar — Praticien Neurofeedback NeurOptimal® Mâcon (71) & Coach ICF Certifié | ON Coaching"
+        description="Noureddine Omar, praticien Neurofeedback NeurOptimal® et coach certifié Prisme Évolution à Mâcon (Sancé, 71). 26 ans d'expérience. Stress, concentration, performance. RDV offert."
         canonical="/about"
-        keywords="Noureddine Omar coach, coach certifié mâcon, Prisme Évolution, coach scolaire mâcon, coaching professionnel saône-et-loire, coach de vie bourgogne, neurofeedback mâcon"
+        keywords="Noureddine Omar neurofeedback, praticien neurofeedback mâcon, NeurOptimal mâcon, coach certifié mâcon, Prisme Évolution, neurofeedback sancé 71, coaching professionnel saône-et-loire, neurofeedback bourgogne"
         structuredData={[
           {
             "@context": "https://schema.org",
@@ -204,8 +204,8 @@ const About = () => {
             name: "Noureddine Omar",
             givenName: "Noureddine",
             familyName: "Omar",
-            jobTitle: "Coach certifié",
-            description: "Coach certifié formé par Prisme Évolution. Ancien enseignant SES avec 26 ans d'expérience dans l'accompagnement humain à Mâcon (Sancé, Saône-et-Loire 71).",
+            jobTitle: "Praticien Neurofeedback NeurOptimal® & Coach certifié",
+            description: "Praticien Neurofeedback NeurOptimal® et coach certifié Prisme Évolution à Mâcon (Sancé, Saône-et-Loire 71). Spécialiste du stress, de la concentration et des performances cognitives. 26 ans d'expérience en accompagnement humain.",
             url: "https://www.oncoaching.fr/about",
             image: "https://www.oncoaching.fr/patron.webp",
             sameAs: [
@@ -216,13 +216,14 @@ const About = () => {
             ],
             worksFor: { "@id": "https://www.oncoaching.fr/#business" },
             knowsAbout: [
+              "Neurofeedback dynamique NeurOptimal®",
+              "Entraînement cérébral non invasif",
+              "Réduction du stress et de l'anxiété par neurofeedback",
+              "Amélioration de la concentration et des performances cognitives",
               "Coaching professionnel certifié",
-              "Neurofeedback dynamique",
               "Coaching scolaire",
               "Coaching jeunes adultes",
               "Coaching d'équipe en entreprise",
-              "Sciences économiques et sociales",
-              "Intelligence collective",
             ],
             hasCredential: {
               "@type": "EducationalOccupationalCredential",
@@ -273,7 +274,7 @@ const About = () => {
           className="max-w-7xl mx-auto px-5 md:px-12 pt-[88px] md:pt-20 lg:pt-28 pb-12 md:pb-20 lg:pb-28"
           aria-labelledby="about-h1"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
 
             <motion.div
               initial="hidden"
@@ -338,7 +339,7 @@ const About = () => {
               initial="hidden"
               animate="visible"
               variants={fadeInScale}
-              className="relative"
+              className="relative p-6"
             >
               <div className="relative rounded-[36px] overflow-hidden aspect-[4/5] max-h-[340px] sm:max-h-[420px] md:max-h-[560px]">
                 <img
@@ -544,7 +545,7 @@ const About = () => {
                   />
                   <div className="flex items-start gap-5">
                     <span
-                      className="font-mono font-black text-[clamp(2rem,4vw,3.5rem)] leading-none tracking-tighter text-gray-100 select-none flex-shrink-0"
+                      className="font-mono font-black text-[clamp(2rem,4vw,3.5rem)] leading-none tracking-tighter text-gray-300 select-none flex-shrink-0"
                       aria-hidden="true"
                     >
                       {step.num}
@@ -589,7 +590,7 @@ const About = () => {
               </p>
               <h2 className="text-[clamp(1.6rem,3vw,2.2rem)] font-bold text-white leading-tight tracking-tight">
                 <E fieldKey="certificationSection.title">{content?.certificationSection?.title ?? "Certification NeurOptimal®"}</E>
-                <span className="block text-white/45 text-[0.85rem] font-medium mt-1">
+                <span className="block text-white/65 text-[0.85rem] font-medium mt-1">
                   <E fieldKey="certificationSection.subtitle">{content?.certificationSection?.subtitle ?? "Praticien Neurofeedback — Zengar Institute"}</E>
                 </span>
               </h2>

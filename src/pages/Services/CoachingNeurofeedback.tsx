@@ -24,7 +24,7 @@ const SESSION_PHOTO    = "https://dbneurofeedback.com/wp-content/uploads/2024/12
 const NF_VIDEO_ID      = "qg1BfBMl0SE";
 const NEUROPTIMAL_LOGO = "https://neuroptimal.com/wp-content/uploads/2025/06/cropped-NO-head-logo-1024x1024-1-367x367.png";
 
-const HERO_WORDS = ["Coaching", "&", "Neurofeedback"];
+const HERO_WORDS = ["Neurofeedback", "à Mâcon"];
 
 const STEPS = [
   {
@@ -132,10 +132,10 @@ const CoachingNeurofeedback = () => {
   return (
     <Layout>
       <SEO
-        title="Neurofeedback à Mâcon (71) — Stress, Concentration, Sommeil | ON Coaching"
-        description="Neurofeedback certifié à Mâcon, Sancé (71) : entraînement cérébral non invasif. Réduction du stress, concentration, sommeil, performances cognitives. 1er RDV offert."
+        title="Neurofeedback Mâcon (71) — Praticien NeurOptimal® Certifié | ON Coaching Sancé"
+        description="Praticien Neurofeedback NeurOptimal® à Mâcon, Sancé (71). Stress, anxiété, concentration, sommeil, TDAH. Technique non invasive et scientifique. 1er bilan offert. Tél : 06 63 04 18 12."
         canonical="/coaching-neurofeedback"
-        keywords="neurofeedback mâcon, neurofeedback sancé 71, neurofeedback bourgogne, entraînement cérébral, réduire stress mâcon, améliorer concentration, neurofeedback enfant mâcon, biofeedback saône-et-loire, neurofeedback dynamique"
+        keywords="neurofeedback mâcon, neurofeedback macon, praticien neurofeedback mâcon, NeurOptimal mâcon, neurofeedback sancé 71, neurofeedback bourgogne, neurofeedback saône-et-loire, neurofeedback dynamique mâcon, neurofeedback stress mâcon, neurofeedback concentration, neurofeedback sommeil, neurofeedback tdah mâcon, neurofeedback enfant adolescent mâcon, biofeedback mâcon 71"
         structuredData={[
           {
             "@context": "https://schema.org",
@@ -182,6 +182,16 @@ const CoachingNeurofeedback = () => {
                 "@type": "Question",
                 name: "Le neurofeedback remplace-t-il le coaching à Mâcon ?",
                 acceptedAnswer: { "@type": "Answer", text: "Non, le neurofeedback complète le coaching. ON Coaching à Mâcon propose une approche combinée : neurofeedback pour réguler le cerveau et coaching certifié pour développer les ressources personnelles et professionnelles." }
+              },
+              {
+                "@type": "Question",
+                name: "Où trouver un praticien neurofeedback à Mâcon ?",
+                acceptedAnswer: { "@type": "Answer", text: "ON Coaching, cabinet de neurofeedback à Mâcon (Sancé, 71), est animé par Noureddine Omar, praticien certifié NeurOptimal®. Cabinet situé au 14 rue des écureuils, Sancé (Mâcon, 71000). Tél : 06 63 04 18 12. 1er bilan offert." }
+              },
+              {
+                "@type": "Question",
+                name: "Neurofeedback ou thérapie classique à Mâcon : quelle différence ?",
+                acceptedAnswer: { "@type": "Answer", text: "Le neurofeedback à Mâcon proposé par ON Coaching est une technique non invasive et sans médicaments qui entraîne le cerveau à s'auto-réguler. Contrairement à une thérapie classique, le neurofeedback agit directement sur l'activité cérébrale pour des résultats rapides et durables. Idéal pour le stress, la concentration, le sommeil et les performances." }
               },
             ],
           },
@@ -250,7 +260,7 @@ const CoachingNeurofeedback = () => {
                       initial={{ opacity: 0, y: 60 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ type: "spring", damping: 18, stiffness: 160, delay: i * 0.1 }}
-                      className={`inline-block mr-3 ${word === "&" ? "text-[#C4903E]" : ""}`}
+                      className={`inline-block mr-3 ${word === "à" ? "text-[#C4903E]" : ""}`}
                     >
                       {word}
                     </motion.span>
@@ -345,7 +355,7 @@ const CoachingNeurofeedback = () => {
                     transition={{ delay: i * 0.08 }}
                     className="bg-white rounded-[24px] p-5 sm:p-6 flex flex-col gap-4"
                   >
-                    <span className="font-mono text-[clamp(3rem,5vw,4rem)] font-bold text-[#C4903E]/20 leading-none select-none">
+                    <span className="font-mono text-[clamp(3rem,5vw,4rem)] font-bold text-[#C4903E]/40 leading-none select-none">
                       {step.num}
                     </span>
                     <h3 className="text-[#1C3A52] font-bold text-[18px] leading-snug">

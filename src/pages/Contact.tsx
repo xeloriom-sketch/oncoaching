@@ -577,7 +577,7 @@ const Contact = () => {
                   style={{ willChange: "transform" }}
                 >
                   <div>
-                    <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-1"><E fieldKey="coordonnees.sectionLabel">{content?.coordonnees?.sectionLabel ?? "Retrouvez-nous"}</E></p>
+                    <p className="text-[11px] font-mono tracking-widest uppercase text-white/55 mb-1"><E fieldKey="coordonnees.sectionLabel">{content?.coordonnees?.sectionLabel ?? "Retrouvez-nous"}</E></p>
                     <h3 className="text-white font-bold text-[1.4rem] leading-snug"><E fieldKey="coordonnees.sectionTitle">{content?.coordonnees?.sectionTitle ?? "Nos coordonnées"}</E></h3>
                   </div>
 
@@ -592,7 +592,7 @@ const Contact = () => {
                         <MapPin className="w-5 h-5 text-[#C4903E]" strokeWidth={2} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.adresse.label}</p>
+                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/55 mb-0.5">{coordonnees.adresse.label}</p>
                         <p className="text-white font-semibold text-[15px] leading-snug whitespace-pre-line group-hover:text-[#C4903E] transition-colors">
                           <E fieldKey="coordonnees.adresse.value">{coordonnees.adresse.value}</E>
                         </p>
@@ -610,7 +610,7 @@ const Contact = () => {
                         <Phone className="w-5 h-5 text-[#C4903E]" strokeWidth={2} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.telephone.label}</p>
+                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/55 mb-0.5">{coordonnees.telephone.label}</p>
                         <p className="text-white font-semibold text-[15px] group-hover:text-[#C4903E] transition-colors">
                           <E fieldKey="coordonnees.telephone.value">{coordonnees.telephone.value}</E>
                         </p>
@@ -628,7 +628,7 @@ const Contact = () => {
                         <Mail className="w-5 h-5 text-[#C4903E]" strokeWidth={2} />
                       </div>
                       <div>
-                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-0.5">{coordonnees.email.label}</p>
+                        <p className="text-[11px] font-mono tracking-widest uppercase text-white/55 mb-0.5">{coordonnees.email.label}</p>
                         <p className="text-white font-semibold text-[15px] break-all group-hover:text-[#C4903E] transition-colors">
                           <E fieldKey="coordonnees.email.value">{coordonnees.email.value}</E>
                         </p>
@@ -639,7 +639,7 @@ const Contact = () => {
                   {/* Horaires */}
                   {coordonnees.horaires?.lines?.length > 0 && (
                     <div className="pt-4 border-t border-white/5">
-                      <p className="text-[11px] font-mono tracking-widest uppercase text-white/30 mb-3"><E fieldKey="coordonnees.horairesLabel">{content?.coordonnees?.horairesLabel ?? "Horaires"}</E></p>
+                      <p className="text-[11px] font-mono tracking-widest uppercase text-white/55 mb-3"><E fieldKey="coordonnees.horairesLabel">{content?.coordonnees?.horairesLabel ?? "Horaires"}</E></p>
                       <div className="flex flex-col gap-1.5">
                         {coordonnees.horaires.lines.map((line: string, i: number) => (
                           <p key={i} className="text-white/60 text-[13px]">{line}</p>
@@ -659,7 +659,7 @@ const Contact = () => {
                         transition={pulseDot.transition}
                       />
                       <span className="text-[#C4903E] font-bold text-[14px]">1er RDV offert</span>
-                      <span className="text-white/40 text-[13px]">· Sans engagement</span>
+                      <span className="text-white/65 text-[13px]">· Sans engagement</span>
                     </motion.div>
                   </div>
                 </div>

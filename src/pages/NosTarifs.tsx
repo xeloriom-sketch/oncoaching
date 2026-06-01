@@ -65,10 +65,10 @@ const NosTarifs = () => {
   return (
     <Layout>
       <SEO
-        title="Tarifs Coaching Mâcon (71) — Prix Séances & Forfaits | ON Coaching"
+        title="Tarifs Neurofeedback Mâcon (71) & Coaching — Prix Séances & Forfaits | ON Coaching"
         description="Prix clairs du coaching à Mâcon (71) : séance individuelle 60€, neurofeedback 80€, équipe sur devis. Forfaits disponibles. 1er rendez-vous offert sans engagement."
         canonical="/nos-tarifs"
-        keywords="tarif coaching mâcon, prix séance coaching mâcon, forfait coaching scolaire sancé, neurofeedback tarif 71, coaching entreprise prix saône-et-loire, coach certifié tarif"
+        keywords="tarif coaching mâcon, prix séance coaching mâcon, forfait coaching scolaire sancé, neurofeedback tarif 71, neurofeedback mâcon tarif, coaching entreprise prix saône-et-loire, coach certifié tarif"
         structuredData={[
           {
             "@context": "https://schema.org",
@@ -342,7 +342,7 @@ const NosTarifs = () => {
                   <h3 className="text-[1.6rem] font-bold text-white leading-tight mb-1">Neuro-<br />feedback</h3>
                   <div className="flex items-end gap-1 mt-4 mb-6">
                     <span className="font-black text-[#C4903E] leading-none" style={{ fontSize: "clamp(2rem,5vw,3rem)" }}><E fieldKey="neurofeedback.cards.0.price">{content?.neurofeedback?.cards?.[0]?.price ?? "60€"}</E></span>
-                    <span className="text-white/40 text-[14px] mb-2"><E fieldKey="neurofeedback.cards.0.unit">{content?.neurofeedback?.cards?.[0]?.unit ?? "/30 min"}</E></span>
+                    <span className="text-white/65 text-[14px] mb-2"><E fieldKey="neurofeedback.cards.0.unit">{content?.neurofeedback?.cards?.[0]?.unit ?? "/30 min"}</E></span>
                   </div>
                   <p className="text-white/50 text-[14px] mb-6"><E fieldKey="neurofeedback.subtitle">{neurofeedback.subtitle}</E></p>
                   <ul className="space-y-2 sm:space-y-3 flex-1 mb-8">
@@ -442,7 +442,7 @@ const NosTarifs = () => {
                   className="flex flex-col cursor-default"
                   style={{ willChange: "transform" }}
                 >
-                  <span className="text-[clamp(3.5rem,6vw,5rem)] font-black font-mono text-[#C4903E]/20 leading-none mb-4 select-none">
+                  <span className="text-[clamp(3.5rem,6vw,5rem)] font-black font-mono text-[#C4903E]/40 leading-none mb-4 select-none">
                     {step.num}
                   </span>
                   <h3 className="text-[1.15rem] font-bold text-[#1C3A52] mb-3 leading-tight">{step.title}</h3>

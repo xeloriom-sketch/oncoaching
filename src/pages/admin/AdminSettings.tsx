@@ -409,9 +409,14 @@ function PushSection() {
           toast({ title: 'Permission refusée', description: 'Autorisez les notifications dans les paramètres du navigateur.', variant: 'destructive' });
           return;
         }
+        const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+        if (!vapidKey) {
+          toast({ title: 'Configuration manquante', description: 'La clé VAPID publique (VITE_VAPID_PUBLIC_KEY) est absente.', variant: 'destructive' });
+          return;
+        }
         const sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: import.meta.env.VITE_VAPID_PUBLIC_KEY,
+          applicationServerKey: vapidKey,
         });
         const json = sub.toJSON();
         await supabase.from('push_subscriptions').upsert({

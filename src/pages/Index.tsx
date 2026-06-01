@@ -101,15 +101,28 @@ interface LiquidCTAProps {
 }
 function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", children }: LiquidCTAProps) {
   const [hovered, setHovered] = useState(false);
+  const [textActive, setTextActive] = useState(false);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleHoverStart = () => {
+    setHovered(true);
+    // Applique la couleur du texte seulement quand le fond a à moitié recouvert le bouton
+    timerRef.current = setTimeout(() => setTextActive(true), 220);
+  };
+  const handleHoverEnd = () => {
+    setHovered(false);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setTextActive(false);
+  };
+
   return (
     <motion.div
       className="relative overflow-hidden rounded-full w-full sm:w-auto"
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
+      onHoverStart={handleHoverStart}
+      onHoverEnd={handleHoverEnd}
       whileTap={{ scale: 0.97 }}
       data-cursor="magnetic"
     >
-      {/* Fond coulissant de gauche à droite */}
       <motion.span
         className={`absolute inset-0 rounded-full ${fillClass}`}
         animate={{ x: hovered ? "0%" : "-105%" }}
@@ -119,7 +132,7 @@ function LiquidCTA({ to, label, baseClass, fillClass, hoverTextClass = "", child
       <Link
         to={to}
         aria-label={label}
-        className={`relative z-10 flex items-center justify-center gap-2.5 py-3.5 px-6 text-[15px] font-semibold transition-colors duration-300 ${baseClass} ${hovered ? hoverTextClass : ""}`}
+        className={`relative z-10 flex items-center justify-center gap-2.5 py-3.5 px-6 text-[15px] font-semibold transition-colors duration-[200ms] ${baseClass} ${textActive ? hoverTextClass : ""}`}
       >
         {children}
       </Link>
@@ -179,10 +192,10 @@ export default function Index() {
   return (
     <Layout>
       <SEO
-        title="ON Coaching — Coach Certifié à Mâcon, Sancé (71) | 1er RDV Offert"
-        description="Coach certifié à Mâcon, Sancé (71, Saône-et-Loire). 26 ans d'expérience. Coaching scolaire, jeunes adultes, neurofeedback, équipe. 1er rendez-vous offert."
+        title="Neurofeedback Mâcon (71) — Praticien NeurOptimal® & Coach ICF | ON Coaching | 1er Bilan Offert"
+        description="Praticien Neurofeedback NeurOptimal® et coach ICF certifié à Mâcon, Sancé (71). Stress, anxiété, concentration, sommeil, TDAH. Coaching scolaire, jeunes adultes, équipe. 1er bilan offert, sans engagement."
         canonical="/"
-        keywords="coaching mâcon, coach certifié mâcon, coaching scolaire mâcon, neurofeedback mâcon, coach jeunes adultes, coaching équipe saône-et-loire, sancé 71, bourgogne, Noureddine Omar"
+        keywords="neurofeedback mâcon, neurofeedback sancé 71, NeurOptimal mâcon, coach certifié mâcon, neurofeedback stress mâcon, neurofeedback concentration, coaching mâcon, coach jeunes adultes, coaching scolaire mâcon, Noureddine Omar, saône-et-loire bourgogne"
         structuredData={[
           {
             "@context": "https://schema.org",
@@ -286,8 +299,7 @@ export default function Index() {
             {/* H1 — 3 lignes, reveal ligne par ligne */}
             <h1
                 id="home-h1"
-                className="font-bold leading-[1.1] tracking-tight text-[#1C3A52] max-w-full"
-                style={{ fontSize: "clamp(1.9rem, 7vw, 5.6rem)" }}
+                className="font-bold leading-[1.15] tracking-tight text-[#1C3A52] max-w-full text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[2.8rem] xl:text-[3.8rem] 2xl:text-[5rem]"
             >
               {isEditMode ? (
                 <E fieldKey="hero.title">
@@ -299,9 +311,9 @@ export default function Index() {
                     { text: "Développez", delay: 0.18 },
                     { text: "votre potentiel", delay: 0.30 },
                   ].map(({ text, delay }) => (
-                    <span key={text} className="word-mask block overflow-hidden">
+                    <span key={text} className="word-mask block">
                       <motion.span
-                        className="inline-block whitespace-nowrap"
+                        className="inline-block"
                         initial={{ y: "105%" }}
                         animate={{ y: "0%" }}
                         transition={{ type: "spring", stiffness: 160, damping: 22, delay }}
@@ -310,9 +322,9 @@ export default function Index() {
                       </motion.span>
                     </span>
                   ))}
-                  <span className="word-mask block overflow-hidden">
+                  <span className="word-mask block">
                     <motion.span
-                      className="inline-block whitespace-nowrap"
+                      className="inline-block"
                       initial={{ y: "105%" }}
                       animate={{ y: "0%" }}
                       transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.42 }}
@@ -355,8 +367,7 @@ export default function Index() {
                   to={ROUTES.about}
                   label="Découvrir l'approche de coaching"
                   baseClass="bg-white text-[#1C3A52] border border-[#E5E7EB] rounded-full px-6 py-3.5 font-medium w-full sm:w-auto justify-center"
-                  fillClass="bg-[#1C3A52]"
-                  hoverTextClass="text-white"
+                  fillClass="bg-[#C4903E]"
               >
                 <E fieldKey="hero.buttonSecondary">{content?.hero?.buttonSecondary ?? "Notre approche"}</E>
               </LiquidCTA>
@@ -615,7 +626,7 @@ export default function Index() {
           >
             <motion.p
               variants={fadeInUp}
-              className="text-[13px] font-mono tracking-widest uppercase text-white/40"
+              className="text-[13px] font-mono tracking-widest uppercase text-white/60"
               aria-hidden="true"
             >
               <E fieldKey="coachSection.labelSmall">{content?.coachSection?.labelSmall ?? "Notre coach"}</E>
@@ -724,7 +735,7 @@ export default function Index() {
               >
                 <div className="flex items-center gap-4 md:block md:space-y-5">
                   <span
-                    className="font-mono text-[clamp(2rem,5vw,4.5rem)] font-bold leading-none text-[#F3F4F6] select-none"
+                    className="font-mono text-[clamp(2rem,5vw,4.5rem)] font-bold leading-none text-gray-300 select-none"
                     aria-hidden="true"
                   >
                     {num}
@@ -824,55 +835,99 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ── 07. TÉMOIGNAGE ───────────────────────────────────────────── */}
+      {/* ── 07. AVIS CLIENTS ─────────────────────────────────────────── */}
       <section
         className="py-12 md:py-20 lg:py-28 bg-[#F3F4F6]"
-        aria-label="Témoignage client"
+        aria-labelledby="avis-title"
       >
-        <div className="max-w-7xl mx-auto px-5 md:px-12">
+        <div className="max-w-7xl mx-auto px-5 md:px-12 flex flex-col gap-8 md:gap-12">
+
+          {/* En-tête */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={VP}
-            variants={fadeInScale}
-            className="max-w-3xl mx-auto text-center flex flex-col items-center gap-6"
+            variants={staggerContainer}
+            className="text-center flex flex-col gap-3"
           >
-            <div
-              className="flex gap-1"
-              role="img"
-              aria-label="Note 5 étoiles sur 5"
-            >
-              {Array(5)
-                .fill(null)
-                .map((_, i) => (
-                  <span
-                    key={i}
-                    className="text-[#C4903E] text-[1.4rem]"
-                    aria-hidden="true"
-                  >
-                    ★
-                  </span>
-                ))}
-            </div>
+            <motion.p variants={fadeInUp} className="text-[13px] font-mono tracking-widest uppercase text-[#C4903E]" aria-hidden="true">
+              Avis vérifiés
+            </motion.p>
+            <motion.h2 id="avis-title" variants={fadeInUp} className="text-[clamp(1.8rem,4vw,3rem)] font-semibold tracking-tight text-[#1C3A52] leading-[1.05]">
+              Ce que disent nos clients
+            </motion.h2>
+            <motion.div variants={fadeInUp} className="flex items-center justify-center gap-1.5">
+              {Array(5).fill(null).map((_, i) => (
+                <span key={i} className="text-[#C4903E] text-[1.2rem]" aria-hidden="true">★</span>
+              ))}
+              <span className="text-[14px] font-semibold text-[#1C3A52] ml-2">5 / 5</span>
+              <span className="text-[14px] text-gray-400 ml-1">· Resalib</span>
+            </motion.div>
+          </motion.div>
 
-            <blockquote className="text-[1.1rem] md:text-[1.25rem] lg:text-[1.5rem] font-medium text-[#1C3A52] leading-relaxed italic">
-              <E fieldKey="testimonial.quote">{content?.testimonial?.quote ?? "\"L'accompagnement d'ON Coaching m'a permis de structurer ma vision et de retrouver une parfaite synergie entre ma vie professionnelle et personnelle. Un coach à l'écoute, bienveillant et efficace.\""}</E>
-            </blockquote>
-
-            <div className="flex items-center gap-3">
-              <div
-                className="w-11 h-11 rounded-full bg-[#1C3A52] flex items-center justify-center flex-shrink-0"
-                aria-hidden="true"
+          {/* Cartes avis */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={VP}
+            variants={staggerContainer}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+          >
+            {[
+              {
+                initials: "SR",
+                name: "Sarah R.",
+                date: "19 décembre 2025",
+                context: "Suite à un rendez-vous en décembre 2025",
+                quote: "Très bon coaching, beaucoup de bienveillance et d'écoute. De très bons conseils pour s'améliorer.",
+                reply: "Merci Sarah. Tu pourras toujours compter sur moi en cas de difficultés.",
+              },
+              {
+                initials: "R",
+                name: "R.",
+                date: "10 novembre 2025",
+                context: "Suite à un rendez-vous en août 2025",
+                quote: "J'ai été accompagnée par Noureddine dans le cadre d'une création d'activité. Son écoute et sa bienveillance sont très appréciables et m'ont aidée à lever certaines barrières que je me mettais.",
+                reply: "Merci pour cet avis. Je te souhaite toute la réussite que tu mérites. Bonne continuation.",
+              },
+            ].map(({ initials, name, date, context, quote, reply }) => (
+              <motion.article
+                key={name}
+                variants={springUp}
+                className="bg-white rounded-[24px] p-6 sm:p-8 flex flex-col gap-5 shadow-[0_4px_24px_rgba(0,0,0,0.07)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.11)] transition-shadow duration-300"
               >
-                <span className="text-[#C4903E] text-[13px] font-bold">
-                  MA
-                </span>
-              </div>
-              <div className="text-left">
-                <p className="text-[15px] font-bold text-[#1C3A52]"><E fieldKey="testimonial.authorName">{content?.testimonial?.authorName ?? "Marc A."}</E></p>
-                <p className="text-[14px] text-gray-500"><E fieldKey="testimonial.authorTitle">{content?.testimonial?.authorTitle ?? "Directeur Associé"}</E></p>
-              </div>
-            </div>
+                {/* Auteur + étoiles */}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-full bg-[#1C3A52] flex items-center justify-center flex-shrink-0">
+                      <span className="text-[#C4903E] text-[13px] font-bold">{initials}</span>
+                    </div>
+                    <div>
+                      <p className="text-[15px] font-bold text-[#1C3A52] leading-tight">{name}</p>
+                      <p className="text-[12px] text-gray-400">{date}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-0.5 flex-shrink-0" role="img" aria-label="5 étoiles sur 5">
+                    {Array(5).fill(null).map((_, i) => (
+                      <span key={i} className="text-[#C4903E] text-[0.9rem]" aria-hidden="true">★</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Avis */}
+                <blockquote className="text-[15px] text-gray-600 leading-relaxed italic flex-1">
+                  "{quote}"
+                </blockquote>
+
+                <p className="text-[11px] font-mono tracking-wide text-gray-300 uppercase">{context}</p>
+
+                {/* Réponse du praticien */}
+                <div className="border-t border-[#F3F4F6] pt-4 flex flex-col gap-1.5">
+                  <p className="text-[11px] font-bold text-[#C4903E] uppercase tracking-widest">Réponse du praticien</p>
+                  <p className="text-[14px] text-gray-500 leading-relaxed italic">"{reply}"</p>
+                </div>
+              </motion.article>
+            ))}
           </motion.div>
         </div>
       </section>

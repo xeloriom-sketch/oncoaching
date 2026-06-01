@@ -118,8 +118,12 @@ const Navbar = () => {
           animate={{ opacity: logoVisible ? 1 : 0, pointerEvents: logoVisible ? "auto" : "none" }}
           transition={{ duration: 0.35, ease: "easeInOut" }}
         >
-          <Link to="/" aria-label="ON Coaching — Accueil">
-            <LogoMark size={36} animate />
+          <Link to="/" aria-label="ON Coaching — Accueil" className="flex items-center gap-2.5">
+            <LogoMark size={42} animate />
+            <span className="hidden sm:flex flex-col leading-[1.25]">
+              <span className="text-[14px] font-bold tracking-wide text-[#1C3A52]">Coaching &amp;</span>
+              <span className="text-[14px] font-bold tracking-wide text-[#C4903E]">Neurofeedback</span>
+            </span>
           </Link>
         </motion.div>
 

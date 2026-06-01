@@ -1,85 +1,129 @@
 {
   "hero": {
-    "title": "DÃ©veloppez votre potentiel infini. 1",
-    "subtitle": "Coach certifiÃ© Ã  MÃ¢con (SancÃ©, 71) â accompagnement personnalisÃ© pour particuliers et entreprises. 26 ans d'expÃ©rience en sciences humaines.",
+    "title": "Développez votre potentiel infini. 1",
+    "subtitle": "Coach certifié à Mâcon (Sancé, 71) — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines.",
     "buttonPrimary": "Prendre rendez-vous",
     "buttonSecondary": "Notre approche",
     "image": "imgHeroicon.png"
   },
   "servicesSection": {
-    "title": "Un accompagnement unique pour des rÃ©sultats durables",
-    "subtitle": "Coaching certifiÃ© Ã  MÃ¢con et Ã  distance â scolaire, jeunes adultes, neurofeedback et Ã©quipe en SaÃ´ne-et-Loire (71)."
+    "title": "Un accompagnement unique pour des résultats durables",
+    "subtitle": "Coaching certifié à Mâcon et à distance — scolaire, jeunes adultes, neurofeedback et équipe en Saône-et-Loire (71)."
   },
   "services": [
     {
       "key": "scolaire",
-      "title": "Coaching scolaire & Ã©tudiant",
-      "description": "Soutien, mÃ©thodologie et orientation pour rÃ©ussir sa scolaritÃ© ou ses Ã©tudes Ã  MÃ¢con et en SaÃ´ne-et-Loire.",
+      "title": "Coaching scolaire & étudiant",
+      "description": "Soutien, méthodologie et orientation pour réussir sa scolarité ou ses études à Mâcon et en Saône-et-Loire.",
       "link": "/coaching-scolaire"
     },
     {
       "key": "jeunes",
       "title": "Coaching jeunes & jeunes adultes",
-      "description": "Accompagnement lors des choix d'orientation, insertion pro, confiance et construction du projet de vie â 15 Ã  30 ans Ã  MÃ¢con.",
+      "description": "Accompagnement lors des choix d'orientation, insertion pro, confiance et construction du projet de vie — 15 à 30 ans à Mâcon.",
       "link": "/coaching-jeunes"
     },
     {
       "key": "neurofeedback",
       "title": "Coaching & Neurofeedback",
-      "description": "Neurofeedback NeurOptimalÂ® non invasif Ã  MÃ¢con : rÃ©duction du stress, concentration, sommeil et performances cognitives.",
+      "description": "Neurofeedback NeurOptimal® non invasif à Mâcon : réduction du stress, concentration, sommeil et performances cognitives.",
       "link": "/coaching-neurofeedback"
     },
     {
       "key": "equipe",
-      "title": "Coaching d'Ã©quipe",
-      "description": "DÃ©veloppez la cohÃ©sion, la performance et l'intelligence collective de votre Ã©quipe â TPE/PME en SaÃ´ne-et-Loire.",
+      "title": "Coaching d'équipe",
+      "description": "Développez la cohésion, la performance et l'intelligence collective de votre équipe — TPE/PME en Saône-et-Loire.",
       "link": "/coaching-equipe"
     }
   ],
   "whyUsSection": {
-    "title": "Pourquoi choisir ON Coaching Ã  MÃ¢con ?",
-    "subtitle": "Coach certifiÃ© Ã  MÃ¢con, Noureddine Omar combine 26 ans d'expÃ©rience enseignant et une expertise en neurofeedback pour des rÃ©sultats concrets.",
+    "title": "Pourquoi choisir ON Coaching à Mâcon ?",
+    "subtitle": "Coach certifié à Mâcon, Noureddine Omar combine 26 ans d'expérience enseignant et une expertise en neurofeedback pour des résultats concrets.",
     "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80",
-    "imageAlt": "Coaching de groupe Ã  MÃ¢con",
+    "imageAlt": "Coaching de groupe à Mâcon",
     "items": [
       {
         "key": "certifies",
-        "title": "Coach certifiÃ© Ã  MÃ¢con",
-        "description": "CertifiÃ© par Prisme Ãvolution, Noureddine Omar est l'un des rares coachs certifiÃ©s Ã  MÃ¢con et en SaÃ´ne-et-Loire (71)."
+        "title": "Coach certifié à Mâcon",
+        "description": "Certifié par Prisme Évolution, Noureddine Omar est l'un des rares coachs certifiés à Mâcon et en Saône-et-Loire (71)."
       },
       {
         "key": "mesure",
         "title": "Approche sur mesure",
-        "description": "Chaque programme de coaching Ã  MÃ¢con est personnalisÃ© pour rÃ©pondre prÃ©cisÃ©ment Ã  vos besoins et objectifs spÃ©cifiques."
+        "description": "Chaque programme de coaching à Mâcon est personnalisé pour répondre précisément à vos besoins et objectifs spécifiques."
       },
       {
         "key": "methodes",
-        "title": "MÃ©thodes Ã©prouvÃ©es",
-        "description": "Nos techniques combinent coaching certifiÃ© et neurofeedback NeurOptimalÂ® â approches scientifiques et validÃ©es cliniquement."
+        "title": "Méthodes éprouvées",
+        "description": "Nos techniques combinent coaching certifié et neurofeedback NeurOptimal® — approches scientifiques et validées cliniquement."
       }
     ]
   },
   "cta": {
-    "title": "Passez au niveau supÃ©rieur.",
-    "subtitle": "1er rendez-vous offert Ã  MÃ¢con (SancÃ©, 71) ou en visioconfÃ©rence. Sans engagement. Coach certifiÃ© disponible pour de nouveaux accompagnements.",
+    "title": "Passez au niveau supérieur.",
+    "subtitle": "1er rendez-vous offert à Mâcon (Sancé, 71) ou en visioconférence. Sans engagement. Coach certifié disponible pour de nouveaux accompagnements.",
     "buttonText": "Prendre rendez-vous",
     "buttonLink": "/contact"
   },
   "stats": [
-    { "value": "26 ans", "label": "Enseignant SES" },
-    { "value": "100+", "label": "Accompagnements" },
-    { "value": "Certifié", "label": "Prisme Évolution" },
-    { "value": "4", "label": "Programmes spécialisés" }
+    {
+      "value": "26 ans",
+      "label": "Enseignant SES"
+    },
+    {
+      "value": "100+",
+      "label": "Accompagnements"
+    },
+    {
+      "value": "Certifié",
+      "label": "Prisme Évolution"
+    },
+    {
+      "value": "4",
+      "label": "Programmes spécialisés"
+    }
   ],
   "steps": [
-    { "num": "01", "title": "Consultation", "desc": "Premier RDV offert, diagnostic complet" },
-    { "num": "02", "title": "Plan sur mesure", "desc": "Programme aligné avec vos objectifs" },
-    { "num": "03", "title": "Transformation", "desc": "Résultats mesurables et durables" }
+    {
+      "num": "01",
+      "title": "Consultation",
+      "desc": "Premier RDV offert, diagnostic complet"
+    },
+    {
+      "num": "02",
+      "title": "Plan sur mesure",
+      "desc": "Programme aligné avec vos objectifs"
+    },
+    {
+      "num": "03",
+      "title": "Transformation",
+      "desc": "Résultats mesurables et durables"
+    }
   ],
   "servicesCards": [
-    { "key": "scolaire", "title": "Coaching scolaire & étudiant", "desc": "Soutien, méthodologie et orientation pour réussir sa scolarité ou ses études.", "tag": "Collégiens · Lycéens · Étudiants" },
-    { "key": "jeunes", "title": "Coaching jeunes & jeunes adultes", "desc": "Accompagnement lors des choix d'orientation, insertion pro et construction du projet de vie.", "tag": "15 – 30 ans" },
-    { "key": "neurofeedback", "title": "Coaching & Neurofeedback", "desc": "Entraînement cérébral NeurOptimal® : réduction du stress, concentration, sommeil, performances cognitives. Non invasif, dès 6 à 10 séances.", "tag": "NeurOptimal® · Non invasif" },
-    { "key": "equipe", "title": "Coaching d'équipe", "desc": "Développez la cohésion, la performance et l'intelligence collective de votre équipe.", "tag": "Entreprises · TPE/PME" }
+    {
+      "key": "scolaire",
+      "title": "Coaching scolaire & étudiant",
+      "desc": "Soutien, méthodologie et orientation pour réussir sa scolarité ou ses études.",
+      "tag": "Collégiens · Lycéens · Étudiants"
+    },
+    {
+      "key": "jeunes",
+      "title": "Coaching jeunes & jeunes adultes",
+      "desc": "Accompagnement lors des choix d'orientation, insertion pro et construction du projet de vie.",
+      "tag": "15 – 30 ans"
+    },
+    {
+      "key": "neurofeedback",
+      "title": "Coaching & Neurofeedback",
+      "desc": "Entraînement cérébral NeurOptimal® : réduction du stress, concentration, sommeil, performances cognitives. Non invasif, dès 6 à 10 séances.",
+      "tag": "NeurOptimal® · Non invasif"
+    },
+    {
+      "key": "equipe",
+      "title": "Coaching d'équipe",
+      "desc": "Développez la cohésion, la performance et l'intelligence collective de votre équipe.",
+      "tag": "Entreprises · TPE/PME"
+    }
   ]
 }

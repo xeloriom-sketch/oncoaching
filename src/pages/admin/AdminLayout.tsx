@@ -7,6 +7,7 @@ import {
   LogOut,
   Loader2,
   Eye,
+  FileText,
 } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import { LogoMark } from "@/components/Logo";
@@ -15,10 +16,11 @@ import { supabase } from "@/lib/supabase";
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { icon: LayoutDashboard, label: "Dashboard",       path: "/admin"                },
-  { icon: Eye,             label: "Éditeur visuel",  path: "/admin/visual"         },
-  { icon: Inbox,           label: "Messages",        path: "/admin/messages"       },
-  { icon: Settings,        label: "Paramètres",      path: "/admin/settings"       },
+  { icon: LayoutDashboard, label: "Dashboard",      path: "/admin"           },
+  { icon: Inbox,           label: "Messages",       path: "/admin/messages"  },
+  { icon: FileText,        label: "Contenu",        path: "/admin/content"   },
+  { icon: Eye,             label: "Visuel",         path: "/admin/visual"    },
+  { icon: Settings,        label: "Paramètres",     path: "/admin/settings"  },
 ];
 
 // ─── FullScreenSpinner ────────────────────────────────────────────────────────
@@ -72,16 +74,25 @@ const AdminLayout = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ── Unread count from Supabase ─────────────────────────────────────────────
+  // ── Unread count — initial fetch + live realtime refresh ──────────────────
   useEffect(() => {
     if (!session) return;
-    supabase
-      .from("submissions")
-      .select("*", { count: "exact", head: true })
-      .eq("read", false)
-      .then(({ count }) => {
-        if (typeof count === "number") setUnreadCount(count);
-      });
+
+    const refetch = () =>
+      supabase
+        .from("submissions")
+        .select("*", { count: "exact", head: true })
+        .eq("read", false)
+        .then(({ count }) => { if (typeof count === "number") setUnreadCount(count); });
+
+    refetch();
+
+    const channel = supabase
+      .channel("layout-unread-watch")
+      .on("postgres_changes", { event: "*", schema: "public", table: "submissions" }, refetch)
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, [session]);
 
   if (session === undefined) return <FullScreenSpinner />;
@@ -107,8 +118,10 @@ const AdminLayout = () => {
         style={{ backgroundColor: "#1C3A52" }}
       >
         {/* Top: Logo */}
-        <div className="flex items-center gap-2 px-6 py-5">
-          <LogoMark size={28} />
+        <div className="flex items-center gap-2.5 px-5 py-5">
+          <div className="bg-white rounded-xl p-1.5 flex-shrink-0">
+            <LogoMark size={24} />
+          </div>
           <span className="font-semibold text-white text-sm tracking-wide">Admin</span>
         </div>
 
@@ -240,8 +253,10 @@ const AdminLayout = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-5 py-4">
-              <div className="flex items-center gap-2">
-                <LogoMark size={28} />
+              <div className="flex items-center gap-2.5">
+                <div className="bg-white rounded-xl p-1.5 flex-shrink-0">
+                  <LogoMark size={24} />
+                </div>
                 <span className="font-semibold text-white text-sm">Admin</span>
               </div>
               <button

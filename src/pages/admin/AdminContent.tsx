@@ -1,16 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import * as LucideIcons from "lucide-react";
-import { ExternalLink } from "lucide-react";
-import { PAGES } from "@/lib/contentSchema";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  ChevronRight,
+  Home,
+  User,
+  GraduationCap,
+  Zap,
+  Brain,
+  Users,
+  CreditCard,
+  MessageSquare,
+  Building2,
+  Newspaper,
+  Settings,
+  FileText,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { PAGES } from "@/lib/contentSchema";
 import AdminContentEditor from "./AdminContentEditor";
 
-// ─── Dynamic Lucide icon resolver ────────────────────────────────────────────
+const NAVY = "#1C3A52";
+const GOLD = "#C4903E";
+
+// ─── Dynamic icon ─────────────────────────────────────────────────────────────
+const ICON_MAP: Record<string, LucideIcon> = {
+  Home, User, GraduationCap, Zap, Brain, Users,
+  CreditCard, MessageSquare, Building2, Newspaper, Settings, FileText,
+};
+
 function DynamicIcon({ name, className }: { name: string; className?: string }) {
-  const icons = LucideIcons as unknown as Record<string, LucideIcon>;
-  const Icon = icons[name] ?? icons["FileText"];
+  const Icon = ICON_MAP[name] ?? FileText;
   return <Icon className={className} />;
 }
 
@@ -18,142 +39,189 @@ function DynamicIcon({ name, className }: { name: string; className?: string }) 
 export default function AdminContent() {
   const navigate = useNavigate();
   const [selectedKey, setSelectedKey] = useState<string>(PAGES[0]?.key ?? "");
+  const [search, setSearch] = useState("");
+
+  const filtered = search.trim()
+    ? PAGES.filter((p) => p.label.toLowerCase().includes(search.toLowerCase()))
+    : PAGES;
+
+  const selectedPage = PAGES.find((p) => p.key === selectedKey);
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC]">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200 px-6 py-5">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-[#1C3A52]">Contenu du site</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Modifiez les textes de chaque page
-          </p>
-        </div>
-      </div>
+    <>
+      {/* ── DESKTOP layout ────────────────────────────────────────────────── */}
+      <div className="hidden lg:block">
 
-      {/* ── Desktop: two-panel layout ─────────────────────────────────────── */}
-      <div className="hidden md:flex max-w-7xl mx-auto h-[calc(100vh-89px)]">
-        {/* Left panel — page list */}
-        <aside className="w-[260px] shrink-0 bg-white border-r border-slate-200 overflow-y-auto">
-          <nav className="py-3">
-            {PAGES.map((pageDef, i) => {
-              const isSelected = pageDef.key === selectedKey;
-              return (
-                <motion.button
-                  key={pageDef.key}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.25, delay: i * 0.04, ease: "easeOut" }}
-                  onClick={() => setSelectedKey(pageDef.key)}
-                  className={[
-                    "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors relative",
-                    isSelected
-                      ? "bg-[#FDF6EC] text-[#C4903E]"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-[#1C3A52]",
-                  ].join(" ")}
-                >
-                  {/* Gold left border when selected */}
-                  {isSelected && (
-                    <span className="absolute inset-y-0 left-0 w-[3px] bg-[#C4903E] rounded-r" />
-                  )}
+        {/*
+          Left sidebar: fixed, positioned right after the AdminLayout sidebar (w-60 = 240px).
+          w-[220px] wide, full height, scrolls independently.
+          z-30 (below AdminLayout's z-40).
+        */}
+        <aside
+          className="fixed top-0 left-60 h-screen w-[220px] flex flex-col z-30 border-r border-slate-200 bg-white"
+        >
+          {/* Header */}
+          <div className="px-4 pt-5 pb-3 shrink-0 border-b border-slate-100">
+            <p
+              className="text-[10px] font-bold uppercase tracking-widest mb-3"
+              style={{ color: "#94a3b8" }}
+            >
+              {PAGES.length} pages
+            </p>
+            {/* Search */}
+            <div className="relative">
+              <Search
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none"
+                style={{ color: "#94a3b8" }}
+              />
+              <input
+                type="text"
+                placeholder="Rechercher…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full h-8 pl-8 pr-3 text-xs rounded-lg border border-slate-200 bg-slate-50 placeholder:text-slate-400 outline-none transition"
+                style={{ color: NAVY }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = GOLD;
+                  e.currentTarget.style.boxShadow = `0 0 0 3px ${GOLD}22`;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "";
+                  e.currentTarget.style.boxShadow = "";
+                }}
+              />
+            </div>
+          </div>
 
-                  {/* Icon */}
-                  <span
-                    className={[
-                      "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors",
-                      isSelected
-                        ? "bg-[#C4903E] text-white"
-                        : "bg-slate-100 text-slate-500",
-                    ].join(" ")}
+          {/* Page list — scrolls independently */}
+          <nav className="flex-1 overflow-y-auto py-1.5">
+            <AnimatePresence>
+              {filtered.map((pageDef, i) => {
+                const isSelected = pageDef.key === selectedKey;
+                return (
+                  <motion.button
+                    key={pageDef.key}
+                    initial={{ opacity: 0, x: -4 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.18, delay: i * 0.025 }}
+                    onClick={() => setSelectedKey(pageDef.key)}
+                    className="relative w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors group"
+                    style={{
+                      backgroundColor: isSelected ? `${GOLD}12` : undefined,
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isSelected)
+                        e.currentTarget.style.backgroundColor = "#f8fafc";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isSelected)
+                        e.currentTarget.style.backgroundColor = "";
+                    }}
                   >
-                    <DynamicIcon name={pageDef.icon} className="w-4 h-4" />
-                  </span>
+                    {/* Gold left bar */}
+                    {isSelected && (
+                      <span
+                        className="absolute inset-y-0 left-0 w-[3px] rounded-r"
+                        style={{ backgroundColor: GOLD }}
+                      />
+                    )}
 
-                  {/* Label + route */}
-                  <div className="min-w-0 flex-1">
-                    <p
-                      className={[
-                        "text-sm font-medium truncate",
-                        isSelected ? "text-[#C4903E]" : "text-[#1C3A52]",
-                      ].join(" ")}
+                    {/* Icon */}
+                    <span
+                      className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors"
+                      style={{
+                        backgroundColor: isSelected ? GOLD : "#f1f5f9",
+                        color: isSelected ? "white" : "#64748b",
+                      }}
+                    >
+                      <DynamicIcon name={pageDef.icon} className="w-3.5 h-3.5" />
+                    </span>
+
+                    {/* Label */}
+                    <span
+                      className="text-xs font-medium truncate flex-1"
+                      style={{ color: isSelected ? GOLD : NAVY }}
                     >
                       {pageDef.label}
-                    </p>
-                    <p className="text-[10px] text-slate-400 font-mono truncate">
-                      {pageDef.route}
-                    </p>
-                  </div>
-                </motion.button>
-              );
-            })}
+                    </span>
+
+                    {isSelected && (
+                      <ChevronRight
+                        className="w-3 h-3 shrink-0"
+                        style={{ color: GOLD }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
+            </AnimatePresence>
+
+            {filtered.length === 0 && (
+              <p className="px-4 py-8 text-xs text-slate-400 text-center">
+                Aucune page trouvée
+              </p>
+            )}
           </nav>
         </aside>
 
-        {/* Right panel — inline editor */}
-        <main className="flex-1 overflow-y-auto bg-[#F4F1EC]">
-          {selectedKey ? (
+        {/*
+          Right content: margin-left = AdminContent sidebar width (220px).
+          The AdminLayout main already has ml-60 (240px), so we only add 220px here.
+          Body scrolls naturally — no overflow tricks needed.
+        */}
+        <div className="ml-[220px] min-h-screen">
+          {selectedPage ? (
             <AdminContentEditor pageKey={selectedKey} />
           ) : (
-            <div className="flex items-center justify-center h-full text-slate-400 text-sm">
-              Sélectionnez une page
+            <div
+              className="flex flex-col items-center justify-center min-h-[60vh] gap-3"
+              style={{ color: "#94a3b8" }}
+            >
+              <p className="text-sm">Sélectionnez une page dans le menu</p>
             </div>
           )}
-        </main>
+        </div>
       </div>
 
-      {/* ── Mobile: card grid navigating to route ─────────────────────────── */}
-      <div className="md:hidden max-w-5xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 gap-4">
+      {/* ── MOBILE card grid ──────────────────────────────────────────────── */}
+      <div className="lg:hidden max-w-xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold" style={{ color: NAVY }}>
+            Contenu
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Sélectionnez une page à modifier
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2.5">
           {PAGES.map((pageDef, i) => (
-            <motion.div
+            <motion.button
               key={pageDef.key}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: i * 0.05, ease: "easeOut" }}
-              whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(28,58,82,0.10)" }}
-              className="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex items-center gap-4 cursor-pointer"
+              transition={{ duration: 0.28, delay: i * 0.04 }}
               onClick={() => navigate(`/admin/content/${pageDef.key}`)}
+              className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 text-left shadow-sm active:scale-[0.99] transition-transform hover:border-[#C4903E]/40"
             >
-              {/* Icon */}
-              <div className="w-11 h-11 rounded-xl bg-[#1C3A52] flex items-center justify-center shrink-0">
-                <DynamicIcon name={pageDef.icon} className="w-5 h-5 text-white" />
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ backgroundColor: NAVY }}
+              >
+                <DynamicIcon name={pageDef.icon} className="w-4.5 h-4.5 text-white" />
               </div>
-
-              {/* Title + URL */}
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-[#1C3A52] text-base leading-tight truncate">
-                  {pageDef.label}
-                </p>
-                <p className="mt-0.5 text-xs text-slate-400 font-mono truncate">
-                  {pageDef.route}
-                </p>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center gap-3 shrink-0">
-                <a
-                  href={pageDef.route}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-[#1C3A52] transition-colors"
-                >
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/admin/content/${pageDef.key}`);
-                  }}
-                  className="px-4 py-1.5 rounded-full bg-[#C4903E] text-white text-xs font-medium hover:bg-[#b07e34] transition-colors"
-                >
-                  Modifier
-                </button>
-              </div>
-            </motion.div>
+              <span
+                className="text-sm font-semibold flex-1 truncate"
+                style={{ color: NAVY }}
+              >
+                {pageDef.label}
+              </span>
+              <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+            </motion.button>
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,8 +1,3 @@
-/**
- * usePageContent — Loads page content from Supabase table `page_content`
- * Backed by React Query: data is cached for the session and never re-fetched
- * on back-navigation.
- */
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase";
 
@@ -12,15 +7,21 @@ interface UsePageContentResult<T> {
   error:    string | null;
 }
 
+// Try Supabase first; fall back to local JSON if it fails or is misconfigured
 async function fetchPageContent<T>(page: string): Promise<T> {
-  const { data, error } = await supabase
-    .from("page_content")
-    .select("content")
-    .eq("page_key", page)
-    .single();
+  try {
+    const { data, error } = await supabase
+      .from("page_content")
+      .select("content")
+      .eq("page_key", page)
+      .single();
 
-  if (error) throw new Error(error.message);
-  return data.content as T;
+    if (!error && data?.content) return data.content as T;
+  } catch { /* network error — fall through to local JSON */ }
+
+  const res = await fetch(`/content/${page}.json`);
+  if (!res.ok) throw new Error(`Content not found: ${page}`);
+  return res.json() as Promise<T>;
 }
 
 export function usePageContent<T = Record<string, unknown>>(

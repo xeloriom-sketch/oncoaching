@@ -328,7 +328,7 @@ const CoachingScolaire = () => {
             className="flex flex-col gap-10"
           >
             <motion.div variants={blurInUp} className="flex flex-col gap-2">
-              <p className="font-mono tracking-widest uppercase text-[11px] text-white/30" aria-hidden="true">
+              <p className="font-mono tracking-widest uppercase text-[11px] text-white/55" aria-hidden="true">
                 <E fieldKey="benefitsLabel">{(content as any)?.benefitsLabel ?? "Résultats"}</E>
               </p>
               <h2 className="text-[clamp(1.8rem,4vw,2.8rem)] font-semibold tracking-tight text-white leading-tight">

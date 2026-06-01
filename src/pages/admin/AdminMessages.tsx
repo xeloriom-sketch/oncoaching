@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import type { Submission } from "@/types/admin";
 import { fadeInUp, staggerFast, pulseDot } from "@/lib/motion";
+import { useToast } from "@/hooks/use-toast";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const NAVY = "#1C3A52";
@@ -87,6 +88,7 @@ interface ListItemProps {
 }
 
 const ListItem = ({ sub, isSelected, onClick, onDelete }: ListItemProps) => {
+  const { toast } = useToast();
   const [hovered, setHovered] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -97,7 +99,11 @@ const ListItem = ({ sub, isSelected, onClick, onDelete }: ListItemProps) => {
     if (!confirmingDelete) { setConfirmingDelete(true); return; }
     setDeleting(true);
     const { error } = await supabase.from("submissions").delete().eq("id", sub.id);
-    if (error) { alert("Erreur : " + error.message); setDeleting(false); return; }
+    if (error) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      setDeleting(false);
+      return;
+    }
     onDelete(sub.id);
   }
 
@@ -176,6 +182,7 @@ interface DetailProps {
 }
 
 const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread, onReplied }: DetailProps) => {
+  const { toast } = useToast();
   const [replyOpen, setReplyOpen]       = useState(false);
   const [replySubject, setReplySubject] = useState("");
   const [replyText, setReplyText]       = useState("");
@@ -246,7 +253,12 @@ const MessageDetail = ({ sub, onBack, onDeleted, onMarkUnread, onReplied }: Deta
     if (!confirmDelete) { setConfirmDelete(true); return; }
     setDeleting(true);
     const { error } = await supabase.from("submissions").delete().eq("id", sub.id);
-    if (error) { alert("Erreur : " + error.message); setDeleting(false); setConfirmDelete(false); return; }
+    if (error) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      setDeleting(false);
+      setConfirmDelete(false);
+      return;
+    }
     onDeleted?.(sub.id);
   }
 
@@ -518,6 +530,11 @@ export default function AdminMessages() {
       .channel("submissions-realtime")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "submissions" }, payload => {
         setSubmissions(prev => [payload.new as Submission, ...prev]);
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "submissions" }, payload => {
+        const deleted = payload.old as { id: string };
+        setSubmissions(prev => prev.filter(s => s.id !== deleted.id));
+        setSelected(prev => prev?.id === deleted.id ? null : prev);
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };

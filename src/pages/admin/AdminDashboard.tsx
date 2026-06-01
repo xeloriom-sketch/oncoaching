@@ -257,10 +257,12 @@ interface StorageBannerProps {
   total: number;
   readCount: number;
   onClean: () => void;
+  onCancelClean: () => void;
+  confirming: boolean;
   cleaning: boolean;
 }
 
-function StorageBanner({ total, readCount, onClean, cleaning }: StorageBannerProps) {
+function StorageBanner({ total, readCount, onClean, onCancelClean, confirming, cleaning }: StorageBannerProps) {
   if (total < 50) return null;
 
   const isDanger = total >= DANGER_THRESHOLD;
@@ -301,20 +303,34 @@ function StorageBanner({ total, readCount, onClean, cleaning }: StorageBannerPro
       </div>
 
       {readCount > 0 && (
-        <button
-          type="button"
-          onClick={onClean}
-          disabled={cleaning}
-          className="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-          style={{ background: isDanger ? "#dc2626" : "#b45309" }}
-        >
-          {cleaning ? (
-            <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
-          ) : (
-            <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {confirming && !cleaning && (
+            <button
+              type="button"
+              onClick={onCancelClean}
+              className="text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors px-2 py-1"
+            >
+              Annuler
+            </button>
           )}
-          Supprimer {readCount} message{readCount > 1 ? "s" : ""} lu{readCount > 1 ? "s" : ""}
-        </button>
+          <button
+            type="button"
+            onClick={onClean}
+            disabled={cleaning}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-90 disabled:opacity-50"
+            style={{ background: confirming ? "#dc2626" : isDanger ? "#dc2626" : "#b45309" }}
+          >
+            {cleaning ? (
+              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin inline-block" />
+            ) : (
+              <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+            )}
+            {confirming
+              ? "Confirmer la suppression"
+              : `Supprimer ${readCount} message${readCount > 1 ? "s" : ""} lu${readCount > 1 ? "s" : ""}`
+            }
+          </button>
+        </div>
       )}
     </motion.div>
   );
@@ -338,6 +354,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats>({ total: 0, unread: 0, rdv: 0, readCount: 0, recent: [] });
   const [loading, setLoading] = useState(true);
   const [cleaning, setCleaning] = useState(false);
+  const [cleanConfirming, setCleanConfirming] = useState(false);
   const [adminEmail, setAdminEmail] = useState<string | null>(null);
 
   const fetchStats = async (cancelled?: { current: boolean }) => {
@@ -382,7 +399,8 @@ const AdminDashboard = () => {
   }, []);
 
   const handleClean = async () => {
-    if (!window.confirm(`Supprimer définitivement les ${stats.readCount} messages déjà lus ?`)) return;
+    if (!cleanConfirming) { setCleanConfirming(true); return; }
+    setCleanConfirming(false);
     setCleaning(true);
     await supabase.from("submissions").delete().eq("read", true);
     await fetchStats();
@@ -482,6 +500,8 @@ const AdminDashboard = () => {
             total={stats.total}
             readCount={stats.readCount}
             onClean={handleClean}
+            onCancelClean={() => setCleanConfirming(false)}
+            confirming={cleanConfirming}
             cleaning={cleaning}
           />
         )}

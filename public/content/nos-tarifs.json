@@ -66,15 +66,39 @@
     ]
   },
   "faqItems": [
-    { "q": "Le premier rendez-vous est-il vraiment gratuit ?", "a": "Oui, absolument. La première consultation de 45 minutes est entièrement offerte, sans engagement. C'est l'occasion de faire connaissance et d'évaluer si notre approche vous correspond." },
-    { "q": "Les tarifs sont-ils négociables ?", "a": "Nous proposons des ajustements tarifaires pour les étudiants et les situations particulières. N'hésitez pas à nous en parler lors de la première consultation." },
-    { "q": "Proposez-vous des forfaits ?", "a": "Oui, nous proposons des forfaits de 5 et 10 séances avec une réduction respective de 5% et 10%. Ces forfaits sont disponibles pour tous nos programmes." },
-    { "q": "Le neurofeedback est-il remboursé par la mutuelle ?", "a": "Certaines mutuelles remboursent partiellement les séances de neurofeedback. Nous vous fournissons les justificatifs nécessaires pour votre demande de remboursement." }
+    {
+      "q": "Le premier rendez-vous est-il vraiment gratuit ?",
+      "a": "Oui, absolument. La première consultation de 45 minutes est entièrement offerte, sans engagement. C'est l'occasion de faire connaissance et d'évaluer si notre approche vous correspond."
+    },
+    {
+      "q": "Les tarifs sont-ils négociables ?",
+      "a": "Nous proposons des ajustements tarifaires pour les étudiants et les situations particulières. N'hésitez pas à nous en parler lors de la première consultation."
+    },
+    {
+      "q": "Proposez-vous des forfaits ?",
+      "a": "Oui, nous proposons des forfaits de 5 et 10 séances avec une réduction respective de 5% et 10%. Ces forfaits sont disponibles pour tous nos programmes."
+    },
+    {
+      "q": "Le neurofeedback est-il remboursé par la mutuelle ?",
+      "a": "Certaines mutuelles remboursent partiellement les séances de neurofeedback. Nous vous fournissons les justificatifs nécessaires pour votre demande de remboursement."
+    }
   ],
   "steps": [
-    { "num": "01", "title": "Consultation gratuite", "desc": "45 min pour évaluer vos besoins et présenter nos programmes" },
-    { "num": "02", "title": "Programme personnalisé", "desc": "Choix du programme et du rythme adapté à votre situation" },
-    { "num": "03", "title": "Accompagnement suivi", "desc": "Séances régulières avec bilan et ajustements en continu" }
+    {
+      "num": "01",
+      "title": "Consultation gratuite",
+      "desc": "45 min pour évaluer vos besoins et présenter nos programmes"
+    },
+    {
+      "num": "02",
+      "title": "Programme personnalisé",
+      "desc": "Choix du programme et du rythme adapté à votre situation"
+    },
+    {
+      "num": "03",
+      "title": "Accompagnement suivi",
+      "desc": "Séances régulières avec bilan et ajustements en continu"
+    }
   ],
   "cta": {
     "title": "Prenez rendez-vous dès aujourd'hui",

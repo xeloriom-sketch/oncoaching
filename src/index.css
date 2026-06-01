@@ -245,10 +245,11 @@
 
 /* ── Masque de mot (text reveal H1) ──────────────────────────── */
 .word-mask {
-  overflow: hidden;
   display: block;
-  vertical-align: bottom;
-  line-height: 1.1;
+  line-height: 1.15;
+  /* coupe uniquement en bas (cache le texte pendant l'animation reveal)
+     les côtés sont libres → pas de coupure horizontale du texte */
+  clip-path: inset(-0.25em -200px 0 -200px);
 }
 
 /* ── "infini." : shimmer au survol ───────────────────────────── */
