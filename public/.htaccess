@@ -1,0 +1,37 @@
+Options -MultiViews
+RewriteEngine On
+
+# SPA routing — toutes les requêtes → index.html (sauf fichiers existants)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.html [QSA,L]
+
+# Cache long terme — assets avec hash Vite
+<FilesMatch "\.(js|css|woff2?|png|webp|svg|ico|jpg|jpeg|mp4|webm|pdf)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# index.html et JSON — pas de cache
+<FilesMatch "^(index\.html|robots\.txt|sitemap\.xml)$">
+  Header set Cache-Control "no-cache, no-store, must-revalidate"
+</FilesMatch>
+<FilesMatch "\.json$">
+  Header set Cache-Control "public, max-age=3600"
+</FilesMatch>
+
+# Compression GZIP
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json text/xml application/xml image/svg+xml
+</IfModule>
+
+# MIME types
+AddType application/javascript .js .mjs
+AddType text/css .css
+AddType image/webp .webp
+AddType video/webm .webm
+AddType video/mp4 .mp4
+AddType font/woff2 .woff2
+
+# Sécurité
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
