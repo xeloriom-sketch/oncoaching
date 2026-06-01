@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import { fadeInUp, staggerContainer, VP } from "@/lib/motion";
 import { E } from "@/components/cms/E";
 

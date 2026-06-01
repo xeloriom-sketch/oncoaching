@@ -8,7 +8,7 @@ import {
   Compass, Zap, Clock, Shield, TrendingUp, Smile,
   Star, GraduationCap, Users, Target, ArrowUpRight, Check,
 } from "lucide-react";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import {
   fadeInUp, blurInUp, staggerContainer, staggerFast,
   springUp, springLeft, springRight,

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import SpotlightCard from "@/components/SpotlightCard";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import { useTilt } from "@/hooks/useTilt";
 import { supabase } from "@/lib/supabase";
 import {

@@ -27,7 +27,7 @@ import {
   VP,
 } from "@/lib/motion";
 import { ROUTES } from "@/lib/config";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import type { IndexContent } from "@/types";
 import { E } from "@/components/cms/E";
 import { useEditMode } from "@/contexts/EditModeContext";
@@ -192,8 +192,8 @@ export default function Index() {
   return (
     <Layout>
       <SEO
-        title="Neurofeedback Mâcon (71) — Praticien NeurOptimal® & Coach ICF | ON Coaching | 1er Bilan Offert"
-        description="Praticien Neurofeedback NeurOptimal® et coach ICF certifié à Mâcon, Sancé (71). Stress, anxiété, concentration, sommeil, TDAH. Coaching scolaire, jeunes adultes, équipe. 1er bilan offert, sans engagement."
+        title="Neurofeedback Mâcon (71) · Coach ICF | ON Coaching Sancé"
+        description="Neurofeedback NeurOptimal® &amp; coach ICF certifié à Mâcon (71). Stress, anxiété, concentration, sommeil, TDAH. Coaching scolaire &amp; équipe. 1er bilan offert."
         canonical="/"
         keywords="neurofeedback mâcon, neurofeedback sancé 71, NeurOptimal mâcon, coach certifié mâcon, neurofeedback stress mâcon, neurofeedback concentration, coaching mâcon, coach jeunes adultes, coaching scolaire mâcon, Noureddine Omar, saône-et-loire bourgogne"
         structuredData={[

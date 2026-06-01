@@ -9,7 +9,7 @@ import {
   Zap, Focus, Wind, Brain, Star, Smile,
   BrainCircuit, GraduationCap, BookOpen, Video, Stethoscope,
 } from "lucide-react";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import {
   fadeInUp, blurInUp, staggerContainer, staggerFast,
   springUp, springLeft, springRight, btnHoverProps,
@@ -132,8 +132,8 @@ const CoachingNeurofeedback = () => {
   return (
     <Layout>
       <SEO
-        title="Neurofeedback Mâcon (71) — Praticien NeurOptimal® Certifié | ON Coaching Sancé"
-        description="Praticien Neurofeedback NeurOptimal® à Mâcon, Sancé (71). Stress, anxiété, concentration, sommeil, TDAH. Technique non invasive et scientifique. 1er bilan offert. Tél : 06 63 04 18 12."
+        title="Neurofeedback Mâcon — Praticien NeurOptimal® | ON Coaching"
+        description="Praticien NeurOptimal® à Mâcon (71). Stress, anxiété, concentration, sommeil, TDAH. Technique non invasive. 1er bilan offert. Tél : 06 63 04 18 12."
         canonical="/coaching-neurofeedback"
         keywords="neurofeedback mâcon, neurofeedback macon, praticien neurofeedback mâcon, NeurOptimal mâcon, neurofeedback sancé 71, neurofeedback bourgogne, neurofeedback saône-et-loire, neurofeedback dynamique mâcon, neurofeedback stress mâcon, neurofeedback concentration, neurofeedback sommeil, neurofeedback tdah mâcon, neurofeedback enfant adolescent mâcon, biofeedback mâcon 71"
         structuredData={[

@@ -8,7 +8,7 @@ import {
   BookOpen, TrendingUp, CalendarCheck, Star, Zap, Compass,
   Check, ArrowUpRight,
 } from "lucide-react";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import { useTilt } from "@/hooks/useTilt";
 import {
   blurInUp, staggerContainer, springUp,

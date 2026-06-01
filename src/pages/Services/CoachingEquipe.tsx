@@ -9,7 +9,7 @@ import {
   Shield, Lightbulb, GraduationCap, Brain, ArrowUpRight, Check,
   Building2, Briefcase, Network,
 } from "lucide-react";
-import { usePageContent } from "@/hooks/usePageContent";
+import { usePublicContent as usePageContent } from "@/hooks/usePublicContent";
 import {
   fadeInUp, blurInUp, staggerContainer, staggerFast,
   springUp, springLeft, springRight, btnHoverProps,
