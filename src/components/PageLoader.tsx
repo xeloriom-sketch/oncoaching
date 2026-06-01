@@ -15,7 +15,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
       document.body.style.overflow = "";
       setVisible(false);
       onDone?.();
-    }, 700);
+    }, 350);
     return () => clearTimeout(t);
   }, [onDone]);
 
@@ -49,7 +49,7 @@ export default function PageLoader({ onDone }: PageLoaderProps) {
               style={{ background: "#C4903E" }}
               initial={{ width: "0%" }}
               animate={{ width: "100%" }}
-              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
             />
           </motion.div>
         </motion.div>

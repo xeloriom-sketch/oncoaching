@@ -308,15 +308,15 @@ export default function Index() {
               ) : (
                 <>
                   {[
-                    { text: "Développez", delay: 0.18 },
-                    { text: "votre potentiel", delay: 0.30 },
+                    { text: "Développez", delay: 0 },
+                    { text: "votre potentiel", delay: 0.06 },
                   ].map(({ text, delay }) => (
                     <span key={text} className="word-mask block">
                       <motion.span
                         className="inline-block"
                         initial={{ y: "105%" }}
                         animate={{ y: "0%" }}
-                        transition={{ type: "spring", stiffness: 160, damping: 22, delay }}
+                        transition={{ type: "spring", stiffness: 200, damping: 26, delay }}
                       >
                         {text}
                       </motion.span>
@@ -327,7 +327,7 @@ export default function Index() {
                       className="inline-block"
                       initial={{ y: "105%" }}
                       animate={{ y: "0%" }}
-                      transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.42 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 26, delay: 0.12 }}
                     >
                       <span className="infini-word">infini.</span>
                     </motion.span>
@@ -340,7 +340,7 @@ export default function Index() {
             <motion.p
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.58 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
                 className="text-[0.95rem] sm:text-[1.05rem] text-[#1C3A52]/70 leading-relaxed max-w-lg text-center lg:text-left px-4 sm:px-0"
             >
               <E fieldKey="hero.subtitle">{content?.hero?.subtitle ?? "Coach certifié à Mâcon — accompagnement personnalisé pour particuliers et entreprises. 26 ans d'expérience en sciences humaines."}</E>
